@@ -6,7 +6,6 @@ import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Course;
-import rwilk.exploreenglish.service.CourseService;
 
 import java.net.URL;
 import java.util.Optional;
@@ -17,7 +16,6 @@ import java.util.ResourceBundle;
 public class CourseFormController implements Initializable {
 
   private CourseController courseController;
-  private CourseService courseService;
   public TextField textFieldId;
   public TextField textFieldEnName;
   public TextField textFieldPlName;
@@ -26,9 +24,8 @@ public class CourseFormController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
   }
 
-  public void init(CourseController courseController, CourseService courseService) {
+  public void init(CourseController courseController) {
     this.courseController = courseController;
-    this.courseService = courseService;
   }
 
   public void buttonClearOnAction(ActionEvent actionEvent) {
@@ -39,7 +36,7 @@ public class CourseFormController implements Initializable {
 
   public void buttonDeleteOnAction(ActionEvent actionEvent) {
     if (!textFieldId.getText().isEmpty()) {
-      courseService.getById(Long.valueOf(textFieldId.getText())).ifPresent(course -> courseService.delete(course));
+      courseController.getCourseService().getById(Long.valueOf(textFieldId.getText())).ifPresent(course -> courseController.getCourseService().delete(course));
       buttonClearOnAction(actionEvent);
       courseController.refreshTableView();
     }
@@ -47,11 +44,11 @@ public class CourseFormController implements Initializable {
 
   public void buttonEditOnAction(ActionEvent actionEvent) {
     if (!textFieldId.getText().isEmpty() && !textFieldEnName.getText().isEmpty() && !textFieldPlName.getText().isEmpty()) {
-      Optional<Course> courseOptional = courseService.getById(Long.valueOf(textFieldId.getText()));
+      Optional<Course> courseOptional = courseController.getCourseService().getById(Long.valueOf(textFieldId.getText()));
       courseOptional.ifPresent(course -> {
         course.setEnglishName(textFieldEnName.getText().trim());
         course.setPolishName(textFieldPlName.getText().trim());
-        setCourseForm(courseService.save(course));
+        setCourseForm(courseController.getCourseService().save(course));
         courseController.refreshTableView();
       });
     }
@@ -63,7 +60,7 @@ public class CourseFormController implements Initializable {
           .englishName(textFieldEnName.getText().trim())
           .polishName(textFieldPlName.getText().trim())
           .build();
-      course = courseService.save(course);
+      course = courseController.getCourseService().save(course);
       setCourseForm(course);
       courseController.refreshTableView();
     }

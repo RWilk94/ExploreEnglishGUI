@@ -45,8 +45,8 @@ public class CourseController implements Initializable {
       VBox table = fxmlLoaderCourseTable.load();
       courseTableController = fxmlLoaderCourseTable.getController();
 
-      courseFormController.init(this, courseService);
-      courseTableController.init(this, courseService);
+      courseFormController.init(this);
+      courseTableController.init(this);
 
       anchorPaneCourseForm.getChildren().add(form);
       anchorPaneCourseTable.getChildren().add(table);
@@ -63,11 +63,8 @@ public class CourseController implements Initializable {
     courseFormController.setCourseForm(course);
   }
 
-  public CourseFormController getCourseFormController() {
-    return courseFormController;
+  public CourseService getCourseService() {
+    return courseService;
   }
 
-  public CourseTableController getCourseTableController() {
-    return courseTableController;
-  }
 }

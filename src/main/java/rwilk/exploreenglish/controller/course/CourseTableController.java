@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Course;
-import rwilk.exploreenglish.service.CourseService;
 
 import java.net.URL;
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 public class CourseTableController implements Initializable {
 
   private CourseController courseController;
-  private CourseService courseService;
   private List<Course> courses;
 
   public TextField textFieldSearch;
@@ -36,9 +34,8 @@ public class CourseTableController implements Initializable {
     textFieldSearch.setOnMouseClicked(view -> filterTableByName(textFieldSearch.getText()));
   }
 
-  public void init(CourseController courseController, CourseService courseService) {
+  public void init(CourseController courseController) {
     this.courseController = courseController;
-    this.courseService = courseService;
     fillInTableView();
   }
 
@@ -49,7 +46,7 @@ public class CourseTableController implements Initializable {
   }
 
   public void fillInTableView() {
-    courses = courseService.getAll();
+    courses = courseController.getCourseService().getAll();
     tableCourses.setItems(FXCollections.observableArrayList(courses));
   }
 

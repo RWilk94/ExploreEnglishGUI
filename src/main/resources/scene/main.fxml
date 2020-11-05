@@ -6,7 +6,7 @@
 
   <center>
       <AnchorPane minHeight="0" minWidth="0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <fx:include source="course/course.fxml"/>
+        <fx:include source="lesson/lesson.fxml"/>
       </AnchorPane>
   </center>
 

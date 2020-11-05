@@ -30,4 +30,8 @@ public final class Course implements Serializable {
   @Transient
   private List<Lesson> lessons;
 
+  @Override
+  public String toString() {
+    return id + ". " + englishName + " (" + polishName + ")";
+  }
 }
