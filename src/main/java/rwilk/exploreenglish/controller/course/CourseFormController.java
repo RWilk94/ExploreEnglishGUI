@@ -3,7 +3,6 @@ package rwilk.exploreenglish.controller.course;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Course;
 
@@ -11,7 +10,6 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-@Slf4j
 @Controller
 public class CourseFormController implements Initializable {
 

@@ -1,16 +1,17 @@
-<?import java.net.URL?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import java.net.URL?>
 <BorderPane
-  xmlns:fx="http://javafx.com/fxml" fx:controller="rwilk.exploreenglish.controller.main.MainController">
+    xmlns:fx="http://javafx.com/fxml" fx:controller="rwilk.exploreenglish.controller.main.MainController">
 
   <center>
-      <AnchorPane minHeight="0" minWidth="0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <fx:include source="lesson/lesson.fxml"/>
-      </AnchorPane>
+    <AnchorPane minHeight="0" minWidth="0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <fx:include source="word/word.fxml"/>
+    </AnchorPane>
   </center>
 
   <stylesheets>
-    <URL value="@../style.css" />
+    <URL value="@../style.css"/>
   </stylesheets>
 </BorderPane>

@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Course;
 import rwilk.exploreenglish.service.CourseService;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@Slf4j
 @Controller
 public class CourseController implements Initializable {
 

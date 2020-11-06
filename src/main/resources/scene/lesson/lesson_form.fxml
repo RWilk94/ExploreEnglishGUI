@@ -7,8 +7,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="rwilk.exploreenglish.controller.lesson.LessonFormController"
       AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -73,23 +73,23 @@
     </Button>
     <Region HBox.hgrow="ALWAYS"/>
     <HBox alignment="BOTTOM_RIGHT">
-    <Button mnemonicParsing="false" text="Clear" onAction="#buttonClearOnAction">
-      <HBox.margin>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-      </HBox.margin>
-    </Button>
+      <Button mnemonicParsing="false" text="Clear" onAction="#buttonClearOnAction">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+      </Button>
 
-    <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" text="Edit" onAction="#buttonEditOnAction">
-      <HBox.margin>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-      </HBox.margin>
-    </Button>
-    <Button layoutX="331.0" layoutY="10.0" mnemonicParsing="false" text="Add" onAction="#buttonAddOnAction">
-      <HBox.margin>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-      </HBox.margin>
-    </Button>
-  </HBox>
+      <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" text="Edit" onAction="#buttonEditOnAction">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+      </Button>
+      <Button layoutX="331.0" layoutY="10.0" mnemonicParsing="false" text="Add" onAction="#buttonAddOnAction">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+      </Button>
+    </HBox>
   </HBox>
 
 </VBox>

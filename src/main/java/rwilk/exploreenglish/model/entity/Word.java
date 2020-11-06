@@ -1,8 +1,22 @@
 package rwilk.exploreenglish.model.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -39,10 +53,10 @@ public final class Word implements Serializable {
   private String comparative;
   @Column(name = "superlative")
   private String superlative;
-  @Column(name = "past_participle")
-  private String pastParticiple;
   @Column(name = "past_tense")
   private String pastTense;
+  @Column(name = "past_participle")
+  private String pastParticiple;
   @Column(name = "grammar_type")
   private String grammarType;
   @Column(name = "level")
