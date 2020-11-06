@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.controller.lesson;
+package rwilk.exploreenglish.controller.note;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -6,27 +6,28 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Lesson;
-import rwilk.exploreenglish.service.CourseService;
+import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.service.LessonService;
+import rwilk.exploreenglish.service.NoteService;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 @Controller
-public class LessonController implements Initializable {
+public class NoteController implements Initializable {
 
-  private final CourseService courseService;
   private final LessonService lessonService;
-  private LessonFormController lessonFormController;
-  private LessonTableController lessonTableController;
+  private final NoteService noteService;
+  private NoteFormController noteFormController;
+  private NoteTableController noteTableController;
 
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public LessonController(CourseService courseService, LessonService lessonService) {
-    this.courseService = courseService;
+  public NoteController(LessonService lessonService, NoteService noteService) {
     this.lessonService = lessonService;
+    this.noteService = noteService;
   }
 
   @Override
@@ -37,17 +38,17 @@ public class LessonController implements Initializable {
   public void init() {
     try {
       FXMLLoader fxmlLoaderForm = new FXMLLoader();
-      fxmlLoaderForm.setLocation(getClass().getResource("/scene/lesson/lesson_form.fxml"));
+      fxmlLoaderForm.setLocation(getClass().getResource("/scene/note/note_form.fxml"));
       VBox form = fxmlLoaderForm.load();
-      lessonFormController = fxmlLoaderForm.getController();
+      noteFormController = fxmlLoaderForm.getController();
 
       FXMLLoader fxmlLoaderTable = new FXMLLoader();
-      fxmlLoaderTable.setLocation(getClass().getResource("/scene/lesson/lesson_table.fxml"));
+      fxmlLoaderTable.setLocation(getClass().getResource("/scene/note/note_table.fxml"));
       VBox table = fxmlLoaderTable.load();
-      lessonTableController = fxmlLoaderTable.getController();
+      noteTableController = fxmlLoaderTable.getController();
 
-      lessonFormController.init(this);
-      lessonTableController.init(this);
+      noteFormController.init(this);
+      noteTableController.init(this);
 
       anchorPaneForm.getChildren().add(form);
       anchorPaneTable.getChildren().add(table);
@@ -56,20 +57,20 @@ public class LessonController implements Initializable {
     }
   }
 
-  public void setLessonForm(Lesson lesson) {
-    lessonFormController.setLessonForm(lesson);
+  public void setNoteForm(Note note) {
+    noteFormController.setNoteForm(note);
   }
 
   public void refreshTableView() {
-    lessonTableController.fillInTableView();
-  }
-
-  public CourseService getCourseService() {
-    return courseService;
+    noteTableController.fillInTableView();
   }
 
   public LessonService getLessonService() {
     return lessonService;
+  }
+
+  public NoteService getNoteService() {
+    return noteService;
   }
 
 }

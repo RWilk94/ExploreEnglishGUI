@@ -51,7 +51,7 @@ public class CourseTableController implements Initializable {
   }
 
   public void tableViewOnMouseClicked(MouseEvent mouseEvent) {
-    if (!tableCourses.getSelectionModel().isEmpty()) {
+    if (tableCourses.getSelectionModel().getSelectedItem() != null) {
       Course selectedCourse = tableCourses.getSelectionModel().getSelectedItem();
       courseController.setCourseForm(selectedCourse);
     }

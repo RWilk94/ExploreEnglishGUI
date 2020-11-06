@@ -19,8 +19,8 @@ public class CourseController implements Initializable {
   private CourseFormController courseFormController;
   private CourseTableController courseTableController;
 
-  public AnchorPane anchorPaneCourseForm;
-  public AnchorPane anchorPaneCourseTable;
+  public AnchorPane anchorPaneForm;
+  public AnchorPane anchorPaneTable;
 
   public CourseController(CourseService courseService) {
     this.courseService = courseService;
@@ -33,21 +33,21 @@ public class CourseController implements Initializable {
 
   private void init() {
     try {
-      FXMLLoader fxmlLoaderCourseForm = new FXMLLoader();
-      fxmlLoaderCourseForm.setLocation(getClass().getResource("/scene/course/course_form.fxml"));
-      VBox form = fxmlLoaderCourseForm.load();
-      courseFormController = fxmlLoaderCourseForm.getController();
+      FXMLLoader fxmlLoaderForm = new FXMLLoader();
+      fxmlLoaderForm.setLocation(getClass().getResource("/scene/course/course_form.fxml"));
+      VBox form = fxmlLoaderForm.load();
+      courseFormController = fxmlLoaderForm.getController();
 
-      FXMLLoader fxmlLoaderCourseTable = new FXMLLoader();
-      fxmlLoaderCourseTable.setLocation(getClass().getResource("/scene/course/course_table.fxml"));
-      VBox table = fxmlLoaderCourseTable.load();
-      courseTableController = fxmlLoaderCourseTable.getController();
+      FXMLLoader fxmlLoaderTable = new FXMLLoader();
+      fxmlLoaderTable.setLocation(getClass().getResource("/scene/course/course_table.fxml"));
+      VBox table = fxmlLoaderTable.load();
+      courseTableController = fxmlLoaderTable.getController();
 
       courseFormController.init(this);
       courseTableController.init(this);
 
-      anchorPaneCourseForm.getChildren().add(form);
-      anchorPaneCourseTable.getChildren().add(table);
+      anchorPaneForm.getChildren().add(form);
+      anchorPaneTable.getChildren().add(table);
     } catch (IOException e) {
       e.printStackTrace();
     }

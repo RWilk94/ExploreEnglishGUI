@@ -22,8 +22,8 @@ public class WordController implements Initializable {
   private WordFormController wordFormController;
   private WordTableController wordTableController;
 
-  public AnchorPane anchorPaneWordForm;
-  public AnchorPane anchorPaneWordTable;
+  public AnchorPane anchorPaneForm;
+  public AnchorPane anchorPaneTable;
 
   public WordController(LessonService lessonService, WordService wordService) {
     this.lessonService = lessonService;
@@ -37,21 +37,21 @@ public class WordController implements Initializable {
 
   public void init() {
     try {
-      FXMLLoader fxmlLoaderLessonForm = new FXMLLoader();
-      fxmlLoaderLessonForm.setLocation(getClass().getResource("/scene/word/word_form.fxml"));
-      ScrollPane form = fxmlLoaderLessonForm.load();
-      wordFormController = fxmlLoaderLessonForm.getController();
+      FXMLLoader fxmlLoaderForm = new FXMLLoader();
+      fxmlLoaderForm.setLocation(getClass().getResource("/scene/word/word_form.fxml"));
+      ScrollPane form = fxmlLoaderForm.load();
+      wordFormController = fxmlLoaderForm.getController();
 
-      FXMLLoader fxmlLoaderLessonTable = new FXMLLoader();
-      fxmlLoaderLessonTable.setLocation(getClass().getResource("/scene/word/word_table.fxml"));
-      VBox table = fxmlLoaderLessonTable.load();
-      wordTableController = fxmlLoaderLessonTable.getController();
+      FXMLLoader fxmlLoaderTable = new FXMLLoader();
+      fxmlLoaderTable.setLocation(getClass().getResource("/scene/word/word_table.fxml"));
+      VBox table = fxmlLoaderTable.load();
+      wordTableController = fxmlLoaderTable.getController();
 
       wordFormController.init(this);
       wordTableController.init(this);
 
-      anchorPaneWordForm.getChildren().add(form);
-      anchorPaneWordTable.getChildren().add(table);
+      anchorPaneForm.getChildren().add(form);
+      anchorPaneTable.getChildren().add(table);
     } catch (IOException e) {
       e.printStackTrace();
     }

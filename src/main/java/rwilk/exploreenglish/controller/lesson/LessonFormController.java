@@ -51,7 +51,7 @@ public class LessonFormController implements Initializable {
   public void buttonEditOnAction(ActionEvent actionEvent) {
     if (StringUtils.isNotEmpty(textFieldId.getText()) && StringUtils.isNotEmpty(textFieldEnName.getText())
         && StringUtils.isNotEmpty(textFieldPlName.getText())
-        && !comboBoxCourse.getSelectionModel().isEmpty()) {
+        && comboBoxCourse.getSelectionModel().getSelectedItem() != null) {
 
       lessonController.getLessonService().getById(Long.valueOf(textFieldId.getText()))
           .ifPresent(lesson -> {
@@ -66,7 +66,7 @@ public class LessonFormController implements Initializable {
 
   public void buttonAddOnAction(ActionEvent actionEvent) {
     if (StringUtils.isNotEmpty(textFieldEnName.getText()) && StringUtils.isNotEmpty(textFieldPlName.getText())
-        && !comboBoxCourse.getSelectionModel().isEmpty()) {
+        && comboBoxCourse.getSelectionModel().getSelectedItem() != null) {
       Lesson lesson = Lesson.builder()
           .englishName(textFieldEnName.getText().trim())
           .polishName(textFieldPlName.getText().trim())

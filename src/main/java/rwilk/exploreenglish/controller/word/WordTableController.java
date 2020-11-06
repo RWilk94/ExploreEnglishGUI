@@ -78,7 +78,7 @@ public class WordTableController implements Initializable {
   }
 
   public void tableViewWordsOnMouseClicked(MouseEvent mouseEvent) {
-    if (!tableWords.getSelectionModel().isEmpty()) {
+    if (tableWords.getSelectionModel().getSelectedItem() != null) {
       Word selectedItem = tableWords.getSelectionModel().getSelectedItem();
       wordController.setWordForm(selectedItem);
     }
