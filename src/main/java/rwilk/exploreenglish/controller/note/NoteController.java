@@ -5,7 +5,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
-import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.NoteService;
