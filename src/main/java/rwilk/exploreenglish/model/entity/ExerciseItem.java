@@ -24,8 +24,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "exercise_rows")
-public final class ExerciseRow implements Serializable {
+@Table(name = "exercise_item")
+public final class ExerciseItem implements Serializable {
 
   private static final long serialVersionUID = 2360065403395688983L;
   @Id
@@ -36,8 +36,8 @@ public final class ExerciseRow implements Serializable {
   private String question;
   @Column(name = "correct_answer")
   private String correctAnswer;
-  @Column(name = "correct_answer_after_choice")
-  private String correctAnswerAfterChoice;
+  @Column(name = "final_answer")
+  private String finalAnswer;
   @Column(name = "first_possible_answer")
   private String firstPossibleAnswer;
   @Column(name = "second_possible_answer")
@@ -54,7 +54,7 @@ public final class ExerciseRow implements Serializable {
   @Column(name = "description")
   private String description;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
   @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
   private Exercise exercise;
 

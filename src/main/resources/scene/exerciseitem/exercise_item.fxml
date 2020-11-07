@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.SplitPane?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+            fx:controller="rwilk.exploreenglish.controller.exerciseitem.ExerciseItemController">
+
+  <center>
+    <SplitPane dividerPositions="0.365" orientation="VERTICAL">
+      <AnchorPane fx:id="anchorPaneForm" minHeight="0" minWidth="0">
+      </AnchorPane>
+      <AnchorPane fx:id="anchorPaneTable" minHeight="0" minWidth="0">
+      </AnchorPane>
+    </SplitPane>
+  </center>
+
+</BorderPane>

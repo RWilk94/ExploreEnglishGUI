@@ -42,7 +42,7 @@ public final class Lesson implements Serializable {
   @Column(name = "image")
   private String image;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
   @JoinColumn(name = "course_id", nullable = false, referencedColumnName = "id")
   private Course course;
 

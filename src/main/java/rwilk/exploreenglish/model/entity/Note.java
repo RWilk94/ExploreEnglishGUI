@@ -37,7 +37,7 @@ public final class Note implements Serializable {
   @Column(name = "position")
   private Integer position;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REFRESH})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
   @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
   private Lesson lesson;
 

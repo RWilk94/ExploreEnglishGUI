@@ -6,6 +6,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Exercise;
 
 import java.net.URL;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+@Controller
 public class ExerciseTableController implements Initializable {
 
 

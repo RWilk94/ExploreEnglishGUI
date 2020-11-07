@@ -41,11 +41,11 @@ public final class Exercise implements Serializable {
   @Column(name = "name")
   private String name;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
   @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
   private Lesson lesson;
 
   @Transient
-  private List<ExerciseRow> exerciseRows;
+  private List<ExerciseItem> exerciseItems;
 
 }

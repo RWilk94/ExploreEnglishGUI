@@ -39,7 +39,7 @@ public final class Sentence implements Serializable {
   @Column(name = "sound")
   private String sound;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REFRESH})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
   @JoinColumn(name = "word_id", nullable = false, referencedColumnName = "id")
   private Word word;
 

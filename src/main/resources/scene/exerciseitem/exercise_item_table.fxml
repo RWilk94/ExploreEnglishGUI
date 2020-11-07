@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="rwilk.exploreenglish.controller.exerciseitem.ExerciseItemTableController"
+      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+  <HBox HBox.hgrow="ALWAYS">
+    <TextField fx:id="textFieldSearch" promptText="Search exercise here..." HBox.hgrow="ALWAYS">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </TextField>
+  </HBox>
+
+  <TableView fx:id="tableExerciseItem" VBox.vgrow="ALWAYS" onMouseClicked="#tableViewOnMouseClicked">
+    <columns>
+      <TableColumn fx:id="columnId" minWidth="20.0" prefWidth="-1.0" text="Id">
+        <cellValueFactory>
+          <PropertyValueFactory property="id"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnQuestion" minWidth="20.0" prefWidth="-1.0" text="Question">
+        <cellValueFactory>
+          <PropertyValueFactory property="question"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnCorrectAnswer" minWidth="20.0" prefWidth="-1.0" text="Correct Answer">
+        <cellValueFactory>
+          <PropertyValueFactory property="correctAnswer"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnFinalAnswer" minWidth="20.0" prefWidth="-1.0" text="Final Answer">
+        <cellValueFactory>
+          <PropertyValueFactory property="finalAnswer"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnFirstPossibleAnswer" minWidth="20.0" prefWidth="-1.0" text="First Answer">
+        <cellValueFactory>
+          <PropertyValueFactory property="firstPossibleAnswer"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnSecondPossibleAnswer" minWidth="20.0" prefWidth="-1.0" text="Second Answer">
+        <cellValueFactory>
+          <PropertyValueFactory property="secondPossibleAnswer"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnThirdPossibleAnswer" minWidth="20.0" prefWidth="-1.0" text="Third Answer">
+        <cellValueFactory>
+          <PropertyValueFactory property="thirdPossibleAnswer"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnForthPossibleAnswer" minWidth="20.0" prefWidth="-1.0" text="Forth Answer">
+        <cellValueFactory>
+          <PropertyValueFactory property="forthPossibleAnswer"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnDialogueEnglish" minWidth="20.0" prefWidth="-1.0" text="Dialogue English">
+        <cellValueFactory>
+          <PropertyValueFactory property="dialogueEnglish"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnDialoguePolish" minWidth="20.0" prefWidth="-1.0" text="Dialogue Polish">
+        <cellValueFactory>
+          <PropertyValueFactory property="dialoguePolish"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnDescription" minWidth="20.0" prefWidth="-1.0" text="Description">
+        <cellValueFactory>
+          <PropertyValueFactory property="description"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnExercise" minWidth="20.0" prefWidth="-1.0" text="Exercise">
+        <cellValueFactory>
+          <PropertyValueFactory property="exercise"/>
+        </cellValueFactory>
+      </TableColumn>
+    </columns>
+
+    <VBox.margin>
+      <Insets bottom="5.0" left="5.0" right="5.0"/>
+    </VBox.margin>
+  </TableView>
+
+</VBox>
