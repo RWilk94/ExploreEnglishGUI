@@ -1,6 +1,8 @@
 package rwilk.exploreenglish.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.repository.NoteRepository;
 
@@ -28,10 +30,17 @@ public class NoteService {
     return noteRepository.save(note);
   }
 
+  @Transactional
   public void delete(Note note) {
     noteRepository.delete(note);
   }
 
+  @Transactional
+  public void deleteByLesson(Lesson lesson) {
+    noteRepository.deleteAllByLesson(lesson);
+  }
+
+  @Transactional
   public void deleteById(Long id) {
     noteRepository.deleteById(id);
   }

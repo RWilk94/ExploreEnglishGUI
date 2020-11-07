@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.entity.Exercise;
 import rwilk.exploreenglish.model.entity.ExerciseItem;
 import rwilk.exploreenglish.repository.ExerciseItemRepository;
@@ -29,10 +30,17 @@ public class ExerciseItemService {
     return exerciseItemRepository.save(exercise);
   }
 
+  @Transactional
   public void delete(ExerciseItem exercise) {
     exerciseItemRepository.delete(exercise);
   }
 
+  @Transactional
+  public void deleteByExercise(Exercise exercise) {
+    exerciseItemRepository.deleteAllByExercise(exercise);
+  }
+
+  @Transactional
   public void deleteById(Long id) {
     exerciseItemRepository.deleteById(id);
   }

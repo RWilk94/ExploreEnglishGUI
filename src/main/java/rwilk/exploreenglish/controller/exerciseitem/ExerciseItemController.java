@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.ExerciseItem;
 import rwilk.exploreenglish.service.ExerciseItemService;
 import rwilk.exploreenglish.service.ExerciseService;
+import rwilk.exploreenglish.service.InjectService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,6 +17,7 @@ import java.util.ResourceBundle;
 @Controller
 public class ExerciseItemController implements Initializable {
 
+  private final InjectService injectService;
   private final ExerciseService exerciseService;
   private final ExerciseItemService exerciseItemService;
   private ExerciseItemFormController exerciseItemFormController;
@@ -24,9 +26,11 @@ public class ExerciseItemController implements Initializable {
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public ExerciseItemController(ExerciseService exerciseService, ExerciseItemService exerciseItemService) {
+  public ExerciseItemController(InjectService injectService, ExerciseService exerciseService, ExerciseItemService exerciseItemService) {
+    this.injectService = injectService;
     this.exerciseService = exerciseService;
     this.exerciseItemService = exerciseItemService;
+    injectService.setExerciseItemController(this);
   }
 
   @Override
@@ -62,6 +66,10 @@ public class ExerciseItemController implements Initializable {
 
   public void refreshTableView() {
     exerciseItemTableController.fillInTableView();
+  }
+
+  public void refreshExerciseComboBox() {
+    exerciseItemFormController.initializeExerciseComboBox();
   }
 
   public ExerciseService getExerciseService() {

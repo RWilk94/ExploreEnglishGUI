@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Word;
+import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.WordService;
 
@@ -17,6 +18,7 @@ import java.util.ResourceBundle;
 @Controller
 public class WordController implements Initializable {
 
+  private final InjectService injectService;
   private final LessonService lessonService;
   private final WordService wordService;
   private WordFormController wordFormController;
@@ -25,9 +27,11 @@ public class WordController implements Initializable {
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public WordController(LessonService lessonService, WordService wordService) {
+  public WordController(InjectService injectService, LessonService lessonService, WordService wordService) {
+    this.injectService = injectService;
     this.lessonService = lessonService;
     this.wordService = wordService;
+    injectService.setWordController(this);
   }
 
   @Override
@@ -63,6 +67,14 @@ public class WordController implements Initializable {
 
   public void refreshTableView() {
     wordTableController.fillInTableView();
+  }
+
+  public void refreshChildView() {
+    // refresh sentence view
+  }
+
+  public void refreshLessonComboBox() {
+    wordFormController.initializeLessonComboBox();
   }
 
   public LessonService getLessonService() {

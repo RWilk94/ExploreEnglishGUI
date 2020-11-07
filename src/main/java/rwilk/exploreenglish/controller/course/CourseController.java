@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Course;
 import rwilk.exploreenglish.service.CourseService;
+import rwilk.exploreenglish.service.InjectService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 @Controller
 public class CourseController implements Initializable {
 
+  private final InjectService injectService;
   private final CourseService courseService;
   private CourseFormController courseFormController;
   private CourseTableController courseTableController;
@@ -22,8 +24,10 @@ public class CourseController implements Initializable {
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public CourseController(CourseService courseService) {
+  public CourseController(InjectService injectService, CourseService courseService) {
+    this.injectService = injectService;
     this.courseService = courseService;
+    injectService.setCourseController(this);
   }
 
   @Override
@@ -55,6 +59,18 @@ public class CourseController implements Initializable {
 
   public void refreshTableView() {
     courseTableController.fillInTableView();
+  }
+
+  public void refreshChildTableView() {
+    injectService.getLessonController().refreshTableView();
+    injectService.getWordController().refreshTableView();
+    injectService.getNoteController().refreshTableView();
+    injectService.getExerciseController().refreshTableView();
+    injectService.getExerciseItemController().refreshTableView();
+  }
+
+  public void refreshChildComboBoxes() {
+    injectService.getLessonController().refreshCourseComboBox();
   }
 
   public void setCourseForm(Course course) {

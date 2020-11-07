@@ -45,6 +45,7 @@ public class LessonFormController implements Initializable {
           .ifPresent(lesson -> lessonController.getLessonService().delete(lesson));
       buttonClearOnAction(actionEvent);
       lessonController.refreshTableView();
+      lessonController.refreshChildTableView();
     }
   }
 
@@ -60,6 +61,7 @@ public class LessonFormController implements Initializable {
             lesson.setCourse(comboBoxCourse.getSelectionModel().getSelectedItem());
             setLessonForm(lessonController.getLessonService().save(lesson));
             lessonController.refreshTableView();
+            lessonController.refreshChildComboBoxes();
           });
     }
   }
@@ -75,6 +77,7 @@ public class LessonFormController implements Initializable {
       lesson = lessonController.getLessonService().save(lesson);
       setLessonForm(lesson);
       lessonController.refreshTableView();
+      lessonController.refreshChildComboBoxes();
     }
   }
 
@@ -85,7 +88,7 @@ public class LessonFormController implements Initializable {
     comboBoxCourse.getSelectionModel().select(lesson.getCourse());
   }
 
-  private void initializeCourseComboBox() {
+  public void initializeCourseComboBox() {
     List<Course> courses = lessonController.getCourseService().getAll();
     comboBoxCourse.setItems(FXCollections.observableArrayList(courses));
   }

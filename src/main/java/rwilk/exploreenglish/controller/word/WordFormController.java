@@ -121,10 +121,9 @@ public class WordFormController implements Initializable {
     toggleButtons.forEach(toggleButton -> toggleButton.setToggleGroup(toggleGroup));
   }
 
-  private void initializeLessonComboBox() {
+  public void initializeLessonComboBox() {
     List<Lesson> lessons = wordController.getLessonService().getAll();
     comboBoxLesson.setItems(FXCollections.observableArrayList(lessons));
   }
-
 
 }

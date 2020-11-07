@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.entity.Course;
 import rwilk.exploreenglish.repository.CourseRepository;
 
@@ -11,9 +12,11 @@ import java.util.Optional;
 public class CourseService {
 
   private final CourseRepository courseRepository;
+  private final LessonService lessonService;
 
-  public CourseService(CourseRepository courseRepository) {
+  public CourseService(CourseRepository courseRepository, LessonService lessonService) {
     this.courseRepository = courseRepository;
+    this.lessonService = lessonService;
   }
 
   public List<Course> getAll() {
@@ -28,10 +31,13 @@ public class CourseService {
     return courseRepository.save(course);
   }
 
+  @Transactional
   public void delete(Course course) {
+    lessonService.deleteByCourse(course);
     courseRepository.delete(course);
   }
 
+  @Transactional
   public void deleteById(Long id) {
     courseRepository.deleteById(id);
   }

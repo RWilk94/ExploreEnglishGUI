@@ -37,6 +37,7 @@ public class CourseFormController implements Initializable {
       courseController.getCourseService().getById(Long.valueOf(textFieldId.getText())).ifPresent(course -> courseController.getCourseService().delete(course));
       buttonClearOnAction(actionEvent);
       courseController.refreshTableView();
+      courseController.refreshChildTableView();
     }
   }
 
@@ -48,6 +49,7 @@ public class CourseFormController implements Initializable {
         course.setPolishName(textFieldPlName.getText().trim());
         setCourseForm(courseController.getCourseService().save(course));
         courseController.refreshTableView();
+        courseController.refreshChildComboBoxes();
       });
     }
   }
@@ -61,6 +63,7 @@ public class CourseFormController implements Initializable {
       course = courseController.getCourseService().save(course);
       setCourseForm(course);
       courseController.refreshTableView();
+      courseController.refreshChildComboBoxes();
     }
   }
 

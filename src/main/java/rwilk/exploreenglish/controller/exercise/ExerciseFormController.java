@@ -41,6 +41,7 @@ public class ExerciseFormController implements Initializable {
           .ifPresent(exercise -> exerciseController.getExerciseService().delete(exercise));
       buttonClearOnAction(actionEvent);
       exerciseController.refreshTableView();
+      exerciseController.refreshChildView();
     }
   }
 
@@ -63,6 +64,7 @@ public class ExerciseFormController implements Initializable {
             exercise = exerciseController.getExerciseService().save(exercise);
             setExerciseForm(exercise);
             exerciseController.refreshTableView();
+            exerciseController.refreshChildComboBoxes();
           });
     }
   }
@@ -80,6 +82,7 @@ public class ExerciseFormController implements Initializable {
       exercise = exerciseController.getExerciseService().save(exercise);
       setExerciseForm(exercise);
       exerciseController.refreshTableView();
+      exerciseController.refreshChildComboBoxes();
     }
   }
 
@@ -90,7 +93,7 @@ public class ExerciseFormController implements Initializable {
     comboBoxType.getSelectionModel().select(exercise.getType());
   }
 
-  private void initializeLessonComboBox() {
+  public void initializeLessonComboBox() {
     List<Lesson> lessons = exerciseController.getLessonService().getAll();
     comboBoxLesson.setItems(FXCollections.observableArrayList(lessons));
   }

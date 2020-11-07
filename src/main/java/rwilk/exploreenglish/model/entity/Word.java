@@ -68,7 +68,7 @@ public final class Word implements Serializable {
   @Column(name = "synonym")
   private String synonym;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
   private Lesson lesson;
 

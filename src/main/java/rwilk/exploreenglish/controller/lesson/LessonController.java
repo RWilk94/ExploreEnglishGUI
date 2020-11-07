@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.service.CourseService;
+import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.ResourceBundle;
 @Controller
 public class LessonController implements Initializable {
 
+  private final InjectService injectService;
   private final CourseService courseService;
   private final LessonService lessonService;
   private LessonFormController lessonFormController;
@@ -24,9 +26,11 @@ public class LessonController implements Initializable {
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public LessonController(CourseService courseService, LessonService lessonService) {
+  public LessonController(InjectService injectService, CourseService courseService, LessonService lessonService) {
+    this.injectService = injectService;
     this.courseService = courseService;
     this.lessonService = lessonService;
+    injectService.setLessonController(this);
   }
 
   @Override
@@ -62,6 +66,23 @@ public class LessonController implements Initializable {
 
   public void refreshTableView() {
     lessonTableController.fillInTableView();
+  }
+
+  public void refreshChildTableView() {
+    injectService.getWordController().refreshTableView();
+    injectService.getNoteController().refreshTableView();
+    injectService.getExerciseController().refreshTableView();
+    injectService.getExerciseItemController().refreshTableView();
+  }
+
+  public void refreshChildComboBoxes() {
+    injectService.getWordController().refreshLessonComboBox();
+    injectService.getNoteController().refreshLessonComboBox();
+    injectService.getExerciseController().refreshLessonComboBox();
+  }
+
+  public void refreshCourseComboBox() {
+    lessonFormController.initializeCourseComboBox();
   }
 
   public CourseService getCourseService() {

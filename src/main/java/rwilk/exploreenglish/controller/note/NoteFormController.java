@@ -80,8 +80,9 @@ public class NoteFormController implements Initializable {
     comboBoxLesson.getSelectionModel().select(note.getLesson());
   }
 
-  private void initializeLessonComboBox() {
+  public void initializeLessonComboBox() {
     List<Lesson> lessons = noteController.getLessonService().getAll();
     comboBoxLesson.setItems(FXCollections.observableArrayList(lessons));
   }
+
 }

@@ -109,6 +109,7 @@ public class ExerciseItemFormController implements Initializable {
         exerciseItem = ExerciseItem.builder()
             .dialogueEnglish(textFieldDialogueEnglish.getText())
             .dialoguePolish(textFieldDialoguePolish.getText())
+            .exercise(exercise)
             .build();
       } else if (exercise.getType().equals("CHOICE")
           && StringUtils.isNoneEmpty(textFieldQuestion.getText())
@@ -125,6 +126,7 @@ public class ExerciseItemFormController implements Initializable {
             .thirdPossibleAnswer(textFieldThirdPossibleAnswer.getText())
             .forthPossibleAnswer(textFieldFourthPossibleAnswer.getText())
             .description(textFieldDescription.getText())
+            .exercise(exercise)
             .build();
       }
       exerciseItem = exerciseItemController.getExerciseItemService().save(exerciseItem);
@@ -148,7 +150,7 @@ public class ExerciseItemFormController implements Initializable {
     textFieldDescription.setText(exerciseItem.getDescription());
   }
 
-  private void initializeExerciseComboBox() {
+  public void initializeExerciseComboBox() {
     List<Exercise> exercises = exerciseItemController.getExerciseService().getAll();
     comboBoxExercise.setItems(FXCollections.observableArrayList(exercises));
   }

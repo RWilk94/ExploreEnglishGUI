@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Note;
+import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.NoteService;
 
@@ -16,6 +17,7 @@ import java.util.ResourceBundle;
 @Controller
 public class NoteController implements Initializable {
 
+  private final InjectService injectService;
   private final LessonService lessonService;
   private final NoteService noteService;
   private NoteFormController noteFormController;
@@ -24,9 +26,11 @@ public class NoteController implements Initializable {
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public NoteController(LessonService lessonService, NoteService noteService) {
+  public NoteController(InjectService injectService, LessonService lessonService, NoteService noteService) {
+    this.injectService = injectService;
     this.lessonService = lessonService;
     this.noteService = noteService;
+    injectService.setNoteController(this);
   }
 
   @Override
@@ -62,6 +66,10 @@ public class NoteController implements Initializable {
 
   public void refreshTableView() {
     noteTableController.fillInTableView();
+  }
+
+  public void refreshLessonComboBox() {
+    noteFormController.initializeLessonComboBox();
   }
 
   public LessonService getLessonService() {
