@@ -75,6 +75,7 @@ public class WordFormController implements Initializable {
           .ifPresent(word -> wordController.getWordService().delete(word));
       buttonClearOnAction(actionEvent);
       wordController.refreshTableView();
+      wordController.refreshChildTableView();
     }
   }
 
@@ -90,6 +91,7 @@ public class WordFormController implements Initializable {
             word = wordController.getWordService().save(word);
             setWordForm(word);
             wordController.refreshTableView();
+            wordController.refreshChildComboBoxes();
           });
     }
   }
@@ -101,6 +103,7 @@ public class WordFormController implements Initializable {
       word = wordController.getWordService().save(word);
       FormUtils.setWordForm(word, controls);
       wordController.refreshTableView();
+      wordController.refreshChildComboBoxes();
     }
   }
 

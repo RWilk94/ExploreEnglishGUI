@@ -69,8 +69,13 @@ public class WordController implements Initializable {
     wordTableController.fillInTableView();
   }
 
-  public void refreshChildView() {
-    // refresh sentence view
+  public void refreshChildTableView() {
+    injectService.getSentenceController().refreshTableView();
+    injectService.getSentenceController().refreshWordComboBox();
+  }
+
+  public void refreshChildComboBoxes() {
+    injectService.getSentenceController().refreshWordComboBox();
   }
 
   public void refreshLessonComboBox() {

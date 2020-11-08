@@ -8,6 +8,7 @@ import rwilk.exploreenglish.controller.exercise.ExerciseController;
 import rwilk.exploreenglish.controller.exerciseitem.ExerciseItemController;
 import rwilk.exploreenglish.controller.lesson.LessonController;
 import rwilk.exploreenglish.controller.note.NoteController;
+import rwilk.exploreenglish.controller.sentence.SentenceController;
 import rwilk.exploreenglish.controller.word.WordController;
 
 @Getter
@@ -18,6 +19,7 @@ public class InjectService {
   private CourseController courseController;
   private LessonController lessonController;
   private WordController wordController;
+  private SentenceController sentenceController;
   private NoteController noteController;
   private ExerciseController exerciseController;
   private ExerciseItemController exerciseItemController;

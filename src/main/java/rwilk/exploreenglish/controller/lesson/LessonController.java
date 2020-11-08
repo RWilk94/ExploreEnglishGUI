@@ -70,9 +70,15 @@ public class LessonController implements Initializable {
 
   public void refreshChildTableView() {
     injectService.getWordController().refreshTableView();
+    injectService.getWordController().refreshLessonComboBox();
+    injectService.getSentenceController().refreshTableView();
+    injectService.getSentenceController().refreshWordComboBox();
     injectService.getNoteController().refreshTableView();
+    injectService.getNoteController().refreshLessonComboBox();
     injectService.getExerciseController().refreshTableView();
+    injectService.getExerciseController().refreshLessonComboBox();
     injectService.getExerciseItemController().refreshTableView();
+    injectService.getExerciseItemController().refreshExerciseComboBox();
   }
 
   public void refreshChildComboBoxes() {

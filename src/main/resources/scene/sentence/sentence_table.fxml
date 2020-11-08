@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="rwilk.exploreenglish.controller.sentence.SentenceTableController"
+      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+  <HBox HBox.hgrow="ALWAYS">
+    <TextField fx:id="textFieldFilterByWord" promptText="Filter by word here..." HBox.hgrow="ALWAYS">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </TextField>
+  </HBox>
+
+  <TableView fx:id="tableSentence" VBox.vgrow="ALWAYS" onMouseClicked="#tableViewOnMouseClicked">
+    <columns>
+      <TableColumn fx:id="columnId" minWidth="20.0" prefWidth="-1.0" text="Id">
+        <cellValueFactory>
+          <PropertyValueFactory property="id"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnEnglishName" minWidth="20.0" prefWidth="-1.0" text="Note">
+        <cellValueFactory>
+          <PropertyValueFactory property="englishName"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnPolishName" minWidth="20.0" prefWidth="-1.0" text="Note">
+        <cellValueFactory>
+          <PropertyValueFactory property="polishName"/>
+        </cellValueFactory>
+      </TableColumn>
+
+
+      <TableColumn fx:id="columnWord" minWidth="20.0" prefWidth="-1.0" text="Lesson">
+        <cellValueFactory>
+          <PropertyValueFactory property="word"/>
+        </cellValueFactory>
+      </TableColumn>
+    </columns>
+
+    <VBox.margin>
+      <Insets bottom="5.0" left="5.0" right="5.0"/>
+    </VBox.margin>
+  </TableView>
+
+</VBox>

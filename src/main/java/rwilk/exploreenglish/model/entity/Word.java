@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -75,4 +76,20 @@ public final class Word implements Serializable {
   @Transient
   private List<Sentence> sentences;
 
+  @Override
+  public String toString() {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append(id).append(". ");
+    if (StringUtils.isNoneEmpty(englishName)) {
+      stringBuilder.append(englishName).append("; ");
+    }
+    if (StringUtils.isNoneEmpty(americanName)) {
+      stringBuilder.append(americanName).append("; ");
+    }
+    if (StringUtils.isNoneEmpty(otherName)) {
+      stringBuilder.append(otherName).append("; ");
+    }
+    stringBuilder.append("(").append(polishName).append(")");
+    return stringBuilder.toString();
+  }
 }

@@ -18,6 +18,9 @@
       <Tab text="Word">
         <fx:include source="word/word.fxml"/>
       </Tab>
+      <Tab text="Sentence">
+        <fx:include source="sentence/sentence.fxml" />
+      </Tab>
       <Tab text="Note">
         <fx:include source="note/note.fxml"/>
       </Tab>

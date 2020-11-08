@@ -70,6 +70,7 @@ public class ExerciseController implements Initializable {
 
   public void refreshChildView() {
     injectService.getExerciseItemController().refreshTableView();
+    injectService.getExerciseItemController().refreshExerciseComboBox();
   }
 
   public void refreshChildComboBoxes() {
