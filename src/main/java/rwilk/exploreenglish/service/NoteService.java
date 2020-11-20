@@ -22,6 +22,10 @@ public class NoteService {
     return noteRepository.findAll();
   }
 
+  public List<Note> getAllByLesson(Lesson lesson) {
+    return noteRepository.findAllByLesson(lesson);
+  }
+
   public Optional<Note> getById(Long id) {
     return noteRepository.findById(id);
   }

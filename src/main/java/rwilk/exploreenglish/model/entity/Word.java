@@ -28,7 +28,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "words")
-public final class Word implements Serializable {
+public final class Word implements Serializable, LearnItem {
 
   private static final long serialVersionUID = -4492733736602366272L;
   @Id
@@ -79,7 +79,7 @@ public final class Word implements Serializable {
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append(id).append(". ");
+    stringBuilder.append("[W]").append(id).append(". ");
     if (StringUtils.isNoneEmpty(englishName)) {
       stringBuilder.append(englishName).append("; ");
     }

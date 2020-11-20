@@ -8,44 +8,42 @@
     xmlns:fx="http://javafx.com/fxml" fx:controller="rwilk.exploreenglish.controller.main.MainController">
 
   <center>
-    <SplitPane dividerPositions="0.5">
-      <AnchorPane minHeight="0" minWidth="0">
+    <SplitPane dividerPositions="0.9" orientation="VERTICAL">
+      <SplitPane dividerPositions="0.5">
+        <AnchorPane minHeight="0" minWidth="0">
 
-        <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-          <Tab text="Course">
-            <fx:include source="course/course.fxml"/>
-          </Tab>
-          <Tab text="Lesson">
-            <fx:include source="lesson/lesson.fxml"/>
-          </Tab>
-          <Tab text="Word">
-            <fx:include source="word/word.fxml"/>
-          </Tab>
-          <Tab text="Sentence">
-            <fx:include source="sentence/sentence.fxml" />
-          </Tab>
-          <Tab text="Note">
-            <fx:include source="note/note.fxml"/>
-          </Tab>
-          <Tab text="Exercise">
-            <fx:include source="exercise/exercise.fxml"/>
-          </Tab>
-          <Tab text="Exercise Item">
-            <fx:include source="exerciseitem/exercise_item.fxml"/>
-          </Tab>
-        </TabPane>
+          <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Tab text="Course">
+              <fx:include source="course/course.fxml"/>
+            </Tab>
+            <Tab text="Lesson">
+              <fx:include source="lesson/lesson.fxml"/>
+            </Tab>
+            <Tab text="Word">
+              <fx:include source="word/word.fxml"/>
+            </Tab>
+            <Tab text="Sentence">
+              <fx:include source="sentence/sentence.fxml"/>
+            </Tab>
+            <Tab text="Note">
+              <fx:include source="note/note.fxml"/>
+            </Tab>
+            <Tab text="Exercise">
+              <fx:include source="exercise/exercise.fxml"/>
+            </Tab>
+            <Tab text="Exercise Item">
+              <fx:include source="exerciseitem/exercise_item.fxml"/>
+            </Tab>
+          </TabPane>
 
-      </AnchorPane>
-      <AnchorPane minHeight="0" minWidth="0">
-        <fx:include source="term/term_table.fxml" />
-      </AnchorPane>
+        </AnchorPane>
+        <AnchorPane minHeight="0" minWidth="0">
+          <fx:include source="term/term_table.fxml"/>
+        </AnchorPane>
+      </SplitPane>
+      <fx:include source="view/view.fxml"/>
     </SplitPane>
-
-
-
-
-
   </center>
 
   <stylesheets>

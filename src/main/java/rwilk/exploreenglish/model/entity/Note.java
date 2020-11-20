@@ -25,7 +25,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "notes")
-public final class Note implements Serializable {
+public final class Note implements Serializable, LearnItem {
 
   private static final long serialVersionUID = -2496000448543922804L;
   @Id
@@ -41,4 +41,8 @@ public final class Note implements Serializable {
   @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
   private Lesson lesson;
 
+  @Override
+  public String toString() {
+    return "[N]" + id + ". " + note;
+  }
 }

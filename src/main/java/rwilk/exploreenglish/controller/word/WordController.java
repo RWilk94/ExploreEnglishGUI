@@ -6,6 +6,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
+import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
@@ -72,14 +73,20 @@ public class WordController implements Initializable {
   public void refreshChildTableView() {
     injectService.getSentenceController().refreshTableView();
     injectService.getSentenceController().refreshWordComboBox();
+    injectService.getViewController().refreshListViewLessonItems();
   }
 
   public void refreshChildComboBoxes() {
     injectService.getSentenceController().refreshWordComboBox();
+    injectService.getViewController().refreshListViewLessonItems();
   }
 
   public void refreshLessonComboBox() {
     wordFormController.initializeLessonComboBox();
+  }
+
+  public void setLessonComboBox(Lesson lesson) {
+    wordFormController.comboBoxLesson.getSelectionModel().select(lesson);
   }
 
   public LessonService getLessonService() {

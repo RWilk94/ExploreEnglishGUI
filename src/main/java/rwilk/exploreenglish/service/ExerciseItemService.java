@@ -22,6 +22,10 @@ public class ExerciseItemService {
     return exerciseItemRepository.findAll();
   }
 
+  public List<ExerciseItem> getAllByExercise(Exercise exercise) {
+    return exerciseItemRepository.findAllByExercise(exercise);
+  }
+
   public Optional<ExerciseItem> getById(Long id) {
     return exerciseItemRepository.findById(id);
   }

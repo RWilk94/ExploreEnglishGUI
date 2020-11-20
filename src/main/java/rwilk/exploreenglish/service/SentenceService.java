@@ -22,6 +22,10 @@ public class SentenceService {
     return sentenceRepository.findAll();
   }
 
+  public List<Sentence> getAllByWord(Word word) {
+    return sentenceRepository.findAllByWord(word);
+  }
+
   public Optional<Sentence> getById(Long id) {
     return sentenceRepository.findById(id);
   }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,7 +26,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "exercise_item")
-public final class ExerciseItem implements Serializable {
+public final class ExerciseItem implements Serializable, LearnItemChildren {
 
   private static final long serialVersionUID = 2360065403395688983L;
   @Id
@@ -57,5 +58,22 @@ public final class ExerciseItem implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
   private Exercise exercise;
+
+  @Override
+  public String toString() {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("[E]").append(id).append(". ");
+    if (exercise.getType().equals("DIALOGUE")) {
+      stringBuilder.append(dialogueEnglish).append(" (").append(dialoguePolish).append(")");
+    } else {
+      if (StringUtils.isNoneEmpty(question)) {
+        stringBuilder.append(question).append("; ");
+      }
+      if (StringUtils.isNoneEmpty(correctAnswer)) {
+        stringBuilder.append(correctAnswer).append("; ");
+      }
+    }
+    return stringBuilder.toString();
+  }
 
 }

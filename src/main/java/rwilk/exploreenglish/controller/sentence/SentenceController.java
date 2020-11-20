@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Sentence;
+import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.SentenceService;
 import rwilk.exploreenglish.service.WordService;
@@ -66,10 +67,15 @@ public class SentenceController implements Initializable {
 
   public void refreshTableView() {
     sentenceTableController.fillInTableView();
+    injectService.getViewController().refreshListViewLessonItemChildren();
   }
 
   public void refreshWordComboBox() {
     sentenceFormController.initializeWordComboBox();
+  }
+
+  public void setWordComboBox(Word word) {
+    sentenceFormController.comboBoxWord.getSelectionModel().select(word);
   }
 
   public WordService getWordService() {

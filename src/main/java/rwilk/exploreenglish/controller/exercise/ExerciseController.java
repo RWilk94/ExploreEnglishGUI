@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Exercise;
+import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.service.ExerciseService;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
@@ -71,14 +72,20 @@ public class ExerciseController implements Initializable {
   public void refreshChildView() {
     injectService.getExerciseItemController().refreshTableView();
     injectService.getExerciseItemController().refreshExerciseComboBox();
+    injectService.getViewController().refreshListViewLessonItems();
   }
 
   public void refreshChildComboBoxes() {
     injectService.getExerciseItemController().refreshExerciseComboBox();
+    injectService.getViewController().refreshListViewLessonItems();
   }
 
   public void refreshLessonComboBox() {
     exerciseFormController.initializeLessonComboBox();
+  }
+
+  public void setLessonComboBox(Lesson lesson) {
+    exerciseFormController.comboBoxLesson.getSelectionModel().select(lesson);
   }
 
   public LessonService getLessonService() {

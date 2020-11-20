@@ -25,7 +25,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "sentences")
-public final class Sentence implements Serializable {
+public final class Sentence implements Serializable, LearnItemChildren {
 
   private static final long serialVersionUID = -8129298224912951576L;
   @Id
@@ -43,4 +43,8 @@ public final class Sentence implements Serializable {
   @JoinColumn(name = "word_id", nullable = false, referencedColumnName = "id")
   private Word word;
 
+  @Override
+  public String toString() {
+    return "[S]" + id + ". " + englishName + " (" + polishName + ")";
+  }
 }

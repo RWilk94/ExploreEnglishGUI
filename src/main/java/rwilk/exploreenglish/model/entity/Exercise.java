@@ -27,7 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "exercises")
-public final class Exercise implements Serializable {
+public final class Exercise implements Serializable, LearnItem {
 
   private static final long serialVersionUID = 6210570119816267463L;
   @Id
@@ -50,6 +50,6 @@ public final class Exercise implements Serializable {
 
   @Override
   public String toString() {
-    return id + ". " + name + " (" + type + ")";
+    return "[E]" + id + ". " + name + " (" + type + ")";
   }
 }

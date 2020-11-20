@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
+import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
@@ -66,10 +67,15 @@ public class NoteController implements Initializable {
 
   public void refreshTableView() {
     noteTableController.fillInTableView();
+    injectService.getViewController().refreshListViewLessonItems();
   }
 
   public void refreshLessonComboBox() {
     noteFormController.initializeLessonComboBox();
+  }
+
+  public void setLessonComboBox(Lesson lesson) {
+    noteFormController.comboBoxLesson.getSelectionModel().select(lesson);
   }
 
   public LessonService getLessonService() {

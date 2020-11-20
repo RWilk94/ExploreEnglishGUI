@@ -61,6 +61,9 @@ public class CourseController implements Initializable {
     courseTableController.fillInTableView();
   }
 
+  /**
+   * Refresh child view after delete course.
+   */
   public void refreshChildTableView() {
     injectService.getLessonController().refreshTableView();
     injectService.getLessonController().refreshCourseComboBox();
@@ -74,10 +77,15 @@ public class CourseController implements Initializable {
     injectService.getExerciseController().refreshLessonComboBox();
     injectService.getExerciseItemController().refreshTableView();
     injectService.getExerciseItemController().refreshExerciseComboBox();
+    injectService.getViewController().refreshListViewCourses();
   }
 
+  /**
+   * Refresh child view after add or edit course.
+   */
   public void refreshChildComboBoxes() {
     injectService.getLessonController().refreshCourseComboBox();
+    injectService.getViewController().refreshListViewCourses();
   }
 
   public void setCourseForm(Course course) {
