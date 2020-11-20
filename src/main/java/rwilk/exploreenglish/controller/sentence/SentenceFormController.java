@@ -73,6 +73,7 @@ public class SentenceFormController implements Initializable {
       Sentence sentence = Sentence.builder()
           .englishName(textFieldEnglishName.getText())
           .polishName(textFieldPolishName.getText())
+          .position(sentenceController.getSentenceService().getCountByWord(comboBoxWord.getSelectionModel().getSelectedItem()))
           .word(comboBoxWord.getSelectionModel().getSelectedItem())
           .build();
       sentence = sentenceController.getSentenceService().save(sentence);

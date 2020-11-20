@@ -76,8 +76,9 @@ public class ExerciseFormController implements Initializable {
 
       Exercise exercise = Exercise.builder()
           .name(textFieldName.getText())
-          .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
           .type(comboBoxType.getSelectionModel().getSelectedItem())
+          .position(exerciseController.getExerciseService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
+          .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
           .build();
       exercise = exerciseController.getExerciseService().save(exercise);
       setExerciseForm(exercise);

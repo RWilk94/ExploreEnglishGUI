@@ -48,4 +48,8 @@ public class NoteService {
   public void deleteById(Long id) {
     noteRepository.deleteById(id);
   }
+
+  public Integer getCountByLesson(Lesson lesson) {
+    return (int) noteRepository.countAllByLesson(lesson.getId());
+  }
 }

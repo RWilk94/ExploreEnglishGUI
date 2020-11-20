@@ -38,6 +38,8 @@ public final class Sentence implements Serializable, LearnItemChildren {
   private String polishName;
   @Column(name = "sound")
   private String sound;
+  @Column(name = "position")
+  private Integer position;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "word_id", nullable = false, referencedColumnName = "id")

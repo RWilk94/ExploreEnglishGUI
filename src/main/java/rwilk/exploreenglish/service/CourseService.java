@@ -42,4 +42,8 @@ public class CourseService {
     courseRepository.deleteById(id);
   }
 
+  public Integer getCount() {
+    return (int) courseRepository.count();
+  }
+
 }

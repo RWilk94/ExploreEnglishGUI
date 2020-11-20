@@ -55,6 +55,9 @@ public final class ExerciseItem implements Serializable, LearnItemChildren {
   @Column(name = "description")
   private String description;
 
+  @Column(name = "position")
+  private Integer position;
+
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
   private Exercise exercise;

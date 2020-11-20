@@ -36,6 +36,8 @@ public final class Course implements Serializable {
   private String polishName;
   @Column(name = "image")
   private String image;
+  @Column(name = "position")
+  private Integer position;
 
   @Transient
   private List<Lesson> lessons;

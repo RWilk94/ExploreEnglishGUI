@@ -100,6 +100,7 @@ public class WordFormController implements Initializable {
     if (FormUtils.allFieldsFilled(requiredControls)) {
       Word word = FormUtils.getWord(controls);
       word.setId(null);
+      word.setPosition(wordController.getWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()));
       word = wordController.getWordService().save(word);
       FormUtils.setWordForm(word, controls);
       wordController.refreshTableView();

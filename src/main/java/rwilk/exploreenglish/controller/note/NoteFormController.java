@@ -66,6 +66,7 @@ public class NoteFormController implements Initializable {
         && comboBoxLesson.getSelectionModel().getSelectedItem() != null) {
       Note note = Note.builder()
           .note(textAreaNote.getText())
+          .position(noteController.getNoteService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
           .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
           .build();
       note = noteController.getNoteService().save(note);

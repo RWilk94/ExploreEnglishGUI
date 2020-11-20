@@ -56,4 +56,8 @@ public class ExerciseService {
     exerciseRepository.deleteById(id);
   }
 
+  public Integer getCountByLesson(Lesson lesson) {
+    return (int) exerciseRepository.countAllByLesson(lesson.getId());
+  }
+
 }

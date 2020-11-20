@@ -69,10 +69,12 @@ public class LessonFormController implements Initializable {
   public void buttonAddOnAction(ActionEvent actionEvent) {
     if (StringUtils.isNotEmpty(textFieldEnName.getText()) && StringUtils.isNotEmpty(textFieldPlName.getText())
         && comboBoxCourse.getSelectionModel().getSelectedItem() != null) {
+      Course course = comboBoxCourse.getSelectionModel().getSelectedItem();
       Lesson lesson = Lesson.builder()
           .englishName(textFieldEnName.getText().trim())
           .polishName(textFieldPlName.getText().trim())
-          .course(lessonController.getCourseService().getById((comboBoxCourse.getSelectionModel().getSelectedItem()).getId()).get())
+          .position(lessonController.getLessonService().getCountByCourse(course))
+          .course(course)
           .build();
       lesson = lessonController.getLessonService().save(lesson);
       setLessonForm(lesson);

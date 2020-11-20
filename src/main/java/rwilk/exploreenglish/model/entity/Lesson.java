@@ -41,6 +41,8 @@ public final class Lesson implements Serializable {
   private String polishName;
   @Column(name = "image")
   private String image;
+  @Column(name = "position")
+  private Integer position;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "course_id", nullable = false, referencedColumnName = "id")

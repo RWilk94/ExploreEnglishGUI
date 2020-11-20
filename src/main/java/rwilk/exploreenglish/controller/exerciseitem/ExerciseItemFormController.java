@@ -109,6 +109,7 @@ public class ExerciseItemFormController implements Initializable {
         exerciseItem = ExerciseItem.builder()
             .dialogueEnglish(textFieldDialogueEnglish.getText())
             .dialoguePolish(textFieldDialoguePolish.getText())
+            .position(exerciseItemController.getExerciseItemService().getCountByExercise(exercise))
             .exercise(exercise)
             .build();
       } else if (exercise.getType().equals("CHOICE")
@@ -126,6 +127,7 @@ public class ExerciseItemFormController implements Initializable {
             .thirdPossibleAnswer(textFieldThirdPossibleAnswer.getText())
             .forthPossibleAnswer(textFieldFourthPossibleAnswer.getText())
             .description(textFieldDescription.getText())
+            .position(exerciseItemController.getExerciseItemService().getCountByExercise(exercise))
             .exercise(exercise)
             .build();
       }

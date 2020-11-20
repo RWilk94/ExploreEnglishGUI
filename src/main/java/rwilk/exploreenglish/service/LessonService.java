@@ -63,5 +63,9 @@ public class LessonService {
   public void deleteById(Long id) {
     lessonRepository.deleteById(id);
   }
+
+  public Integer getCountByCourse(Course course) {
+    return (int) lessonRepository.countAllByCourse(course);
+  }
   
 }

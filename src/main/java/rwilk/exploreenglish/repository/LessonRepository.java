@@ -12,4 +12,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
   List<Lesson> findAllByCourse(Course course);
 
+  long countAllByCourse(Course course);
+
 }

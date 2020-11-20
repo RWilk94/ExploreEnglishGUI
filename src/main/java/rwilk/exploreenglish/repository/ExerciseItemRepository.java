@@ -14,4 +14,6 @@ public interface ExerciseItemRepository extends JpaRepository<ExerciseItem, Long
 
   List<ExerciseItem> findAllByExercise(Exercise exercise);
 
+  long countAllByExercise(Exercise exercise);
+
 }

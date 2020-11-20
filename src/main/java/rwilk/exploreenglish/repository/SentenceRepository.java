@@ -14,4 +14,6 @@ public interface SentenceRepository extends JpaRepository<Sentence, Long> {
 
   List<Sentence> findAllByWord(Word word);
 
+  long countAllByWord(Word word);
+
 }

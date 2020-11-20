@@ -59,6 +59,7 @@ public class CourseFormController implements Initializable {
       Course course = Course.builder()
           .englishName(textFieldEnName.getText().trim())
           .polishName(textFieldPlName.getText().trim())
+          .position(courseController.getCourseService().getCount())
           .build();
       course = courseController.getCourseService().save(course);
       setCourseForm(course);

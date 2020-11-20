@@ -49,4 +49,8 @@ public class SentenceService {
     sentenceRepository.deleteById(id);
   }
 
+  public Integer getCountByWord(Word word) {
+    return (int) sentenceRepository.countAllByWord(word);
+  }
+
 }

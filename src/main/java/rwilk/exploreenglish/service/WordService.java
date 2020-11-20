@@ -56,4 +56,8 @@ public class WordService {
     wordRepository.deleteById(id);
   }
 
+  public Integer getCountByLesson(Lesson lesson) {
+    return (int) wordRepository.countAllByLesson(lesson.getId());
+  }
+
 }
