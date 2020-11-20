@@ -8,6 +8,7 @@ import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Word;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WordRepository extends JpaRepository<Word, Long> {
@@ -20,5 +21,17 @@ public interface WordRepository extends JpaRepository<Word, Long> {
       "(select count(*) from explore_english.exercises e where e.lesson_id = :lessonId)" +
       ") as pos;", nativeQuery = true)
   long countAllByLesson(@Param("lessonId") Long lessonId);
+
+  @Query(value = "select *" +
+      "from words w " +
+      "where w.lesson_id = :lessonId and w.`position` = (select max(position) from words where lesson_id = :lessonId and `position` < :position);",
+      nativeQuery = true)
+  Optional<Word> findPreviousPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
+
+  @Query(value = "select *" +
+      "from words w " +
+      "where w.lesson_id = :lessonId and w.`position` = (select min(position) from words where lesson_id = :lessonId and `position` > :position);",
+      nativeQuery = true)
+  Optional<Word> findNextPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
 
 }

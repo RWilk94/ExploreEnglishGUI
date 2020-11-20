@@ -8,6 +8,7 @@ import rwilk.exploreenglish.model.entity.Exercise;
 import rwilk.exploreenglish.model.entity.Lesson;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
@@ -20,5 +21,17 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
       "(select count(*) from explore_english.exercises e where e.lesson_id = :lessonId)" +
       ") as pos;", nativeQuery = true)
   long countAllByLesson(@Param("lessonId") Long lessonId);
+
+  @Query(value = "select *" +
+      "from exercises e " +
+      "where e.lesson_id = :lessonId and e.`position` = (select max(position) from exercises where lesson_id = :lessonId and `position` < :position);",
+      nativeQuery = true)
+  Optional<Exercise> findPreviousPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
+
+  @Query(value = "select *" +
+      "from exercises e " +
+      "where e.lesson_id = :lessonId and e.`position` = (select min(position) from exercises where lesson_id = :lessonId and `position` > :position);",
+      nativeQuery = true)
+  Optional<Exercise> findNextPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
 
 }

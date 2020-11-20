@@ -53,4 +53,12 @@ public class ExerciseItemService {
     return (int) exerciseItemRepository.countAllByExercise(exercise);
   }
 
+  public Optional<ExerciseItem> getPreviousExerciseItem(Long exerciseId, Integer position) {
+    return exerciseItemRepository.findPreviousPosition(exerciseId, position);
+  }
+
+  public Optional<ExerciseItem> getNextExerciseItem(Long exerciseId, Integer position) {
+    return exerciseItemRepository.findNextPosition(exerciseId, position);
+  }
+
 }

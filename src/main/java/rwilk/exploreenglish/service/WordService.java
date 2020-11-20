@@ -60,4 +60,12 @@ public class WordService {
     return (int) wordRepository.countAllByLesson(lesson.getId());
   }
 
+  public Optional<Word> getPreviousWord(Long lessonId, Integer position) {
+    return wordRepository.findPreviousPosition(lessonId, position);
+  }
+
+  public Optional<Word> getNextWord(Long lessonId, Integer position) {
+    return wordRepository.findNextPosition(lessonId, position);
+  }
+
 }

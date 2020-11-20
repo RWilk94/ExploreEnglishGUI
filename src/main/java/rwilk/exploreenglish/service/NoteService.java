@@ -52,4 +52,12 @@ public class NoteService {
   public Integer getCountByLesson(Lesson lesson) {
     return (int) noteRepository.countAllByLesson(lesson.getId());
   }
+
+  public Optional<Note> getPreviousNote(Long lessonId, Integer position) {
+    return noteRepository.findPreviousPosition(lessonId, position);
+  }
+
+  public Optional<Note> getNextNote(Long lessonId, Integer position) {
+    return noteRepository.findNextPosition(lessonId, position);
+  }
 }

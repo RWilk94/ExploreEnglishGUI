@@ -67,5 +67,13 @@ public class LessonService {
   public Integer getCountByCourse(Course course) {
     return (int) lessonRepository.countAllByCourse(course);
   }
+
+  public Optional<Lesson> getPreviousLesson(Long courseId, Integer position) {
+    return lessonRepository.findPreviousPosition(courseId, position);
+  }
+
+  public Optional<Lesson> getNextLesson(Long courseId, Integer position) {
+    return lessonRepository.findNextPosition(courseId, position);
+  }
   
 }

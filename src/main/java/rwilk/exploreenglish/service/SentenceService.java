@@ -53,4 +53,12 @@ public class SentenceService {
     return (int) sentenceRepository.countAllByWord(word);
   }
 
+  public Optional<Sentence> getPreviousSentence(Long wordId, Integer position) {
+    return sentenceRepository.findPreviousPosition(wordId, position);
+  }
+
+  public Optional<Sentence> getNextSentence(Long wordId, Integer position) {
+    return sentenceRepository.findNextPosition(wordId, position);
+  }
+
 }

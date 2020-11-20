@@ -46,4 +46,12 @@ public class CourseService {
     return (int) courseRepository.count();
   }
 
+  public Optional<Course> getPreviousCourse(Integer position) {
+    return courseRepository.findPreviousPosition(position);
+  }
+
+  public Optional<Course> getNextCourse(Integer position) {
+    return courseRepository.findNextPosition(position);
+  }
+
 }

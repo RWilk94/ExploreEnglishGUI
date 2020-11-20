@@ -8,6 +8,7 @@ import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Note;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long> {
@@ -22,4 +23,16 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
       "(select count(*) from explore_english.exercises e where e.lesson_id = :lessonId)" +
       ") as pos;", nativeQuery = true)
   long countAllByLesson(@Param("lessonId") Long lessonId);
+
+  @Query(value = "select *" +
+      "from notes n " +
+      "where n.lesson_id = :lessonId and n.`position` = (select max(position) from notes where lesson_id = :lessonId and `position` < :position);",
+      nativeQuery = true)
+  Optional<Note> findPreviousPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
+
+  @Query(value = "select *" +
+      "from notes n " +
+      "where n.lesson_id = :lessonId and n.`position` = (select min(position) from notes where lesson_id = :lessonId and `position` > :position);",
+      nativeQuery = true)
+  Optional<Note> findNextPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
 }

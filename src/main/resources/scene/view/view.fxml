@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -11,20 +8,40 @@
             fx:controller="rwilk.exploreenglish.controller.view.ViewController"
             prefHeight="400.0" prefWidth="600.0">
 
-  <ListView HBox.hgrow="ALWAYS" fx:id="listViewCourses" onMouseClicked="#listViewCoursesOnMouseClicked">
+  <VBox HBox.hgrow="ALWAYS">
+    <ListView HBox.hgrow="ALWAYS" fx:id="listViewCourses" onMouseClicked="#listViewCoursesOnMouseClicked">
+    </ListView>
+    <HBox HBox.hgrow="ALWAYS">
+      <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonCoursePositionUpOnAction"/>
+      <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonCoursePositionDownOnAction"/>
+    </HBox>
+  </VBox>
 
-  </ListView>
+  <VBox HBox.hgrow="ALWAYS">
+    <ListView HBox.hgrow="ALWAYS" fx:id="listViewLessons" onMouseClicked="#listViewLessonsOnMouseClicked">
+    </ListView>
+    <HBox HBox.hgrow="ALWAYS">
+      <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLessonPositionUpOnAction"/>
+      <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLessonPositionDownOnAction"/>
+    </HBox>
+  </VBox>
 
-  <ListView HBox.hgrow="ALWAYS" fx:id="listViewLessons" onMouseClicked="#listViewLessonsOnMouseClicked">
+  <VBox HBox.hgrow="ALWAYS">
+    <ListView HBox.hgrow="ALWAYS" fx:id="listViewLearnItems" onMouseClicked="#listViewLearnItemsOnMouseClicked">
+    </ListView>
+    <HBox HBox.hgrow="ALWAYS">
+      <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemsPositionUpOnAction"/>
+      <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemsPositionDownOnAction"/>
+    </HBox>
+  </VBox>
 
-  </ListView>
-
-  <ListView HBox.hgrow="ALWAYS" fx:id="listViewLearnItems" onMouseClicked="#listViewLearnItemsOnMouseClicked">
-
-  </ListView>
-
-  <ListView HBox.hgrow="ALWAYS" fx:id="listViewLearnItemChildren" onMouseClicked="#listViewLearnItemChildrenOnMouseClicked">
-
-  </ListView>
+  <VBox HBox.hgrow="ALWAYS">
+    <ListView HBox.hgrow="ALWAYS" fx:id="listViewLearnItemChildren" onMouseClicked="#listViewLearnItemChildrenOnMouseClicked">
+    </ListView>
+    <HBox HBox.hgrow="ALWAYS">
+      <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemChildrenPositionUpOnAction"/>
+      <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemChildrenPositionDownOnAction"/>
+    </HBox>
+  </VBox>
 
 </HBox>

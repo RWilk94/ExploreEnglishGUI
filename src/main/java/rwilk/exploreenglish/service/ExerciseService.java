@@ -60,4 +60,12 @@ public class ExerciseService {
     return (int) exerciseRepository.countAllByLesson(lesson.getId());
   }
 
+  public Optional<Exercise> getPreviousExercise(Long lessonId, Integer position) {
+    return exerciseRepository.findPreviousPosition(lessonId, position);
+  }
+
+  public Optional<Exercise> getNextExercise(Long lessonId, Integer position) {
+    return exerciseRepository.findNextPosition(lessonId, position);
+  }
+
 }
