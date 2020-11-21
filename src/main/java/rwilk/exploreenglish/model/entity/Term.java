@@ -58,4 +58,7 @@ public final class Term implements Serializable {
   private String source;
   @Column(name = "category")
   private String category;
+
+  @Column(name = "is_added")
+  private Boolean isAdded;
 }

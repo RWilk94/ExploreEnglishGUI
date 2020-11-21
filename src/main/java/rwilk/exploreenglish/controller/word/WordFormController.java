@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.custom.ToggleGroup2;
 import rwilk.exploreenglish.model.entity.Lesson;
+import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.utils.FormUtils;
 
@@ -110,6 +111,10 @@ public class WordFormController implements Initializable {
 
   public void setWordForm(Word word) {
     FormUtils.setWordForm(word, controls);
+  }
+
+  public void setWordForm(Term term) {
+    FormUtils.setWordForm(term, controls);
   }
 
   private void setToggleGroups() {

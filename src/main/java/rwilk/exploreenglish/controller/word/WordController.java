@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Lesson;
+import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
@@ -64,6 +65,10 @@ public class WordController implements Initializable {
 
   public void setWordForm(Word word) {
     wordFormController.setWordForm(word);
+  }
+
+  public void setWordForm(Term term) {
+    wordFormController.setWordForm(term);
   }
 
   public void refreshTableView() {

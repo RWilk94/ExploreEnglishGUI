@@ -1,9 +1,9 @@
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import java.net.URL?>
-<?import javafx.scene.control.SplitPane?>
 <BorderPane
     xmlns:fx="http://javafx.com/fxml" fx:controller="rwilk.exploreenglish.controller.main.MainController">
 
@@ -12,7 +12,8 @@
       <SplitPane dividerPositions="0.5">
         <AnchorPane minHeight="0" minWidth="0">
 
-          <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0"
+                   AnchorPane.leftAnchor="0.0"
                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <Tab text="Course">
               <fx:include source="course/course.fxml"/>
@@ -38,9 +39,14 @@
           </TabPane>
 
         </AnchorPane>
-        <AnchorPane minHeight="0" minWidth="0">
-          <fx:include source="term/term_table.fxml"/>
-        </AnchorPane>
+        <SplitPane dividerPositions="0.7" orientation="VERTICAL">
+          <AnchorPane>
+            <fx:include source="term/term_table.fxml"/>
+          </AnchorPane>
+          <AnchorPane>
+            <fx:include source="term/term_duplicated_table.fxml"/>
+          </AnchorPane>
+        </SplitPane>
       </SplitPane>
       <fx:include source="view/view.fxml"/>
     </SplitPane>

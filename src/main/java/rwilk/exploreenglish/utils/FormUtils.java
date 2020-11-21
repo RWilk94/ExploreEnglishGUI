@@ -11,6 +11,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.lang.NonNull;
 import rwilk.exploreenglish.custom.ToggleGroup2;
 import rwilk.exploreenglish.model.entity.Lesson;
+import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 
 import java.util.List;
@@ -83,6 +84,22 @@ public class FormUtils {
       }
     }
     return word;
+  }
+
+  public static Term setWordForm(Term term, List<Object> controls) {
+    for (Object control : controls) {
+      if (control instanceof TextField) {
+        TextField textField = (TextField) control;
+        setFieldFromWord(term, getFieldId(textField), textField);
+      } else if (control instanceof ComboBox) {
+        ComboBox comboBox = (ComboBox) control;
+        setFieldFromWord(term, getFieldId(comboBox), comboBox);
+      } else if (control instanceof ToggleGroup2) {
+        ToggleGroup2 toggleGroup2 = (ToggleGroup2) control;
+        setFieldFromWord(term, getFieldId(toggleGroup2), toggleGroup2);
+      }
+    }
+    return term;
   }
 
   private static void setWordField(@NonNull Word word, @NonNull String id, Object field) {
@@ -175,6 +192,47 @@ public class FormUtils {
         break;
       case "comboBoxLesson":
         setComboBox((ComboBox<Lesson>) field, word.getLesson());
+        break;
+    }
+  }
+
+  private static void setFieldFromWord(@NonNull Term term, @NonNull String id, Object field) {
+    switch (id) {
+      case "textFieldEnglishName":
+        setTextField((TextField) field, term.getEnglishName());
+        break;
+      case "textFieldAmericanName":
+        setTextField((TextField) field, term.getAmericanName());
+        break;
+      case "textFieldOtherNames":
+        setTextField((TextField) field, term.getOtherName());
+        break;
+      case "textFieldPolishName":
+        setTextField((TextField) field, term.getPolishName());
+        break;
+      case "toggleGroupPartOfSpeech":
+        setToggleGroup2((ToggleGroup2) field, "");
+        break;
+      case "toggleGroupArticle":
+        setToggleGroup2((ToggleGroup2) field, "");
+        break;
+      case "textFieldComparative":
+        setTextField((TextField) field, term.getComparative());
+        break;
+      case "textFieldSuperlative":
+        setTextField((TextField) field, term.getSuperlative());
+        break;
+      case "textFieldPastTense":
+        setTextField((TextField) field, term.getPastTense());
+        break;
+      case "textFieldPastParticiple":
+        setTextField((TextField) field, term.getPastParticiple());
+        break;
+      case "textFieldPlural":
+        setTextField((TextField) field, term.getPlural());
+        break;
+      case "textFieldSynonym":
+        setTextField((TextField) field, term.getSynonym());
         break;
     }
   }

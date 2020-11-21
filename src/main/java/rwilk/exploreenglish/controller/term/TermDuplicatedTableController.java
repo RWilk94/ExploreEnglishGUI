@@ -1,7 +1,9 @@
 package rwilk.exploreenglish.controller.term;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -20,15 +22,16 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @Controller
-public class TermTableController implements Initializable {
+public class TermDuplicatedTableController implements Initializable {
 
   private final InjectService injectService;
   private final TermService termService;
   private List<Term> terms = new ArrayList<>();
   public TextField textFieldFilterByName;
-  public TextField textFieldFilterByCategory;
-  public TableView<Term> tableTerms;
+  public TextField textFieldFilterByPLName;
+  public TableView<Term> tableDuplicatedTerms;
   public TableColumn<Term, Long> columnId;
+  public TableColumn<Term, CheckBox> columnIsAdded;
   public TableColumn<Term, String> columnEnglishName;
   public TableColumn<Term, String> columnAmericanName;
   public TableColumn<Term, String> columnOtherName;
@@ -44,10 +47,10 @@ public class TermTableController implements Initializable {
   public TableColumn<Term, String> columnEnglishSentence;
   public TableColumn<Term, String> columnPolishSentence;
 
-  public TermTableController(InjectService injectService, TermService termService) {
+  public TermDuplicatedTableController(InjectService injectService, TermService termService) {
     this.injectService = injectService;
     this.termService = termService;
-    this.injectService.setTermTableController(this);
+    this.injectService.setTermDuplicatedTableController(this);
   }
 
   @Override
@@ -58,8 +61,8 @@ public class TermTableController implements Initializable {
     textFieldFilterByName.textProperty().addListener((observable, oldValue, newValue) -> filterTableByName(newValue));
     textFieldFilterByName.setOnMouseClicked(view -> filterTableByName(textFieldFilterByName.getText()));
 
-    textFieldFilterByCategory.textProperty().addListener((observable, oldValue, newValue) -> filterTableByCategory(newValue));
-    textFieldFilterByCategory.setOnMouseClicked(view -> filterTableByCategory(textFieldFilterByCategory.getText()));
+    textFieldFilterByPLName.textProperty().addListener((observable, oldValue, newValue) -> filterTableByPLName(newValue));
+    textFieldFilterByPLName.setOnMouseClicked(view -> filterTableByPLName(textFieldFilterByPLName.getText()));
   }
 
   private void initializeTableView() {
@@ -68,9 +71,22 @@ public class TermTableController implements Initializable {
     initializeColumns(Arrays.asList(
         columnCategory, columnComparative,
         columnSuperlative, columnPastTense, columnPastParticiple, columnPlural, columnSynonym), 0.1);
-    initializeColumns(Arrays.asList(columnId, columnSource), 0.05);
+    initializeColumns(Arrays.asList(columnId, columnIsAdded, columnSource), 0.05);
 
-    tableTerms.setRowFactory(row -> new TableRow<Term>() {
+    columnIsAdded.setCellValueFactory(param -> {
+      Term term = param.getValue();
+      CheckBox checkBox = new CheckBox();
+      checkBox.selectedProperty().setValue(term.getIsAdded());
+      checkBox.selectedProperty().addListener((ov, oldVal, newVal) -> {
+        term.setIsAdded(newVal);
+        termService.save(term);
+        injectService.getTermTableController().updateById(term.getId());
+        // tableDuplicatedTerms.refresh();
+      });
+      return new SimpleObjectProperty<>(checkBox);
+    });
+
+    tableDuplicatedTerms.setRowFactory(row -> new TableRow<Term>() {
       @Override
       protected void updateItem(Term item, boolean empty) {
         super.updateItem(item, empty);
@@ -84,51 +100,38 @@ public class TermTableController implements Initializable {
   }
 
   private void initializeColumns(List<TableColumn<?, ?>> tableColumns, double other) {
-    tableColumns.forEach(tableColumn -> tableColumn.prefWidthProperty().bind(tableTerms.widthProperty().multiply(other)));
+    tableColumns.forEach(tableColumn -> tableColumn.prefWidthProperty().bind(tableDuplicatedTerms.widthProperty().multiply(other)));
   }
 
   private void fillInTableView() {
     terms = termService.getAll();
-    tableTerms.setItems(FXCollections.observableArrayList(terms));
-  }
-
-  public void tableViewTermsOnMouseClicked(MouseEvent mouseEvent) {
-    Term term = tableTerms.getSelectionModel().getSelectedItem();
-    if (term != null) {
-      injectService.getWordController().setWordForm(term);
-      injectService.getMainController().tabPane.getSelectionModel().select(2);
-      injectService.getTermDuplicatedTableController().textFieldFilterByPLName.setText(term.getPolishName());
-      injectService.getTermDuplicatedTableController().textFieldFilterByName.setText(term.getEnglishName());
-    }
+    tableDuplicatedTerms.setItems(FXCollections.observableArrayList(terms));
   }
 
   private void filterTableByName(String value) {
     List<Term> filteredTerms = terms.stream()
         .filter(term ->
-            (term.getEnglishName() != null && term.getEnglishName().toLowerCase().startsWith(value.toLowerCase()))
-                || (term.getPolishName() != null && term.getPolishName().toLowerCase().startsWith(value.toLowerCase()))
-                || (term.getAmericanName() != null && term.getAmericanName().toLowerCase().startsWith(value.toLowerCase()))
-                || (term.getOtherName() != null && term.getOtherName().toLowerCase().startsWith(value.toLowerCase())))
+            (term.getEnglishName() != null && term.getEnglishName().toLowerCase().equals(value.toLowerCase()))
+                || (term.getAmericanName() != null && term.getAmericanName().toLowerCase().equals(value.toLowerCase()))
+                || (term.getOtherName() != null && term.getOtherName().toLowerCase().equals(value.toLowerCase())))
         .collect(Collectors.toList());
-    tableTerms.setItems(FXCollections.observableArrayList(filteredTerms));
+    tableDuplicatedTerms.setItems(FXCollections.observableArrayList(filteredTerms));
   }
 
-  private void filterTableByCategory(String value) {
+  private void filterTableByPLName(String value) {
     List<Term> filteredTerms = terms.stream()
-        .filter(term ->
-            term.getCategory().toLowerCase().contains(value.toLowerCase()))
+        .filter(term -> term.getPolishName() != null && term.getPolishName().toLowerCase().equals(value.toLowerCase()))
         .collect(Collectors.toList());
-    tableTerms.setItems(FXCollections.observableArrayList(filteredTerms));
+    tableDuplicatedTerms.setItems(FXCollections.observableArrayList(filteredTerms));
   }
 
-  public void updateById(Long id) {
-    Term term = terms.get(findById(id));
-    term.setIsAdded(!term.getIsAdded());
-    tableTerms.refresh();
+  public void tableViewDuplicatedTermsOnMouseClicked(MouseEvent mouseEvent) {
+    Term term = tableDuplicatedTerms.getSelectionModel().getSelectedItem();
   }
 
   private int findById(Long id) {
     List<Long> ids = terms.stream().map(Term::getId).collect(Collectors.toList());
     return ids.indexOf(id);
   }
+
 }
