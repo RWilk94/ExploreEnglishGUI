@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="rwilk.exploreenglish.controller.word.scrapper.ScrapperController">
+
+  <HBox VBox.vgrow="ALWAYS">
+    <TabPane fx:id="tabPaneScrapper" HBox.hgrow="ALWAYS">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </TabPane>
+  </HBox>
+
+</VBox>

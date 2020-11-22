@@ -3,6 +3,7 @@ package rwilk.exploreenglish.controller.word;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ public class WordController implements Initializable {
   private final InjectService injectService;
   private final LessonService lessonService;
   private final WordService wordService;
+  public TabPane tabPane;
   private WordFormController wordFormController;
   private WordTableController wordTableController;
 
@@ -102,4 +104,11 @@ public class WordController implements Initializable {
     return wordService;
   }
 
+  public InjectService getInjectService() {
+    return injectService;
+  }
+
+  public TabPane getTabPane() {
+    return tabPane;
+  }
 }

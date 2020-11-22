@@ -135,4 +135,11 @@ public class WordFormController implements Initializable {
     comboBoxLesson.setItems(FXCollections.observableArrayList(lessons));
   }
 
+  public void buttonTranslateOnAction(ActionEvent actionEvent) {
+    if (!StringUtils.trimToEmpty(textFieldEnglishName.getText()).isEmpty()) {
+      wordController.getInjectService().getScrapperController().webScrap(StringUtils.trimToEmpty(textFieldEnglishName.getText()));
+      wordController.getTabPane().getSelectionModel().select(1);
+    }
+  }
+
 }

@@ -13,7 +13,9 @@ import rwilk.exploreenglish.controller.sentence.SentenceController;
 import rwilk.exploreenglish.controller.term.TermDuplicatedTableController;
 import rwilk.exploreenglish.controller.term.TermTableController;
 import rwilk.exploreenglish.controller.view.ViewController;
+import rwilk.exploreenglish.controller.word.scrapper.ScrapperTabController;
 import rwilk.exploreenglish.controller.word.WordController;
+import rwilk.exploreenglish.controller.word.scrapper.ScrapperController;
 
 @Getter
 @Setter
@@ -31,5 +33,7 @@ public class InjectService {
   private ViewController viewController;
   private TermTableController termTableController;
   private TermDuplicatedTableController termDuplicatedTableController;
+  private ScrapperController scrapperController;
+  private ScrapperTabController scrapperTabController;
 
 }
