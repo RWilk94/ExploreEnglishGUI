@@ -17,16 +17,6 @@ import java.util.List;
 @Service
 public class DikiScrapper {
 
-  public static void main(String[] args) {
-    DikiScrapper dikiScrapper = new DikiScrapper();
-    // dikiScrapper.webScrap("make");
-    // dikiScrapper.webScrap("get");
-     dikiScrapper.webScrap("big");
-//     dikiScrapper.webScrap("dog");
-    // dikiScrapper.webScrap("child");
-    // dikiScrapper.webScrap("mobile");
-  }
-
   public List<Term> webScrap(String englishWord) {
     log.info("[Diki scrapper] {}", englishWord);
     try {
@@ -40,7 +30,6 @@ public class DikiScrapper {
           .trim()
           .replaceAll(" ", "+");
 
-      // Wt8bpASp84XmYDz0wRAcjUn8HU5QylhRRXKgem95
       Document document = Jsoup.connect(url).cookie("autoLoginToken", "7Gzy1dCKErpdyBhzvc14Xt6uBoZMFUso0LwclUan").userAgent("Mozilla").timeout(10000).get();
       Elements elements = document.select("div.diki-results-left-column").get(0).child(0)
           .select("div.dictionaryEntity"); // return elements containing translations

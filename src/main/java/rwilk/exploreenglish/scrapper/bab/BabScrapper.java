@@ -1,7 +1,6 @@
 package rwilk.exploreenglish.scrapper.bab;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,12 +15,6 @@ import java.util.List;
 @Slf4j
 @Component
 public class BabScrapper {
-
-  public static void main(String[] args) {
-    BabScrapper babScrapper = new BabScrapper();
-    // babScrapper.webScrap("child");
-    babScrapper.webScrap("dog");
-  }
 
   public List<Term> webScrap(String englishTerm) {
     log.info("[Bab scrapper] {}", englishTerm);
