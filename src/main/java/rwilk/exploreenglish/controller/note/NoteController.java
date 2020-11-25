@@ -86,4 +86,7 @@ public class NoteController implements Initializable {
     return noteService;
   }
 
+  public InjectService getInjectService() {
+    return injectService;
+  }
 }

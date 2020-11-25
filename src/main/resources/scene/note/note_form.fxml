@@ -35,14 +35,37 @@
         <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
       </HBox.margin>
     </ComboBox>
+    <Button text="Add" onAction="#buttonAddWordsOnAction">
+      <HBox.margin>
+        <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
   </HBox>
 
-  <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" prefWidth="100">
+  <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" prefWidth="100" minHeight="150">
     <TextArea fx:id="textAreaNote" HBox.hgrow="ALWAYS">
       <HBox.margin>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
       </HBox.margin>
     </TextArea>
+  </HBox>
+
+  <HBox  HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" prefWidth="100">
+    <Label minWidth="100" text="Title:">
+      <HBox.margin>
+        <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+      </HBox.margin>
+    </Label>
+    <TextField fx:id="textFieldTitle" HBox.hgrow="ALWAYS">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="2.5" top="5.0"/>
+      </HBox.margin>
+    </TextField>
+    <Button text="Add" onAction="#buttonAddTitleOnAction">
+      <HBox.margin>
+        <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
   </HBox>
 
   <HBox>
