@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.term;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Controller
 public class TermTableController implements Initializable {
 
+  private final static String regex = "[^a-zA-z ]";
   private final InjectService injectService;
   private final TermService termService;
   private List<Term> terms = new ArrayList<>();
@@ -76,6 +78,8 @@ public class TermTableController implements Initializable {
         super.updateItem(item, empty);
         if (item != null && item.getIsAdded() != null && item.getIsAdded()) {
           this.setStyle("-fx-background-color: #07cded");
+        } else if (item != null && item.getIsIgnored() != null && item.getIsIgnored()) {
+          this.setStyle("-fx-background-color: #ED073D");
         } else {
           setStyle("");
         }
@@ -88,7 +92,7 @@ public class TermTableController implements Initializable {
   }
 
   private void fillInTableView() {
-    terms = termService.getAll();
+    terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
     tableTerms.setItems(FXCollections.observableArrayList(terms));
   }
 
@@ -103,28 +107,50 @@ public class TermTableController implements Initializable {
   }
 
   private void filterTableByName(String value) {
-    List<Term> filteredTerms = terms.stream()
-        .filter(term ->
-            (term.getEnglishName() != null && term.getEnglishName().toLowerCase().startsWith(value.toLowerCase()))
-                || (term.getPolishName() != null && term.getPolishName().toLowerCase().startsWith(value.toLowerCase()))
-                || (term.getAmericanName() != null && term.getAmericanName().toLowerCase().startsWith(value.toLowerCase()))
-                || (term.getOtherName() != null && term.getOtherName().toLowerCase().startsWith(value.toLowerCase())))
-        .collect(Collectors.toList());
-    tableTerms.setItems(FXCollections.observableArrayList(filteredTerms));
+    new Thread(() -> {
+      List<Term> filteredTerms = terms.stream()
+          .filter(term ->
+              (term.getEnglishName() != null && term.getEnglishName().replaceAll(regex, "").toLowerCase().contains(value.replaceAll(regex, "").toLowerCase()))
+                  || (term.getPolishName() != null && term.getPolishName().replaceAll(regex, "").toLowerCase().contains(value.replaceAll(regex, "").toLowerCase()))
+                  || (term.getAmericanName() != null && term.getAmericanName().replaceAll(regex, "").toLowerCase().contains(value.replaceAll(regex, "").toLowerCase()))
+                  || (term.getOtherName() != null && term.getOtherName().replaceAll(regex, "").toLowerCase().contains(value.replaceAll(regex, "").toLowerCase())))
+          .collect(Collectors.toList());
+      Platform.runLater(() -> tableTerms.setItems(FXCollections.observableArrayList(filteredTerms)));
+    }).start();
   }
 
   private void filterTableByCategory(String value) {
-    List<Term> filteredTerms = terms.stream()
-        .filter(term ->
-            term.getCategory().toLowerCase().contains(value.toLowerCase()))
-        .collect(Collectors.toList());
-    tableTerms.setItems(FXCollections.observableArrayList(filteredTerms));
+    new Thread(() -> {
+      List<Term> filteredTerms = terms.stream()
+          .filter(term ->
+              term.getCategory().toLowerCase().contains(value.toLowerCase()))
+          .collect(Collectors.toList());
+      Platform.runLater(() -> tableTerms.setItems(FXCollections.observableArrayList(filteredTerms)));
+    }).start();
   }
 
-  public void updateById(Long id) {
-    Term term = terms.get(findById(id));
-    term.setIsAdded(!term.getIsAdded());
-    tableTerms.refresh();
+  public void updateIsAdded(Long id) {
+    try {
+      Term term = terms.get(findById(id));
+      boolean newStatus = !term.getIsIgnored();
+      if (newStatus) {
+        term.setIsAdded(true);
+        term.setIsIgnored(true);
+      } else {
+        term.setIsAdded(false);
+        term.setIsIgnored(false);
+      }
+      tableTerms.refresh();
+    } catch (ArrayIndexOutOfBoundsException e) {}
+  }
+
+  public void updateIsIgnore(Long id) {
+    try {
+      Term term = terms.get(findById(id));
+      boolean newStatus = !term.getIsIgnored();
+      term.setIsIgnored(newStatus);
+      tableTerms.refresh();
+    } catch (ArrayIndexOutOfBoundsException e) {}
   }
 
   private int findById(Long id) {

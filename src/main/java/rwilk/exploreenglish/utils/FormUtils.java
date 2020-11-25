@@ -199,13 +199,32 @@ public class FormUtils {
   private static void setFieldFromWord(@NonNull Term term, @NonNull String id, Object field) {
     switch (id) {
       case "textFieldEnglishName":
-        setTextField((TextField) field, term.getEnglishName());
+        String englishName = StringUtils.trimToEmpty(term.getEnglishName());
+        if (englishName.contains("British English")) {
+          englishName = englishName.replace("British English", "(British English)");
+        } else if (englishName.contains("American English")){
+          englishName = englishName.replace("American English", "(American English)");
+        }
+        setTextField((TextField) field, englishName);
         break;
       case "textFieldAmericanName":
-        setTextField((TextField) field, term.getAmericanName());
+        String americanName = StringUtils.trimToEmpty(term.getAmericanName());
+        if (americanName.contains("British English")) {
+          americanName = americanName.replace("British English", "(British English)");
+        } else if (americanName.contains("American English")){
+          americanName = americanName.replace("American English", "(American English)");
+        }
+        setTextField((TextField) field, americanName);
         break;
       case "textFieldOtherNames":
-        setTextField((TextField) field, term.getOtherName());
+        String otherName = StringUtils.trimToEmpty(term.getOtherName());
+        if (otherName.contains("British English")) {
+          otherName = otherName.replaceAll("British English", "(British English)");
+        }
+        if (otherName.contains("American English")){
+          otherName = otherName.replaceAll("American English", "(American English)");
+        }
+        setTextField((TextField) field, otherName);
         break;
       case "textFieldPolishName":
         setTextField((TextField) field, term.getPolishName());

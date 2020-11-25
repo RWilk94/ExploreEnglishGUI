@@ -63,4 +63,6 @@ public final class Term implements Serializable {
 
   @Column(name = "is_added")
   private Boolean isAdded;
+  @Column(name = "is_ignored")
+  private Boolean isIgnored;
 }

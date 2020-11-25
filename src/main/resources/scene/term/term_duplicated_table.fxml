@@ -38,6 +38,11 @@
           <PropertyValueFactory property="isAdded"/>
         </cellValueFactory>
       </TableColumn>
+      <TableColumn fx:id="columnIsIgnored" minWidth="20.0" prefWidth="-1.0" text="Is Ignored">
+        <cellValueFactory>
+          <PropertyValueFactory property="isIgnored"/>
+        </cellValueFactory>
+      </TableColumn>
       <TableColumn fx:id="columnEnglishName" minWidth="20.0" prefWidth="-1.0" text="En Name">
         <cellValueFactory>
           <PropertyValueFactory property="englishName"/>

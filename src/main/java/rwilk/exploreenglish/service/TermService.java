@@ -21,6 +21,10 @@ public class TermService {
     return termRepository.findAll();
   }
 
+  public List<Term> getAllByIsIgnoredAndIsAdded(Boolean isIgnored, Boolean isAdded) {
+    return termRepository.findAllByIsIgnoredAndIsAdded(isIgnored, isAdded);
+  }
+
   public Optional<Term> getById(Long id) {
     return termRepository.findById(id);
   }
