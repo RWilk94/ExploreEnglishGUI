@@ -3,6 +3,7 @@ package rwilk.exploreenglish.controller.term;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
@@ -172,4 +173,12 @@ public class TermDuplicatedTableController implements Initializable {
     return ids.indexOf(id);
   }
 
+  public void buttonIgnoreAllOnAction(ActionEvent actionEvent) {
+    List<Term> terms = tableDuplicatedTerms.getItems();
+    for (Term term : terms) {
+      term.setIsIgnored(true);
+      termService.save(term);
+      injectService.getTermTableController().updateIsIgnore(term.getId());
+    }
+  }
 }

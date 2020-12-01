@@ -9,10 +9,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Exercise;
 import rwilk.exploreenglish.model.entity.ExerciseItem;
+import rwilk.exploreenglish.model.entity.Word;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 @Controller
 public class ExerciseItemFormController implements Initializable {
@@ -156,4 +160,37 @@ public class ExerciseItemFormController implements Initializable {
     List<Exercise> exercises = exerciseItemController.getExerciseService().getAll();
     comboBoxExercise.setItems(FXCollections.observableArrayList(exercises));
   }
+
+  public void buttonLoadWordsOnAction(ActionEvent actionEvent) {
+    Exercise exercise = comboBoxExercise.getSelectionModel().getSelectedItem();
+    if (exercise != null) {
+      List<Word> words = exerciseItemController.getInjectService().getWordController().getWordService()
+          .getAllByLesson(exercise.getLesson()).stream()
+          .sorted(Comparator.comparing(Word::getPosition))
+          .collect(Collectors.toList());
+      if (words.size() >= 4) {
+        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldThirdPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldFourthPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+      } else if (words.size() >= 3) {
+        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldThirdPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+      } else if (words.size() >= 2) {
+        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+      }
+    }
+  }
+
+  private int getIndex(List<Word> words) {
+    return new Random().nextInt(((words.size() - 1) + 1));
+  }
+
+  private Word getWord(List<Word> words) {
+    int index = new Random().nextInt(((words.size() - 1) + 1));
+    return words.get(index);
+  }
+
 }

@@ -88,7 +88,7 @@ public class WordFormController implements Initializable {
     if (FormUtils.allFieldsFilled(requiredControls)) {
       wordController.getWordService().getById(Long.valueOf(textFieldId.getText()))
           .ifPresent(word -> {
-            word = FormUtils.getWord(controls);
+            word = FormUtils.getWord(word, controls);
             word = wordController.getWordService().save(word);
             setWordForm(word);
             wordController.refreshTableView();
@@ -99,7 +99,7 @@ public class WordFormController implements Initializable {
 
   public void buttonAddOnAction(ActionEvent actionEvent) {
     if (FormUtils.allFieldsFilled(requiredControls)) {
-      Word word = FormUtils.getWord(controls);
+      Word word = FormUtils.getWord(new Word(), controls);
       word.setId(null);
       word.setPosition(wordController.getWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()));
       word = wordController.getWordService().save(word);

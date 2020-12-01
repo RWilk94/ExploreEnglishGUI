@@ -53,8 +53,7 @@ public class FormUtils {
     }
   }
 
-  public static Word getWord(List<Object> controls) {
-    Word word = new Word();
+  public static Word getWord(Word word, List<Object> controls) {
     for (Object control : controls) {
       if (control instanceof TextField) {
         TextField textField = (TextField) control;

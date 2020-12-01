@@ -86,4 +86,7 @@ public class ExerciseItemController implements Initializable {
     return exerciseItemService;
   }
 
+  public InjectService getInjectService() {
+    return injectService;
+  }
 }

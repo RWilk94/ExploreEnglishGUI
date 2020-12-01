@@ -24,6 +24,11 @@
         <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
       </HBox.margin>
     </TextField>
+    <Button text="Ignore all" onAction="#buttonIgnoreAllOnAction">
+      <HBox.margin>
+        <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
   </HBox>
 
   <TableView fx:id="tableDuplicatedTerms" VBox.vgrow="ALWAYS" onMouseClicked="#tableViewDuplicatedTermsOnMouseClicked">

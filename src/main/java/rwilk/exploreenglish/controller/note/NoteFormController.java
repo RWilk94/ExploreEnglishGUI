@@ -115,6 +115,23 @@ public class NoteFormController implements Initializable {
     }
   }
 
+  public void buttonAddTextWordsOnAction(ActionEvent actionEvent) {
+    Lesson selectedLesson = comboBoxLesson.getSelectionModel().getSelectedItem();
+    if (selectedLesson != null) {
+      List<Word> words = noteController.getInjectService().getWordController().getWordService()
+          .getAllByLesson(selectedLesson).stream()
+          .sorted(Comparator.comparing(Word::getPosition))
+          .collect(Collectors.toList());
+      for (Word word : words) {
+        if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
+          textAreaNote.setText(textAreaNote.getText() + "\n" + word.getEnglishName() + " = " + word.getPolishName());
+        } else {
+          textAreaNote.setText("[WORD=#" + word.getId() + "]");
+        }
+      }
+    }
+  }
+
   public void buttonAddTitleOnAction(ActionEvent actionEvent) {
     if (StringUtils.isNoneEmpty(textFieldTitle.getText())) {
       if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
