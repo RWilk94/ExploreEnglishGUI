@@ -168,7 +168,7 @@ public class TermDuplicatedTableController implements Initializable {
     injectService.getWordController().setWordForm(term);
   }
 
-  private int findById(Long id) {
+  public int findById(Long id) {
     List<Long> ids = terms.stream().map(Term::getId).collect(Collectors.toList());
     return ids.indexOf(id);
   }
@@ -178,7 +178,17 @@ public class TermDuplicatedTableController implements Initializable {
     for (Term term : terms) {
       term.setIsIgnored(true);
       termService.save(term);
+      this.terms.set(findById(term.getId()), term);
       injectService.getTermTableController().updateIsIgnore(term.getId());
     }
+    tableDuplicatedTerms.refresh();
+  }
+
+  public List<Term> getTerms() {
+    return terms;
+  }
+
+  public TableView<Term> getTableDuplicatedTerms() {
+    return tableDuplicatedTerms;
   }
 }

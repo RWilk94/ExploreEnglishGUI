@@ -142,6 +142,8 @@ public class DikiScrapper {
                       singleMeaning.set(singleMeaning.size() - 1, singleMeaning.get(singleMeaning.size() - 1).concat(" [").concat(element3.text()).concat("]"));
                     }
                   }
+                } else if (element1.hasClass("grammarTag")) {
+                  singleMeaning.set(singleMeaning.size() - 1, singleMeaning.get(singleMeaning.size() - 1).concat(element1.text()));
                 }
               }
               meanings.add(String.join(", ", singleMeaning));

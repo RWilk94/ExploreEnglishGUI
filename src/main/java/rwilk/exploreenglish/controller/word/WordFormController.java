@@ -46,6 +46,9 @@ public class WordFormController implements Initializable {
   public ToggleButton toggleButtonA;
   public ToggleButton toggleButtonAn;
   public ToggleButton toggleButtonNone;
+  public ToggleButton toggleButtonCountable;
+  public ToggleButton toggleButtonUncountable;
+  public ToggleButton toggleButtonEmpty;
   public TextField textFieldComparative;
   public TextField textFieldSuperlative;
   public TextField textFieldPastTense;
@@ -54,13 +57,14 @@ public class WordFormController implements Initializable {
   public TextField textFieldSynonym;
   private ToggleGroup2 toggleGroupPartOfSpeech;
   private ToggleGroup2 toggleGroupArticle;
+  private ToggleGroup2 toggleGroupGrammar;
 
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     setToggleGroups();
     controls.addAll(Arrays.asList(textFieldId, textFieldEnglishName, textFieldAmericanName, textFieldOtherNames,
-        textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, textFieldComparative,
+        textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, toggleGroupGrammar, textFieldComparative,
         textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldSynonym, comboBoxLesson));
     requiredControls.addAll(Arrays.asList(textFieldEnglishName, textFieldPolishName, comboBoxLesson));
   }
@@ -124,6 +128,9 @@ public class WordFormController implements Initializable {
 
     toggleGroupArticle = new ToggleGroup2("toggleGroupArticle");
     setToggleGroup(Arrays.asList(toggleButtonA, toggleButtonAn, toggleButtonNone), toggleGroupArticle);
+
+    toggleGroupGrammar = new ToggleGroup2("toggleGroupGrammar");
+    setToggleGroup(Arrays.asList(toggleButtonCountable, toggleButtonUncountable, toggleButtonEmpty), toggleGroupGrammar);
   }
 
   private void setToggleGroup(List<ToggleButton> toggleButtons, ToggleGroup toggleGroup) {

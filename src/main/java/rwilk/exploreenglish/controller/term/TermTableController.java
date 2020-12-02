@@ -1,8 +1,10 @@
 package rwilk.exploreenglish.controller.term;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -31,6 +33,7 @@ public class TermTableController implements Initializable {
   public TextField textFieldFilterByCategory;
   public TableView<Term> tableTerms;
   public TableColumn<Term, Long> columnId;
+  public TableColumn<Term, CheckBox> columnIsIgnored;
   public TableColumn<Term, String> columnEnglishName;
   public TableColumn<Term, String> columnAmericanName;
   public TableColumn<Term, String> columnOtherName;
@@ -70,7 +73,7 @@ public class TermTableController implements Initializable {
     initializeColumns(Arrays.asList(
         columnCategory, columnComparative,
         columnSuperlative, columnPastTense, columnPastParticiple, columnPlural, columnSynonym), 0.1);
-    initializeColumns(Arrays.asList(columnId, columnSource), 0.05);
+    initializeColumns(Arrays.asList(columnId, columnIsIgnored, columnSource), 0.05);
 
     tableTerms.setRowFactory(row -> new TableRow<Term>() {
       @Override
@@ -84,6 +87,20 @@ public class TermTableController implements Initializable {
           setStyle("");
         }
       }
+    });
+
+    columnIsIgnored.setCellValueFactory(param -> {
+      Term term = param.getValue();
+      CheckBox checkBox = new CheckBox();
+      checkBox.selectedProperty().setValue(term.getIsIgnored());
+      checkBox.selectedProperty().addListener((ov, oldVal, newVal) -> {
+        term.setIsIgnored(newVal);
+        this.terms.set(term.getId().intValue(), termService.save(term));
+        injectService.getTermDuplicatedTableController().getTerms().set(injectService.getTermDuplicatedTableController().findById(term.getId()), term);
+        injectService.getTermDuplicatedTableController().getTableDuplicatedTerms().refresh();
+        tableTerms.refresh();
+      });
+      return new SimpleObjectProperty<>(checkBox);
     });
   }
 

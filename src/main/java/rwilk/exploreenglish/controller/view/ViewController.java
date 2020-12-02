@@ -3,18 +3,13 @@ package rwilk.exploreenglish.controller.view;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import rwilk.exploreenglish.model.entity.Course;
-import rwilk.exploreenglish.model.entity.Exercise;
-import rwilk.exploreenglish.model.entity.ExerciseItem;
-import rwilk.exploreenglish.model.entity.LearnItemChildren;
-import rwilk.exploreenglish.model.entity.Lesson;
-import rwilk.exploreenglish.model.entity.LearnItem;
-import rwilk.exploreenglish.model.entity.Note;
-import rwilk.exploreenglish.model.entity.Sentence;
-import rwilk.exploreenglish.model.entity.Word;
+import rwilk.exploreenglish.model.entity.*;
 import rwilk.exploreenglish.service.CourseService;
 import rwilk.exploreenglish.service.ExerciseItemService;
 import rwilk.exploreenglish.service.ExerciseService;
@@ -68,6 +63,28 @@ public class ViewController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     fillInCoursesListView();
+
+    listViewLearnItems.setCellFactory(lv -> new ListCell<LearnItem>() {
+      @Override
+      protected void updateItem(LearnItem item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item != null) {
+          this.setText(item.toString());
+        }
+        if (item instanceof Word) {
+          Word word = (Word) item;
+          if (StringUtils.isNoneEmpty(StringUtils.trimToEmpty(word.getPartOfSpeech())) && StringUtils.isNoneEmpty(StringUtils.trimToEmpty(word.getGrammarType()))) {
+            setStyle("-fx-background-color: #11ff00");
+          } else {
+            setStyle("");
+          }
+        } else if (item instanceof Note || item instanceof Exercise) {
+          setStyle("-fx-background-color: #FFF200");
+        } else {
+          setStyle("");
+        }
+      }
+    });
   }
 
   public void listViewCoursesOnMouseClicked(MouseEvent mouseEvent) {

@@ -32,6 +32,7 @@ public class ScrapperTabController implements Initializable {
   public TextField textFieldSuperlative;
   public TextField textFieldPlural;
   public TextField textFieldSynonym;
+  public TextField textFieldPartOfSpeech;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -47,7 +48,7 @@ public class ScrapperTabController implements Initializable {
     textFieldComparative.setText(StringUtils.trimToEmpty(term.getComparative()));
     textFieldSuperlative.setText(StringUtils.trimToEmpty(term.getSuperlative()));
     textFieldPlural.setText(StringUtils.trimToEmpty(term.getPlural()));
-
+    textFieldPartOfSpeech.setText(StringUtils.trimToEmpty(term.getPartOfSpeech()));
 
     listViewMeaning.setItems(FXCollections.observableArrayList(
         Arrays.stream(StringUtils.split(StringUtils.trimToEmpty(term.getPolishName()), ";")).map(StringUtils::trim).collect(Collectors.toList())

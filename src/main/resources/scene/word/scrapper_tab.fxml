@@ -9,22 +9,36 @@
             AnchorPane.topAnchor="0.0"
             fitToWidth="true" fitToHeight="true">
 <VBox VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
-  <HBox HBox.hgrow="ALWAYS">
-    <Label minWidth="55" style="-fx-font-weight: bold;" text="EN Name">
-      <HBox.margin>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="10.0"/>
-      </HBox.margin>
-    </Label>
-    <TextField fx:id="textFieldEnglishName" style="-fx-font-weight: bold;" HBox.hgrow="ALWAYS">
-      <HBox.margin>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-      </HBox.margin>
-    </TextField>
+  <HBox>
+    <HBox HBox.hgrow="ALWAYS" prefWidth="100">
+      <Label minWidth="55" style="-fx-font-weight: bold;" text="EN Name">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="10.0"/>
+        </HBox.margin>
+      </Label>
+      <TextField fx:id="textFieldEnglishName" style="-fx-font-weight: bold;" HBox.hgrow="ALWAYS">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+      </TextField>
+    </HBox>
+    <HBox HBox.hgrow="ALWAYS" prefWidth="100">
+
+      <Label minWidth="55" text="Part of speech">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="10.0"/>
+        </HBox.margin>
+      </Label>
+      <TextField fx:id="textFieldPartOfSpeech" HBox.hgrow="ALWAYS">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+      </TextField>
+    </HBox>
   </HBox>
 
   <HBox>
-    <VBox HBox.hgrow="ALWAYS" prefWidth="100">
-      <HBox HBox.hgrow="ALWAYS">
+      <HBox HBox.hgrow="ALWAYS" prefWidth="100">
         <Label minWidth="55" text="US Name">
           <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="10.0"/>
@@ -36,10 +50,8 @@
           </HBox.margin>
         </TextField>
       </HBox>
-    </VBox>
 
-    <VBox HBox.hgrow="ALWAYS" prefWidth="100">
-      <HBox HBox.hgrow="ALWAYS">
+      <HBox HBox.hgrow="ALWAYS" prefWidth="100">
         <Label text="Other">
           <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="10.0"/>
@@ -51,7 +63,6 @@
           </HBox.margin>
         </TextField>
       </HBox>
-    </VBox>
   </HBox>
 
   <HBox>

@@ -124,6 +124,9 @@ public class FormUtils {
       case "toggleGroupArticle":
         word.setArticle(getString(field));
         break;
+      case "toggleGroupGrammar":
+        word.setGrammarType(getString(field));
+        break;
       case "textFieldComparative":
         word.setComparative(getString(field));
         break;
@@ -170,6 +173,9 @@ public class FormUtils {
         break;
       case "toggleGroupArticle":
         setToggleGroup2((ToggleGroup2) field, word.getArticle());
+        break;
+      case "toggleGroupGrammar":
+        setToggleGroup2((ToggleGroup2) field, word.getGrammarType());
         break;
       case "textFieldComparative":
         setTextField((TextField) field, word.getComparative());

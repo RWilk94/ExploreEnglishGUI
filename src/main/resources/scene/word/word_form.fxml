@@ -157,7 +157,7 @@
     </HBox>
 
     <HBox BorderPane.alignment="TOP_CENTER">
-      <VBox>
+      <VBox HBox.hgrow="ALWAYS">
         <Label text="Article" minWidth="100">
           <HBox.margin>
             <Insets bottom="2.5" left="5.0" right="5.0" top="10.0"/>
@@ -185,6 +185,36 @@
           <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
+
+      <VBox HBox.hgrow="ALWAYS">
+        <Label text="Grammar" minWidth="100">
+          <HBox.margin>
+            <Insets bottom="2.5" left="5.0" right="5.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+
+        <HBox>
+          <ToggleButton fx:id="toggleButtonCountable" text="countable" userData="countable">
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonUncountable" text="uncountable" userData="uncountable">
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonEmpty" text=" " userData=" ">
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+        </HBox>
+        <HBox.margin>
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+        </HBox.margin>
+      </VBox>
+
     </HBox>
 
     <HBox HBox.hgrow="ALWAYS">
