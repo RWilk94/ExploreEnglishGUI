@@ -9,6 +9,10 @@ import java.util.List;
 @Repository
 public interface TermRepository extends JpaRepository<Term, Long> {
 
-  List<Term> findAllByIsIgnoredAndIsAdded(Boolean isIgnored, Boolean isAdded);
+  List<Term> findAllBySourceNotIn(List<String> excludedSources);
+
+  List<Term> findAllByIsIgnoredAndIsAddedAndSourceNotIn(Boolean isIgnored, Boolean isAdded, List<String> excludedSources);
+
+  List<Term> findAllByCategoryAndSource(String category, String source);
 
 }

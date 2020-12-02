@@ -71,6 +71,7 @@ public class WordController implements Initializable {
 
   public void setWordForm(Term term) {
     wordFormController.setWordForm(term);
+    wordFormController.buttonTranslateOnAction(null);
   }
 
   public void refreshTableView() {

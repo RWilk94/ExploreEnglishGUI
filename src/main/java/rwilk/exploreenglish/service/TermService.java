@@ -5,12 +5,14 @@ import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.repository.TermRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TermService {
 
+  private static final List<String> EXCLUDED_SOURCES = Arrays.asList("diki", "bab");
   private final TermRepository termRepository;
 
   public TermService(TermRepository termRepository) {
@@ -18,11 +20,15 @@ public class TermService {
   }
 
   public List<Term> getAll() {
-    return termRepository.findAll();
+    return termRepository.findAllBySourceNotIn(EXCLUDED_SOURCES);
   }
 
   public List<Term> getAllByIsIgnoredAndIsAdded(Boolean isIgnored, Boolean isAdded) {
-    return termRepository.findAllByIsIgnoredAndIsAdded(isIgnored, isAdded);
+    return termRepository.findAllByIsIgnoredAndIsAddedAndSourceNotIn(isIgnored, isAdded, EXCLUDED_SOURCES);
+  }
+
+  public List<Term> getTermsByCategoryAndSource(String englishName, String source) {
+    return termRepository.findAllByCategoryAndSource(englishName, source);
   }
 
   public Optional<Term> getById(Long id) {

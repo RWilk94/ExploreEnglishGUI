@@ -50,6 +50,8 @@ public final class Term implements Serializable {
   private String synonym;
   @Column(name = "part_of_speech")
   private String partOfSpeech;
+  @Column(name = "popularity")
+  private String popularity;
 
   @Column(name = "english_sentence", length = 2000)
   private String englishSentence;

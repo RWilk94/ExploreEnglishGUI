@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import rwilk.exploreenglish.model.LearnItem;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

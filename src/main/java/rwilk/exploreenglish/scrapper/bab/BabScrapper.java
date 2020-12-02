@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.Term;
+import rwilk.exploreenglish.service.TermService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,8 +17,22 @@ import java.util.List;
 @Component
 public class BabScrapper {
 
+  private static final String SOURCE = "bab";
+  private final TermService termService;
+
+  public BabScrapper(TermService termService) {
+    this.termService = termService;
+  }
+
   public List<Term> webScrap(String englishTerm) {
     log.info("[Bab scrapper] {}", englishTerm);
+
+    List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishTerm, SOURCE);
+    if (!cachedResults.isEmpty()) {
+      log.info("[Bab scrapper] return cached results");
+      return cachedResults;
+    }
+
     try {
       List<Term> terms = new ArrayList<>();
 
@@ -61,7 +76,7 @@ public class BabScrapper {
           } else {
             term.setPartOfSpeech("");
           }
-          term.setSource("bab");
+          term.setSource(SOURCE);
           List<String> polishTranslations = new ArrayList<>();
           for (Element translation : translations) {
             polishTranslations.add(translation.text());
@@ -70,11 +85,21 @@ public class BabScrapper {
           terms.add(term);
         }
       }
-      return terms;
+      return saveTerms(terms, englishTerm);
     } catch (Exception e) {
-      log.error("[{}] ", englishTerm/*, e*/);
+      log.error("[Bab scrapper] exception during scrapping {}", englishTerm, e);
       return Collections.emptyList();
     }
+  }
+
+  private List<Term> saveTerms(List<Term> terms, String englishWord) {
+    for (Term term : terms) {
+      term.setCategory(englishWord);
+      term.setIsAdded(false);
+      term.setIsIgnored(false);
+    }
+    log.info("[Bab scrapper] save and return terms");
+    return termService.saveAll(terms);
   }
 
 }

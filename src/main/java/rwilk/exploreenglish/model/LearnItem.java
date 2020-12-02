@@ -1,4 +1,6 @@
-package rwilk.exploreenglish.model.entity;
+package rwilk.exploreenglish.model;
+
+import rwilk.exploreenglish.model.entity.Lesson;
 
 public interface LearnItem {
 

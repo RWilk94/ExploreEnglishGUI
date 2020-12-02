@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rwilk.exploreenglish.model.LearnItemChildren;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

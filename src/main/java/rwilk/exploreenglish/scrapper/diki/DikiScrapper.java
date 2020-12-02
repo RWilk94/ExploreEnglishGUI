@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.Term;
+import rwilk.exploreenglish.service.TermService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,8 +18,22 @@ import java.util.List;
 @Service
 public class DikiScrapper {
 
+  private static final String SOURCE = "diki";
+  private final TermService termService;
+
+  public DikiScrapper(TermService termService) {
+    this.termService = termService;
+  }
+
   public List<Term> webScrap(String englishWord) {
     log.info("[Diki scrapper] {}", englishWord);
+
+    List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishWord, SOURCE);
+    if (!cachedResults.isEmpty()) {
+      log.info("[Diki scrapper] return cached results");
+      return cachedResults;
+    }
+
     try {
       List<Term> results = new ArrayList<>();
 
@@ -36,11 +51,12 @@ public class DikiScrapper {
 
       for (Element dictionaryEntity : elements) {
         Term term = new Term();
-        term.setSource("diki");
+        term.setSource(SOURCE);
         for (Element element : dictionaryEntity.children()) {
           if (element.hasClass("hws")) {
             List<String> englishNames = new ArrayList<>();
             String englishName = "";
+            String popularity = "";
             for (Element element1 : element.select("div.hws").select("h1").get(0).children()) {
               if (element1.hasClass("hw")) {
                 if (StringUtils.isNoneEmpty(englishName)) {
@@ -50,10 +66,20 @@ public class DikiScrapper {
                 englishName = element1.select("span.hw").text();
               } else if (element1.hasClass("dictionaryEntryHeaderAdditionalInformation")) {
                 String englishVariety = element1.select("span.dictionaryEntryHeaderAdditionalInformation").text();
-                if (StringUtils.isNoneEmpty(englishVariety) && StringUtils.isNoneEmpty(englishName)) {
-                  englishName = englishName.concat(" (").concat(englishVariety).concat(")");
-                  englishNames.add(englishName);
-                  englishName = "";
+                if (StringUtils.isNoneEmpty(englishVariety) && StringUtils.isNoneEmpty(englishName)
+                    && !englishVariety.equals("także:")) {
+                  if (englishVariety.contains("*****") || englishVariety.contains("****")
+                      || englishVariety.contains("***") || englishVariety.contains("**") || englishVariety.contains("*")) {
+                    popularity = englishVariety.replaceAll("[^*]", "");
+                    String englishVar = StringUtils.trimToEmpty(englishVariety.replaceAll("[*]", ""));
+                    if (StringUtils.isNoneEmpty(englishVar)) {
+                      englishName = englishName.concat(" (").concat(englishVar).concat(")").trim();
+                    }
+                  } else {
+                    englishName = englishName.concat(" (").concat(englishVariety).concat(")");
+                    englishNames.add(englishName);
+                    englishName = "";
+                  }
                 }
               }
             }
@@ -61,13 +87,15 @@ public class DikiScrapper {
               englishNames.add(englishName);
             }
             mapWordVersion(term, englishNames);
+            term.setPopularity(popularity);
           } else if (element.hasClass("partOfSpeechSectionHeader")) {
             if (StringUtils.isNoneEmpty(term.getPartOfSpeech())) {
               results.add(term);
               term = Term.builder()
                   .englishName(term.getEnglishName())
                   .americanName(term.getAmericanName())
-                  .otherName(term.getOtherName())
+                  .otherName(StringUtils.trimToEmpty(term.getOtherName()))
+                  .popularity(term.getPopularity())
                   .source(term.getSource())
                   .build();
             }
@@ -108,13 +136,14 @@ public class DikiScrapper {
               term = Term.builder()
                   .englishName(term.getEnglishName())
                   .americanName(term.getAmericanName())
-                  .otherName(term.getOtherName())
+                  .otherName(StringUtils.trimToEmpty(term.getOtherName()))
                   .comparative(term.getComparative())
                   .superlative(term.getSuperlative())
                   .pastTense(term.getPastTense())
                   .pastParticiple(term.getPastParticiple())
                   .plural(term.getPlural())
                   .partOfSpeech(term.getPartOfSpeech())
+                  .popularity(term.getPopularity())
                   .source(term.getSource())
                   .build();
             }
@@ -127,7 +156,7 @@ public class DikiScrapper {
               for (Element element1 : element2.children()) {
                 if (element1.hasClass("hw")) {
                   String meaning = element1.text();
-                  singleMeaning.add(meaning);
+                  singleMeaning.add(StringUtils.trim(meaning.replace("(****)", "")));
                 } else if (element1.hasClass("exampleSentence")) {
                   String exampleSentence = element1.select("div.exampleSentence").text();
                   String exampleSentenceTranslation = element1.select("div.exampleSentence").select("span.exampleSentenceTranslation").text();
@@ -189,10 +218,9 @@ public class DikiScrapper {
         }
         results.add(term);
       }
-
-      return results;
+      return saveTerms(results, englishWord);
     } catch (Exception e) {
-      log.error("[{}] ", englishWord, e);
+      log.error("[Diki scrapper] exception during scrapping {}", englishWord, e);
       return Collections.emptyList();
     }
   }
@@ -206,12 +234,22 @@ public class DikiScrapper {
       if (wordVersions.get(i).contains("American English") && StringUtils.isEmpty(term.getAmericanName())) {
         term.setAmericanName(wordVersions.get(i));
       } else {
-        term.setOtherName(term.getOtherName() + wordVersions.get(i) + "; ");
+        term.setOtherName(StringUtils.trimToEmpty(term.getOtherName()) + wordVersions.get(i) + "; ");
         if (term.getOtherName() == null) {
           term.setOtherName("");
         }
       }
     }
+  }
+
+  private List<Term> saveTerms(List<Term> terms, String englishWord) {
+    for (Term term : terms) {
+      term.setCategory(englishWord);
+      term.setIsAdded(false);
+      term.setIsIgnored(false);
+    }
+    log.info("[Diki scrapper] save and return terms");
+    return termService.saveAll(terms);
   }
 
 }
