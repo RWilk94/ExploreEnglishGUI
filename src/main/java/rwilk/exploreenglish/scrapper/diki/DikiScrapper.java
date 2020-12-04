@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.TermService;
+import rwilk.exploreenglish.utils.WordUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,15 +38,8 @@ public class DikiScrapper {
     try {
       List<Term> results = new ArrayList<>();
 
-      String url = "http://www.diki.pl/slownik-angielskiego?q=" + englishWord.
-          trim()
-          .replaceAll("British English", "")
-          .trim()
-          .replaceAll("American English", "")
-          .trim()
-          .replaceAll(" ", "+");
-
-      Document document = Jsoup.connect(url).cookie("autoLoginToken", "7Gzy1dCKErpdyBhzvc14Xt6uBoZMFUso0LwclUan").userAgent("Mozilla").timeout(10000).get();
+      String url = "http://www.diki.pl/slownik-angielskiego?q=" + WordUtils.trimAndReplace(englishWord, "+");
+      Document document = Jsoup.connect(url).cookie("autoLoginToken", "aCCJem50QmbkPp163sFnocX9ypt4eTHl5hA00rEs").userAgent("Mozilla").timeout(10000).get();
       Elements elements = document.select("div.diki-results-left-column").get(0).child(0)
           .select("div.dictionaryEntity"); // return elements containing translations
 

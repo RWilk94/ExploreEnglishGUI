@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.TermService;
+import rwilk.exploreenglish.utils.WordUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,13 +37,7 @@ public class BabScrapper {
     try {
       List<Term> terms = new ArrayList<>();
 
-      String url = "https://pl.bab.la/slownik/angielski-polski/" + englishTerm.
-          trim()
-          .replaceAll("British English", "")
-          .trim()
-          .replaceAll("American English", "")
-          .trim()
-          .replaceAll(" ", "-")
+      String url = "https://pl.bab.la/slownik/angielski-polski/" + WordUtils.trimAndReplace(englishTerm, "-")
           .replaceAll("something", "sth")
           .replaceAll("somebody", "sb");
 

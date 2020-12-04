@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.TermService;
+import rwilk.exploreenglish.utils.WordUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ import java.util.stream.Collectors;
 @Controller
 public class TermDuplicatedTableController implements Initializable {
 
-  private final static String regex = "[^a-zA-z ]";
   private final InjectService injectService;
   private final TermService termService;
 
@@ -143,12 +143,12 @@ public class TermDuplicatedTableController implements Initializable {
     new Thread(() -> {
       List<Term> filteredTerms = terms.stream()
           .filter(term ->
-              (term.getEnglishName() != null && term.getEnglishName().replaceAll(regex, "").toLowerCase()
-                  .equals(value.replaceAll(regex, "").toLowerCase()))
-                  || (term.getAmericanName() != null && term.getAmericanName().replaceAll(regex, "").toLowerCase()
-                  .equals(value.replaceAll(regex, "").toLowerCase()))
-                  || (term.getOtherName() != null && term.getOtherName().replaceAll(regex, "").toLowerCase()
-                  .equals(value.replaceAll(regex, "").toLowerCase())))
+              (term.getEnglishName() != null && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                  || (term.getAmericanName() != null && WordUtils.removeNonLiteralCharacters(term.getAmericanName()).toLowerCase()
+                  .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                  || (term.getOtherName() != null && WordUtils.removeNonLiteralCharacters(term.getOtherName()).toLowerCase()
+                  .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase())))
           .collect(Collectors.toList());
       Platform.runLater(() -> tableDuplicatedTerms.setItems(FXCollections.observableArrayList(filteredTerms)));
     }).start();
