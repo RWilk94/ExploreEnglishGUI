@@ -175,7 +175,7 @@
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonNone" text=" " userData=" ">
+          <ToggleButton fx:id="toggleButtonNone" text=" " userData="">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
@@ -204,7 +204,7 @@
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonEmpty" text=" " userData=" ">
+          <ToggleButton fx:id="toggleButtonEmpty" text=" " userData="">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
@@ -273,6 +273,18 @@
       <VBox HBox.hgrow="ALWAYS">
         <Label text="Plural"/>
         <TextField fx:id="textFieldPlural" HBox.hgrow="ALWAYS">
+          <VBox.margin>
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+          </VBox.margin>
+        </TextField>
+        <HBox.margin>
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+        </HBox.margin>
+      </VBox>
+
+      <VBox HBox.hgrow="ALWAYS">
+        <Label text="Opposite"/>
+        <TextField fx:id="textFieldOpposite" HBox.hgrow="ALWAYS">
           <VBox.margin>
             <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>

@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Controller
 public class ScrapperTabController implements Initializable {
 
+  private InjectService injectService;
   public TextField textFieldEnglishName;
   public TextField textFieldAmericanName;
   public TextField textFieldOtherNames;
@@ -39,7 +40,9 @@ public class ScrapperTabController implements Initializable {
 
   }
 
-  public void init(Term term) {
+  public void init(Term term, InjectService injectService) {
+    this.injectService = injectService;
+
     textFieldEnglishName.setText(StringUtils.trimToEmpty(term.getEnglishName()));
     textFieldAmericanName.setText(StringUtils.trimToEmpty(term.getAmericanName()));
     textFieldOtherNames.setText(StringUtils.trimToEmpty(term.getOtherName()));
@@ -69,6 +72,10 @@ public class ScrapperTabController implements Initializable {
   }
 
   public void listViewMeaningOnMouseClicked(MouseEvent mouseEvent) {
+    String meaning = listViewMeaning.getSelectionModel().getSelectedItem();
+    if (meaning != null) {
+      injectService.getWordController().setMeaningAndProperties(meaning, textFieldPartOfSpeech.getText());
+    }
   }
 
   public void buttonLoadDataOnAction(ActionEvent actionEvent) {

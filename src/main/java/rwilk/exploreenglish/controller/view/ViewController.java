@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.LearnItem;
 import rwilk.exploreenglish.model.LearnItemChildren;
+import rwilk.exploreenglish.model.PartOfSpeechEnum;
 import rwilk.exploreenglish.model.entity.*;
 import rwilk.exploreenglish.service.CourseService;
 import rwilk.exploreenglish.service.ExerciseItemService;
@@ -74,7 +75,12 @@ public class ViewController implements Initializable {
         }
         if (item instanceof Word) {
           Word word = (Word) item;
-          if (StringUtils.isNoneEmpty(StringUtils.trimToEmpty(word.getPartOfSpeech())) && StringUtils.isNoneEmpty(StringUtils.trimToEmpty(word.getGrammarType()))) {
+          if ((nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              && nonEmpty(word.getGrammarType()) &&
+              ((word.getGrammarType().equals("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an")))
+                  || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
+              || (nonEmpty(word.getPartOfSpeech()) && !word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())) {
             setStyle("-fx-background-color: #11ff00");
           } else {
             setStyle("");
@@ -394,6 +400,10 @@ public class ViewController implements Initializable {
     exerciseItemService.save(otherExerciseItem);
     refreshListViewLessonItemChildren();
     selectedLearnItemChildren = currentExerciseItem;
+  }
+
+  private boolean nonEmpty(String text) {
+    return StringUtils.isNoneEmpty(StringUtils.trimToEmpty(text));
   }
 
 }

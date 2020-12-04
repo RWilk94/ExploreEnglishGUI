@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import rwilk.exploreenglish.model.PartOfSpeechEnum;
 
 import java.util.regex.Pattern;
 
@@ -8,7 +9,8 @@ public class WordUtils {
 
   private final static String REGEX = "[^\\p{IsAlphabetic}\\p{IsDigit} ]";
 
-  private WordUtils() {}
+  private WordUtils() {
+  }
 
   public static String trim(String term) {
 
@@ -46,6 +48,57 @@ public class WordUtils {
 
   public static String trimAndReplaceAndRemoveNonLiteralCharacters(String term, String delimiter) {
     return replace(removeNonLiteralCharacters(trim(term)), delimiter);
+  }
+
+  public static String extractGrammarTag(String term) {
+    String[] strings = term.split(Pattern.quote("["));
+    for (String s : strings) {
+      if (s.contains("grammarTag")) {
+        return s.trim().substring(s.trim().indexOf(":") + 1, s.trim().length() - 1).trim();
+      }
+    }
+    return "";
+  }
+
+  public static String extractSynonym(String term) {
+    String[] strings = term.split(Pattern.quote("["));
+    for (String s : strings) {
+      if (s.contains("synonim")) {
+        return s.trim().substring(s.trim().indexOf(":") + 1, s.trim().length() - 1).trim();
+      }
+    }
+    return "";
+  }
+
+  public static String extractOpposite(String term) {
+    String[] strings = term.split(Pattern.quote("["));
+    for (String s : strings) {
+      if (s.contains("przeciwieństw")) {
+        return s.trim().substring(s.trim().indexOf(":") + 1, s.trim().length() - 1).trim();
+      }
+    }
+    return "";
+  }
+
+  public static String extractPartOfSpeech(String partOfSpeech) {
+    if (partOfSpeech.equals("rzeczownik") || partOfSpeech.equals("rzecz.")) {
+      return PartOfSpeechEnum.RZECZOWNIK.getValue();
+    } else if (partOfSpeech.equals("czasownik") || partOfSpeech.contains("czas.")) {
+      return PartOfSpeechEnum.CZASOWNIK.getValue();
+    } else if (partOfSpeech.equals("przymiotnik") || partOfSpeech.equals("przym.")) {
+      return PartOfSpeechEnum.PRZYMIOTNIK.getValue();
+    } else if (partOfSpeech.equals("przysłówek") || partOfSpeech.equals("przysł.")) {
+      return PartOfSpeechEnum.PRZYSLOWEK.getValue();
+    } else if (partOfSpeech.equals("phrasal verb")) {
+      return PartOfSpeechEnum.PHRASAL_VERB.getValue();
+    } else if (partOfSpeech.equals("wyrażenie")) {
+      return PartOfSpeechEnum.WYRAZENIE.getValue();
+    } else if (partOfSpeech.equals("idiom") || partOfSpeech.contains("idiom")) {
+      return PartOfSpeechEnum.IDIOM.getValue();
+    } else if (partOfSpeech.equals("")) {
+      return PartOfSpeechEnum.EMPTY.getValue();
+    }
+    throw new IllegalStateException("extractPartOfSpeech");
   }
 
 }

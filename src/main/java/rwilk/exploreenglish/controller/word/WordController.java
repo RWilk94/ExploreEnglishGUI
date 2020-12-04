@@ -4,15 +4,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Toggle;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import rwilk.exploreenglish.model.PartOfSpeechEnum;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.WordService;
+import rwilk.exploreenglish.utils.WordUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -95,6 +99,37 @@ public class WordController implements Initializable {
 
   public void setLessonComboBox(Lesson lesson) {
     wordFormController.comboBoxLesson.getSelectionModel().select(lesson);
+  }
+
+  public void setMeaningAndProperties(String text, String partOfSpeech) {
+    if (StringUtils.isNoneEmpty(text)) {
+      wordFormController.textFieldSynonym.setText(WordUtils.extractSynonym(text));
+      wordFormController.textFieldOpposite.setText(WordUtils.extractOpposite(text));
+
+      String extractedPartOfSpeech = WordUtils.extractPartOfSpeech(partOfSpeech);
+      Toggle toggleButtonPOS = wordFormController.getToggleGroupPartOfSpeech().getToggles().stream()
+          .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(extractedPartOfSpeech))
+          .findFirst()
+          .orElse(null);
+      wordFormController.getToggleGroupPartOfSpeech().selectToggle(toggleButtonPOS);
+
+      String grammarTag = WordUtils.extractGrammarTag(text);
+      Toggle toggleButtonGT = wordFormController.getToggleGroupGrammar().getToggles().stream()
+          .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(grammarTag))
+          .findFirst()
+          .orElse(null);
+      if (extractedPartOfSpeech.equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+          && toggleButtonGT != null && !toggleButtonGT.getUserData().toString().isEmpty()) {
+        wordFormController.getToggleGroupGrammar().selectToggle(toggleButtonGT);
+      } else {
+        wordFormController.getToggleGroupGrammar().selectToggle(null);
+      }
+      if (text.contains("[")) {
+        wordFormController.textFieldPolishName.setText(text.substring(0, text.indexOf("[")).trim());
+      } else {
+        wordFormController.textFieldPolishName.setText(text);
+      }
+    }
   }
 
   public LessonService getLessonService() {

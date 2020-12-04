@@ -70,7 +70,7 @@ public class ScrapperController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader();
             ScrollPane vBox = fxmlLoader.load(getClass().getResource("/scene/word/scrapper_tab.fxml").openStream());
             ScrapperTabController scrapperTabController = fxmlLoader.getController();
-            scrapperTabController.init(term);
+            scrapperTabController.init(term, injectService);
 
             Tab tab = new Tab(term.getEnglishName() + " |" + term.getSource() + "|");
             tab.setContent(vBox);

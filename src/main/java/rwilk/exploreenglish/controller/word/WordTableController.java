@@ -35,6 +35,7 @@ public class WordTableController implements Initializable {
   public TableColumn<Word, String> columnPastTense;
   public TableColumn<Word, String> columnPastParticiple;
   public TableColumn<Word, String> columnPlural;
+  public TableColumn<Word, String> columnOpposite;
   public TableColumn<Word, String> columnSynonym;
   public TextField textFieldFilterByLesson;
   public TextField textFieldFilterByCourse;
@@ -69,7 +70,7 @@ public class WordTableController implements Initializable {
     initializeColumns(Arrays.asList(columnAmericanName, columnOtherName, columnPartOfSpeech), 0.14);
     initializeColumns(Arrays.asList(
         columnLesson, columnComparative,
-        columnSuperlative, columnPastTense, columnPastParticiple, columnPlural, columnSynonym), 0.2);
+        columnSuperlative, columnPastTense, columnPastParticiple, columnPlural, columnOpposite, columnSynonym), 0.2);
     initializeColumns(Arrays.asList(columnId, columnLevel), 0.05);
   }
 

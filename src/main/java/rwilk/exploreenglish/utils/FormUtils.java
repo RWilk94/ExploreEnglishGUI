@@ -145,9 +145,14 @@ public class FormUtils {
       case "textFieldSynonym":
         word.setSynonym(getString(field));
         break;
+      case "textFieldOpposite":
+        word.setOpposite(getString(field));
+        break;
       case "comboBoxLesson":
         word.setLesson(getLesson(field));
         break;
+      default:
+        throw new IllegalArgumentException("setWordField");
     }
   }
 
@@ -195,9 +200,14 @@ public class FormUtils {
       case "textFieldSynonym":
         setTextField((TextField) field, word.getSynonym());
         break;
+      case "textFieldOpposite":
+        setTextField((TextField) field, word.getOpposite());
+        break;
       case "comboBoxLesson":
         setComboBox((ComboBox<Lesson>) field, word.getLesson());
         break;
+      default:
+        throw new IllegalArgumentException("[WORD] setFieldFromWord");
     }
   }
 
@@ -255,9 +265,14 @@ public class FormUtils {
       case "textFieldPlural":
         setTextField((TextField) field, term.getPlural());
         break;
+      case "textFieldOpposite":
+        setTextField((TextField) field, "");
+        break;
       case "textFieldSynonym":
         setTextField((TextField) field, term.getSynonym());
         break;
+      default:
+        throw new IllegalArgumentException("[TERM] setFieldFromWord");
     }
   }
 
@@ -289,7 +304,7 @@ public class FormUtils {
     } else if (field instanceof ToggleGroup2) {
       ToggleGroup2 toggleGroup2 = (ToggleGroup2) field;
       if (toggleGroup2.getSelectedToggle() != null && toggleGroup2.getSelectedToggle().isSelected()) {
-        return ((ToggleButton) toggleGroup2.getSelectedToggle()).getText();
+        return ((ToggleButton) toggleGroup2.getSelectedToggle()).getUserData().toString();
       }
     }
     return StringUtils.EMPTY;

@@ -54,6 +54,7 @@ public class WordFormController implements Initializable {
   public TextField textFieldPastTense;
   public TextField textFieldPastParticiple;
   public TextField textFieldPlural;
+  public TextField textFieldOpposite;
   public TextField textFieldSynonym;
   private ToggleGroup2 toggleGroupPartOfSpeech;
   private ToggleGroup2 toggleGroupArticle;
@@ -65,7 +66,7 @@ public class WordFormController implements Initializable {
     setToggleGroups();
     controls.addAll(Arrays.asList(textFieldId, textFieldEnglishName, textFieldAmericanName, textFieldOtherNames,
         textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, toggleGroupGrammar, textFieldComparative,
-        textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldSynonym, comboBoxLesson));
+        textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldOpposite, textFieldSynonym, comboBoxLesson));
     requiredControls.addAll(Arrays.asList(textFieldEnglishName, textFieldPolishName, comboBoxLesson));
   }
 
@@ -149,4 +150,11 @@ public class WordFormController implements Initializable {
     }
   }
 
+  public ToggleGroup2 getToggleGroupGrammar() {
+    return toggleGroupGrammar;
+  }
+
+  public ToggleGroup2 getToggleGroupPartOfSpeech() {
+    return toggleGroupPartOfSpeech;
+  }
 }

@@ -3,7 +3,7 @@ package rwilk.exploreenglish.utils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Word Trimmer Test should")
 class WordUtilsTest {
@@ -44,6 +44,28 @@ class WordUtilsTest {
   void trimAndReplaceAndRemoveNonLiteralCharacters() {
     assertEquals("good+morning", WordUtils.trimAndReplaceAndRemoveNonLiteralCharacters(" !@#$%^&*()_good morning ", "+"));
     assertEquals("good-morning", WordUtils.trimAndReplaceAndRemoveNonLiteralCharacters(" !@#$%^&*()_good morning ", "-"));
+  }
+
+  @Test
+  @DisplayName("extract GrammarTag")
+  void extractGrammarTag() {
+    assertEquals("COUNTABLE", WordUtils.extractGrammarTag("pies [synonim: psiak][grammarTag: COUNTABLE]"));
+    assertEquals("UNCOUNTABLE", WordUtils.extractGrammarTag("pies [grammarTag: UNCOUNTABLE]"));
+  }
+
+  @Test
+  @DisplayName("extract Synonym")
+  void extractSynonym() {
+    assertEquals("psiak", WordUtils.extractSynonym("pies [synonim: psiak][grammarTag: COUNTABLE]"));
+    assertEquals("psiak", WordUtils.extractSynonym("pies[synonim: psiak]"));
+
+  }
+
+  @Test
+  @DisplayName("extract Opposite")
+  void extractOpposite() {
+    assertEquals("przeciwieństwo", WordUtils.extractOpposite("pies [synonim: psiak][przeciwieństwo: przeciwieństwo][grammarTag: COUNTABLE]"));
+    assertEquals("przeciwieństwa", WordUtils.extractOpposite("pies[synonim: psiak][przeciwieństwa: przeciwieństwa]"));
   }
 
 }

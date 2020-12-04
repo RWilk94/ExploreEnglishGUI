@@ -14,6 +14,7 @@ import rwilk.exploreenglish.utils.WordUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -154,7 +155,7 @@ public class DikiScrapper {
                 } else if (element1.hasClass("exampleSentence")) {
                   String exampleSentence = element1.select("div.exampleSentence").text();
                   String exampleSentenceTranslation = element1.select("div.exampleSentence").select("span.exampleSentenceTranslation").text();
-                  exampleSentence = exampleSentence.replace(exampleSentenceTranslation, "");
+                  exampleSentence = exampleSentence.substring(0, exampleSentence.indexOf(exampleSentenceTranslation)).trim();
                   englishSentences.add(exampleSentence);
                   polishSentences.add(exampleSentenceTranslation);
                 } else if (element1.hasClass("ref")) {
@@ -166,7 +167,12 @@ public class DikiScrapper {
                     }
                   }
                 } else if (element1.hasClass("grammarTag")) {
-                  singleMeaning.set(singleMeaning.size() - 1, singleMeaning.get(singleMeaning.size() - 1).concat(element1.text()));
+                  singleMeaning.set(singleMeaning.size() - 1, singleMeaning.get(singleMeaning.size() - 1)
+                      .concat(" [grammarTag: ").concat(element1.text()
+                          .replaceFirst(Pattern.quote("["), "")
+                          .replaceFirst(Pattern.quote("]"), "")
+                          .trim())
+                      .concat("]"));
                 }
               }
               meanings.add(String.join(", ", singleMeaning));

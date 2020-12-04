@@ -69,6 +69,8 @@ public final class Word implements Serializable, LearnItem {
   private Integer position;
   @Column(name = "synonym")
   private String synonym;
+  @Column(name = "opposite")
+  private String opposite;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")

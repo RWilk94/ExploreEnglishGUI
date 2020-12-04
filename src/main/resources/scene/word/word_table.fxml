@@ -101,6 +101,11 @@
           <PropertyValueFactory property="plural"/>
         </cellValueFactory>
       </TableColumn>
+      <TableColumn fx:id="columnOpposite" minWidth="20.0" prefWidth="-1.0" text="Opposite">
+        <cellValueFactory>
+          <PropertyValueFactory property="opposite"/>
+        </cellValueFactory>
+      </TableColumn>
       <TableColumn fx:id="columnSynonym" minWidth="20.0" prefWidth="-1.0" text="Synonym">
         <cellValueFactory>
           <PropertyValueFactory property="synonym"/>
