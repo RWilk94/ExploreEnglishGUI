@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.scrapper.bab.BabScrapper;
+import rwilk.exploreenglish.scrapper.cambridge.CambridgeDictionaryScrapper;
 import rwilk.exploreenglish.scrapper.diki.DikiScrapper;
 import rwilk.exploreenglish.service.InjectService;
 
@@ -25,12 +26,14 @@ public class ScrapperController implements Initializable {
   private final InjectService injectService;
   private final BabScrapper babScrapper;
   private final DikiScrapper dikiScrapper;
+  private final CambridgeDictionaryScrapper cambridgeDictionaryScrapper;
   public TabPane tabPaneScrapper;
 
-  public ScrapperController(InjectService injectService, BabScrapper babScrapper, DikiScrapper dikiScrapper) {
+  public ScrapperController(InjectService injectService, BabScrapper babScrapper, DikiScrapper dikiScrapper, CambridgeDictionaryScrapper cambridgeDictionaryScrapper) {
     this.injectService = injectService;
     this.babScrapper = babScrapper;
     this.dikiScrapper = dikiScrapper;
+    this.cambridgeDictionaryScrapper = cambridgeDictionaryScrapper;
     this.injectService.setScrapperController(this);
   }
 
@@ -53,6 +56,13 @@ public class ScrapperController implements Initializable {
         .thenAccept(this::createTab)
         .exceptionally(ex -> {
           createEmptyTab("bab");
+          return null;
+        });
+    CompletableFuture.supplyAsync(
+        () -> cambridgeDictionaryScrapper.webScrap(englishTerm))
+        .thenAccept(this::createTab)
+        .exceptionally(ex -> {
+          createEmptyTab("cambridge");
           return null;
         });
   }
