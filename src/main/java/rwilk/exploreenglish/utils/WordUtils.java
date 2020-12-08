@@ -81,21 +81,21 @@ public class WordUtils {
   }
 
   public static String extractPartOfSpeech(String partOfSpeech) {
-    if (partOfSpeech.equals("rzeczownik") || partOfSpeech.equals("rzecz.")) {
+    if (partOfSpeech.equals("rzeczownik") || partOfSpeech.equals("rzecz.") || partOfSpeech.equals("noun")) {
       return PartOfSpeechEnum.RZECZOWNIK.getValue();
-    } else if (partOfSpeech.equals("czasownik") || partOfSpeech.contains("czas.")) {
+    } else if (partOfSpeech.equals("czasownik") || partOfSpeech.contains("czas.") || partOfSpeech.contains("verb")) {
       return PartOfSpeechEnum.CZASOWNIK.getValue();
-    } else if (partOfSpeech.equals("przymiotnik") || partOfSpeech.equals("przym.")) {
+    } else if (partOfSpeech.equals("przymiotnik") || partOfSpeech.equals("przym.") || partOfSpeech.equals("adjective")) {
       return PartOfSpeechEnum.PRZYMIOTNIK.getValue();
-    } else if (partOfSpeech.equals("przysłówek") || partOfSpeech.equals("przysł.")) {
+    } else if (partOfSpeech.equals("przysłówek") || partOfSpeech.equals("przysł.") || partOfSpeech.equals("adverb")) {
       return PartOfSpeechEnum.PRZYSLOWEK.getValue();
-    } else if (partOfSpeech.equals("phrasal verb")) {
+    } else if (partOfSpeech.equals("phrasal verb") || partOfSpeech.contains("phrasal verb")) {
       return PartOfSpeechEnum.PHRASAL_VERB.getValue();
     } else if (partOfSpeech.equals("wyrażenie")) {
       return PartOfSpeechEnum.WYRAZENIE.getValue();
     } else if (partOfSpeech.equals("idiom") || partOfSpeech.contains("idiom")) {
       return PartOfSpeechEnum.IDIOM.getValue();
-    } else if (partOfSpeech.equals("")) {
+    } else if (partOfSpeech.equals("") || partOfSpeech.equals("determiner") || partOfSpeech.equals("conjunction")) {
       return PartOfSpeechEnum.EMPTY.getValue();
     }
     throw new IllegalStateException("extractPartOfSpeech");

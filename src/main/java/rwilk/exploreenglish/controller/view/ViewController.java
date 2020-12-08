@@ -72,6 +72,8 @@ public class ViewController implements Initializable {
         super.updateItem(item, empty);
         if (item != null) {
           this.setText(item.toString());
+        } else {
+          this.setText("");
         }
         if (item instanceof Word) {
           Word word = (Word) item;

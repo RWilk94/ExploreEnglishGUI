@@ -14,6 +14,7 @@ import rwilk.exploreenglish.utils.WordUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -58,6 +59,7 @@ public class CambridgeDictionaryScrapper {
       String pastParticiple = "";
       String comparative = "";
       String superlative = "";
+      String grammarTag = Optional.of(header.select("span.gram").select("span.gcs").text()).orElse("");
 
       Elements grammarElements = header.select("span.inf-group");
       for (Element grammarElement : grammarElements) {
@@ -79,11 +81,13 @@ public class CambridgeDictionaryScrapper {
       List<String> englishSentences = new ArrayList<>();
       List<Term> otherTerms = new ArrayList<>();
       for (Element element : body) {
-        // if (!element.hasClass("dsense-noh")) {
         if (StringUtils.isEmpty(element.select("span.dphrase-title").text())) {
           String polishName = element.select("span.trans").text();
           for (Element example : element.select("div.examp")) {
             englishSentences.add(example.text());
+          }
+          if (StringUtils.isNoneEmpty(grammarTag) && (grammarTag.equals("C") || grammarTag.equals("U"))) {
+            polishName = polishName.concat(" [grammarTag: ").concat(extractGrammarTag(grammarTag)).concat("]");
           }
           meanings.add(polishName);
         } else {
@@ -151,6 +155,15 @@ public class CambridgeDictionaryScrapper {
     }
     log.info("[CambridgeDictionary scrapper] save and return terms");
     return termService.saveAll(terms);
+  }
+
+  private String extractGrammarTag(String grammarTag) {
+    if (grammarTag.equals("C")) {
+      return "COUNTABLE";
+    } else if (grammarTag.equals("U")) {
+      return "UNCOUNTABLE";
+    }
+    return "";
   }
 
 }
