@@ -36,12 +36,8 @@ public final class Word implements Serializable, LearnItem {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "english_name")
-  private String englishName;
-  @Column(name = "american_name")
-  private String americanName;
   @Column(name = "other_name")
-  private String otherName;
+  private String englishNames;
   @Column(name = "polish_name")
   private String polishName;
   @Column(name = "part_of_speech")
@@ -83,16 +79,13 @@ public final class Word implements Serializable, LearnItem {
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("[W]").append(id).append(". ");
-    if (StringUtils.isNoneEmpty(englishName)) {
-      stringBuilder.append(englishName).append("; ");
-    }
-    if (StringUtils.isNoneEmpty(americanName)) {
-      stringBuilder.append(americanName).append("; ");
-    }
-    if (StringUtils.isNoneEmpty(otherName)) {
-      stringBuilder.append(otherName).append("; ");
+    if (StringUtils.isNoneEmpty(englishNames)) {
+      stringBuilder.append(englishNames).append("; ");
     }
     stringBuilder.append("(").append(polishName).append(")");
+    if (StringUtils.isNoneEmpty(grammarType)) {
+      stringBuilder.append("[").append(grammarType).append("]");
+    }
     return stringBuilder.toString();
   }
 }

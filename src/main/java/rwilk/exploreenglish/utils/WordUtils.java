@@ -95,7 +95,8 @@ public class WordUtils {
       return PartOfSpeechEnum.WYRAZENIE.getValue();
     } else if (partOfSpeech.equals("idiom") || partOfSpeech.contains("idiom")) {
       return PartOfSpeechEnum.IDIOM.getValue();
-    } else if (partOfSpeech.equals("") || partOfSpeech.equals("determiner") || partOfSpeech.equals("conjunction")) {
+    } else if (partOfSpeech.equals("") || partOfSpeech.equals("determiner") || partOfSpeech.equals("conjunction")
+    || partOfSpeech.equals("exclamation") || partOfSpeech.equals("wykrz.")) {
       return PartOfSpeechEnum.EMPTY.getValue();
     }
     throw new IllegalStateException("extractPartOfSpeech");

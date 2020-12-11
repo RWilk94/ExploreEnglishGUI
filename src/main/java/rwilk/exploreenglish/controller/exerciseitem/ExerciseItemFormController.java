@@ -168,18 +168,19 @@ public class ExerciseItemFormController implements Initializable {
           .getAllByLesson(exercise.getLesson()).stream()
           .sorted(Comparator.comparing(Word::getPosition))
           .collect(Collectors.toList());
+      // FIXME otherName split(";")[0]
       if (words.size() >= 4) {
-        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
-        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
-        textFieldThirdPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
-        textFieldFourthPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
+        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
+        textFieldThirdPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
+        textFieldFourthPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
       } else if (words.size() >= 3) {
-        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
-        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
-        textFieldThirdPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
+        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
+        textFieldThirdPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
       } else if (words.size() >= 2) {
-        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
-        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishName());
+        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
+        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
       }
     }
   }

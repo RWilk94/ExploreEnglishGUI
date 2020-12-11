@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 @Controller
 public class WordFormController implements Initializable {
@@ -31,10 +33,9 @@ public class WordFormController implements Initializable {
 
   public TextField textFieldId;
   public ComboBox<Lesson> comboBoxLesson;
-  public TextField textFieldEnglishName;
-  public TextField textFieldAmericanName;
   public TextField textFieldPolishName;
-  public TextField textFieldOtherNames;
+  public TextField textFieldEnglishNames;
+  public ListView<String> listViewNames;
   public ToggleButton toggleButtonNoun;
   public ToggleButton toggleButtonVerb;
   public ToggleButton toggleButtonAdjective;
@@ -64,10 +65,16 @@ public class WordFormController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     setToggleGroups();
-    controls.addAll(Arrays.asList(textFieldId, textFieldEnglishName, textFieldAmericanName, textFieldOtherNames,
+    controls.addAll(Arrays.asList(textFieldId, textFieldEnglishNames,
         textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, toggleGroupGrammar, textFieldComparative,
         textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldOpposite, textFieldSynonym, comboBoxLesson));
-    requiredControls.addAll(Arrays.asList(textFieldEnglishName, textFieldPolishName, comboBoxLesson));
+    requiredControls.addAll(Arrays.asList(textFieldEnglishNames, textFieldPolishName, comboBoxLesson));
+
+    textFieldEnglishNames.textProperty().addListener((observable, oldValue, newValue) ->
+        listViewNames.setItems(FXCollections.observableArrayList(Arrays.stream(newValue.split(";"))
+            .map(StringUtils::trimToEmpty)
+            .filter(StringUtils::isNoneEmpty)
+            .collect(Collectors.toList()))));
   }
 
   public void init(WordController wordController) {
@@ -93,8 +100,20 @@ public class WordFormController implements Initializable {
     if (FormUtils.allFieldsFilled(requiredControls)) {
       wordController.getWordService().getById(Long.valueOf(textFieldId.getText()))
           .ifPresent(word -> {
-            word = FormUtils.getWord(word, controls);
+            word.setEnglishNames(StringUtils.trimToEmpty(textFieldEnglishNames.getText()));
+            word.setPolishName(StringUtils.trimToEmpty(textFieldPolishName.getText()));
+            word.setPartOfSpeech(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupPartOfSpeech)));
+            word.setArticle(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupArticle)));
+            word.setGrammarType(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupGrammar)));
+            word.setComparative(StringUtils.trimToEmpty(textFieldComparative.getText()));
+            word.setSuperlative(StringUtils.trimToEmpty(textFieldSuperlative.getText()));
+            word.setPastTense(StringUtils.trimToEmpty(textFieldPastTense.getText()));
+            word.setPastParticiple(StringUtils.trimToEmpty(textFieldPastParticiple.getText()));
+            word.setPlural(StringUtils.trimToEmpty(textFieldPlural.getText()));
+            word.setOpposite(StringUtils.trimToEmpty(textFieldOpposite.getText()));
+            word.setSynonym(StringUtils.trimToEmpty(textFieldSynonym.getText()));
             word = wordController.getWordService().save(word);
+            
             setWordForm(word);
             wordController.refreshTableView();
             wordController.refreshChildComboBoxes();
@@ -104,22 +123,74 @@ public class WordFormController implements Initializable {
 
   public void buttonAddOnAction(ActionEvent actionEvent) {
     if (FormUtils.allFieldsFilled(requiredControls)) {
-      Word word = FormUtils.getWord(new Word(), controls);
-      word.setId(null);
-      word.setPosition(wordController.getWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()));
+
+      Word word = Word.builder()
+          .id(null)
+          .englishNames(StringUtils.trimToEmpty(textFieldEnglishNames.getText()))
+          .polishName(StringUtils.trimToEmpty(textFieldPolishName.getText()))
+          .partOfSpeech(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupPartOfSpeech)))
+          .article(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupArticle)))
+          .grammarType(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupGrammar)))
+          .comparative(StringUtils.trimToEmpty(textFieldComparative.getText()))
+          .superlative(StringUtils.trimToEmpty(textFieldSuperlative.getText()))
+          .pastTense(StringUtils.trimToEmpty(textFieldPastTense.getText()))
+          .pastParticiple(StringUtils.trimToEmpty(textFieldPastParticiple.getText()))
+          .plural(StringUtils.trimToEmpty(textFieldPlural.getText()))
+          .opposite(StringUtils.trimToEmpty(textFieldOpposite.getText()))
+          .synonym(StringUtils.trimToEmpty(textFieldSynonym.getText()))
+          .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
+          .position(wordController.getWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
+          .build();
       word = wordController.getWordService().save(word);
-      FormUtils.setWordForm(word, controls);
+
+      setWordForm(word);
       wordController.refreshTableView();
       wordController.refreshChildComboBoxes();
     }
   }
 
   public void setWordForm(Word word) {
-    FormUtils.setWordForm(word, controls);
+    textFieldId.setText(StringUtils.trimToEmpty(word.getId().toString()));
+    comboBoxLesson.getSelectionModel().select(word.getLesson());
+
+    toggleGroupPartOfSpeech.selectToggle(toggleGroupPartOfSpeech.getToggles().stream()
+        .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(word.getPartOfSpeech())))
+        .findFirst()
+        .orElse(null));
+    toggleGroupArticle.selectToggle(toggleGroupArticle.getToggles().stream()
+        .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(word.getArticle())))
+        .findFirst()
+        .orElse(null));
+    toggleGroupGrammar.selectToggle(toggleGroupGrammar.getToggles().stream()
+        .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(word.getGrammarType())))
+        .findFirst()
+        .orElse(null));
+    setWordForm(word.getEnglishNames(), word.getPolishName(), word.getComparative(), word.getSuperlative(), word.getPastTense(),
+        word.getPastParticiple(), word.getPlural(), word.getSynonym());
+    textFieldOpposite.setText(StringUtils.trimToEmpty(word.getOpposite()));
   }
 
   public void setWordForm(Term term) {
-    FormUtils.setWordForm(term, controls);
+    toggleGroupPartOfSpeech.selectToggle(toggleGroupPartOfSpeech.getToggles().stream()
+        .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(term.getPartOfSpeech())))
+        .findFirst()
+        .orElse(null));
+    toggleGroupArticle.selectToggle(null);
+    toggleGroupGrammar.selectToggle(null);
+    setWordForm(term.getOtherName(), term.getPolishName(), term.getComparative(), term.getSuperlative(), term.getPastTense(), term.getPastParticiple(), term.getPlural(), term.getSynonym());
+    textFieldSynonym.setText(StringUtils.trimToEmpty(term.getSynonym()));
+  }
+
+  private void setWordForm(String otherName, String polishName, String comparative, String superlative, String pastTense,
+                           String pastParticiple, String plural, String synonym) {
+    textFieldEnglishNames.setText(StringUtils.trimToEmpty(otherName));
+    textFieldPolishName.setText(StringUtils.trimToEmpty(polishName));
+    textFieldComparative.setText(StringUtils.trimToEmpty(comparative));
+    textFieldSuperlative.setText(StringUtils.trimToEmpty(superlative));
+    textFieldPastTense.setText(StringUtils.trimToEmpty(pastTense));
+    textFieldPastParticiple.setText(StringUtils.trimToEmpty(pastParticiple));
+    textFieldPlural.setText(StringUtils.trimToEmpty(plural));
+    textFieldSynonym.setText(StringUtils.trimToEmpty(synonym));
   }
 
   private void setToggleGroups() {
@@ -144,10 +215,17 @@ public class WordFormController implements Initializable {
   }
 
   public void buttonTranslateOnAction(ActionEvent actionEvent) {
-    if (!StringUtils.trimToEmpty(textFieldEnglishName.getText()).isEmpty()) {
-      wordController.getInjectService().getScrapperController().webScrap(StringUtils.trimToEmpty(textFieldEnglishName.getText()));
+    if (!StringUtils.trimToEmpty(textFieldEnglishNames.getText()).isEmpty()) {
+      wordController.getInjectService().getScrapperController().webScrap(StringUtils.trimToEmpty(textFieldEnglishNames.getText().split(";")[0]));
       wordController.getTabPane().getSelectionModel().select(1);
     }
+  }
+
+  private String getSelectedToggleText(ToggleGroup2 toggleGroup2) {
+      if (toggleGroup2.getSelectedToggle() != null && toggleGroup2.getSelectedToggle().isSelected()) {
+        return ((ToggleButton) toggleGroup2.getSelectedToggle()).getUserData().toString();
+    }
+    return StringUtils.EMPTY;
   }
 
   public ToggleGroup2 getToggleGroupGrammar() {

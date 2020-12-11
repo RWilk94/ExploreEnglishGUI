@@ -88,10 +88,8 @@ public class WordTableController implements Initializable {
   private void filterTableByName(String value) {
     List<Word> filteredWords = words.stream()
         .filter(word ->
-            word.getEnglishName().toLowerCase().contains(value.toLowerCase())
-                || word.getPolishName().toLowerCase().contains(value.toLowerCase())
-                || word.getAmericanName().toLowerCase().contains(value.toLowerCase())
-                || word.getOtherName().toLowerCase().contains(value.toLowerCase()))
+                word.getPolishName().toLowerCase().contains(value.toLowerCase())
+                || word.getEnglishNames().toLowerCase().contains(value.toLowerCase()))
         .collect(Collectors.toList());
     tableWords.setItems(FXCollections.observableArrayList(filteredWords));
   }

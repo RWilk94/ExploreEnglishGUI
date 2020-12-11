@@ -9,7 +9,7 @@ public enum PartOfSpeechEnum {
   PHRASAL_VERB("phrasal verb"),
   WYRAZENIE("wyrażenie"),
   IDIOM("idiom"),
-  EMPTY("");
+  EMPTY("inne");
 
   private String value;
 

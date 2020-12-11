@@ -62,10 +62,8 @@ public class SentenceTableController implements Initializable {
   private void filterTableByWord(String value) {
     List<Sentence> filtered = sentences.stream()
         .filter(sentence ->
-            sentence.getWord().getEnglishName().toLowerCase().contains(value.toLowerCase())
-                || sentence.getWord().getPolishName().toLowerCase().contains(value.toLowerCase())
-                || sentence.getWord().getAmericanName().toLowerCase().contains(value.toLowerCase())
-                || sentence.getWord().getOtherName().toLowerCase().contains(value.toLowerCase()))
+                sentence.getWord().getPolishName().toLowerCase().contains(value.toLowerCase())
+                || sentence.getWord().getEnglishNames().toLowerCase().contains(value.toLowerCase()))
         .collect(Collectors.toList());
     tableSentence.setItems(FXCollections.observableArrayList(filtered));
   }

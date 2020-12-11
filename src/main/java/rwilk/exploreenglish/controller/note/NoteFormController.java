@@ -124,7 +124,7 @@ public class NoteFormController implements Initializable {
           .collect(Collectors.toList());
       for (Word word : words) {
         if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
-          textAreaNote.setText(textAreaNote.getText() + "\n" + word.getEnglishName() + " = " + word.getPolishName());
+          textAreaNote.setText(textAreaNote.getText() + "\n" + word.getEnglishNames() + " = " + word.getPolishName());
         } else {
           textAreaNote.setText("[WORD=#" + word.getId() + "]");
         }

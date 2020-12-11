@@ -71,6 +71,7 @@ public class WordController implements Initializable {
 
   public void setWordForm(Word word) {
     wordFormController.setWordForm(word);
+    wordFormController.buttonTranslateOnAction(null);
   }
 
   public void setWordForm(Term term) {
@@ -122,7 +123,11 @@ public class WordController implements Initializable {
           && toggleButtonGT != null && !toggleButtonGT.getUserData().toString().isEmpty()) {
         wordFormController.getToggleGroupGrammar().selectToggle(toggleButtonGT);
       } else {
-        wordFormController.getToggleGroupGrammar().selectToggle(null);
+        wordFormController.getToggleGroupGrammar().selectToggle(wordFormController.getToggleGroupGrammar().getToggles()
+            .stream()
+            .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(""))
+            .findFirst()
+            .orElse(null));
       }
       if (text.contains("[")) {
         wordFormController.textFieldPolishName.setText(text.substring(0, text.indexOf("[")).trim());
