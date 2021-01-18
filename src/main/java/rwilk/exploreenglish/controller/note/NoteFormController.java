@@ -66,6 +66,7 @@ public class NoteFormController implements Initializable {
           .ifPresent(note -> {
             note.setNote(textAreaNote.getText());
             note.setLesson(comboBoxLesson.getSelectionModel().getSelectedItem());
+            note.setPosition(noteController.getNoteService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()));
             note = noteController.getNoteService().save(note);
             setNoteForm(note);
             noteController.refreshTableView();

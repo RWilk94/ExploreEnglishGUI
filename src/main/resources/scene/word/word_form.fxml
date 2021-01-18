@@ -159,6 +159,11 @@
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
+          <ToggleButton fx:id="toggleButtonThe" text="the" userData="the">
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
           <ToggleButton fx:id="toggleButtonNone" text=" " userData="">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
@@ -184,6 +189,11 @@
             </HBox.margin>
           </ToggleButton>
           <ToggleButton fx:id="toggleButtonUncountable" text="uncountable" userData="uncountable">
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonPlural" text="plural" userData="plural">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>

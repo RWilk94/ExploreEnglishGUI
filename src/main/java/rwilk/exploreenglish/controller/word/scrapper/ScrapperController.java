@@ -16,9 +16,11 @@ import rwilk.exploreenglish.scrapper.diki.DikiScrapper;
 import rwilk.exploreenglish.service.InjectService;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -75,7 +77,7 @@ public class ScrapperController implements Initializable {
     Platform.runLater(new Runnable() {
       @Override
       public void run() {
-        for (Term term : terms) {
+        for (Term term : terms.stream().sorted(Comparator.comparing(term -> term.getEnglishName().length())).collect(Collectors.toList())) {
           try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             ScrollPane vBox = fxmlLoader.load(getClass().getResource("/scene/word/scrapper_tab.fxml").openStream());

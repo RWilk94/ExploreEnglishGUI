@@ -17,11 +17,25 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
   List<Note> findAllByLesson(Lesson lesson);
 
-  @Query(value = "select (" +
-      "(select count(*) from explore_english.words w where w.lesson_id = :lessonId) +" +
-      "(select count(*) from explore_english.notes n where n.lesson_id = :lessonId) +" +
-      "(select count(*) from explore_english.exercises e where e.lesson_id = :lessonId)" +
-      ") as pos;", nativeQuery = true)
+  @Query(value = "select GREATEST(" +
+      "(select " +
+      "  case " +
+      "    when max(`position`) is not null then max(`position`) " +
+      "    else -1 " +
+      "  end " +
+      "from explore_english.words w where w.lesson_id = :lessonId), " +
+      "(select " +
+      "  case " +
+      "    when max(`position`) is not null then max(`position`) " +
+      "    else -1 " +
+      "  end " +
+      "from explore_english.notes n where n.lesson_id = :lessonId), " +
+      "(select " +
+      "  case " +
+      "    when max(`position`) is not null then max(`position`) " +
+      "    else -1 " +
+      "  end " +
+      "from explore_english.exercises e where e.lesson_id = :lessonId)) as max;", nativeQuery = true)
   long countAllByLesson(@Param("lessonId") Long lessonId);
 
   @Query(value = "select *" +

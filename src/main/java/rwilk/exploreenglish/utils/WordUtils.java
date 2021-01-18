@@ -11,6 +11,27 @@ public class WordUtils {
 
   private WordUtils() {
   }
+  
+  public static String replaceSpecialText(String term) {
+    return StringUtils.trimToEmpty(StringUtils.trimToEmpty(term)
+        .replace(" British English", " (British English)")
+        .replace(" American English", " (American English)")
+        .replace(" slang", " (slang)")
+        .replace(" formal", " (formal)")
+        .replace(" informal", " (informal)")
+        .replace(" literary", " (literary)")
+        .replace(" technical", " (technical)")
+        .replace(" old-fashioned", " (old-fashioned)")
+        .replace(" old use", " (old use)")
+        .replace(" spoken", " (spoken)")
+        .replace(" written", " (written)")
+        .replace(" not polite", " (not polite)")
+        .replace(" taboo", " (taboo)")
+        .replace(" trademark", " (trademark)")
+        .replace(" dialect", " (dialect)")
+        .replace(" loan-word", " (loan-word)")
+        .replace(" humorous", " (humorous)"));
+  }
 
   public static String trim(String term) {
 

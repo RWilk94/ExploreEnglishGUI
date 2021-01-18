@@ -57,7 +57,7 @@ public class ExerciseService {
   }
 
   public Integer getCountByLesson(Lesson lesson) {
-    return (int) exerciseRepository.countAllByLesson(lesson.getId());
+    return (int) exerciseRepository.countAllByLesson(lesson.getId()) + 1;
   }
 
   public Optional<Exercise> getPreviousExercise(Long lessonId, Integer position) {

@@ -16,6 +16,7 @@ import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.utils.FormUtils;
+import rwilk.exploreenglish.utils.WordUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,9 +47,11 @@ public class WordFormController implements Initializable {
   public ToggleButton toggleButtonOther;
   public ToggleButton toggleButtonA;
   public ToggleButton toggleButtonAn;
+  public ToggleButton toggleButtonThe;
   public ToggleButton toggleButtonNone;
   public ToggleButton toggleButtonCountable;
   public ToggleButton toggleButtonUncountable;
+  public ToggleButton toggleButtonPlural;
   public ToggleButton toggleButtonEmpty;
   public TextField textFieldComparative;
   public TextField textFieldSuperlative;
@@ -112,6 +115,8 @@ public class WordFormController implements Initializable {
             word.setPlural(StringUtils.trimToEmpty(textFieldPlural.getText()));
             word.setOpposite(StringUtils.trimToEmpty(textFieldOpposite.getText()));
             word.setSynonym(StringUtils.trimToEmpty(textFieldSynonym.getText()));
+            word.setLesson(comboBoxLesson.getSelectionModel().getSelectedItem());
+            word.setPosition(wordController.getWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()));
             word = wordController.getWordService().save(word);
             
             setWordForm(word);
@@ -177,7 +182,13 @@ public class WordFormController implements Initializable {
         .orElse(null));
     toggleGroupArticle.selectToggle(null);
     toggleGroupGrammar.selectToggle(null);
-    setWordForm(term.getOtherName(), term.getPolishName(), term.getComparative(), term.getSuperlative(), term.getPastTense(), term.getPastParticiple(), term.getPlural(), term.getSynonym());
+    String englishNames = (StringUtils.isNoneEmpty(term.getEnglishName()) ? term.getEnglishName() + "; " : "")
+        .concat((StringUtils.isNoneEmpty(term.getAmericanName()) ? term.getAmericanName() + "; " : ""))
+        .concat((StringUtils.isNoneEmpty(term.getOtherName()) ? term.getOtherName() + "; " : "")).trim();
+    englishNames = englishNames.substring(englishNames.length() - 1).equals(";")
+        ? englishNames.substring(0, englishNames.length() - 1)
+        : englishNames;
+    setWordForm(WordUtils.replaceSpecialText(englishNames), term.getPolishName(), term.getComparative(), term.getSuperlative(), term.getPastTense(), term.getPastParticiple(), term.getPlural(), term.getSynonym());
     textFieldSynonym.setText(StringUtils.trimToEmpty(term.getSynonym()));
   }
 
@@ -199,10 +210,10 @@ public class WordFormController implements Initializable {
         toggleButtonPhrasalVerb, toggleButtonSentence, toggleButtonIdiom, toggleButtonOther), toggleGroupPartOfSpeech);
 
     toggleGroupArticle = new ToggleGroup2("toggleGroupArticle");
-    setToggleGroup(Arrays.asList(toggleButtonA, toggleButtonAn, toggleButtonNone), toggleGroupArticle);
+    setToggleGroup(Arrays.asList(toggleButtonA, toggleButtonAn, toggleButtonThe, toggleButtonNone), toggleGroupArticle);
 
     toggleGroupGrammar = new ToggleGroup2("toggleGroupGrammar");
-    setToggleGroup(Arrays.asList(toggleButtonCountable, toggleButtonUncountable, toggleButtonEmpty), toggleGroupGrammar);
+    setToggleGroup(Arrays.asList(toggleButtonCountable, toggleButtonUncountable, toggleButtonPlural, toggleButtonEmpty), toggleGroupGrammar);
   }
 
   private void setToggleGroup(List<ToggleButton> toggleButtons, ToggleGroup toggleGroup) {

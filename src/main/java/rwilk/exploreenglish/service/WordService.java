@@ -57,7 +57,7 @@ public class WordService {
   }
 
   public Integer getCountByLesson(Lesson lesson) {
-    return (int) wordRepository.countAllByLesson(lesson.getId());
+    return (int) wordRepository.countAllByLesson(lesson.getId()) + 1;
   }
 
   public Optional<Word> getPreviousWord(Long lessonId, Integer position) {

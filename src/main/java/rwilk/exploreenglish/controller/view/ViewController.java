@@ -79,10 +79,13 @@ public class ViewController implements Initializable {
           Word word = (Word) item;
           if ((nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && nonEmpty(word.getGrammarType()) &&
-              ((word.getGrammarType().equals("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an")))
+              ((word.getGrammarType().equals("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the")))
                   || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
               || (nonEmpty(word.getPartOfSpeech()) && !word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
-              && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())) {
+              && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())
+              || (nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              && nonEmpty(word.getGrammarType()) &&
+              word.getGrammarType().equals("plural") && (word.getArticle().equals("")))) {
             setStyle("-fx-background-color: #11ff00");
           } else {
             setStyle("");

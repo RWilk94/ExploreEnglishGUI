@@ -50,7 +50,7 @@ public class NoteService {
   }
 
   public Integer getCountByLesson(Lesson lesson) {
-    return (int) noteRepository.countAllByLesson(lesson.getId());
+    return (int) noteRepository.countAllByLesson(lesson.getId()) + 1;
   }
 
   public Optional<Note> getPreviousNote(Long lessonId, Integer position) {
