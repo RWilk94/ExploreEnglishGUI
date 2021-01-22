@@ -116,7 +116,6 @@ public class WordFormController implements Initializable {
             word.setOpposite(StringUtils.trimToEmpty(textFieldOpposite.getText()));
             word.setSynonym(StringUtils.trimToEmpty(textFieldSynonym.getText()));
             word.setLesson(comboBoxLesson.getSelectionModel().getSelectedItem());
-            word.setPosition(wordController.getWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()));
             word = wordController.getWordService().save(word);
             
             setWordForm(word);

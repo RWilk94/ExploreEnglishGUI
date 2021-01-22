@@ -66,7 +66,6 @@ public class NoteFormController implements Initializable {
           .ifPresent(note -> {
             note.setNote(textAreaNote.getText());
             note.setLesson(comboBoxLesson.getSelectionModel().getSelectedItem());
-            note.setPosition(noteController.getNoteService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()));
             note = noteController.getNoteService().save(note);
             setNoteForm(note);
             noteController.refreshTableView();
@@ -108,9 +107,9 @@ public class NoteFormController implements Initializable {
           .collect(Collectors.toList());
       for (Word word : words) {
         if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
-          textAreaNote.setText(textAreaNote.getText() + "\n[WORD=#" + word.getId() + "]");
+          textAreaNote.setText(textAreaNote.getText() + "\n<WORD=#" + word.getId() + ">");
         } else {
-          textAreaNote.setText("[WORD=#" + word.getId() + "]");
+          textAreaNote.setText("<WORD=#" + word.getId() + ">");
         }
       }
     }
@@ -125,9 +124,10 @@ public class NoteFormController implements Initializable {
           .collect(Collectors.toList());
       for (Word word : words) {
         if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
+          // FIXME
           textAreaNote.setText(textAreaNote.getText() + "\n" + word.getEnglishNames() + " = " + word.getPolishName());
         } else {
-          textAreaNote.setText("[WORD=#" + word.getId() + "]");
+          textAreaNote.setText("<WORD=#" + word.getId() + ">");
         }
       }
     }
@@ -136,12 +136,11 @@ public class NoteFormController implements Initializable {
   public void buttonAddTitleOnAction(ActionEvent actionEvent) {
     if (StringUtils.isNoneEmpty(textFieldTitle.getText())) {
       if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
-        textAreaNote.setText(textAreaNote.getText() + "\n[TITLE]" + textFieldTitle.getText());
+        textAreaNote.setText(textAreaNote.getText() + "\n<b>" + textFieldTitle.getText() + "</b>");
       } else {
-        textAreaNote.setText("[TITLE]" + textFieldTitle.getText());
+        textAreaNote.setText("<b>" + textFieldTitle.getText() + "</b>");
       }
     }
   }
-
 
 }
