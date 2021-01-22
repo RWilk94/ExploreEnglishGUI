@@ -315,7 +315,7 @@ public class ExportService implements CommandLineRunner {
   }
 
   private void exportFile(StringBuilder sql, String fileName, String tag) {
-    try (PrintWriter out = new PrintWriter(fileName)) {
+    try (PrintWriter out = new PrintWriter("scripts/" + fileName)) {
       out.println(sql.toString());
       log.info("FINISH GENERATING {}", tag);
     } catch (Exception e) {
