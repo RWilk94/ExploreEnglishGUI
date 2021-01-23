@@ -9,10 +9,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.custom.ToggleGroup2;
 import rwilk.exploreenglish.model.entity.Lesson;
+import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.utils.FormUtils;
@@ -63,6 +65,7 @@ public class WordFormController implements Initializable {
   private ToggleGroup2 toggleGroupPartOfSpeech;
   private ToggleGroup2 toggleGroupArticle;
   private ToggleGroup2 toggleGroupGrammar;
+  public ListView<Lesson> listViewLessons;
 
 
   @Override
@@ -71,7 +74,7 @@ public class WordFormController implements Initializable {
     controls.addAll(Arrays.asList(textFieldId, textFieldEnglishNames,
         textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, toggleGroupGrammar, textFieldComparative,
         textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldOpposite, textFieldSynonym, comboBoxLesson));
-    requiredControls.addAll(Arrays.asList(textFieldEnglishNames, textFieldPolishName, comboBoxLesson));
+    requiredControls.addAll(Arrays.asList(textFieldEnglishNames, textFieldPolishName));
 
     textFieldEnglishNames.textProperty().addListener((observable, oldValue, newValue) ->
         listViewNames.setItems(FXCollections.observableArrayList(Arrays.stream(newValue.split(";"))
@@ -83,6 +86,7 @@ public class WordFormController implements Initializable {
   public void init(WordController wordController) {
     this.wordController = wordController;
     initializeLessonComboBox();
+    setLessonWordForm();
   }
 
   public void buttonDeleteOnAction(ActionEvent actionEvent) {
@@ -115,9 +119,8 @@ public class WordFormController implements Initializable {
             word.setPlural(StringUtils.trimToEmpty(textFieldPlural.getText()));
             word.setOpposite(StringUtils.trimToEmpty(textFieldOpposite.getText()));
             word.setSynonym(StringUtils.trimToEmpty(textFieldSynonym.getText()));
-            word.setLesson(comboBoxLesson.getSelectionModel().getSelectedItem());
             word = wordController.getWordService().save(word);
-            
+
             setWordForm(word);
             wordController.refreshTableView();
             wordController.refreshChildComboBoxes();
@@ -142,11 +145,19 @@ public class WordFormController implements Initializable {
           .plural(StringUtils.trimToEmpty(textFieldPlural.getText()))
           .opposite(StringUtils.trimToEmpty(textFieldOpposite.getText()))
           .synonym(StringUtils.trimToEmpty(textFieldSynonym.getText()))
-          .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
-          .position(wordController.getWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
           .build();
-      word = wordController.getWordService().save(word);
 
+      word = wordController.getWordService().save(word);
+      if (comboBoxLesson.getSelectionModel().getSelectedItem() != null) {
+        LessonWord lessonWord = LessonWord.builder()
+            .id(null)
+            .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
+            .position(wordController.getLessonWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
+            .word(word)
+            .build();
+        wordController.getLessonWordService().save(lessonWord);
+        setLessonWordForm();
+      }
       setWordForm(word);
       wordController.refreshTableView();
       wordController.refreshChildComboBoxes();
@@ -155,7 +166,6 @@ public class WordFormController implements Initializable {
 
   public void setWordForm(Word word) {
     textFieldId.setText(StringUtils.trimToEmpty(word.getId().toString()));
-    comboBoxLesson.getSelectionModel().select(word.getLesson());
 
     toggleGroupPartOfSpeech.selectToggle(toggleGroupPartOfSpeech.getToggles().stream()
         .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(word.getPartOfSpeech())))
@@ -172,6 +182,8 @@ public class WordFormController implements Initializable {
     setWordForm(word.getEnglishNames(), word.getPolishName(), word.getComparative(), word.getSuperlative(), word.getPastTense(),
         word.getPastParticiple(), word.getPlural(), word.getSynonym());
     textFieldOpposite.setText(StringUtils.trimToEmpty(word.getOpposite()));
+
+    setLessonWordForm();
   }
 
   public void setWordForm(Term term) {
@@ -225,9 +237,15 @@ public class WordFormController implements Initializable {
   }
 
   public void buttonTranslateOnAction(ActionEvent actionEvent) {
+    translate(true);
+  }
+
+  public void translate(boolean changeTab) {
     if (!StringUtils.trimToEmpty(textFieldEnglishNames.getText()).isEmpty()) {
       wordController.getInjectService().getScrapperController().webScrap(StringUtils.trimToEmpty(textFieldEnglishNames.getText().split(";")[0]));
-      wordController.getTabPane().getSelectionModel().select(1);
+      if (changeTab) {
+        wordController.getTabPane().getSelectionModel().select(1);
+      }
     }
   }
 
@@ -244,5 +262,60 @@ public class WordFormController implements Initializable {
 
   public ToggleGroup2 getToggleGroupPartOfSpeech() {
     return toggleGroupPartOfSpeech;
+  }
+
+  public void buttonAddLessonOnAction(ActionEvent actionEvent) {
+    if (comboBoxLesson.getSelectionModel().getSelectedItem() != null && StringUtils.isNoneEmpty(textFieldId.getText())) {
+      Lesson lesson = comboBoxLesson.getSelectionModel().getSelectedItem();
+      Long wordId = Long.parseLong(textFieldId.getText());
+
+      wordController.getWordService().getById(wordId)
+          .ifPresent(word -> {
+            LessonWord lessonWord = wordController.getLessonWordService().save(
+                LessonWord.builder()
+                    .word(word)
+                    .lesson(lesson)
+                    .position(wordController.getLessonWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
+                    .build());
+            setLessonWordForm();
+            wordController.refreshTableView();
+            wordController.refreshChildComboBoxes();
+          });
+    }
+  }
+
+  public void buttonRemoveLessonOnAction(ActionEvent actionEvent) {
+    if (comboBoxLesson.getSelectionModel().getSelectedItem() != null && StringUtils.isNoneEmpty(textFieldId.getText())) {
+      Lesson lesson = comboBoxLesson.getSelectionModel().getSelectedItem();
+      Long wordId = Long.parseLong(textFieldId.getText());
+
+      wordController.getLessonWordService().getByLessonIdAndWordId(lesson.getId(), wordId)
+          .ifPresent(lessonWord -> wordController.getLessonWordService().deleteById(lessonWord.getId()));
+      setLessonWordForm();
+      wordController.refreshTableView();
+      wordController.refreshChildComboBoxes();
+    }
+  }
+
+  private void setLessonWordForm() {
+    if (StringUtils.isNoneEmpty(textFieldId.getText())) {
+      wordController.getWordService().getById(Long.parseLong(textFieldId.getText()))
+          .ifPresent(word -> {
+            List<LessonWord> lessonWords = wordController.getLessonWordService().getAllByWord(word);
+            listViewLessons.setItems(null);
+            listViewLessons.setItems(FXCollections.observableArrayList(lessonWords.stream()
+                .map(LessonWord::getLesson)
+                .collect(Collectors.toList())));
+          });
+    }
+
+  }
+
+  public void listViewLessonsOnMouseClicked(MouseEvent mouseEvent) {
+    Lesson selectedItem = listViewLessons.getSelectionModel().getSelectedItem();
+    if (selectedItem != null) {
+      comboBoxLesson.getSelectionModel().select(selectedItem);
+    }
+
   }
 }

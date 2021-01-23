@@ -21,7 +21,7 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
       "    when max(`position`) is not null then max(`position`) " +
       "    else -1 " +
       "  end " +
-      "from explore_english.words w where w.lesson_id = :lessonId), " +
+      "from explore_english.lesson_word lw where lw.lesson_id = :lessonId), " +
       "(select " +
       "  case " +
       "    when max(`position`) is not null then max(`position`) " +

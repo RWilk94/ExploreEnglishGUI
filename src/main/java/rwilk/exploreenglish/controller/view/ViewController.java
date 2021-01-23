@@ -17,6 +17,7 @@ import rwilk.exploreenglish.service.ExerciseItemService;
 import rwilk.exploreenglish.service.ExerciseService;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
+import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.NoteService;
 import rwilk.exploreenglish.service.SentenceService;
 import rwilk.exploreenglish.service.WordService;
@@ -35,11 +36,11 @@ public class ViewController implements Initializable {
   private final InjectService injectService;
   private final CourseService courseService;
   private final LessonService lessonService;
-  private final WordService wordService;
   private final NoteService noteService;
   private final ExerciseService exerciseService;
   private final ExerciseItemService exerciseItemService;
   private final SentenceService sentenceService;
+  private final LessonWordService lessonWordService;
 
   private Course selectedCourse;
   private Lesson selectedLesson;
@@ -50,15 +51,18 @@ public class ViewController implements Initializable {
   public ListView<LearnItem> listViewLearnItems;
   public ListView<LearnItemChildren> listViewLearnItemChildren;
 
-  public ViewController(InjectService injectService, CourseService courseService, LessonService lessonService, WordService wordService, NoteService noteService, ExerciseService exerciseService, ExerciseItemService exerciseItemService, SentenceService sentenceService) {
+  public ViewController(InjectService injectService, CourseService courseService, LessonService lessonService,
+                        WordService wordService, NoteService noteService, ExerciseService exerciseService,
+                        ExerciseItemService exerciseItemService, SentenceService sentenceService,
+                        LessonWordService lessonWordService) {
     this.injectService = injectService;
     this.courseService = courseService;
     this.lessonService = lessonService;
-    this.wordService = wordService;
     this.noteService = noteService;
     this.exerciseService = exerciseService;
     this.exerciseItemService = exerciseItemService;
     this.sentenceService = sentenceService;
+    this.lessonWordService = lessonWordService;
     this.injectService.setViewController(this);
   }
 
@@ -75,8 +79,8 @@ public class ViewController implements Initializable {
         } else {
           this.setText("");
         }
-        if (item instanceof Word) {
-          Word word = (Word) item;
+        if (item instanceof LessonWord) {
+          Word word = ((LessonWord) item).getWord();
           if ((nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && nonEmpty(word.getGrammarType()) &&
               ((word.getGrammarType().equals("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the")))
@@ -129,11 +133,12 @@ public class ViewController implements Initializable {
   public void listViewLearnItemsOnMouseClicked(MouseEvent mouseEvent) {
     selectedLearnItem = listViewLearnItems.getSelectionModel().getSelectedItem();
     if (selectedLearnItem != null) {
-      if (selectedLearnItem instanceof Word) {
+      if (selectedLearnItem instanceof LessonWord) {
+        Word word = ((LessonWord)selectedLearnItem).getWord();
         fillInLessonItemChildrenListView(selectedLearnItem);
-        injectService.getWordController().setWordForm((Word) selectedLearnItem);
+        injectService.getWordController().setWordForm(word);
         injectService.getMainController().tabPane.getSelectionModel().select(2);
-        injectService.getSentenceController().setWordComboBox((Word) selectedLearnItem);
+        injectService.getSentenceController().setWordComboBox(word);
       } else if (selectedLearnItem instanceof Exercise) {
         fillInLessonItemChildrenListView(selectedLearnItem);
         injectService.getExerciseController().setExerciseForm((Exercise) selectedLearnItem);
@@ -183,11 +188,11 @@ public class ViewController implements Initializable {
 
   private void fillInLearnItemsListView(Lesson lesson) {
     List<Note> notes = noteService.getAllByLesson(lesson);
-    List<Word> words = wordService.getAllByLesson(lesson);
+    List<LessonWord> lessonWords = lessonWordService.getAllByLesson(lesson);
     List<Exercise> exercises = exerciseService.getAllByLesson(lesson);
 
     List<LearnItem> learnItems = new ArrayList<>(notes);
-    learnItems.addAll(words);
+    learnItems.addAll(lessonWords);
     learnItems.addAll(exercises);
     learnItems = learnItems.stream().sorted(Comparator.comparing(LearnItem::getPosition)).collect(Collectors.toList());
 
@@ -203,8 +208,8 @@ public class ViewController implements Initializable {
           .sorted(Comparator.comparing(ExerciseItem::getPosition))
           .collect(Collectors.toList());
       listViewLearnItemChildren.setItems(FXCollections.observableArrayList(learnItemChildren));
-    } else if (selectedItem instanceof Word) {
-      Word word = (Word) selectedItem;
+    } else if (selectedItem instanceof LessonWord) {
+      Word word = ((LessonWord) selectedItem).getWord();
       List<LearnItemChildren> learnItemChildren = sentenceService.getAllByWord(word).stream()
           .sorted(Comparator.comparing(Sentence::getPosition))
           .collect(Collectors.toList());
@@ -278,12 +283,13 @@ public class ViewController implements Initializable {
   public void buttonLearnItemsPositionUpOnAction(ActionEvent actionEvent) {
     if (selectedLearnItem != null) {
       HashMap<Integer, LearnItem> itemHashMap = new HashMap<>();
+      Lesson lesson = selectedLearnItem.getLesson();
 
-      wordService.getPreviousWord(selectedLearnItem.getLesson().getId(), selectedLearnItem.getPosition())
+      lessonWordService.getPreviousWord(lesson.getId(), selectedLearnItem.getPosition())
           .ifPresent(previousWord -> itemHashMap.put(previousWord.getPosition(), previousWord));
-      noteService.getPreviousNote(selectedLearnItem.getLesson().getId(), selectedLearnItem.getPosition())
+      noteService.getPreviousNote(lesson.getId(), selectedLearnItem.getPosition())
           .ifPresent(previousNote -> itemHashMap.put(previousNote.getPosition(), previousNote));
-      exerciseService.getPreviousExercise(selectedLearnItem.getLesson().getId(), selectedLearnItem.getPosition())
+      exerciseService.getPreviousExercise(lesson.getId(), selectedLearnItem.getPosition())
           .ifPresent(previousExercise -> itemHashMap.put(previousExercise.getPosition(), previousExercise));
 
       if (!itemHashMap.isEmpty()) {
@@ -305,12 +311,13 @@ public class ViewController implements Initializable {
   public void buttonLearnItemsPositionDownOnAction(ActionEvent actionEvent) {
     if (selectedLearnItem != null) {
       HashMap<Integer, LearnItem> itemHashMap = new HashMap<>();
+      Lesson lesson = selectedLearnItem.getLesson();
 
-      wordService.getNextWord(selectedLearnItem.getLesson().getId(), selectedLearnItem.getPosition())
+      lessonWordService.getNextWord(lesson.getId(), selectedLearnItem.getPosition())
           .ifPresent(previousWord -> itemHashMap.put(previousWord.getPosition(), previousWord));
-      noteService.getNextNote(selectedLearnItem.getLesson().getId(), selectedLearnItem.getPosition())
+      noteService.getNextNote(lesson.getId(), selectedLearnItem.getPosition())
           .ifPresent(previousNote -> itemHashMap.put(previousNote.getPosition(), previousNote));
-      exerciseService.getNextExercise(selectedLearnItem.getLesson().getId(), selectedLearnItem.getPosition())
+      exerciseService.getNextExercise(lesson.getId(), selectedLearnItem.getPosition())
           .ifPresent(previousExercise -> itemHashMap.put(previousExercise.getPosition(), previousExercise));
 
       if (!itemHashMap.isEmpty()) {
@@ -377,8 +384,8 @@ public class ViewController implements Initializable {
   }
 
   private LearnItem saveLearnItem(LearnItem learnItem) {
-    if (learnItem instanceof Word) {
-      return wordService.save((Word)learnItem);
+    if (learnItem instanceof LessonWord) {
+      return lessonWordService.save((LessonWord) learnItem);
     } else if (learnItem instanceof Note) {
       return noteService.save((Note) learnItem);
     } else if (learnItem instanceof Exercise) {

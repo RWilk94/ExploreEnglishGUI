@@ -9,6 +9,7 @@ import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
+import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.NoteService;
 
 import java.io.IOException;
@@ -21,16 +22,19 @@ public class NoteController implements Initializable {
   private final InjectService injectService;
   private final LessonService lessonService;
   private final NoteService noteService;
+  private final LessonWordService lessonWordService;
   private NoteFormController noteFormController;
   private NoteTableController noteTableController;
 
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public NoteController(InjectService injectService, LessonService lessonService, NoteService noteService) {
+  public NoteController(InjectService injectService, LessonService lessonService, NoteService noteService,
+                        LessonWordService lessonWordService) {
     this.injectService = injectService;
     this.lessonService = lessonService;
     this.noteService = noteService;
+    this.lessonWordService = lessonWordService;
     injectService.setNoteController(this);
   }
 
@@ -84,6 +88,10 @@ public class NoteController implements Initializable {
 
   public NoteService getNoteService() {
     return noteService;
+  }
+
+  public LessonWordService getLessonWordService() {
+    return lessonWordService;
   }
 
   public InjectService getInjectService() {

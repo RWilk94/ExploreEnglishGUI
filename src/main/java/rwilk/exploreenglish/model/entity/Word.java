@@ -6,19 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import rwilk.exploreenglish.model.LearnItem;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.util.List;
 
@@ -28,21 +25,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "words")
-public final class Word implements Serializable, LearnItem {
+@Table(name = "words", uniqueConstraints = @UniqueConstraint(columnNames={"english_names", "polish_name"}))
+public final class Word implements Serializable {
 
   private static final long serialVersionUID = -4492733736602366272L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "other_name")
+  @Column(name = "english_names", length = 2000)
   private String englishNames;
-  @Column(name = "polish_name")
+  @Column(name = "polish_name", length = 2000)
   private String polishName;
   @Column(name = "part_of_speech")
   private String partOfSpeech;
-  @Column(name = "sound")
+  @Column(name = "sound", length = 2000)
   private String sound;
 
   @Column(name = "article")
@@ -61,16 +58,13 @@ public final class Word implements Serializable, LearnItem {
   private String level;
   @Column(name = "plural")
   private String plural;
-  @Column(name = "position")
-  private Integer position;
   @Column(name = "synonym")
   private String synonym;
   @Column(name = "opposite")
   private String opposite;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-  @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
-  private Lesson lesson;
+  @OneToMany(mappedBy = "word")
+  private List<LessonWord> lessonWords;
 
   @Transient
   private List<Sentence> sentences;

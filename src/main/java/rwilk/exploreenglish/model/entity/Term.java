@@ -28,13 +28,13 @@ public final class Term implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "english_name")
+  @Column(name = "english_name", length = 2000)
   private String englishName;
-  @Column(name = "american_name")
+  @Column(name = "american_name", length = 2000)
   private String americanName;
-  @Column(name = "other_name")
+  @Column(name = "other_name", length = 2000)
   private String otherName;
-  @Column(name = "polish_name")
+  @Column(name = "polish_name", length = 2000)
   private String polishName;
   @Column(name = "comparative")
   private String comparative;

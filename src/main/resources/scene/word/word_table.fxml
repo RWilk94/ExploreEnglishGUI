@@ -43,17 +43,7 @@
       </TableColumn>
       <TableColumn fx:id="columnEnglishName" minWidth="20.0" prefWidth="-1.0" text="En Name">
         <cellValueFactory>
-          <PropertyValueFactory property="englishName"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnAmericanName" minWidth="20.0" prefWidth="-1.0" text="Us Name">
-        <cellValueFactory>
-          <PropertyValueFactory property="americanName"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnOtherName" minWidth="20.0" prefWidth="-1.0" text="Other Name">
-        <cellValueFactory>
-          <PropertyValueFactory property="otherName"/>
+          <PropertyValueFactory property="englishNames"/>
         </cellValueFactory>
       </TableColumn>
       <TableColumn fx:id="columnPolishName" minWidth="20.0" prefWidth="-1.0" text="Pl Name">
@@ -64,11 +54,6 @@
       <TableColumn fx:id="columnLevel" minWidth="20.0" prefWidth="-1.0" text="Level">
         <cellValueFactory>
           <PropertyValueFactory property="level"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnLesson" minWidth="20.0" prefWidth="-1.0" text="Lesson">
-        <cellValueFactory>
-          <PropertyValueFactory property="lesson"/>
         </cellValueFactory>
       </TableColumn>
       <TableColumn fx:id="columnPartOfSpeech" minWidth="20.0" prefWidth="-1.0" text="PartOfSpeech">

@@ -13,13 +13,14 @@ import java.util.Optional;
 public class LessonService {
 
   private final LessonRepository lessonRepository;
-  private final WordService wordService;
+  private final LessonWordService lessonWordService;
   private final NoteService noteService;
   private final ExerciseService exerciseService;
 
-  public LessonService(LessonRepository lessonRepository, WordService wordService, NoteService noteService, ExerciseService exerciseService) {
+  public LessonService(LessonRepository lessonRepository, LessonWordService lessonWordService,
+                       NoteService noteService, ExerciseService exerciseService) {
     this.lessonRepository = lessonRepository;
-    this.wordService = wordService;
+    this.lessonWordService = lessonWordService;
     this.noteService = noteService;
     this.exerciseService = exerciseService;
   }
@@ -42,7 +43,7 @@ public class LessonService {
 
   @Transactional
   public void delete(Lesson lesson) {
-    wordService.deleteByLesson(lesson);
+    lessonWordService.deleteByLesson(lesson);
     noteService.deleteByLesson(lesson);
     exerciseService.deleteByLesson(lesson);
     lessonRepository.delete(lesson);
@@ -52,7 +53,7 @@ public class LessonService {
   public void deleteByCourse(Course course) {
     List<Lesson> lessons = getAllByCourse(course);
     for (Lesson lesson : lessons) {
-      wordService.deleteByLesson(lesson);
+      lessonWordService.deleteByLesson(lesson);
       noteService.deleteByLesson(lesson);
       exerciseService.deleteByLesson(lesson);
       lessonRepository.delete(lesson);

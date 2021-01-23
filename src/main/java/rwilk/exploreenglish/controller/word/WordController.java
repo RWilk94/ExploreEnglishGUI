@@ -15,6 +15,7 @@ import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
+import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.WordService;
 import rwilk.exploreenglish.utils.WordUtils;
 
@@ -28,6 +29,7 @@ public class WordController implements Initializable {
   private final InjectService injectService;
   private final LessonService lessonService;
   private final WordService wordService;
+  private final LessonWordService lessonWordService;
   public TabPane tabPane;
   private WordFormController wordFormController;
   private WordTableController wordTableController;
@@ -35,10 +37,12 @@ public class WordController implements Initializable {
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public WordController(InjectService injectService, LessonService lessonService, WordService wordService) {
+  public WordController(InjectService injectService, LessonService lessonService, WordService wordService,
+                        LessonWordService lessonWordService) {
     this.injectService = injectService;
     this.lessonService = lessonService;
     this.wordService = wordService;
+    this.lessonWordService = lessonWordService;
     injectService.setWordController(this);
   }
 
@@ -71,12 +75,12 @@ public class WordController implements Initializable {
 
   public void setWordForm(Word word) {
     wordFormController.setWordForm(word);
-    wordFormController.buttonTranslateOnAction(null);
+    wordFormController.translate(false);
   }
 
   public void setWordForm(Term term) {
     wordFormController.setWordForm(term);
-    wordFormController.buttonTranslateOnAction(null);
+    wordFormController.translate(true);
   }
 
   public void refreshTableView() {
@@ -143,6 +147,10 @@ public class WordController implements Initializable {
 
   public WordService getWordService() {
     return wordService;
+  }
+
+  public LessonWordService getLessonWordService() {
+    return lessonWordService;
   }
 
   public InjectService getInjectService() {

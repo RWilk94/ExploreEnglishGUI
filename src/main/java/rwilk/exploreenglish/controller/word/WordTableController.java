@@ -3,6 +3,7 @@ package rwilk.exploreenglish.controller.word;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -11,6 +12,7 @@ import rwilk.exploreenglish.model.entity.Word;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -24,11 +26,8 @@ public class WordTableController implements Initializable {
   public TableView<Word> tableWords;
   public TableColumn<Word, Long> columnId;
   public TableColumn<Word, String> columnEnglishName;
-  public TableColumn<Word, String> columnAmericanName;
-  public TableColumn<Word, String> columnOtherName;
   public TableColumn<Word, String> columnPolishName;
   public TableColumn<Word, String> columnLevel;
-  public TableColumn<Word, String> columnLesson;
   public TableColumn<Word, String> columnPartOfSpeech;
   public TableColumn<Word, String> columnComparative;
   public TableColumn<Word, String> columnSuperlative;
@@ -67,11 +66,22 @@ public class WordTableController implements Initializable {
 
   private void initializeTableView() {
     initializeColumns(Arrays.asList(columnEnglishName, columnPolishName), 0.16);
-    initializeColumns(Arrays.asList(columnAmericanName, columnOtherName, columnPartOfSpeech), 0.14);
-    initializeColumns(Arrays.asList(
-        columnLesson, columnComparative,
-        columnSuperlative, columnPastTense, columnPastParticiple, columnPlural, columnOpposite, columnSynonym), 0.2);
+    initializeColumns(Collections.singletonList(columnPartOfSpeech), 0.10);
+    initializeColumns(Arrays.asList(columnComparative, columnSuperlative, columnPastTense, columnPastParticiple,
+        columnPlural, columnOpposite, columnSynonym), 0.2);
     initializeColumns(Arrays.asList(columnId, columnLevel), 0.05);
+
+    tableWords.setRowFactory(row -> new TableRow<Word>() {
+      @Override
+      protected void updateItem(Word item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item != null && (item.getLessonWords() == null || item.getLessonWords().isEmpty())) {
+          this.setStyle("-fx-background-color: #ED073D");
+        } else {
+          setStyle("");
+        }
+      }
+    });
   }
 
   private void initializeColumns(List<TableColumn<?, ?>> tableColumns, double other) {
@@ -97,8 +107,10 @@ public class WordTableController implements Initializable {
   private void filterTableByLesson(String value) {
     List<Word> filteredWords = words.stream()
         .filter(word ->
-            word.getLesson().getEnglishName().toLowerCase().contains(value.toLowerCase())
-                || word.getLesson().getPolishName().toLowerCase().contains(value.toLowerCase()))
+            word.getLessonWords().stream()
+                .anyMatch(lessonWord -> lessonWord.getLesson().getEnglishName().toLowerCase().contains(value.toLowerCase()))
+                || word.getLessonWords().stream()
+                .anyMatch(lessonWord -> lessonWord.getLesson().getPolishName().toLowerCase().contains(value.toLowerCase())))
         .collect(Collectors.toList());
     tableWords.setItems(FXCollections.observableArrayList(filteredWords));
   }
@@ -106,8 +118,10 @@ public class WordTableController implements Initializable {
   private void filterTableByCourse(String value) {
     List<Word> filteredWords = words.stream()
         .filter(word ->
-            word.getLesson().getCourse().getEnglishName().toLowerCase().contains(value.toLowerCase())
-                || word.getLesson().getCourse().getPolishName().toLowerCase().contains(value.toLowerCase()))
+            word.getLessonWords().stream()
+                .anyMatch(lessonWord -> lessonWord.getLesson().getCourse().getEnglishName().toLowerCase().contains(value.toLowerCase()))
+                || word.getLessonWords().stream()
+                .anyMatch(lessonWord -> lessonWord.getLesson().getCourse().getPolishName().toLowerCase().contains(value.toLowerCase())))
         .collect(Collectors.toList());
     tableWords.setItems(FXCollections.observableArrayList(filteredWords));
   }

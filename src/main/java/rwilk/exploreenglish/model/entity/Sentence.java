@@ -33,11 +33,11 @@ public final class Sentence implements Serializable, LearnItemChildren {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "english_name")
+  @Column(name = "english_name", length = 2000)
   private String englishName;
-  @Column(name = "polish_name")
+  @Column(name = "polish_name", length = 2000)
   private String polishName;
-  @Column(name = "sound")
+  @Column(name = "sound", length = 2000)
   private String sound;
   @Column(name = "position")
   private Integer position;

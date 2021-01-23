@@ -33,7 +33,7 @@ public final class Note implements Serializable, LearnItem {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "note")
+  @Column(name = "note", length = 2000)
   private String note;
   @Column(name = "position")
   private Integer position;

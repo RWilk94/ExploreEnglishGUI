@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "courses")
+@Table(name = "courses", uniqueConstraints = @UniqueConstraint(columnNames={"english_name", "polish_name"}))
 public final class Course implements Serializable {
 
   private static final long serialVersionUID = -301812296339879988L;
@@ -30,9 +31,9 @@ public final class Course implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "english_name")
+  @Column(name = "english_name", length = 2000)
   private String englishName;
-  @Column(name = "polish_name")
+  @Column(name = "polish_name", length = 2000)
   private String polishName;
   @Column(name = "image")
   private String image;

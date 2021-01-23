@@ -1,11 +1,11 @@
 package rwilk.exploreenglish.model.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rwilk.exploreenglish.model.LearnItem;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,10 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
-import java.util.List;
 
 @Getter
 @Setter
@@ -28,33 +26,46 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "lessons", uniqueConstraints = @UniqueConstraint(columnNames={"english_name", "polish_name"}))
-public final class Lesson implements Serializable {
+@Table(name = "lesson_word", uniqueConstraints = @UniqueConstraint(columnNames={"lesson_id", "word_id"}))
+public class LessonWord implements Serializable, LearnItem {
 
-  private static final long serialVersionUID = 4141601594703098085L;
+  private static final long serialVersionUID = -4744082827489819635L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "english_name")
-  private String englishName;
-  @Column(name = "polish_name")
-  private String polishName;
-  @Column(name = "image")
-  private String image;
+
   @Column(name = "position")
   private Integer position;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-  @JoinColumn(name = "course_id", nullable = false, referencedColumnName = "id")
-  private Course course;
+  @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
+  private Lesson lesson;
 
-  @Transient
-  // One to Many
-  private List<LessonWord> lessonWords;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @JoinColumn(name = "word_id", nullable = false, referencedColumnName = "id")
+  private Word word;
+
+  @Override
+  public Lesson getLesson() {
+    return lesson;
+  }
+
+  public void setLesson(Lesson lesson) {
+    this.lesson = lesson;
+  }
+
+  @Override
+  public Integer getPosition() {
+    return position;
+  }
+
+  public void setPosition(Integer position) {
+    this.position = position;
+  }
 
   @Override
   public String toString() {
-    return id + ". " + englishName + " (" + polishName + ") [Course: " + course + "]";
+    return word.toString();
   }
 }

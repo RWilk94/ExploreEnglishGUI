@@ -2,7 +2,6 @@ package rwilk.exploreenglish.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.repository.WordRepository;
 
@@ -24,10 +23,6 @@ public class WordService {
     return wordRepository.findAll();
   }
 
-  public List<Word> getAllByLesson(Lesson lesson) {
-    return wordRepository.findAllByLesson(lesson);
-  }
-
   public Optional<Word> getById(Long id) {
     return wordRepository.findById(id);
   }
@@ -40,32 +35,6 @@ public class WordService {
   public void delete(Word word) {
     sentenceService.deleteByWord(word);
     wordRepository.delete(word);
-  }
-
-  @Transactional
-  public void deleteByLesson(Lesson lesson) {
-    List<Word> words = getAllByLesson(lesson);
-    for (Word word : words) {
-      sentenceService.deleteByWord(word);
-      wordRepository.delete(word);
-    }
-  }
-
-  @Transactional
-  public void deleteById(Long id) {
-    wordRepository.deleteById(id);
-  }
-
-  public Integer getCountByLesson(Lesson lesson) {
-    return (int) wordRepository.countAllByLesson(lesson.getId()) + 1;
-  }
-
-  public Optional<Word> getPreviousWord(Long lessonId, Integer position) {
-    return wordRepository.findPreviousPosition(lessonId, position);
-  }
-
-  public Optional<Word> getNextWord(Long lessonId, Integer position) {
-    return wordRepository.findNextPosition(lessonId, position);
   }
 
 }

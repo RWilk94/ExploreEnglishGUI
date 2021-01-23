@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Lesson;
+import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.model.entity.Word;
 
@@ -101,15 +102,15 @@ public class NoteFormController implements Initializable {
   public void buttonAddWordsOnAction(ActionEvent actionEvent) {
     Lesson selectedLesson = comboBoxLesson.getSelectionModel().getSelectedItem();
     if (selectedLesson != null) {
-      List<Word> words = noteController.getInjectService().getWordController().getWordService()
+      List<LessonWord> lessonWords = noteController.getLessonWordService()
           .getAllByLesson(selectedLesson).stream()
-          .sorted(Comparator.comparing(Word::getPosition))
+          .sorted(Comparator.comparing(LessonWord::getPosition))
           .collect(Collectors.toList());
-      for (Word word : words) {
+      for (LessonWord lessonWord : lessonWords) {
         if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
-          textAreaNote.setText(textAreaNote.getText() + "\n<WORD=#" + word.getId() + ">");
+          textAreaNote.setText(textAreaNote.getText() + "\n<WORD=#" + lessonWord.getId() + ">");
         } else {
-          textAreaNote.setText("<WORD=#" + word.getId() + ">");
+          textAreaNote.setText("<WORD=#" + lessonWord.getId() + ">");
         }
       }
     }
@@ -118,16 +119,16 @@ public class NoteFormController implements Initializable {
   public void buttonAddTextWordsOnAction(ActionEvent actionEvent) {
     Lesson selectedLesson = comboBoxLesson.getSelectionModel().getSelectedItem();
     if (selectedLesson != null) {
-      List<Word> words = noteController.getInjectService().getWordController().getWordService()
+      List<LessonWord> lessonWords = noteController.getLessonWordService()
           .getAllByLesson(selectedLesson).stream()
-          .sorted(Comparator.comparing(Word::getPosition))
+          .sorted(Comparator.comparing(LessonWord::getPosition))
           .collect(Collectors.toList());
-      for (Word word : words) {
+      for (LessonWord lessonWord : lessonWords) {
         if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
           // FIXME
-          textAreaNote.setText(textAreaNote.getText() + "\n" + word.getEnglishNames() + " = " + word.getPolishName());
+          textAreaNote.setText(textAreaNote.getText() + "\n" + lessonWord.getWord().getEnglishNames() + " = " + lessonWord.getWord().getPolishName());
         } else {
-          textAreaNote.setText("<WORD=#" + word.getId() + ">");
+          textAreaNote.setText(lessonWord.getWord().getEnglishNames() + " = " + lessonWord.getWord().getPolishName());
         }
       }
     }

@@ -10,6 +10,7 @@ import rwilk.exploreenglish.model.entity.ExerciseItem;
 import rwilk.exploreenglish.service.ExerciseItemService;
 import rwilk.exploreenglish.service.ExerciseService;
 import rwilk.exploreenglish.service.InjectService;
+import rwilk.exploreenglish.service.LessonWordService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,16 +22,20 @@ public class ExerciseItemController implements Initializable {
   private final InjectService injectService;
   private final ExerciseService exerciseService;
   private final ExerciseItemService exerciseItemService;
+  private final LessonWordService lessonWordService;
   private ExerciseItemFormController exerciseItemFormController;
   private ExerciseItemTableController exerciseItemTableController;
 
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public ExerciseItemController(InjectService injectService, ExerciseService exerciseService, ExerciseItemService exerciseItemService) {
+  public ExerciseItemController(InjectService injectService, ExerciseService exerciseService,
+                                ExerciseItemService exerciseItemService,
+                                LessonWordService lessonWordService) {
     this.injectService = injectService;
     this.exerciseService = exerciseService;
     this.exerciseItemService = exerciseItemService;
+    this.lessonWordService = lessonWordService;
     injectService.setExerciseItemController(this);
   }
 
@@ -84,6 +89,10 @@ public class ExerciseItemController implements Initializable {
 
   public ExerciseItemService getExerciseItemService() {
     return exerciseItemService;
+  }
+
+  public LessonWordService getLessonWordService() {
+    return lessonWordService;
   }
 
   public InjectService getInjectService() {

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Exercise;
 import rwilk.exploreenglish.model.entity.ExerciseItem;
+import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Word;
 
 import java.net.URL;
@@ -164,28 +165,28 @@ public class ExerciseItemFormController implements Initializable {
   public void buttonLoadWordsOnAction(ActionEvent actionEvent) {
     Exercise exercise = comboBoxExercise.getSelectionModel().getSelectedItem();
     if (exercise != null) {
-      List<Word> words = exerciseItemController.getInjectService().getWordController().getWordService()
+      List<LessonWord> lessonWords = exerciseItemController.getLessonWordService()
           .getAllByLesson(exercise.getLesson()).stream()
-          .sorted(Comparator.comparing(Word::getPosition))
+          .sorted(Comparator.comparing(LessonWord::getPosition))
           .collect(Collectors.toList());
       // FIXME otherName split(";")[0]
-      if (words.size() >= 4) {
-        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
-        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
-        textFieldThirdPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
-        textFieldFourthPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
-      } else if (words.size() >= 3) {
-        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
-        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
-        textFieldThirdPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
-      } else if (words.size() >= 2) {
-        textFieldFirstPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
-        textFieldSecondPossibleAnswer.setText(words.remove(getIndex(words)).getEnglishNames());
+      if (lessonWords.size() >= 4) {
+        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldThirdPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldFourthPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+      } else if (lessonWords.size() >= 3) {
+        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldThirdPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+      } else if (lessonWords.size() >= 2) {
+        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
       }
     }
   }
 
-  private int getIndex(List<Word> words) {
+  private int getIndex(List<LessonWord> words) {
     return new Random().nextInt(((words.size() - 1) + 1));
   }
 

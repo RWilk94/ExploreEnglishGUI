@@ -5,17 +5,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rwilk.exploreenglish.model.entity.Lesson;
-import rwilk.exploreenglish.model.entity.Note;
+import rwilk.exploreenglish.model.entity.LessonWord;
+import rwilk.exploreenglish.model.entity.Word;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface NoteRepository extends JpaRepository<Note, Long> {
+public interface LessonWordRepository extends JpaRepository<LessonWord, Long> {
 
   void deleteAllByLesson(Lesson lesson);
 
-  List<Note> findAllByLesson(Lesson lesson);
+  List<LessonWord> findAllByLesson(Lesson lesson);
+
+  List<LessonWord> findAllByWord(Word word);
+
+  Optional<LessonWord> findByLesson_IdAndWord_Id(Long lessonId, Long wordId);
 
   @Query(value = "select GREATEST(" +
       "(select " +
@@ -39,14 +44,15 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
   long countAllByLesson(@Param("lessonId") Long lessonId);
 
   @Query(value = "select *" +
-      "from notes n " +
-      "where n.lesson_id = :lessonId and n.`position` = (select max(position) from notes where lesson_id = :lessonId and `position` < :position);",
+      "from lesson_word lw " +
+      "where lw.lesson_id = :lessonId and lw.`position` = (select max(position) from lesson_word where lesson_id = :lessonId and `position` < :position);",
       nativeQuery = true)
-  Optional<Note> findPreviousPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
+  Optional<LessonWord> findPreviousPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
 
   @Query(value = "select *" +
-      "from notes n " +
-      "where n.lesson_id = :lessonId and n.`position` = (select min(position) from notes where lesson_id = :lessonId and `position` > :position);",
+      "from lesson_word lw " +
+      "where lw.lesson_id = :lessonId and lw.`position` = (select min(position) from lesson_word where lesson_id = :lessonId and `position` > :position);",
       nativeQuery = true)
-  Optional<Note> findNextPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
+  Optional<LessonWord> findNextPosition(@Param("lessonId") Long lessonId, @Param("position") Integer position);
+
 }

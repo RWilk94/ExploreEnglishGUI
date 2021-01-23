@@ -34,26 +34,26 @@ public final class ExerciseItem implements Serializable, LearnItemChildren {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "question")
+  @Column(name = "question", length = 2000)
   private String question;
-  @Column(name = "correct_answer")
+  @Column(name = "correct_answer", length = 512)
   private String correctAnswer;
-  @Column(name = "final_answer")
+  @Column(name = "final_answer", length = 2000)
   private String finalAnswer;
-  @Column(name = "first_possible_answer")
+  @Column(name = "first_possible_answer", length = 512)
   private String firstPossibleAnswer;
-  @Column(name = "second_possible_answer")
+  @Column(name = "second_possible_answer", length = 512)
   private String secondPossibleAnswer;
-  @Column(name = "third_possible_answer")
+  @Column(name = "third_possible_answer", length = 512)
   private String thirdPossibleAnswer;
-  @Column(name = "forth_possible_answer")
+  @Column(name = "forth_possible_answer", length = 512)
   private String forthPossibleAnswer;
 
-  @Column(name = "dialogue_english")
+  @Column(name = "dialogue_english", length = 2000)
   private String dialogueEnglish;
-  @Column(name = "dialogue_polish")
+  @Column(name = "dialogue_polish", length = 2000)
   private String dialoguePolish;
-  @Column(name = "description")
+  @Column(name = "description", length = 2000)
   private String description;
 
   @Column(name = "position")
