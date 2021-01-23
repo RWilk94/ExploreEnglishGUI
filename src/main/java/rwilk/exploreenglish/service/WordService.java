@@ -3,6 +3,7 @@ package rwilk.exploreenglish.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.entity.Word;
+import rwilk.exploreenglish.repository.LessonWordRepository;
 import rwilk.exploreenglish.repository.WordRepository;
 
 import java.util.List;
@@ -11,12 +12,16 @@ import java.util.Optional;
 @Service
 public class WordService {
 
+  private final LessonWordRepository lessonWordRepository;
   private final WordRepository wordRepository;
-  private final SentenceService sentenceService;
+  private final WordSentenceService wordSentenceService;
 
-  public WordService(WordRepository wordRepository, SentenceService sentenceService) {
+  public WordService(LessonWordRepository lessonWordRepository,
+                     WordRepository wordRepository,
+                     WordSentenceService wordSentenceService) {
+    this.lessonWordRepository = lessonWordRepository;
     this.wordRepository = wordRepository;
-    this.sentenceService = sentenceService;
+    this.wordSentenceService = wordSentenceService;
   }
 
   public List<Word> getAll() {
@@ -33,7 +38,8 @@ public class WordService {
 
   @Transactional
   public void delete(Word word) {
-    sentenceService.deleteByWord(word);
+    wordSentenceService.deleteByWord(word);
+    lessonWordRepository.deleteAllByWord(word);
     wordRepository.delete(word);
   }
 

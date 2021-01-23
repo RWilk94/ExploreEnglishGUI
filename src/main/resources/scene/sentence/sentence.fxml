@@ -8,7 +8,7 @@
             fx:controller="rwilk.exploreenglish.controller.sentence.SentenceController">
 
   <center>
-    <SplitPane dividerPositions="0.2" orientation="VERTICAL">
+    <SplitPane dividerPositions="0.35" orientation="VERTICAL">
       <AnchorPane fx:id="anchorPaneForm" minHeight="0" minWidth="0">
       </AnchorPane>
       <AnchorPane fx:id="anchorPaneTable" minHeight="0" minWidth="0">

@@ -16,6 +16,8 @@ public interface LessonWordRepository extends JpaRepository<LessonWord, Long> {
 
   void deleteAllByLesson(Lesson lesson);
 
+  void deleteAllByWord(Word word);
+
   List<LessonWord> findAllByLesson(Lesson lesson);
 
   List<LessonWord> findAllByWord(Word word);

@@ -28,13 +28,13 @@
         </cellValueFactory>
       </TableColumn>
 
-      <TableColumn fx:id="columnEnglishName" minWidth="20.0" prefWidth="-1.0" text="Note">
+      <TableColumn fx:id="columnEnglishName" minWidth="20.0" prefWidth="-1.0" text="English Name">
         <cellValueFactory>
           <PropertyValueFactory property="englishName"/>
         </cellValueFactory>
       </TableColumn>
 
-      <TableColumn fx:id="columnPolishName" minWidth="20.0" prefWidth="-1.0" text="Note">
+      <TableColumn fx:id="columnPolishName" minWidth="20.0" prefWidth="-1.0" text="Polish Name">
         <cellValueFactory>
           <PropertyValueFactory property="polishName"/>
         </cellValueFactory>

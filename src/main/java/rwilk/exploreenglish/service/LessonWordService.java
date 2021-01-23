@@ -7,7 +7,6 @@ import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.repository.LessonWordRepository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,5 +63,10 @@ public class LessonWordService {
   @Transactional
   public void deleteByLesson(Lesson lesson) {
     lessonWordRepository.deleteAllByLesson(lesson);
+  }
+
+  @Transactional
+  public void deleteByWord(Word word) {
+    lessonWordRepository.deleteAllByWord(word);
   }
 }

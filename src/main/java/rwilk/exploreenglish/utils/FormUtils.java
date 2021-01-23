@@ -2,6 +2,7 @@ package rwilk.exploreenglish.utils;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +42,9 @@ public class FormUtils {
       } else if (control instanceof ToggleGroup) {
         ToggleGroup toggleGroup = (ToggleGroup) control;
         toggleGroup.selectToggle(null);
+      } else if (control instanceof ListView) {
+        ListView listView = (ListView) control;
+        listView.setItems(null);
       }
     }
   }

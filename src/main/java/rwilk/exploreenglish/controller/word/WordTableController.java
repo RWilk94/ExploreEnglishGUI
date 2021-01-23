@@ -7,6 +7,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Word;
 
@@ -105,24 +106,28 @@ public class WordTableController implements Initializable {
   }
 
   private void filterTableByLesson(String value) {
-    List<Word> filteredWords = words.stream()
-        .filter(word ->
-            word.getLessonWords().stream()
-                .anyMatch(lessonWord -> lessonWord.getLesson().getEnglishName().toLowerCase().contains(value.toLowerCase()))
-                || word.getLessonWords().stream()
-                .anyMatch(lessonWord -> lessonWord.getLesson().getPolishName().toLowerCase().contains(value.toLowerCase())))
-        .collect(Collectors.toList());
-    tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+    if (StringUtils.isNoneEmpty(value)) {
+      List<Word> filteredWords = words.stream()
+          .filter(word ->
+              word.getLessonWords().stream()
+                  .anyMatch(lessonWord -> lessonWord.getLesson().getEnglishName().toLowerCase().contains(value.toLowerCase()))
+                  || word.getLessonWords().stream()
+                  .anyMatch(lessonWord -> lessonWord.getLesson().getPolishName().toLowerCase().contains(value.toLowerCase())))
+          .collect(Collectors.toList());
+      tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+    }
   }
 
   private void filterTableByCourse(String value) {
-    List<Word> filteredWords = words.stream()
-        .filter(word ->
-            word.getLessonWords().stream()
-                .anyMatch(lessonWord -> lessonWord.getLesson().getCourse().getEnglishName().toLowerCase().contains(value.toLowerCase()))
-                || word.getLessonWords().stream()
-                .anyMatch(lessonWord -> lessonWord.getLesson().getCourse().getPolishName().toLowerCase().contains(value.toLowerCase())))
-        .collect(Collectors.toList());
-    tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+    if (StringUtils.isNoneEmpty(value)) {
+      List<Word> filteredWords = words.stream()
+          .filter(word ->
+              word.getLessonWords().stream()
+                  .anyMatch(lessonWord -> lessonWord.getLesson().getCourse().getEnglishName().toLowerCase().contains(value.toLowerCase()))
+                  || word.getLessonWords().stream()
+                  .anyMatch(lessonWord -> lessonWord.getLesson().getCourse().getPolishName().toLowerCase().contains(value.toLowerCase())))
+          .collect(Collectors.toList());
+      tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+    }
   }
 }

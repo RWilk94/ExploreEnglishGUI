@@ -67,7 +67,7 @@ public final class Word implements Serializable {
   private List<LessonWord> lessonWords;
 
   @Transient
-  private List<Sentence> sentences;
+  private List<WordSentence> wordSentences;
 
   @Override
   public String toString() {

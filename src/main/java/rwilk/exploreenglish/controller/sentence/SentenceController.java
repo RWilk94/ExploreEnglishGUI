@@ -9,6 +9,7 @@ import rwilk.exploreenglish.model.entity.Sentence;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.SentenceService;
+import rwilk.exploreenglish.service.WordSentenceService;
 import rwilk.exploreenglish.service.WordService;
 
 import java.io.IOException;
@@ -21,16 +22,19 @@ public class SentenceController implements Initializable {
   private final InjectService injectService;
   private final WordService wordService;
   private final SentenceService sentenceService;
+  private final WordSentenceService wordSentenceService;
   private SentenceFormController sentenceFormController;
   private SentenceTableController sentenceTableController;
 
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public SentenceController(InjectService injectService, WordService wordService, SentenceService sentenceService) {
+  public SentenceController(InjectService injectService, WordService wordService, SentenceService sentenceService,
+                            WordSentenceService wordSentenceService) {
     this.injectService = injectService;
     this.wordService = wordService;
     this.sentenceService = sentenceService;
+    this.wordSentenceService = wordSentenceService;
     injectService.setSentenceController(this);
   }
 
@@ -80,6 +84,10 @@ public class SentenceController implements Initializable {
 
   public WordService getWordService() {
     return wordService;
+  }
+
+  public WordSentenceService getWordSentenceService() {
+    return wordSentenceService;
   }
 
   public SentenceService getSentenceService() {

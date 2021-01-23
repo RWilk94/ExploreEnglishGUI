@@ -13,6 +13,7 @@ import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.model.entity.Sentence;
 import rwilk.exploreenglish.model.entity.Word;
+import rwilk.exploreenglish.model.entity.WordSentence;
 import rwilk.exploreenglish.service.CourseService;
 import rwilk.exploreenglish.service.ExerciseItemService;
 import rwilk.exploreenglish.service.ExerciseService;
@@ -20,6 +21,7 @@ import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.NoteService;
 import rwilk.exploreenglish.service.SentenceService;
+import rwilk.exploreenglish.service.WordSentenceService;
 import rwilk.exploreenglish.service.WordService;
 
 import java.io.PrintWriter;
@@ -35,19 +37,20 @@ public class ExportService implements CommandLineRunner {
   private final LessonService lessonService;
   private final LessonWordService lessonWordService;
   private final WordService wordService;
+  private final WordSentenceService wordSentenceService;
   private final SentenceService sentenceService;
   private final NoteService noteService;
   private final ExerciseService exerciseService;
   private final ExerciseItemService exerciseItemService;
 
-  public ExportService(CourseService courseService, LessonService lessonService,
-                       LessonWordService lessonWordService, WordService wordService,
-                       SentenceService sentenceService, NoteService noteService, ExerciseService exerciseService,
-                       ExerciseItemService exerciseItemService) {
+  public ExportService(CourseService courseService, LessonService lessonService, LessonWordService lessonWordService,
+                       WordService wordService, WordSentenceService wordSentenceService, SentenceService sentenceService,
+                       NoteService noteService, ExerciseService exerciseService, ExerciseItemService exerciseItemService) {
     this.courseService = courseService;
     this.lessonService = lessonService;
     this.lessonWordService = lessonWordService;
     this.wordService = wordService;
+    this.wordSentenceService = wordSentenceService;
     this.sentenceService = sentenceService;
     this.noteService = noteService;
     this.exerciseService = exerciseService;
@@ -59,6 +62,7 @@ public class ExportService implements CommandLineRunner {
     exportLessons(lessonService.getAll());
     exportLessonWords(lessonWordService.getAll());
     exportWords(wordService.getAll());
+    exportWordSentences(wordSentenceService.getAll());
     exportSentences(sentenceService.getAll());
     exportNotes(noteService.getAll());
     exportExercises(exerciseService.getAll());
@@ -191,13 +195,37 @@ public class ExportService implements CommandLineRunner {
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
+  private void exportWordSentences(List<WordSentence> wordSentences) {
+    String tag = "WORD_SENTENCE";
+    log.info("START GENERATING {}", tag);
+    List<List<WordSentence>> chunks = ListUtils.partition(wordSentences, 100);
+    StringBuilder sql = new StringBuilder();
+    for (List<WordSentence> chunk : chunks) {
+      sql.append("INSERT INTO 'word_sentence' ('id', 'position', 'word_id', 'sentence_id') VALUES ");
+
+      for (WordSentence wordSentence : chunk) {
+        sql.append("\n")
+            .append("(")
+            .append(wordSentence.getId()) // COLUMN ID
+            .append(PARAM_SEPARATOR)
+            .append(wordSentence.getPosition()) // COLUMN POSITION
+            .append(PARAM_SEPARATOR)
+            .append(wordSentence.getWord().getId()) // COLUMN WORD ID
+            .append(PARAM_SEPARATOR)
+            .append(wordSentence.getSentence().getId()); // COLUMN SENTENCE ID
+        insertEndLineCharacter(sql, chunk, wordSentence);
+      }
+    }
+    exportFile(sql, tag.toLowerCase() + ".txt", tag);
+  }
+
   private void exportSentences(List<Sentence> sentences) {
     String tag = "SENTENCES";
     log.info("START GENERATING {}", tag);
     List<List<Sentence>> chunks = ListUtils.partition(sentences, 100);
     StringBuilder sql = new StringBuilder();
     for (List<Sentence> chunk : chunks) {
-      sql.append("INSERT INTO 'sentences' ('id', 'english_name', 'polish_name', 'sound', 'position', 'word_id', " +
+      sql.append("INSERT INTO 'sentences' ('id', 'english_name', 'polish_name', 'sound', " +
           "'progress', 'skip', 'difficult', 'correct', 'wrong', 'next_repeat', 'series') VALUES ");
       for (Sentence sentence : chunk) {
         sql.append("\n")
@@ -208,11 +236,7 @@ public class ExportService implements CommandLineRunner {
             .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(sentence.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(sentence.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOUND
-            .append(PARAM_SEPARATOR)
-            .append(sentence.getPosition()) // COLUMN POSITION
-            .append(PARAM_SEPARATOR)
-            .append(sentence.getWord().getId()); // COLUMN WORD ID
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(sentence.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN SOUND
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, sentence);
       }

@@ -3,9 +3,11 @@ package rwilk.exploreenglish.controller.sentence;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Sentence;
 
@@ -40,6 +42,18 @@ public class SentenceTableController implements Initializable {
     columnEnglishName.prefWidthProperty().bind(tableSentence.widthProperty().multiply(0.3));
     columnPolishName.prefWidthProperty().bind(tableSentence.widthProperty().multiply(0.3));
     columnWord.prefWidthProperty().bind(tableSentence.widthProperty().multiply(0.3));
+
+    tableSentence.setRowFactory(row -> new TableRow<Sentence>() {
+      @Override
+      protected void updateItem(Sentence item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item != null && (item.getWordSentences() == null || item.getWordSentences().isEmpty())) {
+          this.setStyle("-fx-background-color: #ED073D");
+        } else {
+          setStyle("");
+        }
+      }
+    });
   }
 
   public void init(SentenceController sentenceController) {
@@ -60,11 +74,14 @@ public class SentenceTableController implements Initializable {
   }
 
   private void filterTableByWord(String value) {
-    List<Sentence> filtered = sentences.stream()
-        .filter(sentence ->
-                sentence.getWord().getPolishName().toLowerCase().contains(value.toLowerCase())
-                || sentence.getWord().getEnglishNames().toLowerCase().contains(value.toLowerCase()))
-        .collect(Collectors.toList());
-    tableSentence.setItems(FXCollections.observableArrayList(filtered));
+    if (StringUtils.isNoneEmpty(value)) {
+      List<Sentence> filtered = sentences.stream()
+          .filter(sentence -> sentence.getWordSentences().stream()
+              .anyMatch(wordSentence -> wordSentence.getSentence().getPolishName().toLowerCase().contains(value.toLowerCase()))
+              || sentence.getWordSentences().stream()
+              .anyMatch(wordSentence -> wordSentence.getSentence().getEnglishName().toLowerCase().contains(value.toLowerCase())))
+          .collect(Collectors.toList());
+      tableSentence.setItems(FXCollections.observableArrayList(filtered));
+    }
   }
 }

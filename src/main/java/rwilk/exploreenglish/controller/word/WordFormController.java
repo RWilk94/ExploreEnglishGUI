@@ -73,7 +73,7 @@ public class WordFormController implements Initializable {
     setToggleGroups();
     controls.addAll(Arrays.asList(textFieldId, textFieldEnglishNames,
         textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, toggleGroupGrammar, textFieldComparative,
-        textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldOpposite, textFieldSynonym, comboBoxLesson));
+        textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldOpposite, textFieldSynonym, comboBoxLesson, listViewLessons));
     requiredControls.addAll(Arrays.asList(textFieldEnglishNames, textFieldPolishName));
 
     textFieldEnglishNames.textProperty().addListener((observable, oldValue, newValue) ->
@@ -146,8 +146,9 @@ public class WordFormController implements Initializable {
           .opposite(StringUtils.trimToEmpty(textFieldOpposite.getText()))
           .synonym(StringUtils.trimToEmpty(textFieldSynonym.getText()))
           .build();
-
       word = wordController.getWordService().save(word);
+      setWordForm(word);
+
       if (comboBoxLesson.getSelectionModel().getSelectedItem() != null) {
         LessonWord lessonWord = LessonWord.builder()
             .id(null)
@@ -158,7 +159,7 @@ public class WordFormController implements Initializable {
         wordController.getLessonWordService().save(lessonWord);
         setLessonWordForm();
       }
-      setWordForm(word);
+
       wordController.refreshTableView();
       wordController.refreshChildComboBoxes();
     }

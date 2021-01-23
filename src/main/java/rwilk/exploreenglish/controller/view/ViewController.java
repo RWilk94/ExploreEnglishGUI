@@ -19,8 +19,7 @@ import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.NoteService;
-import rwilk.exploreenglish.service.SentenceService;
-import rwilk.exploreenglish.service.WordService;
+import rwilk.exploreenglish.service.WordSentenceService;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,8 +38,8 @@ public class ViewController implements Initializable {
   private final NoteService noteService;
   private final ExerciseService exerciseService;
   private final ExerciseItemService exerciseItemService;
-  private final SentenceService sentenceService;
   private final LessonWordService lessonWordService;
+  private final WordSentenceService wordSentenceService;
 
   private Course selectedCourse;
   private Lesson selectedLesson;
@@ -52,17 +51,18 @@ public class ViewController implements Initializable {
   public ListView<LearnItemChildren> listViewLearnItemChildren;
 
   public ViewController(InjectService injectService, CourseService courseService, LessonService lessonService,
-                        WordService wordService, NoteService noteService, ExerciseService exerciseService,
-                        ExerciseItemService exerciseItemService, SentenceService sentenceService,
-                        LessonWordService lessonWordService) {
+                        NoteService noteService, ExerciseService exerciseService,
+                        ExerciseItemService exerciseItemService,
+                        LessonWordService lessonWordService,
+                        WordSentenceService wordSentenceService) {
     this.injectService = injectService;
     this.courseService = courseService;
     this.lessonService = lessonService;
     this.noteService = noteService;
     this.exerciseService = exerciseService;
     this.exerciseItemService = exerciseItemService;
-    this.sentenceService = sentenceService;
     this.lessonWordService = lessonWordService;
+    this.wordSentenceService = wordSentenceService;
     this.injectService.setViewController(this);
   }
 
@@ -210,8 +210,8 @@ public class ViewController implements Initializable {
       listViewLearnItemChildren.setItems(FXCollections.observableArrayList(learnItemChildren));
     } else if (selectedItem instanceof LessonWord) {
       Word word = ((LessonWord) selectedItem).getWord();
-      List<LearnItemChildren> learnItemChildren = sentenceService.getAllByWord(word).stream()
-          .sorted(Comparator.comparing(Sentence::getPosition))
+      List<LearnItemChildren> learnItemChildren = wordSentenceService.getAllByWord(word).stream()
+          .sorted(Comparator.comparing(WordSentence::getPosition))
           .collect(Collectors.toList());
       listViewLearnItemChildren.setItems(FXCollections.observableArrayList(learnItemChildren));
     }
@@ -337,9 +337,9 @@ public class ViewController implements Initializable {
 
   public void buttonLearnItemChildrenPositionUpOnAction(ActionEvent actionEvent) {
     if (selectedLearnItemChildren != null) {
-      if (selectedLearnItemChildren instanceof Sentence) {
-        Sentence currentSentence = (Sentence) selectedLearnItemChildren;
-        sentenceService.getPreviousSentence(currentSentence.getWord().getId(), currentSentence.getPosition())
+      if (selectedLearnItemChildren instanceof WordSentence) {
+        WordSentence currentSentence = (WordSentence) selectedLearnItemChildren;
+        wordSentenceService.getPreviousSentence(currentSentence.getWord().getId(), currentSentence.getPosition())
             .ifPresent(previousSentence -> replaceSentence(currentSentence, previousSentence));
       } else if (selectedLearnItemChildren instanceof ExerciseItem) {
         ExerciseItem currentExerciseItem = (ExerciseItem) selectedLearnItemChildren;
@@ -351,9 +351,9 @@ public class ViewController implements Initializable {
 
   public void buttonLearnItemChildrenPositionDownOnAction(ActionEvent actionEvent) {
     if (selectedLearnItemChildren != null) {
-      if (selectedLearnItemChildren instanceof Sentence) {
-        Sentence currentSentence = (Sentence) selectedLearnItemChildren;
-        sentenceService.getNextSentence(currentSentence.getWord().getId(), currentSentence.getPosition())
+      if (selectedLearnItemChildren instanceof WordSentence) {
+        WordSentence currentSentence = (WordSentence) selectedLearnItemChildren;
+        wordSentenceService.getNextSentence(currentSentence.getWord().getId(), currentSentence.getPosition())
             .ifPresent(previousSentence -> replaceSentence(currentSentence, previousSentence));
       } else if (selectedLearnItemChildren instanceof ExerciseItem) {
         ExerciseItem currentExerciseItem = (ExerciseItem) selectedLearnItemChildren;
@@ -394,12 +394,12 @@ public class ViewController implements Initializable {
     return null;
   }
 
-  private void replaceSentence(Sentence currentSentence, Sentence otherSentence) {
+  private void replaceSentence(WordSentence currentSentence, WordSentence otherSentence) {
     int currentPosition = currentSentence.getPosition();
     currentSentence.setPosition(otherSentence.getPosition());
     otherSentence.setPosition(currentPosition);
-    currentSentence = sentenceService.save(currentSentence);
-    sentenceService.save(otherSentence);
+    currentSentence = wordSentenceService.save(currentSentence);
+    wordSentenceService.save(otherSentence);
     refreshListViewLessonItemChildren();
     selectedLearnItemChildren = currentSentence;
   }
