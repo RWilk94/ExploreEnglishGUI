@@ -126,6 +126,13 @@ public class WordController implements Initializable {
       if (extractedPartOfSpeech.equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
           && toggleButtonGT != null && !toggleButtonGT.getUserData().toString().isEmpty()) {
         wordFormController.getToggleGroupGrammar().selectToggle(toggleButtonGT);
+        if (toggleButtonGT.getUserData().toString().equals("countable and uncountable")) {
+          wordFormController.getToggleGroupArticle().selectToggle(
+              wordFormController.getToggleGroupArticle().getToggles().stream()
+                  .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(""))
+                  .findFirst()
+                  .orElse(null));
+        }
       } else {
         wordFormController.getToggleGroupGrammar().selectToggle(wordFormController.getToggleGroupGrammar().getToggles()
             .stream()

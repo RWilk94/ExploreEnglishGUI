@@ -53,6 +53,7 @@ public class WordFormController implements Initializable {
   public ToggleButton toggleButtonNone;
   public ToggleButton toggleButtonCountable;
   public ToggleButton toggleButtonUncountable;
+  public ToggleButton toggleButtonCountableAndUncountable;
   public ToggleButton toggleButtonPlural;
   public ToggleButton toggleButtonEmpty;
   public TextField textFieldComparative;
@@ -66,7 +67,6 @@ public class WordFormController implements Initializable {
   private ToggleGroup2 toggleGroupArticle;
   private ToggleGroup2 toggleGroupGrammar;
   public ListView<Lesson> listViewLessons;
-
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -225,7 +225,7 @@ public class WordFormController implements Initializable {
     setToggleGroup(Arrays.asList(toggleButtonA, toggleButtonAn, toggleButtonThe, toggleButtonNone), toggleGroupArticle);
 
     toggleGroupGrammar = new ToggleGroup2("toggleGroupGrammar");
-    setToggleGroup(Arrays.asList(toggleButtonCountable, toggleButtonUncountable, toggleButtonPlural, toggleButtonEmpty), toggleGroupGrammar);
+    setToggleGroup(Arrays.asList(toggleButtonCountable, toggleButtonUncountable, toggleButtonCountableAndUncountable, toggleButtonPlural, toggleButtonEmpty), toggleGroupGrammar);
   }
 
   private void setToggleGroup(List<ToggleButton> toggleButtons, ToggleGroup toggleGroup) {
@@ -259,6 +259,10 @@ public class WordFormController implements Initializable {
 
   public ToggleGroup2 getToggleGroupGrammar() {
     return toggleGroupGrammar;
+  }
+
+  public ToggleGroup2 getToggleGroupArticle() {
+    return toggleGroupArticle;
   }
 
   public ToggleGroup2 getToggleGroupPartOfSpeech() {
@@ -318,5 +322,29 @@ public class WordFormController implements Initializable {
       comboBoxLesson.getSelectionModel().select(selectedItem);
     }
 
+  }
+
+  public void toggleButtonAOnAction(ActionEvent actionEvent) {
+    toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
+    toggleGroupGrammar.selectToggle(toggleButtonCountable);
+  }
+
+  public void toggleButtonPluralOnAction(ActionEvent actionEvent) {
+    toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
+    toggleGroupArticle.selectToggle(toggleButtonNone);
+  }
+
+  public void toggleButtonPartOfSpeechOnMouseClicked(MouseEvent mouseEvent) {
+    if (toggleGroupArticle.getSelectedToggle() == null && toggleGroupGrammar.getSelectedToggle() == null) {
+      toggleGroupArticle.selectToggle(toggleButtonNone);
+      toggleGroupGrammar.selectToggle(toggleButtonEmpty);
+    }
+  }
+
+  public void toggleButtonCountableAndUncountableOnAction(ActionEvent actionEvent) {
+    if (toggleGroupPartOfSpeech.getSelectedToggle() == null && toggleGroupArticle.getSelectedToggle() == null) {
+      toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
+      toggleGroupArticle.selectToggle(toggleButtonNone);
+    }
   }
 }

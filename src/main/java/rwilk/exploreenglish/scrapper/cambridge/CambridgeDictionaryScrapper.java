@@ -86,7 +86,7 @@ public class CambridgeDictionaryScrapper {
           for (Element example : element.select("div.examp")) {
             englishSentences.add(example.text());
           }
-          if (StringUtils.isNoneEmpty(grammarTag) && (grammarTag.equals("C") || grammarTag.equals("U"))) {
+          if (StringUtils.isNoneEmpty(grammarTag)) {
             polishName = polishName.concat(" [grammarTag: ").concat(extractGrammarTag(grammarTag)).concat("]");
           }
           meanings.add(polishName);
@@ -162,6 +162,8 @@ public class CambridgeDictionaryScrapper {
       return "COUNTABLE";
     } else if (grammarTag.equals("U")) {
       return "UNCOUNTABLE";
+    } else if (grammarTag.equals("C U")) {
+      return "COUNTABLE AND UNCOUNTABLE";
     }
     return "";
   }

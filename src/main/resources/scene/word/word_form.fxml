@@ -111,42 +111,42 @@
           </HBox.margin>
         </Label>
         <HBox>
-          <ToggleButton fx:id="toggleButtonNoun" text="rzeczownik" userData="rzeczownik">
+          <ToggleButton fx:id="toggleButtonNoun" text="rzeczownik" userData="rzeczownik" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonVerb" text="czasownik" userData="czasownik">
+          <ToggleButton fx:id="toggleButtonVerb" text="czasownik" userData="czasownik" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonAdjective" text="przymiotnik" userData="przymiotnik">
+          <ToggleButton fx:id="toggleButtonAdjective" text="przymiotnik" userData="przymiotnik" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonAdverb" text="przysłówek" userData="przysłówek">
+          <ToggleButton fx:id="toggleButtonAdverb" text="przysłówek" userData="przysłówek" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonPhrasalVerb" text="phrasal verb" userData="phrasal verb">
+          <ToggleButton fx:id="toggleButtonPhrasalVerb" text="phrasal verb" userData="phrasal verb" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonSentence" text="wyrażenie" userData="wyrażenie">
+          <ToggleButton fx:id="toggleButtonSentence" text="wyrażenie" userData="wyrażenie" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonIdiom" text="idiom" userData="idiom">
+          <ToggleButton fx:id="toggleButtonIdiom" text="idiom" userData="idiom" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonOther" text="inne" userData="inne">
+          <ToggleButton fx:id="toggleButtonOther" text="inne" userData="inne" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
@@ -167,12 +167,12 @@
         </Label>
 
         <HBox>
-          <ToggleButton fx:id="toggleButtonA" text="a" userData="a">
+          <ToggleButton fx:id="toggleButtonA" text="a" userData="a" onAction="#toggleButtonAOnAction">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonAn" text="an" userData="an">
+          <ToggleButton fx:id="toggleButtonAn" text="an" userData="an" onAction="#toggleButtonAOnAction">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
@@ -211,7 +211,13 @@
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
           </ToggleButton>
-          <ToggleButton fx:id="toggleButtonPlural" text="plural" userData="plural">
+          <ToggleButton fx:id="toggleButtonCountableAndUncountable" text="countable and uncountable"
+                        userData="countable and uncountable" onAction="#toggleButtonCountableAndUncountableOnAction">
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonPlural" text="plural" userData="plural" onAction="#toggleButtonPluralOnAction">
             <HBox.margin>
               <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
