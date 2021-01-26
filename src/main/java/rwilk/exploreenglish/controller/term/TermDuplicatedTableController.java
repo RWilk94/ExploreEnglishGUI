@@ -165,7 +165,9 @@ public class TermDuplicatedTableController implements Initializable {
 
   public void tableViewDuplicatedTermsOnMouseClicked(MouseEvent mouseEvent) {
     Term term = tableDuplicatedTerms.getSelectionModel().getSelectedItem();
-    injectService.getWordController().setWordForm(term);
+    if (term != null) {
+      injectService.getWordController().setWordForm(term);
+    }
   }
 
   public int findById(Long id) {

@@ -6,7 +6,8 @@
 <HBox xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="rwilk.exploreenglish.controller.view.ViewController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
   <VBox HBox.hgrow="ALWAYS">
     <ListView HBox.hgrow="ALWAYS" fx:id="listViewCourses" onMouseClicked="#listViewCoursesOnMouseClicked">

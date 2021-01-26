@@ -36,16 +36,22 @@
                     </TabPane>
 
                 </AnchorPane>
-                <SplitPane dividerPositions="0.7" orientation="VERTICAL">
+                <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                     <AnchorPane>
                         <fx:include source="term/term_table.fxml"/>
                     </AnchorPane>
-                    <AnchorPane>
-                        <fx:include source="term/term_duplicated_table.fxml"/>
-                    </AnchorPane>
+                    <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+                        <AnchorPane>
+                            <fx:include source="term/term_duplicated_table.fxml"/>
+                        </AnchorPane>
+                        <AnchorPane>
+                            <fx:include source="view/view.fxml"/>
+                        </AnchorPane>
+                    </SplitPane>
+
                 </SplitPane>
             </SplitPane>
-            <fx:include source="view/view.fxml"/>
+
         </SplitPane>
     </center>
 
