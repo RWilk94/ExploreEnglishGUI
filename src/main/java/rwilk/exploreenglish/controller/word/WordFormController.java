@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -76,11 +77,31 @@ public class WordFormController implements Initializable {
         textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldOpposite, textFieldSynonym, comboBoxLesson, listViewLessons));
     requiredControls.addAll(Arrays.asList(textFieldEnglishNames, textFieldPolishName));
 
-    textFieldEnglishNames.textProperty().addListener((observable, oldValue, newValue) ->
-        listViewNames.setItems(FXCollections.observableArrayList(Arrays.stream(newValue.split(";"))
-            .map(StringUtils::trimToEmpty)
-            .filter(StringUtils::isNoneEmpty)
-            .collect(Collectors.toList()))));
+    textFieldEnglishNames.textProperty().addListener((observable, oldValue, newValue) -> {
+      List<String> words = Arrays.stream(newValue.split(";"))
+          .map(StringUtils::trimToEmpty)
+          .filter(StringUtils::isNoneEmpty)
+          .collect(Collectors.toList());
+      listViewNames.setItems(FXCollections.observableArrayList(words));
+
+      listViewNames.setCellFactory(lv -> new ListCell<String>() {
+        @Override
+        protected void updateItem(String item, boolean empty) {
+          super.updateItem(item, empty);
+          if (item != null) {
+            this.setText(item);
+            if (!wordController.getWordService().getAllByEnglishNamesLike(item).isEmpty()) {
+              setStyle("-fx-background-color: #ff0000");
+            } else {
+              setStyle("");
+            }
+          } else {
+            this.setText("");
+            setStyle("");
+          }
+        }
+      });
+    });
   }
 
   public void init(WordController wordController) {

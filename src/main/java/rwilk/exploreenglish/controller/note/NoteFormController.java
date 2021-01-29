@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Note;
-import rwilk.exploreenglish.model.entity.Word;
 
 import java.net.URL;
 import java.util.Comparator;
@@ -42,6 +41,7 @@ public class NoteFormController implements Initializable {
 
   public void init(NoteController noteController) {
     this.noteController = noteController;
+    textAreaNote.setWrapText(true);
     initializeLessonComboBox();
   }
 
@@ -108,30 +108,16 @@ public class NoteFormController implements Initializable {
           .collect(Collectors.toList());
       for (LessonWord lessonWord : lessonWords) {
         if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
-          textAreaNote.setText(textAreaNote.getText() + "\n<WORD=#" + lessonWord.getId() + ">");
+          textAreaNote.setText(textAreaNote.getText() + getWordTag(lessonWord));
         } else {
-          textAreaNote.setText("<WORD=#" + lessonWord.getId() + ">");
+          textAreaNote.setText(getWordTag(lessonWord));
         }
       }
     }
   }
 
-  public void buttonAddTextWordsOnAction(ActionEvent actionEvent) {
-    Lesson selectedLesson = comboBoxLesson.getSelectionModel().getSelectedItem();
-    if (selectedLesson != null) {
-      List<LessonWord> lessonWords = noteController.getLessonWordService()
-          .getAllByLesson(selectedLesson).stream()
-          .sorted(Comparator.comparing(LessonWord::getPosition))
-          .collect(Collectors.toList());
-      for (LessonWord lessonWord : lessonWords) {
-        if (StringUtils.isNoneEmpty(textAreaNote.getText())) {
-          // FIXME
-          textAreaNote.setText(textAreaNote.getText() + "\n" + lessonWord.getWord().getEnglishNames() + " = " + lessonWord.getWord().getPolishName());
-        } else {
-          textAreaNote.setText(lessonWord.getWord().getEnglishNames() + " = " + lessonWord.getWord().getPolishName());
-        }
-      }
-    }
+  private String getWordTag(LessonWord lessonWord) {
+    return "\n" + "<word id=" + lessonWord.getWord().getId() + ">" + lessonWord.getWord().getEnglishNames() + "</word>";
   }
 
   public void buttonAddTitleOnAction(ActionEvent actionEvent) {

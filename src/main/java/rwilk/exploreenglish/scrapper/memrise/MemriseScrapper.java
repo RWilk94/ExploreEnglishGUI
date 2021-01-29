@@ -16,7 +16,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class MemriseScrapper {
-
   private static final String BASE_URL = "https://app.memrise.com";
   private final TermService termService;
 
@@ -58,13 +57,15 @@ public class MemriseScrapper {
       for (Element element : elements) {
         String en = element.select("div.col_a").first().text();
         String pl = element.select("div.col_b").first().text();
-        String category = document.select("h3.progress-box-title").text();
+        String category = "[" + document.select("h1.course-name").text() + "]" + document.select("h3.progress-box-title").text();
 
         Term term = Term.builder()
             .englishName(en)
             .polishName(pl)
             .category(category)
             .source("memrise")
+            .isIgnored(false)
+            .isAdded(false)
             .build();
         terms.add(term);
       }
@@ -74,5 +75,4 @@ public class MemriseScrapper {
       return Collections.emptyList();
     }
   }
-
 }

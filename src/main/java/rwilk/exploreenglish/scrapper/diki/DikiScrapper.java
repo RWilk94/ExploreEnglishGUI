@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.TermService;
@@ -18,7 +19,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Service
-public class DikiScrapper {
+public class DikiScrapper implements CommandLineRunner {
 
   private static final String SOURCE = "diki";
   private final TermService termService;
@@ -173,6 +174,12 @@ public class DikiScrapper {
                           .replaceFirst(Pattern.quote("]"), "")
                           .trim())
                       .concat("]"));
+                } else if (element1.hasClass("meaningAdditionalInformation")) {
+                  if (StringUtils.isNoneEmpty(element1.text())) {
+                    singleMeaning.set(singleMeaning.size() - 1, singleMeaning.get(singleMeaning.size() - 1)
+                        .concat(" (").concat(element1.text().trim())
+                        .concat(")"));
+                  }
                 }
               }
               meanings.add(String.join(", ", singleMeaning));
@@ -252,4 +259,7 @@ public class DikiScrapper {
     return termService.saveAll(terms);
   }
 
+  @Override
+  public void run(String... args) throws Exception {
+  }
 }

@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.repository.LessonWordRepository;
 import rwilk.exploreenglish.repository.WordRepository;
+import rwilk.exploreenglish.utils.WordUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,10 @@ public class WordService {
 
   public Optional<Word> getById(Long id) {
     return wordRepository.findById(id);
+  }
+
+  public List<Word> getAllByEnglishNamesLike(String pattern) {
+    return wordRepository.findAllByEnglishNamesLike(WordUtils.removeNonLiteralCharacters(pattern));
   }
 
   public Word save(Word word) {

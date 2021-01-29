@@ -73,6 +73,9 @@ public final class Word implements Serializable {
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("[W]").append(id).append(". ");
+    if (StringUtils.isNoneEmpty(article)) {
+      stringBuilder.append(article).append(" ");
+    }
     if (StringUtils.isNoneEmpty(englishNames)) {
       stringBuilder.append(englishNames).append("; ");
     }
