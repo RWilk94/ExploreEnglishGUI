@@ -101,7 +101,12 @@ public class WordFormController implements Initializable {
           }
         }
       });
+
+      wordController.getWordTableController().textFieldFilterByEnName.setText(newValue);
     });
+
+    textFieldPolishName.textProperty().addListener((observable, oldValue, newValue) ->
+        wordController.getWordTableController().textFieldFilterByPlName.setText(newValue));
   }
 
   public void init(WordController wordController) {
@@ -221,6 +226,17 @@ public class WordFormController implements Initializable {
     englishNames = englishNames.substring(englishNames.length() - 1).equals(";")
         ? englishNames.substring(0, englishNames.length() - 1)
         : englishNames;
+    if (englishNames.startsWith("a ")) {
+      toggleGroupArticle.selectToggle(toggleButtonA);
+      englishNames = englishNames.substring(englishNames.indexOf(" "));
+    } else if (englishNames.startsWith("an ")) {
+      toggleGroupArticle.selectToggle(toggleButtonAn);
+      englishNames = englishNames.substring(englishNames.indexOf(" "));
+    } else if (englishNames.startsWith("the ")) {
+      toggleGroupArticle.selectToggle(toggleButtonThe);
+      englishNames = englishNames.substring(englishNames.indexOf(" "));
+    }
+
     setWordForm(WordUtils.replaceSpecialText(englishNames), term.getPolishName(), term.getComparative(), term.getSuperlative(), term.getPastTense(), term.getPastParticiple(), term.getPlural(), term.getSynonym());
     textFieldSynonym.setText(StringUtils.trimToEmpty(term.getSynonym()));
   }

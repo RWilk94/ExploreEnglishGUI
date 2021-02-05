@@ -67,4 +67,17 @@ public final class Term implements Serializable {
   private Boolean isAdded;
   @Column(name = "is_ignored")
   private Boolean isIgnored;
+
+  public Term(Word word) {
+    this.englishName = word.getEnglishNames();
+    this.polishName = word.getPolishName();
+    this.comparative = word.getComparative();
+    this.superlative = word.getSuperlative();
+    this.pastTense = word.getPastTense();
+    this.pastParticiple = word.getPastParticiple();
+    this.plural = word.getPlural();
+    this.synonym = word.getSynonym();
+    this.partOfSpeech = word.getPartOfSpeech();
+    this.isAdded = true;
+  }
 }

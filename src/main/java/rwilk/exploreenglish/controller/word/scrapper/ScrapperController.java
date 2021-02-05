@@ -16,6 +16,7 @@ import rwilk.exploreenglish.scrapper.diki.DikiScrapper;
 import rwilk.exploreenglish.service.InjectService;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -46,25 +47,31 @@ public class ScrapperController implements Initializable {
 
   public void webScrap(String englishTerm) {
     tabPaneScrapper.getTabs().clear();
+//    CompletableFuture.supplyAsync(
+//        () -> dikiScrapper.webScrap(englishTerm))
+//        .thenAccept(this::createTab)
+//        .exceptionally(ex -> {
+//          createEmptyTab("diki");
+//          return null;
+//        });
+//    CompletableFuture.supplyAsync(
+//        () -> babScrapper.webScrap(englishTerm))
+//        .thenAccept(this::createTab)
+//        .exceptionally(ex -> {
+//          createEmptyTab("bab");
+//          return null;
+//        });
     CompletableFuture.supplyAsync(
-        () -> dikiScrapper.webScrap(englishTerm))
+        () -> {
+          List<Term> terms = new ArrayList<>();
+          terms.addAll(dikiScrapper.webScrap(englishTerm));
+          terms.addAll(babScrapper.webScrap(englishTerm));
+          terms.addAll(cambridgeDictionaryScrapper.webScrap(englishTerm));
+          return terms;
+        })
         .thenAccept(this::createTab)
         .exceptionally(ex -> {
-          createEmptyTab("diki");
-          return null;
-        });
-    CompletableFuture.supplyAsync(
-        () -> babScrapper.webScrap(englishTerm))
-        .thenAccept(this::createTab)
-        .exceptionally(ex -> {
-          createEmptyTab("bab");
-          return null;
-        });
-    CompletableFuture.supplyAsync(
-        () -> cambridgeDictionaryScrapper.webScrap(englishTerm))
-        .thenAccept(this::createTab)
-        .exceptionally(ex -> {
-          createEmptyTab("cambridge");
+          createEmptyTab("no records found");
           return null;
         });
   }

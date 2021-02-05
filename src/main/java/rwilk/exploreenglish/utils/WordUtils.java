@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class WordUtils {
 
-  private final static String REGEX = "[^\\p{IsAlphabetic}\\p{IsDigit} ]";
+  private final static String REGEX = "[^\\p{IsAlphabetic}\\p{IsDigit}' ]";
 
   private WordUtils() {
   }
@@ -117,7 +117,8 @@ public class WordUtils {
     } else if (partOfSpeech.equals("idiom") || partOfSpeech.contains("idiom")) {
       return PartOfSpeechEnum.IDIOM.getValue();
     } else if (partOfSpeech.equals("") || partOfSpeech.equals("determiner") || partOfSpeech.equals("conjunction")
-    || partOfSpeech.equals("exclamation") || partOfSpeech.equals("wykrz.")) {
+        || partOfSpeech.equals("exclamation") || partOfSpeech.equals("wykrz.") || partOfSpeech.equals("przyimek")
+        || partOfSpeech.equals("zaim.") || partOfSpeech.equals("zaimek")) {
       return PartOfSpeechEnum.EMPTY.getValue();
     }
     throw new IllegalStateException("extractPartOfSpeech");

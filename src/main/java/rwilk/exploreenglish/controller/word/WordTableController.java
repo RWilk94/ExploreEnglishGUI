@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.controller.word;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -39,14 +40,18 @@ public class WordTableController implements Initializable {
   public TableColumn<Word, String> columnSynonym;
   public TextField textFieldFilterByLesson;
   public TextField textFieldFilterByCourse;
-  public TextField textFieldFilterByName;
+  public TextField textFieldFilterByEnName;
+  public TextField textFieldFilterByPlName;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     initializeTableView();
 
-    textFieldFilterByName.textProperty().addListener((observable, oldValue, newValue) -> filterTableByName(newValue));
-    textFieldFilterByName.setOnMouseClicked(view -> filterTableByName(textFieldFilterByName.getText()));
+    textFieldFilterByEnName.textProperty().addListener((observable, oldValue, newValue) -> filterTableByEnName(newValue));
+    textFieldFilterByEnName.setOnMouseClicked(view -> filterTableByEnName(textFieldFilterByEnName.getText()));
+
+    textFieldFilterByPlName.textProperty().addListener((observable, oldValue, newValue) -> filterTableByPlName(newValue));
+    textFieldFilterByPlName.setOnMouseClicked(view -> filterTableByPlName(textFieldFilterByPlName.getText()));
 
     textFieldFilterByLesson.textProperty().addListener((observable, oldValue, newValue) -> filterTableByLesson(newValue));
     textFieldFilterByLesson.setOnMouseClicked(view -> filterTableByLesson(textFieldFilterByLesson.getText()));
@@ -96,11 +101,16 @@ public class WordTableController implements Initializable {
     }
   }
 
-  private void filterTableByName(String value) {
+  private void filterTableByEnName(String value) {
     List<Word> filteredWords = words.stream()
-        .filter(word ->
-                word.getPolishName().toLowerCase().contains(value.toLowerCase())
-                || word.getEnglishNames().toLowerCase().contains(value.toLowerCase()))
+        .filter(word -> word.getEnglishNames().toLowerCase().contains(value.toLowerCase()))
+        .collect(Collectors.toList());
+    tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+  }
+
+  private void filterTableByPlName(String value) {
+    List<Word> filteredWords = words.stream()
+        .filter(word -> word.getPolishName().toLowerCase().contains(value.toLowerCase()))
         .collect(Collectors.toList());
     tableWords.setItems(FXCollections.observableArrayList(filteredWords));
   }
@@ -129,5 +139,9 @@ public class WordTableController implements Initializable {
           .collect(Collectors.toList());
       tableWords.setItems(FXCollections.observableArrayList(filteredWords));
     }
+  }
+
+  public void buttonClearOnAction(ActionEvent actionEvent) {
+    tableWords.setItems(FXCollections.observableArrayList(words));
   }
 }

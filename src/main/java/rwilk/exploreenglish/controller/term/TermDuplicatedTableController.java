@@ -13,8 +13,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Term;
+import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.TermService;
+import rwilk.exploreenglish.service.WordService;
 import rwilk.exploreenglish.utils.WordUtils;
 
 import java.net.URL;
@@ -29,6 +31,7 @@ public class TermDuplicatedTableController implements Initializable {
 
   private final InjectService injectService;
   private final TermService termService;
+  private final WordService wordService;
 
   private List<Term> terms = new ArrayList<>();
   public TextField textFieldFilterByName;
@@ -52,9 +55,11 @@ public class TermDuplicatedTableController implements Initializable {
   public TableColumn<Term, String> columnEnglishSentence;
   public TableColumn<Term, String> columnPolishSentence;
 
-  public TermDuplicatedTableController(InjectService injectService, TermService termService) {
+  public TermDuplicatedTableController(InjectService injectService, TermService termService,
+                                       WordService wordService) {
     this.injectService = injectService;
     this.termService = termService;
+    this.wordService = wordService;
     this.injectService.setTermDuplicatedTableController(this);
   }
 
@@ -102,6 +107,9 @@ public class TermDuplicatedTableController implements Initializable {
 
     columnIsIgnored.setCellValueFactory(param -> {
       Term term = param.getValue();
+      if (term.getIsAdded()) {
+        return new SimpleObjectProperty<>();
+      }
       CheckBox checkBox = new CheckBox();
       checkBox.selectedProperty().setValue(term.getIsIgnored());
       checkBox.selectedProperty().addListener((ov, oldVal, newVal) -> {
@@ -135,11 +143,15 @@ public class TermDuplicatedTableController implements Initializable {
   }
 
   private void fillInTableView() {
-    terms = termService.getAll();
+    List<Word> words = wordService.getAll();
+    List<Term> termsFromWords = words.stream().map(Term::new).collect(Collectors.toList());
+
+    terms.addAll(termsFromWords);
+    terms.addAll(termService.getAll());
     // tableDuplicatedTerms.setItems(FXCollections.observableArrayList(terms));
   }
 
-  private void filterTableByName(String value) {
+  private void filterTableByName(final String value) {
     new Thread(() -> {
       List<Term> filteredTerms = terms.stream()
           .filter(term ->
@@ -148,9 +160,20 @@ public class TermDuplicatedTableController implements Initializable {
                   || (term.getAmericanName() != null && WordUtils.removeNonLiteralCharacters(term.getAmericanName()).toLowerCase()
                   .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
                   || (term.getOtherName() != null && WordUtils.removeNonLiteralCharacters(term.getOtherName()).toLowerCase()
-                  .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase())))
+                  .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                  || ((value.startsWith("a ") || value.startsWith("an ") || value.startsWith("the ")) && term.getEnglishName() != null && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  .equals(WordUtils.removeNonLiteralCharacters(value.substring(value.indexOf(" ")).toLowerCase())))
+                  || (term.getIsAdded() && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  .contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                  || ((value.startsWith("a ") || value.startsWith("an ") || value.startsWith("the ")) && term.getIsAdded() && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  .contains(WordUtils.removeNonLiteralCharacters(value.substring(value.indexOf(" ")).toLowerCase())))
+              )
           .collect(Collectors.toList());
-      Platform.runLater(() -> tableDuplicatedTerms.setItems(FXCollections.observableArrayList(filteredTerms)));
+      Platform.runLater(() -> {
+        if (value.equals(textFieldFilterByName.getText())) {
+          tableDuplicatedTerms.setItems(FXCollections.observableArrayList(filteredTerms));
+        }
+      });
     }).start();
   }
 
@@ -159,7 +182,11 @@ public class TermDuplicatedTableController implements Initializable {
       List<Term> filteredTerms = terms.stream()
           .filter(term -> term.getPolishName() != null && term.getPolishName().toLowerCase().equals(value.toLowerCase()))
           .collect(Collectors.toList());
-      Platform.runLater(() -> tableDuplicatedTerms.setItems(FXCollections.observableArrayList(filteredTerms)));
+      Platform.runLater(() -> {
+        if (value.equals(textFieldFilterByPLName.getText())) {
+          tableDuplicatedTerms.setItems(FXCollections.observableArrayList(filteredTerms));
+        }
+      });
     }).start();
   }
 
@@ -176,7 +203,9 @@ public class TermDuplicatedTableController implements Initializable {
   }
 
   public void buttonIgnoreAllOnAction(ActionEvent actionEvent) {
-    List<Term> terms = tableDuplicatedTerms.getItems();
+    List<Term> terms = tableDuplicatedTerms.getItems().stream()
+        .filter(term -> !term.getIsAdded())
+        .collect(Collectors.toList());
     for (Term term : terms) {
       term.setIsIgnored(true);
       termService.save(term);

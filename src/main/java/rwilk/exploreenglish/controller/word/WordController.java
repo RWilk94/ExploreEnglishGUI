@@ -80,7 +80,7 @@ public class WordController implements Initializable {
 
   public void setWordForm(Term term) {
     wordFormController.setWordForm(term);
-    wordFormController.translate(true);
+    wordFormController.translate(false);
   }
 
   public void refreshTableView() {
@@ -158,6 +158,14 @@ public class WordController implements Initializable {
 
   public LessonWordService getLessonWordService() {
     return lessonWordService;
+  }
+
+  public WordTableController getWordTableController() {
+    return wordTableController;
+  }
+
+  public WordFormController getWordFormController() {
+    return wordFormController;
   }
 
   public InjectService getInjectService() {

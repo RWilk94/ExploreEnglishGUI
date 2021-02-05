@@ -12,12 +12,9 @@ public interface WordRepository extends JpaRepository<Word, Long> {
 
   @Query(nativeQuery = true, value =
       "SELECT * FROM words w WHERE " +
-          "w.english_names like concat('% ', :pattern, ' %') " +
-          "or w.english_names like concat('% ', :pattern) " +
-          "or w.english_names like concat(:pattern, ' %') " +
-          "or w.english_names like concat(:pattern, '.;%') " +
-          "or w.english_names like concat(:pattern, '!;%') " +
-          "or w.english_names like concat(:pattern, '?;%') " +
+          "w.english_names like concat('%', :pattern, '%') " +
+          "or w.english_names like concat('%', :pattern) " +
+          "or w.english_names like concat(:pattern, '%') " +
           "or lower(w.english_names) = lower(:pattern)")
   List<Word> findAllByEnglishNamesLike(String pattern);
 

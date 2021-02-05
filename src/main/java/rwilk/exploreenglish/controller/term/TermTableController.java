@@ -10,8 +10,13 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Term;
+import rwilk.exploreenglish.scrapper.bab.BabScrapper;
+import rwilk.exploreenglish.scrapper.cambridge.CambridgeDictionaryScrapper;
+import rwilk.exploreenglish.scrapper.diki.DikiScrapper;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.TermService;
 import rwilk.exploreenglish.utils.WordUtils;
@@ -24,10 +29,13 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @Controller
-public class TermTableController implements Initializable {
+public class TermTableController implements Initializable, CommandLineRunner {
 
   private final InjectService injectService;
   private final TermService termService;
+  private final DikiScrapper dikiScrapper;
+  private final BabScrapper babScrapper;
+  private final CambridgeDictionaryScrapper cambridgeDictionaryScrapper;
   private List<Term> terms = new ArrayList<>();
   public TextField textFieldFilterByName;
   public TextField textFieldFilterByCategory;
@@ -49,9 +57,14 @@ public class TermTableController implements Initializable {
   public TableColumn<Term, String> columnEnglishSentence;
   public TableColumn<Term, String> columnPolishSentence;
 
-  public TermTableController(InjectService injectService, TermService termService) {
+  public TermTableController(InjectService injectService, TermService termService,
+                             DikiScrapper dikiScrapper, BabScrapper babScrapper,
+                             CambridgeDictionaryScrapper cambridgeDictionaryScrapper) {
     this.injectService = injectService;
     this.termService = termService;
+    this.dikiScrapper = dikiScrapper;
+    this.babScrapper = babScrapper;
+    this.cambridgeDictionaryScrapper = cambridgeDictionaryScrapper;
     this.injectService.setTermTableController(this);
   }
 
@@ -178,5 +191,18 @@ public class TermTableController implements Initializable {
   private int findById(Long id) {
     List<Long> ids = terms.stream().map(Term::getId).collect(Collectors.toList());
     return ids.indexOf(id);
+  }
+
+  @Override
+  public void run(String... args) throws Exception {
+    List<Term> terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
+    terms.forEach(term -> {
+      String t = StringUtils.trimToEmpty(term.getEnglishName().split(";")[0]);
+      if (StringUtils.isNoneEmpty(t)) {
+        dikiScrapper.webScrap(t);
+        babScrapper.webScrap(t);
+        cambridgeDictionaryScrapper.webScrap(t);
+      }
+    });
   }
 }
