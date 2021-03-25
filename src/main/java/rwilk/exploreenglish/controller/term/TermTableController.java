@@ -195,14 +195,14 @@ public class TermTableController implements Initializable, CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    List<Term> terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
-    terms.forEach(term -> {
-      String t = StringUtils.trimToEmpty(term.getEnglishName().split(";")[0]);
-      if (StringUtils.isNoneEmpty(t)) {
-        dikiScrapper.webScrap(t);
-        babScrapper.webScrap(t);
-        cambridgeDictionaryScrapper.webScrap(t);
-      }
-    });
+//    List<Term> terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
+//    terms.forEach(term -> {
+//      String t = StringUtils.trimToEmpty(term.getEnglishName().split(";")[0]);
+//      if (StringUtils.isNoneEmpty(t)) {
+//        dikiScrapper.webScrap(t);
+//        babScrapper.webScrap(t);
+//        cambridgeDictionaryScrapper.webScrap(t);
+//      }
+//    });
   }
 }

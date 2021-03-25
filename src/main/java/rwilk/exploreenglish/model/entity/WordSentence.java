@@ -26,7 +26,7 @@ import javax.persistence.UniqueConstraint;
 @AllArgsConstructor
 @Entity
 @Table(name = "word_sentence", uniqueConstraints = @UniqueConstraint(columnNames={"word_id", "sentence_id"}))
-public class WordSentence implements LearnItemChildren {
+public final class WordSentence implements LearnItemChildren {
 
   private static final long serialVersionUID = -4744082827489819635L;
   @Id

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Course;
 import rwilk.exploreenglish.service.CourseService;
 import rwilk.exploreenglish.service.InjectService;
+import rwilk.exploreenglish.service.export.ExportService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,15 +19,17 @@ public class CourseController implements Initializable {
 
   private final InjectService injectService;
   private final CourseService courseService;
+  private final ExportService exportService;
   private CourseFormController courseFormController;
   private CourseTableController courseTableController;
 
   public AnchorPane anchorPaneForm;
   public AnchorPane anchorPaneTable;
 
-  public CourseController(InjectService injectService, CourseService courseService) {
+  public CourseController(InjectService injectService, CourseService courseService, ExportService exportService) {
     this.injectService = injectService;
     this.courseService = courseService;
+    this.exportService = exportService;
     injectService.setCourseController(this);
   }
 
@@ -96,4 +99,7 @@ public class CourseController implements Initializable {
     return courseService;
   }
 
+  public ExportService getExportService() {
+    return exportService;
+  }
 }

@@ -35,6 +35,7 @@ public class TermDuplicatedTableController implements Initializable {
 
   private List<Term> terms = new ArrayList<>();
   public TextField textFieldFilterByName;
+  public CheckBox checkBoxAnd;
   public TextField textFieldFilterByPLName;
   public TableView<Term> tableDuplicatedTerms;
   public TableColumn<Term, Long> columnId;
@@ -69,10 +70,22 @@ public class TermDuplicatedTableController implements Initializable {
     fillInTableView();
 
     textFieldFilterByName.textProperty().addListener((observable, oldValue, newValue) -> filterTableByName(newValue));
-    textFieldFilterByName.setOnMouseClicked(view -> filterTableByName(textFieldFilterByName.getText()));
+    textFieldFilterByName.setOnMouseClicked(view -> {
+      if (checkBoxAnd.isSelected()) {
+        filterTableByEnNameAndPlName(textFieldFilterByName.getText(), textFieldFilterByPLName.getText());
+      } else {
+        filterTableByName(textFieldFilterByName.getText());
+      }
+    });
 
     textFieldFilterByPLName.textProperty().addListener((observable, oldValue, newValue) -> filterTableByPLName(newValue));
-    textFieldFilterByPLName.setOnMouseClicked(view -> filterTableByPLName(textFieldFilterByPLName.getText()));
+    textFieldFilterByPLName.setOnMouseClicked(view -> {
+      if (checkBoxAnd.isSelected()) {
+        filterTableByEnNameAndPlName(textFieldFilterByName.getText(), textFieldFilterByPLName.getText());
+      } else {
+        filterTableByPLName(textFieldFilterByPLName.getText());
+      }
+    });
   }
 
   private void initializeTableView() {
@@ -151,6 +164,33 @@ public class TermDuplicatedTableController implements Initializable {
     // tableDuplicatedTerms.setItems(FXCollections.observableArrayList(terms));
   }
 
+  private void filterTableByEnNameAndPlName(final String value, final String plValue) {
+    new Thread(() -> {
+      List<Term> filteredTerms = terms.stream()
+          .filter(term ->
+              (((term.getEnglishName() != null && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                  || (term.getAmericanName() != null && WordUtils.removeNonLiteralCharacters(term.getAmericanName()).toLowerCase()
+                  .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                  || (term.getOtherName() != null && WordUtils.removeNonLiteralCharacters(term.getOtherName()).toLowerCase()
+                  .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                  || ((value.startsWith("a ") || value.startsWith("an ") || value.startsWith("the ")) && term.getEnglishName() != null && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  .equals(WordUtils.removeNonLiteralCharacters(value.substring(value.indexOf(" ")).toLowerCase())))
+                  || (term.getIsAdded() && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  .contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                  || ((value.startsWith("a ") || value.startsWith("an ") || value.startsWith("the ")) && term.getIsAdded() && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  .contains(WordUtils.removeNonLiteralCharacters(value.substring(value.indexOf(" ")).toLowerCase()))))
+              && (term.getPolishName() != null && term.getPolishName().toLowerCase().equals(plValue.toLowerCase())))
+          )
+          .collect(Collectors.toList());
+      Platform.runLater(() -> {
+        if (value.equals(textFieldFilterByName.getText())) {
+          tableDuplicatedTerms.setItems(FXCollections.observableArrayList(filteredTerms));
+        }
+      });
+    }).start();
+  }
+
   private void filterTableByName(final String value) {
     new Thread(() -> {
       List<Term> filteredTerms = terms.stream()
@@ -221,5 +261,11 @@ public class TermDuplicatedTableController implements Initializable {
 
   public TableView<Term> getTableDuplicatedTerms() {
     return tableDuplicatedTerms;
+  }
+
+  public void checkBoxAndOnAction(ActionEvent actionEvent) {
+    if (checkBoxAnd.isSelected()) {
+      filterTableByEnNameAndPlName(textFieldFilterByName.getText(), textFieldFilterByPLName.getText());
+    }
   }
 }

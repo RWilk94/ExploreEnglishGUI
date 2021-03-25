@@ -3,7 +3,6 @@ package rwilk.exploreenglish.service.export;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.Course;
 import rwilk.exploreenglish.model.entity.Exercise;
@@ -12,6 +11,7 @@ import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.model.entity.Sentence;
+import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.model.entity.WordSentence;
 import rwilk.exploreenglish.service.CourseService;
@@ -21,15 +21,17 @@ import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.NoteService;
 import rwilk.exploreenglish.service.SentenceService;
+import rwilk.exploreenglish.service.TermService;
 import rwilk.exploreenglish.service.WordSentenceService;
 import rwilk.exploreenglish.service.WordService;
+import rwilk.exploreenglish.utils.WordUtils;
 
 import java.io.PrintWriter;
 import java.util.List;
 
 @Slf4j
 @Service
-public class ExportService implements CommandLineRunner {
+public class ExportService {
 
   private final static String PARAM_SEPARATOR = ", ";
   private final static String QUOTE_SIGN = "'";
@@ -42,10 +44,11 @@ public class ExportService implements CommandLineRunner {
   private final NoteService noteService;
   private final ExerciseService exerciseService;
   private final ExerciseItemService exerciseItemService;
+  private final TermService termService;
 
   public ExportService(CourseService courseService, LessonService lessonService, LessonWordService lessonWordService,
                        WordService wordService, WordSentenceService wordSentenceService, SentenceService sentenceService,
-                       NoteService noteService, ExerciseService exerciseService, ExerciseItemService exerciseItemService) {
+                       NoteService noteService, ExerciseService exerciseService, ExerciseItemService exerciseItemService, TermService termService) {
     this.courseService = courseService;
     this.lessonService = lessonService;
     this.lessonWordService = lessonWordService;
@@ -55,6 +58,7 @@ public class ExportService implements CommandLineRunner {
     this.noteService = noteService;
     this.exerciseService = exerciseService;
     this.exerciseItemService = exerciseItemService;
+    this.termService = termService;
   }
 
   public void export() {
@@ -67,6 +71,7 @@ public class ExportService implements CommandLineRunner {
     exportNotes(noteService.getAll());
     exportExercises(exerciseService.getAll());
     exportExerciseItems(exerciseItemService.getAll());
+    exportTerms(termService.getAll());
   }
 
   private void exportCourses(List<Course> courses) {
@@ -339,6 +344,70 @@ public class ExportService implements CommandLineRunner {
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
+  private void exportTerms(List<Term> terms) {
+    String tag = "TERMS";
+    log.info("START GENERATING {}", tag);
+    List<List<Term>> chunks = ListUtils.partition(terms, 100);
+    StringBuilder sql = new StringBuilder();
+    for (List<Term> chunk : chunks) {
+      sql.append("INSERT INTO 'terms' ('id', 'english_names', 'polish_name', 'part_of_speech', " +
+          "'comparative', 'superlative', 'past_tense', 'past_participle', 'plural', 'synonym', " +
+          "'category', 'source', 'is_ignored', 'progress', 'skip', 'difficult', 'correct', 'wrong', 'next_repeat', " +
+          "'series') VALUES ");
+
+      for (Term term : chunk) {
+        String englishNames = (StringUtils.isNoneEmpty(term.getEnglishName()) ? term.getEnglishName() + "; " : "")
+            .concat((StringUtils.isNoneEmpty(term.getAmericanName()) ? term.getAmericanName() + "; " : ""))
+            .concat((StringUtils.isNoneEmpty(term.getOtherName()) ? term.getOtherName() + "; " : "")).trim();
+        if (StringUtils.isBlank(englishNames)) {
+          englishNames = "";
+        } else {
+          englishNames = englishNames.substring(englishNames.length() - 1).equals(";")
+              ? englishNames.substring(0, englishNames.length() - 1)
+              : englishNames;
+          if (englishNames.startsWith("a ")) {
+            englishNames = englishNames.substring(englishNames.indexOf(" "));
+          } else if (englishNames.startsWith("an ")) {
+            englishNames = englishNames.substring(englishNames.indexOf(" "));
+          } else if (englishNames.startsWith("the ")) {
+            englishNames = englishNames.substring(englishNames.indexOf(" "));
+          }
+        }
+
+        sql.append("\n")
+            .append("(")
+            .append(term.getId()) // COLUMN_ID
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(WordUtils.replaceSpecialText(englishNames).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAMES
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(term.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPartOfSpeech()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PART OF SPEECH
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getComparative()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN COMPARATIVE
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSuperlative()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SUPERLATIVE
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPastTense()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST TENSE
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPastParticiple()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST PARTICIPLE
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPlural()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PLURAL
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSynonym()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SYNONYM
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getCategory()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN CATEGORY
+            .append(PARAM_SEPARATOR)
+            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSource()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOURCE
+            .append(PARAM_SEPARATOR)
+            .append(term.getIsIgnored() ? 1 : 0); // COLUMN IS_IGNORED
+        insertRepeatablePart(sql);
+        insertEndLineCharacter(sql, chunk, term);
+      }
+    }
+    exportFile(sql, tag.toLowerCase() + ".txt", tag);
+  }
+
   private void insertRepeatablePart(StringBuilder sql) {
     sql.append(PARAM_SEPARATOR)
         .append(-1) // COLUMN PROGRESS
@@ -373,9 +442,4 @@ public class ExportService implements CommandLineRunner {
     }
   }
 
-
-  @Override
-  public void run(String... args) throws Exception {
-    export();
-  }
 }

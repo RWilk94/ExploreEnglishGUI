@@ -27,7 +27,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "lesson_word", uniqueConstraints = @UniqueConstraint(columnNames={"lesson_id", "word_id"}))
-public class LessonWord implements Serializable, LearnItem {
+public final class LessonWord implements Serializable, LearnItem {
 
   private static final long serialVersionUID = -4744082827489819635L;
   @Id

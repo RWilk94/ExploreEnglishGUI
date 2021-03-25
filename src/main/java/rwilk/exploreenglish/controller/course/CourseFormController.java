@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 public class CourseFormController implements Initializable {
 
   private CourseController courseController;
+
   public TextField textFieldId;
   public TextField textFieldEnName;
   public TextField textFieldPlName;
@@ -74,4 +75,7 @@ public class CourseFormController implements Initializable {
     textFieldId.setText(course.getId().toString());
   }
 
+  public void buttonExportDatabaseOnAction(ActionEvent actionEvent) {
+    courseController.getExportService().export();
+  }
 }

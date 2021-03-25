@@ -250,6 +250,7 @@ public class WordFormController implements Initializable {
     textFieldPastTense.setText(StringUtils.trimToEmpty(pastTense));
     textFieldPastParticiple.setText(StringUtils.trimToEmpty(pastParticiple));
     textFieldPlural.setText(StringUtils.trimToEmpty(plural));
+    textFieldOpposite.setText(StringUtils.EMPTY);
     textFieldSynonym.setText(StringUtils.trimToEmpty(synonym));
   }
 

@@ -117,7 +117,7 @@ public class NoteFormController implements Initializable {
   }
 
   private String getWordTag(LessonWord lessonWord) {
-    return "\n" + "<word id=" + lessonWord.getWord().getId() + ">" + lessonWord.getWord().getEnglishNames() + "</word>";
+    return "\n" + "<word id=" + lessonWord.getWord().getId() + ">" + lessonWord.getWord().getEnglishNames() + " = " + lessonWord.getWord().getPolishName() + "</word>";
   }
 
   public void buttonAddTitleOnAction(ActionEvent actionEvent) {

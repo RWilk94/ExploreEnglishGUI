@@ -19,6 +19,11 @@
         <Insets bottom="5.0" left="5.0" right="2.5" top="5.0"/>
       </HBox.margin>
     </TextField>
+    <CheckBox fx:id="checkBoxAnd" text="AND" onAction="#checkBoxAndOnAction">
+      <HBox.margin>
+        <Insets bottom="5.0" left="2.5" right="2.5" top="7.5"/>
+      </HBox.margin>
+    </CheckBox>
     <TextField fx:id="textFieldFilterByPLName" promptText="Filter by PL name here..." HBox.hgrow="ALWAYS">
       <HBox.margin>
         <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
