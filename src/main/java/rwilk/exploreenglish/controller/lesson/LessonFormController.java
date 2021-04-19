@@ -56,9 +56,14 @@ public class LessonFormController implements Initializable {
 
       lessonController.getLessonService().getById(Long.valueOf(textFieldId.getText()))
           .ifPresent(lesson -> {
+            Course course = comboBoxCourse.getSelectionModel().getSelectedItem();
             lesson.setEnglishName(textFieldEnName.getText().trim());
             lesson.setPolishName(textFieldPlName.getText().trim());
-            lesson.setCourse(comboBoxCourse.getSelectionModel().getSelectedItem());
+
+            if (lesson.getCourse().getId().compareTo(course.getId()) != 0) {
+              lesson.setCourse(course);
+              lesson.setPosition(lessonController.getLessonService().getCountByCourse(course));
+            }
             setLessonForm(lessonController.getLessonService().save(lesson));
             lessonController.refreshTableView();
             lessonController.refreshChildComboBoxes();

@@ -130,4 +130,27 @@ public class NoteFormController implements Initializable {
     }
   }
 
+  public void buttonBoldOnAction(ActionEvent actionEvent) {
+    final String selectedText = textAreaNote.getSelectedText().trim();
+    final String text = textAreaNote.getText();
+    if (StringUtils.isNoneEmpty(selectedText, text)) {
+      textAreaNote.setText(text.replace(selectedText, "<b>".concat(selectedText).concat("</b>")));
+    }
+  }
+
+  public void buttonItalicsOnAction(ActionEvent actionEvent) {
+    final String selectedText = textAreaNote.getSelectedText().trim();
+    final String text = textAreaNote.getText();
+    if (StringUtils.isNoneEmpty(selectedText, text)) {
+      textAreaNote.setText(text.replace(selectedText, "<i>".concat(selectedText).concat("</i>")));
+    }
+  }
+
+  public void buttonWordTagOnAction(ActionEvent actionEvent) {
+    final String selectedText = textAreaNote.getSelectedText().trim();
+    final String text = textAreaNote.getText();
+    if (StringUtils.isNoneEmpty(selectedText, text)) {
+      textAreaNote.setText(text.replace(selectedText, "<word>".concat(selectedText).concat("</word>")));
+    }
+  }
 }

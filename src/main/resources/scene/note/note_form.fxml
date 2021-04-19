@@ -40,6 +40,21 @@
         <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
       </HBox.margin>
     </Button>
+    <Button text="Bold" onAction="#buttonBoldOnAction">
+      <HBox.margin>
+        <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
+    <Button text="Italics" onAction="#buttonItalicsOnAction">
+      <HBox.margin>
+        <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
+    <Button text="Word" onAction="#buttonWordTagOnAction">
+      <HBox.margin>
+        <Insets bottom="5.0" left="2.5" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
   </HBox>
 
   <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" prefWidth="100" minHeight="150">
