@@ -1,0 +1,225 @@
+// zaimki osobowe w funkcji podmiotu
+man = człowiek, mężczyzna
+woman = kobieta
+boy = chłopiec (liczba mnoga = boys)
+girl = dziewczyna
+dog = pies (liczba mnoga = dogs)
+cat = kot
+book = książka (liczba mnoga = books)
+car = samochód
+mother = matka, mama
+father = ojciec, tata
+mouse = mysz
+ball = piłka (liczba mnoga = balls)
+school = szkoła
+bike = rower
+and = i
+
+// czasownik to be
+actor = aktor (liczba mnoga = actors)
+student = student, uczeń (liczba mnoga = students)
+teacher = nauczyciel
+doctor = doktor
+policeman = policjant (liczba mnoga = policemen)
+journalist = dziennikarz
+waiter = kelner (liczba mnoga = waiters)
+at school = w szkole
+my = mój
+studying = uczenie się, studiowanie
+tall = wysoki
+French = Francuz
+from = z
+England = Anglia
+nice = miły
+parents = rodzice
+Poland = Polska
+friend = przyjaciel
+school bag = tornister, plecak szkolny
+black = czarny
+in = w
+garden = ogród
+
+// liczba mnoga
+dish = danie
+kiss =  pocałunek
+tomato = pomidor
+hero = bohater
+piano = fortepian
+boy = chłopiec
+key = klucz
+lady = dama
+wife = żona
+knife = nóż
+cliff = klif
+person = osoba
+goose = gęś
+child = dziecko
+mouse = mysz
+fish = ryba
+aircraft = samolot
+fruit = owoc
+glasses = okulary
+shorts = spodenki
+scissors = nożyce
+banana = banan
+egg = jajko
+donkey = osioł
+horse = koń
+cow = krowa
+window = okno
+branch = gałąź
+chair = krzesło
+cherry = wiśnia
+pear = gruszka	car = samochód
+bus = autobus
+box = pudełko
+watch = zegarek
+potato = ziemniak
+radio = radio
+photo = zdjęcie
+day = dzień
+city = miasto
+country = kraj
+wolf = wilk
+roof = dach
+sheriff = szeryf
+tooth = ząb
+die = kostka do gry
+foot = stopa
+ox = wół
+deer = jeleń
+sheep = owca
+cod = dorsz
+jeans = dżinsy
+trousers = spodnie
+playclothes = bielizna kąpielowa
+church = kościół
+toy = zabawka
+// tree = drzewo
+kangaroo = kangur
+leaf = liść
+family = rodzina
+library = biblioteka
+house = dom
+octopus = ośmiornica
+lory = ciężarówka
+
+shop = sklep
+month = miesiąc
+crash = wypadek, kraksa
+garage = garaż
+tree = drzewo
+end = koniec
+zoo = ogród zoologiczny
+
+apple = jabłko
+giraffe = żyrafa
+parrot = papuga
+dress = sukienka
+ferry = prom
+leaf = liść
+
+// rzeczowniki policzalne i niepoliczalne
+jedzenie i rzeczy półpłynne:
+cheese = ser
+bread = chleb
+honey = miód
+gel = żel
+butter = masło
+chocolate = czekolada
+cream = śmietana
+toothpaste = pasta do zębów
+
+tea = herbata
+water = woda
+milk = mleko
+juice = sok
+petrol = benzyna
+oil = olej
+
+sugar = cukier
+sand = piasek
+flour = mąka
+rice = ryż
+
+beauty = piękno
+happiness = szczęście
+love = miłość
+knowledge = wiedza, umiejętności
+
+mathematics = matematyka
+gymnastics = gimnastyka
+
+gold = złoto
+silver = srebro
+iron = żelazo
+paper = papier
+
+time = czas
+music = muzyka
+weather = pogoda
+work = praca
+hair = włosy
+money = pieniądze
+information = informacja
+news = wiadomości
+furniture = meble
+traffic = korek (na drodze)
+
+flower = kwiat
+two = dwa
+three = trzy
+four = cztery
+five = pięć
+
+a bag of = torebka, worek
+a bar of = tabliczka
+a bottle of = butelka
+a bowl of = miska
+a box of = pudełko
+
+a bunch of = pęczek, kiść
+a bag of sugar = torebka cukru
+a bar of chocolate = tabliczka czekolady
+a bottle of water = butelka wody
+a bowl of rice = miska ryżu
+a box a careal = pudełko płatków śniadaniowych
+a bunch of bananas = pęczek bananów
+a can of = puszka
+a carton of = karton
+a cup of = filiżanka
+a glass of = szklanka
+a jar of = słoik
+a jug of = dzbanek, dzban
+a kilo of = kilogram
+a loaf of = bochenek
+a packet of = opakowanie
+a slice of = kromka, plaster, kawałek
+a tin of = puszka
+a can of coke = puszka coca-coli
+a carton of milk = karton mleka
+a cup of tea = filiżanka herbaty
+a glass of water = szkolanka wody
+a jar of jam = słoik dżemu
+a jug of beer = dzban piwa
+a kilo of meat = kilogram mięsa
+a loaf of bread = bochenek chleba
+a packet of biscuits = paczka ciastek
+a slice of bread = kromka chleba
+a tin of tuna = puszka tuńczyka
+
+coffee = kawa
+orange juice = sok pomarańczowy
+wine = wino
+soap = mydło
+lemonade = lemoniada
+bean = fasola
+
+table = stół
+desk = biurko
+carrot = marchewka
+cucumber = ogórek
+soup = zupa
+orange = pomarańcza
+cake = ciasto
+wood = drewno
