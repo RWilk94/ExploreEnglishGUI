@@ -15,4 +15,6 @@ public interface TermRepository extends JpaRepository<Term, Long> {
 
   List<Term> findAllByCategoryAndSource(String category, String source);
 
+  List<Term> findAllBySourceAndCategoryLike(String source, String category);
+
 }

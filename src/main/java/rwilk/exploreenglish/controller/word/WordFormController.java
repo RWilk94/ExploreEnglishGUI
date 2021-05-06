@@ -90,8 +90,10 @@ public class WordFormController implements Initializable {
           super.updateItem(item, empty);
           if (item != null) {
             this.setText(item);
-            if (!wordController.getWordService().getAllByEnglishNamesLike(item).isEmpty()) {
+            if (!wordController.getWordService().getAllByEnglishNames(item).isEmpty()) {
               setStyle("-fx-background-color: #ff0000");
+            } else if (!wordController.getWordService().getAllByEnglishNamesLike(item).isEmpty()) {
+              setStyle("-fx-background-color: #ffa200");
             } else {
               setStyle("");
             }
@@ -228,12 +230,19 @@ public class WordFormController implements Initializable {
         : englishNames;
     if (englishNames.startsWith("a ")) {
       toggleGroupArticle.selectToggle(toggleButtonA);
+      toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
+      toggleGroupGrammar.selectToggle(toggleButtonCountable);
       englishNames = englishNames.substring(englishNames.indexOf(" "));
     } else if (englishNames.startsWith("an ")) {
       toggleGroupArticle.selectToggle(toggleButtonAn);
+      toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
+      toggleGroupGrammar.selectToggle(toggleButtonCountable);
       englishNames = englishNames.substring(englishNames.indexOf(" "));
     } else if (englishNames.startsWith("the ")) {
       toggleGroupArticle.selectToggle(toggleButtonThe);
+      englishNames = englishNames.substring(englishNames.indexOf(" "));
+    } else if (englishNames.startsWith("to ")) {
+      toggleGroupPartOfSpeech.selectToggle(toggleButtonVerb);
       englishNames = englishNames.substring(englishNames.indexOf(" "));
     }
 
@@ -243,7 +252,6 @@ public class WordFormController implements Initializable {
 
   private void setWordForm(String otherName, String polishName, String comparative, String superlative, String pastTense,
                            String pastParticiple, String plural, String synonym) {
-    textFieldEnglishNames.setText(StringUtils.trimToEmpty(otherName));
     textFieldPolishName.setText(StringUtils.trimToEmpty(polishName));
     textFieldComparative.setText(StringUtils.trimToEmpty(comparative));
     textFieldSuperlative.setText(StringUtils.trimToEmpty(superlative));
@@ -252,6 +260,7 @@ public class WordFormController implements Initializable {
     textFieldPlural.setText(StringUtils.trimToEmpty(plural));
     textFieldOpposite.setText(StringUtils.EMPTY);
     textFieldSynonym.setText(StringUtils.trimToEmpty(synonym));
+    textFieldEnglishNames.setText(StringUtils.trimToEmpty(otherName));
   }
 
   private void setToggleGroups() {

@@ -41,7 +41,9 @@ public class DikiScrapper implements CommandLineRunner {
       List<Term> results = new ArrayList<>();
 
       String url = "http://www.diki.pl/slownik-angielskiego?q=" + WordUtils.trimAndReplace(englishWord, "+");
-      Document document = Jsoup.connect(url).cookie("autoLoginToken", "aCCJem50QmbkPp163sFnocX9ypt4eTHl5hA00rEs").userAgent("Mozilla").timeout(10000).get();
+      Document document = Jsoup.connect(url)
+          // .cookie("autoLoginToken", "aCCJem50QmbkPp163sFnocX9ypt4eTHl5hA00rEs")
+          .userAgent("Mozilla").timeout(10000).get();
       Elements elements = document.select("div.diki-results-left-column").get(0).child(0)
           .select("div.dictionaryEntity"); // return elements containing translations
 
@@ -184,9 +186,9 @@ public class DikiScrapper implements CommandLineRunner {
               }
               meanings.add(String.join(", ", singleMeaning));
             }
-            term.setPolishName(String.join("; ", meanings));
-            term.setEnglishSentence(String.join("; ", englishSentences));
-            term.setPolishSentence(String.join("; ", polishSentences));
+            term.setPolishName(StringUtils.left(String.join("; ", meanings), 2000));
+            term.setEnglishSentence(StringUtils.left(String.join("; ", englishSentences), 2000));
+            term.setPolishSentence(StringUtils.left(String.join("; ", polishSentences), 2000));
 
           } else if (element.hasClass("af")) {
             String type = "";

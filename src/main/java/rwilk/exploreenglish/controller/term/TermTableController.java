@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -195,14 +196,33 @@ public class TermTableController implements Initializable, CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-//    List<Term> terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
-//    terms.forEach(term -> {
-//      String t = StringUtils.trimToEmpty(term.getEnglishName().split(";")[0]);
-//      if (StringUtils.isNoneEmpty(t)) {
-//        dikiScrapper.webScrap(t);
-//        babScrapper.webScrap(t);
-//        cambridgeDictionaryScrapper.webScrap(t);
-//      }
-//    });
+/*    for (int i = 229587; i <= 230620; i++) {
+      Optional<Term> term = termService.getById((long) i);
+      term.ifPresent(te -> {
+        String englishNames = te.getEnglishName();
+        if (englishNames.startsWith("a ")) {
+          englishNames = englishNames.substring(englishNames.indexOf(" "));
+        } else if (englishNames.startsWith("an ")) {
+          englishNames = englishNames.substring(englishNames.indexOf(" "));
+        } else if (englishNames.startsWith("the ")) {
+          englishNames = englishNames.substring(englishNames.indexOf(" "));
+        } else if (englishNames.startsWith("to ")) {
+          englishNames = englishNames.substring(englishNames.indexOf(" "));
+        }
+        dikiScrapper.webScrap(englishNames.trim());
+        babScrapper.webScrap(englishNames.trim());
+        cambridgeDictionaryScrapper.webScrap(englishNames.trim());
+      });
+    }*/
+
+/*    List<Term> terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
+    terms.forEach(term -> {
+      String t = StringUtils.trimToEmpty(term.getEnglishName().split(";")[0]);
+      if (StringUtils.isNoneEmpty(t)) {
+        dikiScrapper.webScrap(t);
+        babScrapper.webScrap(t);
+        cambridgeDictionaryScrapper.webScrap(t);
+      }
+    });*/
   }
 }

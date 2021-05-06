@@ -37,6 +37,10 @@ public class WordService {
     return wordRepository.findAllByEnglishNamesLike(WordUtils.removeNonLiteralCharacters(pattern));
   }
 
+  public List<Word> getAllByEnglishNames(String pattern) {
+    return wordRepository.findAllByEnglishNames(WordUtils.removeNonLiteralCharacters(pattern));
+  }
+
   public Word save(Word word) {
     return wordRepository.save(word);
   }

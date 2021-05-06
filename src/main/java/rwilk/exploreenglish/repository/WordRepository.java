@@ -18,4 +18,6 @@ public interface WordRepository extends JpaRepository<Word, Long> {
           "or lower(w.english_names) = lower(:pattern)")
   List<Word> findAllByEnglishNamesLike(String pattern);
 
+  List<Word> findAllByEnglishNames(String englishName);
+
 }

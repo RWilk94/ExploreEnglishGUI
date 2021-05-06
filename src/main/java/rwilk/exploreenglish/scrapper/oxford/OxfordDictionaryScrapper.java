@@ -109,8 +109,5 @@ public class OxfordDictionaryScrapper implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-/*    for (String href : hrefs) {
-      webScrap(href);
-    }*/
   }
 }

@@ -8,12 +8,14 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.scrapper.bab.BabScrapper;
 import rwilk.exploreenglish.scrapper.cambridge.CambridgeDictionaryScrapper;
 import rwilk.exploreenglish.scrapper.diki.DikiScrapper;
 import rwilk.exploreenglish.service.InjectService;
+import rwilk.exploreenglish.service.TermService;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,18 +27,20 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-public class ScrapperController implements Initializable {
+public class ScrapperController implements Initializable, CommandLineRunner {
   private final InjectService injectService;
   private final BabScrapper babScrapper;
   private final DikiScrapper dikiScrapper;
   private final CambridgeDictionaryScrapper cambridgeDictionaryScrapper;
+  private final TermService termService;
   public TabPane tabPaneScrapper;
 
-  public ScrapperController(InjectService injectService, BabScrapper babScrapper, DikiScrapper dikiScrapper, CambridgeDictionaryScrapper cambridgeDictionaryScrapper) {
+  public ScrapperController(InjectService injectService, BabScrapper babScrapper, DikiScrapper dikiScrapper, CambridgeDictionaryScrapper cambridgeDictionaryScrapper, TermService termService) {
     this.injectService = injectService;
     this.babScrapper = babScrapper;
     this.dikiScrapper = dikiScrapper;
     this.cambridgeDictionaryScrapper = cambridgeDictionaryScrapper;
+    this.termService = termService;
     this.injectService.setScrapperController(this);
   }
 
@@ -119,4 +123,16 @@ public class ScrapperController implements Initializable {
     });
   }
 
+  @Override
+  public void run(String... args) throws Exception {
+/*    List<Term> terms = termService.getTermsBySourceAndCategoryLike("etutor", "%a2%");
+    int i = 0;
+    for (Term term : terms) {
+      i++;
+      log.info("{}/{}", i, terms.size());
+      dikiScrapper.webScrap(term.getEnglishName());
+      babScrapper.webScrap(term.getEnglishName());
+      cambridgeDictionaryScrapper.webScrap(term.getEnglishName());
+    }*/
+  }
 }

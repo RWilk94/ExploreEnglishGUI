@@ -31,6 +31,10 @@ public class TermService {
     return termRepository.findAllByCategoryAndSource(englishName, source);
   }
 
+  public List<Term> getTermsBySourceAndCategoryLike(String source, String category) {
+    return termRepository.findAllBySourceAndCategoryLike(source, category);
+  }
+
   public Optional<Term> getById(Long id) {
     return termRepository.findById(id);
   }
