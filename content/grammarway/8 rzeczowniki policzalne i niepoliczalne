@@ -22,49 +22,55 @@ some cheese, some bananas
 cwiczenie 6
 wstaw a, an lub some
 1 [...] meat
-4 [...] Jam
-7 [...] soup
-10 [...] elephant
-13 [...] lemons
 2 [...] orange
-5 [...] butter
-8 [...] egg
-11 [...] milk
-14 [...] bread
 3 [...] chocolate
+4 [...] jam
+5 [...] butter
 6 [...] leaves
+7 [...] soup
+8 [...] egg
 9 [...] coffee
+10 [...] elephant
+11 [...] milk
 12 [...] cups
+13 [...] lemons
+14 [...] bread
 15 [...] doll
 1 some
-2 an 7 some 12 some
-3 some 8 an 13 some
+2 an
+3 some
 4 some
 5 some
 6 some
-9 some 14 some
-10 an 15 a
+7 some
+8 an
+9 some
+10 an
 11 some
+12 some
+13 some
+14 some
+15 a
 
 cwiczenie 7
 wstaw a, an lub some. Ktore rzeczowniki sa policzalne, a ktore niepoliczalne.
 1 [...] biscuit
-7 [...] armchair
-13 [...] money
 2 [...] tea
-8 [...] plate
-14 [...] watches
 3 [...] carrot
-9 [...] chair
-15 [...]  salt
 4 [...]  ring
-10 [...]  pepper
-16 [...] honey
 5 [...]  bread
-11 [...] cat
-17 [...] water
 6 [...] boxes
+7 [...] armchair
+8 [...] plate
+9 [...] chair
+10 [...]  pepper
+11 [...] cat
 12 [...] dress
+13 [...] money
+14 [...] watches
+15 [...]  salt
+16 [...] honey
+17 [...] water
 18 [...]  advice
 1 a
 2 some (niepoliczalny)
@@ -85,6 +91,7 @@ wstaw a, an lub some. Ktore rzeczowniki sa policzalne, a ktore niepoliczalne.
 17 some ( niepoliczalny)
 18 some ( niepoliczalny)
 
+// TODO
 Rzeczowniki policzalne i niepoliczalne można poprzedać określeniami ilości takimi jak:
 a jar, bottle, piece, loaf, cup, bar, glass, kilo, carton, bowl, can, jug, slice, tin, packet + of.
 a jar of marmalade

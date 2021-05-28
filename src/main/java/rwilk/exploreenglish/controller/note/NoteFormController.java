@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.web.HTMLEditor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Lesson;
@@ -26,6 +27,7 @@ public class NoteFormController implements Initializable {
   public TextField textFieldId;
   public ComboBox<Lesson> comboBoxLesson;
   public TextArea textAreaNote;
+  public HTMLEditor htmlEditor;
   public TextField textFieldTitle;
 
   @Override
@@ -58,6 +60,7 @@ public class NoteFormController implements Initializable {
     textFieldId.clear();
     comboBoxLesson.getSelectionModel().select(null);
     textAreaNote.clear();
+    htmlEditor.setHtmlText("");
   }
 
   public void buttonEditOnAction(ActionEvent actionEvent) {
@@ -153,4 +156,10 @@ public class NoteFormController implements Initializable {
       textAreaNote.setText(text.replace(selectedText, "<word>".concat(selectedText).concat("</word>")));
     }
   }
+
+  public void buttonCopyHtmlOnAction(ActionEvent actionEvent) {
+    final String text = textAreaNote.getText();
+    htmlEditor.setHtmlText(text.replace("\n", "<br>"));
+  }
+
 }

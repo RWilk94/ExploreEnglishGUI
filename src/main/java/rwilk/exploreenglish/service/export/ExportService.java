@@ -35,6 +35,7 @@ public class ExportService {
 
   private final static String PARAM_SEPARATOR = ", ";
   private final static String QUOTE_SIGN = "'";
+  private final static Integer CHUNK_SIZE = 1;
   private final CourseService courseService;
   private final LessonService lessonService;
   private final LessonWordService lessonWordService;
@@ -77,7 +78,7 @@ public class ExportService {
   private void exportCourses(List<Course> courses) {
     String tag = "COURSES";
     log.info("START GENERATING {}", tag);
-    List<List<Course>> chunks = ListUtils.partition(courses, 100);
+    List<List<Course>> chunks = ListUtils.partition(courses, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Course> chunk : chunks) {
       sql.append("INSERT INTO 'courses' ('id', 'english_name', 'polish_name', 'image', 'position') VALUES ");
@@ -103,7 +104,7 @@ public class ExportService {
   private void exportLessons(List<Lesson> lessons) {
     String tag = "LESSONS";
     log.info("START GENERATING {}", tag);
-    List<List<Lesson>> chunks = ListUtils.partition(lessons, 100);
+    List<List<Lesson>> chunks = ListUtils.partition(lessons, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Lesson> chunk : chunks) {
       sql.append("INSERT INTO 'lessons' ('id', 'english_name', 'polish_name', 'image', 'position', 'course_id') VALUES ");
@@ -131,7 +132,7 @@ public class ExportService {
   private void exportLessonWords(List<LessonWord> lessonWords) {
     String tag = "LESSON_WORDS";
     log.info("START GENERATING {}", tag);
-    List<List<LessonWord>> chunks = ListUtils.partition(lessonWords, 100);
+    List<List<LessonWord>> chunks = ListUtils.partition(lessonWords, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<LessonWord> chunk : chunks) {
       sql.append("INSERT INTO 'lesson_word' ('id', 'position', 'lesson_id', 'word_id') VALUES ");
@@ -155,7 +156,7 @@ public class ExportService {
   private void exportWords(List<Word> words) {
     String tag = "WORDS";
     log.info("START GENERATING {}", tag);
-    List<List<Word>> chunks = ListUtils.partition(words, 100);
+    List<List<Word>> chunks = ListUtils.partition(words, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Word> chunk : chunks) {
       sql.append("INSERT INTO 'words' ('id', 'english_name', 'polish_name', 'part_of_speech', 'sound', 'article', " +
@@ -203,7 +204,7 @@ public class ExportService {
   private void exportWordSentences(List<WordSentence> wordSentences) {
     String tag = "WORD_SENTENCE";
     log.info("START GENERATING {}", tag);
-    List<List<WordSentence>> chunks = ListUtils.partition(wordSentences, 100);
+    List<List<WordSentence>> chunks = ListUtils.partition(wordSentences, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<WordSentence> chunk : chunks) {
       sql.append("INSERT INTO 'word_sentence' ('id', 'position', 'word_id', 'sentence_id') VALUES ");
@@ -227,7 +228,7 @@ public class ExportService {
   private void exportSentences(List<Sentence> sentences) {
     String tag = "SENTENCES";
     log.info("START GENERATING {}", tag);
-    List<List<Sentence>> chunks = ListUtils.partition(sentences, 100);
+    List<List<Sentence>> chunks = ListUtils.partition(sentences, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Sentence> chunk : chunks) {
       sql.append("INSERT INTO 'sentences' ('id', 'english_name', 'polish_name', 'sound', " +
@@ -252,7 +253,7 @@ public class ExportService {
   private void exportNotes(List<Note> notes) {
     String tag = "NOTES";
     log.info("START GENERATING {}", tag);
-    List<List<Note>> chunks = ListUtils.partition(notes, 100);
+    List<List<Note>> chunks = ListUtils.partition(notes, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Note> chunk : chunks) {
       sql.append("INSERT INTO 'notes' ('id', 'note', 'viewed', 'position', 'lesson_id') VALUES ");
@@ -277,7 +278,7 @@ public class ExportService {
   private void exportExercises(List<Exercise> exercises) {
     String tag = "EXERCISES";
     log.info("START GENERATING {}", tag);
-    List<List<Exercise>> chunks = ListUtils.partition(exercises, 100);
+    List<List<Exercise>> chunks = ListUtils.partition(exercises, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Exercise> chunk : chunks) {
       sql.append("INSERT INTO 'exercises' ('id', 'name', 'type', 'position', 'lesson_id', 'progress', 'skip', " +
@@ -304,10 +305,10 @@ public class ExportService {
   private void exportExerciseItems(List<ExerciseItem> exerciseItems) {
     String tag = "EXERCISES_ITEMS";
     log.info("START GENERATING {}", tag);
-    List<List<ExerciseItem>> chunks = ListUtils.partition(exerciseItems, 100);
+    List<List<ExerciseItem>> chunks = ListUtils.partition(exerciseItems, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<ExerciseItem> chunk : chunks) {
-      sql.append("INSERT INTO 'exercise_item' ('id', 'question', 'correct_answer', 'final_answer', " +
+      sql.append("INSERT INTO 'exercise_items' ('id', 'question', 'correct_answer', 'final_answer', " +
           "'first_possible_answer', 'second_possible_answer', 'third_possible_answer', 'forth_possible_answer', " +
           "'dialogue_english', 'dialogue_polish', 'description', 'position', 'exercise_id') VALUES ");
       for (ExerciseItem exerciseItem : chunk) {
@@ -347,7 +348,7 @@ public class ExportService {
   private void exportTerms(List<Term> terms) {
     String tag = "TERMS";
     log.info("START GENERATING {}", tag);
-    List<List<Term>> chunks = ListUtils.partition(terms, 100);
+    List<List<Term>> chunks = ListUtils.partition(terms, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Term> chunk : chunks) {
       sql.append("INSERT INTO 'terms' ('id', 'english_names', 'polish_name', 'part_of_speech', " +

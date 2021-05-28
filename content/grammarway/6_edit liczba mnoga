@@ -116,8 +116,6 @@ Podaj liczbe mnoga
 7 giraffe [...]
 8 deer [...]
 9 calf [...]
-10 fox [...]
-11 mouse [...]
 12 hippo [...]
 1 ducks
 2 ostriches
@@ -128,30 +126,28 @@ Podaj liczbe mnoga
 7 giraffes
 8 deer
 9 calves
-10 foxes
-11 mice
 12 hippos
 
 cwiczenie 4
 podaj liczbe mnoga
-bicycle, bus, cherry, knife, man, glass, child, house, apple, box,
-baby, ball, tomato, ferry, leaf, tooth, goose, radio, cliff, dress,
+bicycle, cherry, man, house, apple, box,
+baby, tomato, ferry, leaf, tooth, goose, dress,
 
-torch, city, wife, ox, deer, calf, fox, giraffe, watch, parrot, lady, wolf, dish,
-boy, woman, melon, sheep, armchair
+torch, city, wife, lady, wolf, dish,
+boy, woman, melon, armchair
 
-bicycles, houses, apples, balls, radios, cliffs,
-giraffes, parrots, boys, melons, armchairs
 
-buses, glasses, boxes, tomatoes,
-dresses, torches, foxes, watches, dishes
+bicycles, houses, apples,
+boys, melons, armchairs
+
+boxes, tomatoes,
+dresses, torches, dishes
 
 cherries ,babies, ferries, cities, ladies
 
-knives, leaves, wives, calves, wolves
+leaves, wives, wolves
 
-men, children, teeth, geese, oxen, deer, women,
-sheep
+men, teeth, geese, women,
 
 
 
