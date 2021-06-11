@@ -40,6 +40,12 @@ public class ExerciseItemFormController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
+    textFieldCorrectAnswer.textProperty().addListener((observable, oldValue, newValue) -> {
+      if (StringUtils.trimToEmpty(textFieldQuestion.getText()).contains("[...]")) {
+        textFieldFinalAnswer.setText(textFieldQuestion.getText().replace("[...]", newValue));
+      }
+    });
+
   }
 
   public void init(ExerciseItemController exerciseItemController) {
