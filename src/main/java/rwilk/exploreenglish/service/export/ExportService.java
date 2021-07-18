@@ -27,7 +27,7 @@ import rwilk.exploreenglish.service.WordService;
 import rwilk.exploreenglish.utils.WordUtils;
 
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -63,6 +63,7 @@ public class ExportService {
   }
 
   public void export() {
+    exportVersion();
     exportCourses(courseService.getAll());
     exportLessons(lessonService.getAll());
     exportLessonWords(lessonWordService.getAll());
@@ -73,6 +74,12 @@ public class ExportService {
     exportExercises(exerciseService.getAll());
     exportExerciseItems(exerciseItemService.getAll());
     exportTerms(termService.getAll());
+  }
+
+  public void exportVersion() {
+    String tag = "VERSIONS";
+    StringBuilder sb = new StringBuilder(String.valueOf(System.currentTimeMillis()));
+    exportFile(sb, tag.toLowerCase() + ".txt", tag);
   }
 
   private void exportCourses(List<Course> courses) {
@@ -401,7 +408,8 @@ public class ExportService {
             .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSource()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOURCE
             .append(PARAM_SEPARATOR)
-            .append(term.getIsIgnored() ? 1 : 0); // COLUMN IS_IGNORED
+            .append(term.getIsIgnored() ? 1 : 0) // COLUMN IS_IGNORED
+            .append()
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, term);
       }
@@ -443,4 +451,71 @@ public class ExportService {
     }
   }
 
+//  @Override
+//  public void run(String... args) throws Exception {
+//
+//    final Lesson lesson = lessonService.getById(121L).get();
+//
+//    final List<Triple<Integer, String, String>> triples = Arrays.asList(
+//        Triple.of(1 , "", ""),
+//        Triple.of(2 , "", ""),
+//        Triple.of(3 , "", ""),
+//        Triple.of(4 , "", ""),
+//        Triple.of(5 , "", ""),
+//        Triple.of(6 , "", ""),
+//        Triple.of(7 , "", ""),
+//        Triple.of(8 , "", ""),
+//        Triple.of(9 , "", ""),
+//        Triple.of(10, "", ""),
+//        Triple.of(11, "", ""),
+//        Triple.of(12, "", ""),
+//        Triple.of(13, "", ""),
+//        Triple.of(14, "", ""),
+//        Triple.of(15, "", ""),
+//        Triple.of(16, "", ""),
+//        Triple.of(17, "", ""),
+//        Triple.of(18, "", ""),
+//        Triple.of(19, "", ""),
+//        Triple.of(20, "", ""),
+//        Triple.of(21, "", ""),
+//        Triple.of(22, "", ""),
+//        Triple.of(23, "", ""),
+//        Triple.of(24, "", ""),
+//        Triple.of(25, "", ""),
+//        Triple.of(26, "", ""),
+//        Triple.of(27, "", ""),
+//        Triple.of(28, "", ""),
+//        Triple.of(29, "", ""),
+//        Triple.of(30, "", "")
+//    );
+//
+//    triples.forEach(item -> {
+//      Word word = Word.builder()
+//          .id(null)
+//          .englishNames(item.getRight())
+//          .polishName(item.getMiddle())
+//          .partOfSpeech(PartOfSpeechEnum.WYRAZENIE.getValue())
+//          .article("")
+//          .grammarType("")
+//          .comparative("")
+//          .superlative("")
+//          .pastTense("")
+//          .pastParticiple("")
+//          .plural("")
+//          .opposite("")
+//          .synonym("")
+//          .build();
+//      try {
+//        word = wordService.save(word);
+//        final LessonWord lessonWord = LessonWord.builder()
+//            .lesson(lesson)
+//            .word(word)
+//            .position(lessonWordService.getCountByLesson(lesson))
+//            .build();
+//
+//        lessonWordService.save(lessonWord);
+//      } catch (Exception e) {}
+//
+//    });
+//  }
 }
