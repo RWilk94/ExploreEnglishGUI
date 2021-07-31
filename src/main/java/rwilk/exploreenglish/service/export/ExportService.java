@@ -370,7 +370,7 @@ public class ExportService {
         if (StringUtils.isBlank(englishNames)) {
           englishNames = "";
         } else {
-          englishNames = englishNames.substring(englishNames.length() - 1).equals(";")
+          englishNames = englishNames.endsWith(";")
               ? englishNames.substring(0, englishNames.length() - 1)
               : englishNames;
           if (englishNames.startsWith("a ")) {
@@ -408,8 +408,7 @@ public class ExportService {
             .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSource()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOURCE
             .append(PARAM_SEPARATOR)
-            .append(term.getIsIgnored() ? 1 : 0) // COLUMN IS_IGNORED
-            .append()
+            .append(term.getIsIgnored() ? 1 : 0); // COLUMN IS_IGNORED
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, term);
       }
