@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.note;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
@@ -40,7 +41,7 @@ public class NoteController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    init();
+    Platform.runLater(this::init); // FIX: Not on FX application thread; currentThread = JavaFX-Launcher
   }
 
   public void init() {
