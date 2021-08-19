@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rwilk.exploreenglish.model.LearnItemChildren;
+import rwilk.exploreenglish.model.LearnItemChild;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "sentences")
-public final class Sentence implements Serializable, LearnItemChildren {
+public final class Sentence implements Serializable, LearnItemChild {
 
   private static final long serialVersionUID = -8129298224912951576L;
   @Id

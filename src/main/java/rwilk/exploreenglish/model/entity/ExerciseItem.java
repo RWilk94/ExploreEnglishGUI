@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import rwilk.exploreenglish.model.LearnItemChildren;
+import rwilk.exploreenglish.model.LearnItemChild;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +27,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "exercise_item")
-public final class ExerciseItem implements Serializable, LearnItemChildren {
+public final class ExerciseItem implements Serializable, LearnItemChild {
 
   private static final long serialVersionUID = 2360065403395688983L;
   @Id

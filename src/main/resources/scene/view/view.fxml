@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="rwilk.exploreenglish.controller.view.ViewController"
@@ -20,6 +21,11 @@
         </HBox>
       </VBox>
       <VBox HBox.hgrow="ALWAYS">
+        <TextField fx:id="textFieldFilterLessons" promptText="Filter lessons here..." HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
+          </HBox.margin>
+        </TextField>
         <ListView HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="listViewLessons"
                   onMouseClicked="#listViewLessonsOnMouseClicked">
         </ListView>
