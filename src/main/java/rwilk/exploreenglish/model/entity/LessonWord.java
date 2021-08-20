@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import rwilk.exploreenglish.model.LearnItem;
 
 import javax.persistence.CascadeType;
@@ -53,6 +54,12 @@ public final class LessonWord implements Serializable, LearnItem {
 
   public void setLesson(Lesson lesson) {
     this.lesson = lesson;
+  }
+
+  @Override
+  public String getName() {
+    return StringUtils.defaultString(word.getEnglishNames())
+               .concat(StringUtils.defaultString(word.getPolishName()));
   }
 
   @Override

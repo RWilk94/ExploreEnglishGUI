@@ -8,6 +8,8 @@ public interface LearnItem {
 
   Lesson getLesson();
 
+  String getName();
+
   void setPosition(Integer position);
 
 }

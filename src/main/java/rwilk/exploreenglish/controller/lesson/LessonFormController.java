@@ -62,7 +62,7 @@ public class LessonFormController implements Initializable {
 
             if (lesson.getCourse().getId().compareTo(course.getId()) != 0) {
               lesson.setCourse(course);
-              lesson.setPosition(lessonController.getLessonService().getCountByCourse(course));
+              lesson.setPosition(lessonController.getLessonService().getNextPosition(course.getId()));
             }
             setLessonForm(lessonController.getLessonService().save(lesson));
             lessonController.refreshTableView();
@@ -78,7 +78,7 @@ public class LessonFormController implements Initializable {
       Lesson lesson = Lesson.builder()
           .englishName(textFieldEnName.getText().trim())
           .polishName(textFieldPlName.getText().trim())
-          .position(lessonController.getLessonService().getCountByCourse(course))
+          .position(lessonController.getLessonService().getNextPosition(course.getId()))
           .course(course)
           .build();
       lesson = lessonController.getLessonService().save(lesson);

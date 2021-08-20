@@ -7,6 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.LearnItem;
@@ -44,12 +45,14 @@ public class ViewController implements Initializable {
 
   private Course selectedCourse;
   private List<Lesson> lessons;
+  private List<LearnItem> learnItems;
   private Lesson selectedLesson;
   private LearnItem selectedLearnItem;
   private LearnItemChild selectedLearnItemChild;
   public ListView<Course> listViewCourses;
   public TextField textFieldFilterLessons;
   public ListView<Lesson> listViewLessons;
+  public TextField textFieldFilterLearnItems;
   public ListView<LearnItem> listViewLearnItems;
   public ListView<LearnItemChild> listViewLearnItemChildren;
 
@@ -106,12 +109,21 @@ public class ViewController implements Initializable {
     });
 
     textFieldFilterLessons.textProperty().addListener((observable, oldValue, newValue) -> {
-      if (lessons != null) {
-        List<Lesson> filteredLessons = lessons.stream()
+      if (!CollectionUtils.isEmpty(lessons)) {
+        List<Lesson> filtered = lessons.stream()
                                               .filter(l -> l.getEnglishName().toLowerCase().contains(newValue.toLowerCase())
                                                       || l.getPolishName().toLowerCase().contains(newValue.toLowerCase()))
                                               .collect(Collectors.toList());
-        listViewLessons.setItems(FXCollections.observableArrayList(filteredLessons));
+        listViewLessons.setItems(FXCollections.observableArrayList(filtered));
+      }
+    });
+
+    textFieldFilterLearnItems.textProperty().addListener((observable, oldValue, newValue) -> {
+      if (!CollectionUtils.isEmpty(learnItems)) {
+        List<LearnItem> filtered = learnItems.stream()
+                                            .filter(item -> item.getName().toLowerCase().contains(newValue))
+                                            .collect(Collectors.toList());
+        listViewLearnItems.setItems(FXCollections.observableArrayList(filtered));
       }
     });
 
@@ -205,7 +217,7 @@ public class ViewController implements Initializable {
     List<LessonWord> lessonWords = lessonWordService.getAllByLesson(lesson);
     List<Exercise> exercises = exerciseService.getAllByLesson(lesson);
 
-    List<LearnItem> learnItems = new ArrayList<>(notes);
+    learnItems = new ArrayList<>(notes);
     learnItems.addAll(lessonWords);
     learnItems.addAll(exercises);
     learnItems = learnItems.stream().sorted(Comparator.comparing(LearnItem::getPosition)).collect(Collectors.toList());
