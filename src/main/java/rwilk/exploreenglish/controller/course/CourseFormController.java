@@ -79,4 +79,8 @@ public class CourseFormController implements Initializable {
     courseController.getExportService().export();
     // TODO copy generated files to android assets
   }
+
+  public void buttonGenerateDocumentOnAction(final ActionEvent actionEvent) {
+    courseController.getDocService().generateDocument();
+  }
 }
