@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.word;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 @Controller
 public class WordFormController implements Initializable {
 
+
   private WordController wordController;
   private final List<Object> controls = new ArrayList<>();
   private final List<Control> requiredControls = new ArrayList<>();
@@ -51,6 +53,12 @@ public class WordFormController implements Initializable {
   public ToggleButton toggleButtonA;
   public ToggleButton toggleButtonAn;
   public ToggleButton toggleButtonThe;
+  public ToggleButton toggleButtonA1;
+  public ToggleButton toggleButtonA2;
+  public ToggleButton toggleButtonB1;
+  public ToggleButton toggleButtonB2;
+  public ToggleButton toggleButtonC1;
+  public ToggleButton toggleButtonC2;
   public ToggleButton toggleButtonNone;
   public ToggleButton toggleButtonCountable;
   public ToggleButton toggleButtonUncountable;
@@ -66,6 +74,7 @@ public class WordFormController implements Initializable {
   public TextField textFieldSynonym;
   private ToggleGroup2 toggleGroupPartOfSpeech;
   private ToggleGroup2 toggleGroupArticle;
+  private ToggleGroup2 toggleGroupLevel;
   private ToggleGroup2 toggleGroupGrammar;
   public ListView<Lesson> listViewLessons;
 
@@ -73,7 +82,7 @@ public class WordFormController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     setToggleGroups();
     controls.addAll(Arrays.asList(textFieldId, textFieldEnglishNames,
-        textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, toggleGroupGrammar, textFieldComparative,
+        textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, toggleGroupLevel, toggleGroupGrammar, textFieldComparative,
         textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldOpposite, textFieldSynonym, comboBoxLesson, listViewLessons));
     requiredControls.addAll(Arrays.asList(textFieldEnglishNames, textFieldPolishName));
 
@@ -139,6 +148,7 @@ public class WordFormController implements Initializable {
             word.setPolishName(StringUtils.trimToEmpty(textFieldPolishName.getText()));
             word.setPartOfSpeech(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupPartOfSpeech)));
             word.setArticle(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupArticle)));
+            word.setLevel(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupLevel)));
             word.setGrammarType(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupGrammar)));
             word.setComparative(StringUtils.trimToEmpty(textFieldComparative.getText()));
             word.setSuperlative(StringUtils.trimToEmpty(textFieldSuperlative.getText()));
@@ -165,6 +175,7 @@ public class WordFormController implements Initializable {
           .polishName(StringUtils.trimToEmpty(textFieldPolishName.getText()))
           .partOfSpeech(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupPartOfSpeech)))
           .article(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupArticle)))
+          .level(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupLevel)))
           .grammarType(StringUtils.trimToEmpty(getSelectedToggleText(toggleGroupGrammar)))
           .comparative(StringUtils.trimToEmpty(textFieldComparative.getText()))
           .superlative(StringUtils.trimToEmpty(textFieldSuperlative.getText()))
@@ -204,6 +215,10 @@ public class WordFormController implements Initializable {
         .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(word.getArticle())))
         .findFirst()
         .orElse(null));
+    toggleGroupLevel.selectToggle(toggleGroupLevel.getToggles().stream()
+                                                      .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(word.getLevel())))
+                                                      .findFirst()
+                                                      .orElse(null));
     toggleGroupGrammar.selectToggle(toggleGroupGrammar.getToggles().stream()
         .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(word.getGrammarType())))
         .findFirst()
@@ -221,6 +236,7 @@ public class WordFormController implements Initializable {
         .findFirst()
         .orElse(null));
     toggleGroupArticle.selectToggle(null);
+    toggleGroupLevel.selectToggle(null);
     toggleGroupGrammar.selectToggle(null);
     String englishNames = (StringUtils.isNoneEmpty(term.getEnglishName()) ? term.getEnglishName() + "; " : "")
         .concat((StringUtils.isNoneEmpty(term.getAmericanName()) ? term.getAmericanName() + "; " : ""))
@@ -246,6 +262,7 @@ public class WordFormController implements Initializable {
       englishNames = englishNames.substring(englishNames.indexOf(" "));
     }
 
+    listViewLessons.setItems(null);
     setWordForm(WordUtils.replaceSpecialText(englishNames), term.getPolishName(), term.getComparative(), term.getSuperlative(), term.getPastTense(), term.getPastParticiple(), term.getPlural(), term.getSynonym());
     textFieldSynonym.setText(StringUtils.trimToEmpty(term.getSynonym()));
   }
@@ -271,6 +288,9 @@ public class WordFormController implements Initializable {
     toggleGroupArticle = new ToggleGroup2("toggleGroupArticle");
     setToggleGroup(Arrays.asList(toggleButtonA, toggleButtonAn, toggleButtonThe, toggleButtonNone), toggleGroupArticle);
 
+    toggleGroupLevel = new ToggleGroup2("toggleGroupLevel");
+    setToggleGroup(Arrays.asList(toggleButtonA1, toggleButtonA2, toggleButtonB1, toggleButtonB2, toggleButtonC1, toggleButtonC2), toggleGroupLevel);
+
     toggleGroupGrammar = new ToggleGroup2("toggleGroupGrammar");
     setToggleGroup(Arrays.asList(toggleButtonCountable, toggleButtonUncountable, toggleButtonCountableAndUncountable, toggleButtonPlural, toggleButtonEmpty), toggleGroupGrammar);
   }
@@ -280,8 +300,11 @@ public class WordFormController implements Initializable {
   }
 
   public void initializeLessonComboBox() {
-    List<Lesson> lessons = wordController.getLessonService().getAll();
-    comboBoxLesson.setItems(FXCollections.observableArrayList(lessons));
+    new Thread(() -> {
+      List<Lesson> lessons = wordController.getLessonService().getAll();
+
+      Platform.runLater(() -> comboBoxLesson.setItems(FXCollections.observableArrayList(lessons)));
+    }).start();
   }
 
   public void buttonTranslateOnAction(ActionEvent actionEvent) {

@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.sentence;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -103,8 +104,11 @@ public class SentenceFormController implements Initializable {
   }
 
   public void initializeWordComboBox() {
-    List<Word> words = sentenceController.getWordService().getAll();
-    comboBoxWord.setItems(FXCollections.observableArrayList(words));
+    new Thread(() -> {
+      List<Word> words = sentenceController.getWordService().getAll();
+
+      Platform.runLater(() -> comboBoxWord.setItems(FXCollections.observableArrayList(words)));
+    }).start();
   }
 
   private void setWordSentenceForm() {

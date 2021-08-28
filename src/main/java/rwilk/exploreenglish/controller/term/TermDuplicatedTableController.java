@@ -156,11 +156,13 @@ public class TermDuplicatedTableController implements Initializable {
   }
 
   private void fillInTableView() {
-    List<Word> words = wordService.getAll();
-    List<Term> termsFromWords = words.stream().map(Term::new).collect(Collectors.toList());
+    new Thread(() -> {
+      List<Word> words = wordService.getAll();
+      List<Term> termsFromWords = words.stream().map(Term::new).collect(Collectors.toList());
 
-    terms.addAll(termsFromWords);
-    terms.addAll(termService.getAll());
+      terms.addAll(termsFromWords);
+      terms.addAll(termService.getAll());
+    }).start();
     // tableDuplicatedTerms.setItems(FXCollections.observableArrayList(terms));
   }
 

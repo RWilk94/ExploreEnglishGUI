@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -63,7 +64,7 @@ public final class Word implements Serializable {
   @Column(name = "opposite")
   private String opposite;
 
-  @OneToMany(mappedBy = "word")
+  @OneToMany(mappedBy = "word", fetch = FetchType.EAGER)
   private List<LessonWord> lessonWords;
 
   @Transient

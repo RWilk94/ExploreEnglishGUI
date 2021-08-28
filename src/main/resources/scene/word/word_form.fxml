@@ -194,6 +194,50 @@
       </VBox>
 
       <VBox HBox.hgrow="ALWAYS">
+      <Label text="Level" minWidth="100">
+        <HBox.margin>
+          <Insets bottom="2.5" left="5.0" right="5.0" top="10.0"/>
+        </HBox.margin>
+      </Label>
+
+        <HBox>
+          <ToggleButton fx:id="toggleButtonA1" text="a1" userData="a1">
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonA2" text="a2" userData="a2">
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonB1" text="b1" userData="b1">
+          <HBox.margin>
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+          </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonB2" text="b2" userData="b2" >
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonC1" text="c1" userData="c1" >
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+          <ToggleButton fx:id="toggleButtonC2" text="c2" userData="c2" >
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </ToggleButton>
+        </HBox>
+        <HBox.margin>
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+        </HBox.margin>
+      </VBox>
+
+      <VBox HBox.hgrow="ALWAYS">
         <Label text="Grammar" minWidth="100">
           <HBox.margin>
             <Insets bottom="2.5" left="5.0" right="5.0" top="10.0"/>

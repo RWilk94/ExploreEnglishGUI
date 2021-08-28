@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.lesson;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -41,8 +42,11 @@ public class LessonTableController implements Initializable {
   }
 
   public void fillInTableView() {
-    lessons = lessonController.getLessonService().getAll();
-    tableLessons.setItems(FXCollections.observableArrayList(lessons));
+    new Thread(() -> {
+      lessons = lessonController.getLessonService().getAll();
+
+      Platform.runLater(() -> tableLessons.setItems(FXCollections.observableArrayList(lessons)));
+    }).start();
   }
 
   private void initializeTableView() {

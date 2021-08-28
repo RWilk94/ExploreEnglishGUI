@@ -66,7 +66,11 @@ public class LessonService {
   }
 
   public Integer getNextPosition(Long courseId) {
-    return lessonRepository.maxPosition(courseId) + 1;
+    Integer maxPosition = lessonRepository.maxPosition(courseId);
+    if (maxPosition == null) {
+      maxPosition = 0;
+    }
+    return maxPosition + 1;
   }
 
   public Optional<Lesson> getPreviousLesson(Long courseId, Integer position) {

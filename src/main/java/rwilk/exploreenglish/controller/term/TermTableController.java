@@ -123,8 +123,12 @@ public class TermTableController implements Initializable, CommandLineRunner {
   }
 
   private void fillInTableView() {
-    terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
-    tableTerms.setItems(FXCollections.observableArrayList(terms));
+    new Thread(() -> {
+      terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
+
+      Platform.runLater(() -> tableTerms.setItems(FXCollections.observableArrayList(terms)));
+
+    }).start();
   }
 
   public void tableViewTermsOnMouseClicked(MouseEvent mouseEvent) {

@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.note;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -98,8 +99,12 @@ public class NoteFormController implements Initializable {
   }
 
   public void initializeLessonComboBox() {
-    List<Lesson> lessons = noteController.getLessonService().getAll();
-    comboBoxLesson.setItems(FXCollections.observableArrayList(lessons));
+    new Thread(() -> {
+      List<Lesson> lessons = noteController.getLessonService().getAll();
+
+      Platform.runLater(() -> comboBoxLesson.setItems(FXCollections.observableArrayList(lessons)));
+    }).start();
+
   }
 
   public void buttonAddWordsOnAction(ActionEvent actionEvent) {

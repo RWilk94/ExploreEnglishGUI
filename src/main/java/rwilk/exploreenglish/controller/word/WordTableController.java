@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.word;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -8,6 +9,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Word;
@@ -66,8 +68,11 @@ public class WordTableController implements Initializable {
   }
 
   public void fillInTableView() {
-    words = wordController.getWordService().getAll();
-    tableWords.setItems(FXCollections.observableArrayList(words));
+    new Thread(() -> {
+      words = wordController.getWordService().getAll();
+
+      Platform.runLater(() -> tableWords.setItems(FXCollections.observableArrayList(words)));
+    }).start();
   }
 
   private void initializeTableView() {
@@ -117,27 +122,47 @@ public class WordTableController implements Initializable {
 
   private void filterTableByLesson(String value) {
     if (StringUtils.isNoneEmpty(value)) {
-      List<Word> filteredWords = words.stream()
-          .filter(word ->
-              word.getLessonWords().stream()
-                  .anyMatch(lessonWord -> lessonWord.getLesson().getEnglishName().toLowerCase().contains(value.toLowerCase()))
-                  || word.getLessonWords().stream()
-                  .anyMatch(lessonWord -> lessonWord.getLesson().getPolishName().toLowerCase().contains(value.toLowerCase())))
-          .collect(Collectors.toList());
-      tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+      new Thread(() -> {
+        List<Word> filteredWords = words.stream()
+                                        .filter(word -> word.getLessonWords() != null)
+                                        .filter(word -> word.getLessonWords()
+                                                            .stream()
+                                                            .anyMatch(
+                                                                    lessonWord -> lessonWord.getLesson().getEnglishName().toLowerCase().contains(
+                                                                            value.toLowerCase()))
+                                                || word.getLessonWords()
+                                                       .stream()
+                                                       .anyMatch(
+                                                               lessonWord -> lessonWord.getLesson().getPolishName().toLowerCase().contains(
+                                                                       value.toLowerCase())))
+                                        .collect(Collectors.toList());
+        Platform.runLater(() -> {
+          if (value.equals(textFieldFilterByLesson.getText())) {
+            tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+          }
+        });
+      }).start();
     }
   }
 
   private void filterTableByCourse(String value) {
     if (StringUtils.isNoneEmpty(value)) {
-      List<Word> filteredWords = words.stream()
-          .filter(word ->
-              word.getLessonWords().stream()
-                  .anyMatch(lessonWord -> lessonWord.getLesson().getCourse().getEnglishName().toLowerCase().contains(value.toLowerCase()))
-                  || word.getLessonWords().stream()
-                  .anyMatch(lessonWord -> lessonWord.getLesson().getCourse().getPolishName().toLowerCase().contains(value.toLowerCase())))
-          .collect(Collectors.toList());
-      tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+      new Thread(() -> {
+        List<Word> filteredWords = words.stream()
+                                        .filter(word -> word.getLessonWords() != null)
+                                        .filter(word -> word.getLessonWords()
+                                                            .stream()
+                                                            .anyMatch(
+                                                                    lessonWord -> lessonWord.getLesson().getCourse().getEnglishName().toLowerCase().contains(
+                                                                            value.toLowerCase()))
+                                                || word.getLessonWords()
+                                                       .stream()
+                                                       .anyMatch(
+                                                               lessonWord -> lessonWord.getLesson().getCourse().getPolishName().toLowerCase().contains(
+                                                                       value.toLowerCase())))
+                                        .collect(Collectors.toList());
+        Platform.runLater(() -> tableWords.setItems(FXCollections.observableArrayList(filteredWords)));
+      }).start();
     }
   }
 
