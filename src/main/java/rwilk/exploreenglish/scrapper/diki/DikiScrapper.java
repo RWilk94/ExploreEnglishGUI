@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -160,7 +161,16 @@ public class DikiScrapper implements CommandLineRunner {
                   String exampleSentenceTranslation = element1.select("div.exampleSentence").select("span.exampleSentenceTranslation").text();
                   exampleSentence = exampleSentence.substring(0, exampleSentence.indexOf(exampleSentenceTranslation)).trim();
                   englishSentences.add(exampleSentence);
-                  polishSentences.add(exampleSentenceTranslation);
+
+                  List<String> audioHrefs = element1.select("span.audioIcon").stream()
+                                                    .map(el -> el.attr("data-audio-url"))
+                                                    .map("https://www.diki.pl"::concat)
+                                                    .collect(Collectors.toList());
+                  if (audioHrefs.isEmpty()) {
+                    polishSentences.add(exampleSentenceTranslation);
+                  } else {
+                    polishSentences.add(exampleSentenceTranslation.concat(" ").concat(String.join("; ", audioHrefs)));
+                  }
                 } else if (element1.hasClass("ref")) {
                   for (Element element3 : element1.select("div.ref").first().children()) {
                     if (element3.text().contains("synonim:")) {

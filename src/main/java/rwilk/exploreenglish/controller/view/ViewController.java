@@ -87,13 +87,12 @@ public class ViewController implements Initializable {
         }
         if (item instanceof LessonWord) {
           Word word = ((LessonWord) item).getWord();
-          if ((nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+          if ((nonEmpty(word.getSound()) && nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && nonEmpty(word.getGrammarType()) &&
-              ((word.getGrammarType().equals("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the")))
-                  || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
-              || (nonEmpty(word.getPartOfSpeech()) && !word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
-              && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())
-              || (nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              ((word.getGrammarType().equals("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the"))) || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
+              || (nonEmpty(word.getSound()) && !word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+                  && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())
+              || (nonEmpty(word.getSound()) && nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && nonEmpty(word.getGrammarType()) &&
               word.getGrammarType().equals("plural") && (word.getArticle().equals("")))) {
             setStyle("-fx-background-color: #11ff00");
@@ -181,8 +180,8 @@ public class ViewController implements Initializable {
   public void listViewLearnItemChildrenOnMouseClicked(MouseEvent mouseEvent) {
     selectedLearnItemChild = listViewLearnItemChildren.getSelectionModel().getSelectedItem();
     if (selectedLearnItemChild != null) {
-      if (selectedLearnItemChild instanceof Sentence) {
-        injectService.getSentenceController().setSentenceForm((Sentence) selectedLearnItemChild);
+      if (selectedLearnItemChild instanceof WordSentence) {
+        injectService.getSentenceController().setSentenceForm(((WordSentence) selectedLearnItemChild).getSentence());
         injectService.getMainController().tabPane.getSelectionModel().select(3);
       } else if (selectedLearnItemChild instanceof ExerciseItem) {
         injectService.getExerciseItemController().setExerciseForm((ExerciseItem) selectedLearnItemChild);

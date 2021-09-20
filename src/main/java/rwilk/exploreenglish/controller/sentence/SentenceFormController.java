@@ -13,8 +13,10 @@ import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Sentence;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.model.entity.WordSentence;
+import rwilk.exploreenglish.utils.SoundUtils;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -28,10 +30,38 @@ public class SentenceFormController implements Initializable {
   public ComboBox<Word> comboBoxWord;
   public TextField textFieldEnglishName;
   public TextField textFieldPolishName;
+  public TextField textFieldSound;
   public ListView<Word> listViewWords;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+
+    textFieldEnglishName.textProperty()
+                        .addListener((observable, oldValue, newValue) -> {
+                                       if (newValue.contains("(") && newValue.contains(")")) {
+                                         final String plName = newValue.substring(newValue.indexOf("(") + 1, newValue.indexOf(")"));
+                                         textFieldPolishName.setText(plName.trim());
+                                         newValue = newValue.replace(plName, "")
+                                                            .replace("(", "")
+                                                            .replace(")", "");
+                                         textFieldEnglishName.setText(newValue.trim());
+                                         return;
+                                       }
+                                       if (newValue.contains("https://www")) {
+                                         final String sound = newValue.substring(newValue.lastIndexOf("https://www")).trim();
+                                         if (StringUtils.isBlank(textFieldSound.getText())) {
+                                           textFieldSound.setText(sound.trim());
+                                         } else if (!StringUtils.trimToEmpty(textFieldSound.getText()).contains(sound)) {
+                                           textFieldSound.setText(textFieldSound.getText()
+                                                                                .concat("; ")
+                                                                                .concat(sound)
+                                                                                .trim());
+                                         }
+                                         newValue = newValue.replace(sound, "");
+                                         textFieldEnglishName.setText(newValue.trim());
+                                       }
+                                     }
+                                    );
   }
 
   public void init(SentenceController sentenceController) {
@@ -53,6 +83,7 @@ public class SentenceFormController implements Initializable {
     comboBoxWord.getSelectionModel().select(null);
     textFieldEnglishName.clear();
     textFieldPolishName.clear();
+    textFieldSound.clear();
     listViewWords.setItems(null);
   }
 
@@ -62,8 +93,9 @@ public class SentenceFormController implements Initializable {
         && StringUtils.isNoneEmpty(textFieldPolishName.getText())) {
       sentenceController.getSentenceService().getById(Long.valueOf(textFieldId.getText()))
           .ifPresent(sentence -> {
-            sentence.setEnglishName(textFieldEnglishName.getText());
-            sentence.setPolishName(textFieldPolishName.getText());
+            sentence.setEnglishName(StringUtils.trimToEmpty(textFieldEnglishName.getText()));
+            sentence.setPolishName(StringUtils.trimToEmpty(textFieldPolishName.getText()));
+            sentence.setSound(StringUtils.trimToEmpty(textFieldSound.getText()));
             sentence = sentenceController.getSentenceService().save(sentence);
             setSentenceForm(sentence);
             sentenceController.refreshTableView();
@@ -75,8 +107,9 @@ public class SentenceFormController implements Initializable {
     if (StringUtils.isNoneEmpty(textFieldEnglishName.getText())
         && StringUtils.isNoneEmpty(textFieldPolishName.getText())) {
       Sentence sentence = Sentence.builder()
-          .englishName(textFieldEnglishName.getText())
-          .polishName(textFieldPolishName.getText())
+          .englishName(StringUtils.trimToEmpty(textFieldEnglishName.getText()))
+          .polishName(StringUtils.trimToEmpty(textFieldPolishName.getText()))
+          .sound(StringUtils.trimToEmpty(textFieldSound.getText()))
           .build();
       sentence = sentenceController.getSentenceService().save(sentence);
       setSentenceForm(sentence);
@@ -100,6 +133,7 @@ public class SentenceFormController implements Initializable {
     textFieldId.setText(sentence.getId().toString());
     textFieldEnglishName.setText(sentence.getEnglishName());
     textFieldPolishName.setText(sentence.getPolishName());
+    textFieldSound.setText(sentence.getSound());
     setWordSentenceForm();
   }
 
@@ -162,6 +196,26 @@ public class SentenceFormController implements Initializable {
     Word selectedItem = listViewWords.getSelectionModel().getSelectedItem();
     if (selectedItem != null) {
       comboBoxWord.getSelectionModel().select(selectedItem);
+    }
+  }
+
+  public void downloadMp3(final ActionEvent actionEvent) {
+    final String soundText = textFieldSound.getText();
+    if (StringUtils.isNotBlank(soundText)) {
+      final List<String> sounds = Arrays.stream(soundText.split(";")).map(StringUtils::trimToEmpty).collect(
+              Collectors.toList());
+      new Thread(() -> {
+
+        for (String sound : sounds) {
+          SoundUtils.downloadFile(sound.trim());
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+
+      }).start();
     }
   }
 

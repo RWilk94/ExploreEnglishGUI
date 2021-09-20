@@ -49,6 +49,11 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </TextField>
+        <Button text="MP3" onAction="#downloadAmericanMp3">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
       </HBox>
 
       <HBox HBox.hgrow="ALWAYS" prefWidth="100">
@@ -62,6 +67,11 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </TextField>
+        <Button text="MP3" onAction="#downloadEnglishMp3">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
       </HBox>
   </HBox>
 
@@ -72,7 +82,7 @@
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
       </HBox.margin>
     </ListView>
-    <ListView fx:id="listViewSentences" HBox.hgrow="ALWAYS" maxHeight="140" minHeight="100">
+    <ListView fx:id="listViewSentences" HBox.hgrow="ALWAYS" maxHeight="140" minHeight="100" onMouseClicked="#listViewSentenceOnMouseClicked">
       <HBox.margin>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
       </HBox.margin>

@@ -107,21 +107,32 @@ public class WordTableController implements Initializable {
   }
 
   private void filterTableByEnName(String value) {
-    List<Word> filteredWords = words.stream()
-        .filter(word -> word.getEnglishNames().toLowerCase().contains(value.toLowerCase()))
-        .collect(Collectors.toList());
-    tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+    if (words == null || words.isEmpty()) {
+      return;
+    }
+    new Thread(() -> {
+      List<Word> filteredWords = words.stream()
+                                      .filter(word -> word.getEnglishNames().toLowerCase().contains(
+                                              value.toLowerCase()))
+                                      .collect(Collectors.toList());
+      Platform.runLater(() -> tableWords.setItems(FXCollections.observableArrayList(filteredWords)));
+    }).start();
   }
 
   private void filterTableByPlName(String value) {
-    List<Word> filteredWords = words.stream()
-        .filter(word -> word.getPolishName().toLowerCase().contains(value.toLowerCase()))
-        .collect(Collectors.toList());
-    tableWords.setItems(FXCollections.observableArrayList(filteredWords));
+    if (words == null || words.isEmpty()) {
+      return;
+    }
+    new Thread(() -> {
+      List<Word> filteredWords = words.stream()
+                                      .filter(word -> word.getPolishName().toLowerCase().contains(value.toLowerCase()))
+                                      .collect(Collectors.toList());
+      Platform.runLater(() -> tableWords.setItems(FXCollections.observableArrayList(filteredWords)));
+    }).start();
   }
 
   private void filterTableByLesson(String value) {
-    if (StringUtils.isNoneEmpty(value)) {
+    if (StringUtils.isNoneEmpty(value) && words != null) {
       new Thread(() -> {
         List<Word> filteredWords = words.stream()
                                         .filter(word -> word.getLessonWords() != null)
@@ -146,7 +157,7 @@ public class WordTableController implements Initializable {
   }
 
   private void filterTableByCourse(String value) {
-    if (StringUtils.isNoneEmpty(value)) {
+    if (StringUtils.isNoneEmpty(value) && words != null) {
       new Thread(() -> {
         List<Word> filteredWords = words.stream()
                                         .filter(word -> word.getLessonWords() != null)

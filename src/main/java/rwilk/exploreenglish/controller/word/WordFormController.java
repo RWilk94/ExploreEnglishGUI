@@ -20,6 +20,7 @@ import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.utils.FormUtils;
+import rwilk.exploreenglish.utils.SoundUtils;
 import rwilk.exploreenglish.utils.WordUtils;
 
 import java.net.URL;
@@ -72,6 +73,7 @@ public class WordFormController implements Initializable {
   public TextField textFieldPlural;
   public TextField textFieldOpposite;
   public TextField textFieldSynonym;
+  public TextField textFieldSound;
   private ToggleGroup2 toggleGroupPartOfSpeech;
   private ToggleGroup2 toggleGroupArticle;
   private ToggleGroup2 toggleGroupLevel;
@@ -82,7 +84,7 @@ public class WordFormController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     setToggleGroups();
     controls.addAll(Arrays.asList(textFieldId, textFieldEnglishNames,
-        textFieldPolishName, toggleGroupPartOfSpeech, /* sound, */ toggleGroupArticle, toggleGroupLevel, toggleGroupGrammar, textFieldComparative,
+        textFieldPolishName, toggleGroupPartOfSpeech, textFieldSound, toggleGroupArticle, toggleGroupLevel, toggleGroupGrammar, textFieldComparative,
         textFieldSuperlative, textFieldPastTense, textFieldPastParticiple, textFieldPlural, textFieldOpposite, textFieldSynonym, comboBoxLesson, listViewLessons));
     requiredControls.addAll(Arrays.asList(textFieldEnglishNames, textFieldPolishName));
 
@@ -157,6 +159,7 @@ public class WordFormController implements Initializable {
             word.setPlural(StringUtils.trimToEmpty(textFieldPlural.getText()));
             word.setOpposite(StringUtils.trimToEmpty(textFieldOpposite.getText()));
             word.setSynonym(StringUtils.trimToEmpty(textFieldSynonym.getText()));
+            word.setSound(StringUtils.trimToEmpty(textFieldSound.getText()));
             word = wordController.getWordService().save(word);
 
             setWordForm(word);
@@ -184,6 +187,7 @@ public class WordFormController implements Initializable {
           .plural(StringUtils.trimToEmpty(textFieldPlural.getText()))
           .opposite(StringUtils.trimToEmpty(textFieldOpposite.getText()))
           .synonym(StringUtils.trimToEmpty(textFieldSynonym.getText()))
+          .sound(StringUtils.trimToEmpty(textFieldSound.getText()))
           .build();
       word = wordController.getWordService().save(word);
       setWordForm(word);
@@ -223,10 +227,11 @@ public class WordFormController implements Initializable {
         .filter(toggle -> toggle.getUserData().toString().equals(StringUtils.trimToEmpty(word.getGrammarType())))
         .findFirst()
         .orElse(null));
+
     setWordForm(word.getEnglishNames(), word.getPolishName(), word.getComparative(), word.getSuperlative(), word.getPastTense(),
         word.getPastParticiple(), word.getPlural(), word.getSynonym());
     textFieldOpposite.setText(StringUtils.trimToEmpty(word.getOpposite()));
-
+    textFieldSound.setText(word.getSound());
     setLessonWordForm();
   }
 
@@ -241,7 +246,7 @@ public class WordFormController implements Initializable {
     String englishNames = (StringUtils.isNoneEmpty(term.getEnglishName()) ? term.getEnglishName() + "; " : "")
         .concat((StringUtils.isNoneEmpty(term.getAmericanName()) ? term.getAmericanName() + "; " : ""))
         .concat((StringUtils.isNoneEmpty(term.getOtherName()) ? term.getOtherName() + "; " : "")).trim();
-    englishNames = englishNames.substring(englishNames.length() - 1).equals(";")
+    englishNames = englishNames.endsWith(";")
         ? englishNames.substring(0, englishNames.length() - 1)
         : englishNames;
     if (englishNames.startsWith("a ")) {
@@ -265,6 +270,7 @@ public class WordFormController implements Initializable {
     listViewLessons.setItems(null);
     setWordForm(WordUtils.replaceSpecialText(englishNames), term.getPolishName(), term.getComparative(), term.getSuperlative(), term.getPastTense(), term.getPastParticiple(), term.getPlural(), term.getSynonym());
     textFieldSynonym.setText(StringUtils.trimToEmpty(term.getSynonym()));
+    textFieldSound.clear();
   }
 
   private void setWordForm(String otherName, String polishName, String comparative, String superlative, String pastTense,
@@ -417,4 +423,26 @@ public class WordFormController implements Initializable {
       toggleGroupArticle.selectToggle(toggleButtonNone);
     }
   }
+
+  public void downloadMp3(final ActionEvent actionEvent) {
+    final String soundText = textFieldSound.getText();
+    if (StringUtils.isNotBlank(soundText)) {
+      final List<String> sounds = Arrays.stream(soundText.split(";")).map(StringUtils::trimToEmpty).collect(
+              Collectors.toList());
+      new Thread(() -> {
+
+        for (String sound : sounds) {
+
+          SoundUtils.downloadFile(sound);
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+
+      }).start();
+    }
+  }
+
 }

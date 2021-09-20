@@ -14,6 +14,7 @@ import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.scrapper.bab.BabScrapper;
 import rwilk.exploreenglish.scrapper.cambridge.CambridgeDictionaryScrapper;
 import rwilk.exploreenglish.scrapper.diki.DikiScrapper;
+import rwilk.exploreenglish.scrapper.longman.LongmanScrapper;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.TermService;
 
@@ -32,14 +33,18 @@ public class ScrapperController implements Initializable, CommandLineRunner {
   private final BabScrapper babScrapper;
   private final DikiScrapper dikiScrapper;
   private final CambridgeDictionaryScrapper cambridgeDictionaryScrapper;
+  private final LongmanScrapper longmanScrapper;
   private final TermService termService;
   public TabPane tabPaneScrapper;
 
-  public ScrapperController(InjectService injectService, BabScrapper babScrapper, DikiScrapper dikiScrapper, CambridgeDictionaryScrapper cambridgeDictionaryScrapper, TermService termService) {
+  public ScrapperController(final InjectService injectService, final BabScrapper babScrapper,
+                            final DikiScrapper dikiScrapper, final CambridgeDictionaryScrapper cambridgeDictionaryScrapper,
+                            final LongmanScrapper longmanScrapper, final TermService termService) {
     this.injectService = injectService;
     this.babScrapper = babScrapper;
     this.dikiScrapper = dikiScrapper;
     this.cambridgeDictionaryScrapper = cambridgeDictionaryScrapper;
+    this.longmanScrapper = longmanScrapper;
     this.termService = termService;
     this.injectService.setScrapperController(this);
   }
@@ -51,26 +56,13 @@ public class ScrapperController implements Initializable, CommandLineRunner {
 
   public void webScrap(String englishTerm) {
     tabPaneScrapper.getTabs().clear();
-//    CompletableFuture.supplyAsync(
-//        () -> dikiScrapper.webScrap(englishTerm))
-//        .thenAccept(this::createTab)
-//        .exceptionally(ex -> {
-//          createEmptyTab("diki");
-//          return null;
-//        });
-//    CompletableFuture.supplyAsync(
-//        () -> babScrapper.webScrap(englishTerm))
-//        .thenAccept(this::createTab)
-//        .exceptionally(ex -> {
-//          createEmptyTab("bab");
-//          return null;
-//        });
     CompletableFuture.supplyAsync(
         () -> {
           List<Term> terms = new ArrayList<>();
           terms.addAll(dikiScrapper.webScrap(englishTerm));
           terms.addAll(babScrapper.webScrap(englishTerm));
           terms.addAll(cambridgeDictionaryScrapper.webScrap(englishTerm));
+          terms.addAll(longmanScrapper.webScrap(englishTerm));
           return terms;
         })
         .thenAccept(this::createTab)

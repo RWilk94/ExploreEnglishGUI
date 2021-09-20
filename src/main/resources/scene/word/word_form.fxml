@@ -375,7 +375,23 @@
           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
         </HBox.margin>
       </Button>
-      <Region HBox.hgrow="ALWAYS"/>
+      <HBox HBox.hgrow="ALWAYS">
+        <Label text="Sound">
+          <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="7.5"/>
+          </HBox.margin>
+        </Label>
+        <TextField fx:id="textFieldSound" HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </TextField>
+        <Button text="MP3" onAction="#downloadMp3">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+      </HBox>
       <HBox alignment="BOTTOM_RIGHT">
         <Button mnemonicParsing="false" text="Clear" onAction="#buttonClearOnAction">
           <HBox.margin>

@@ -121,7 +121,7 @@ public class WordUtils {
         || partOfSpeech.equals("zaim.") || partOfSpeech.equals("zaimek")) {
       return PartOfSpeechEnum.EMPTY.getValue();
     }
-    throw new IllegalStateException("extractPartOfSpeech");
+    return "";
   }
 
 }
