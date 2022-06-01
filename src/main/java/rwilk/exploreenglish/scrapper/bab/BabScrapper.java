@@ -25,13 +25,15 @@ public class BabScrapper {
     this.termService = termService;
   }
 
-  public List<Term> webScrap(String englishTerm) {
+  public List<Term> webScrap(String englishTerm, boolean forceTranslate) {
     log.info("[Bab scrapper] {}", englishTerm);
 
-    List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishTerm, SOURCE);
-    if (!cachedResults.isEmpty()) {
-      log.info("[Bab scrapper] return cached results");
-      return cachedResults;
+    if (!forceTranslate) {
+      List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishTerm, SOURCE);
+      if (!cachedResults.isEmpty()) {
+        log.info("[Bab scrapper] return cached results");
+        return cachedResults;
+      }
     }
 
     try {

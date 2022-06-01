@@ -5,11 +5,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.LearnItem;
-import rwilk.exploreenglish.model.LearnItemChildren;
+import rwilk.exploreenglish.model.LearnItemChild;
 import rwilk.exploreenglish.model.PartOfSpeechEnum;
 import rwilk.exploreenglish.model.entity.*;
 import rwilk.exploreenglish.service.CourseService;
@@ -42,13 +44,17 @@ public class ViewController implements Initializable {
   private final WordSentenceService wordSentenceService;
 
   private Course selectedCourse;
+  private List<Lesson> lessons;
+  private List<LearnItem> learnItems;
   private Lesson selectedLesson;
   private LearnItem selectedLearnItem;
-  private LearnItemChildren selectedLearnItemChildren;
+  private LearnItemChild selectedLearnItemChild;
   public ListView<Course> listViewCourses;
+  public TextField textFieldFilterLessons;
   public ListView<Lesson> listViewLessons;
+  public TextField textFieldFilterLearnItems;
   public ListView<LearnItem> listViewLearnItems;
-  public ListView<LearnItemChildren> listViewLearnItemChildren;
+  public ListView<LearnItemChild> listViewLearnItemChildren;
 
   public ViewController(InjectService injectService, CourseService courseService, LessonService lessonService,
                         NoteService noteService, ExerciseService exerciseService,
@@ -81,16 +87,24 @@ public class ViewController implements Initializable {
         }
         if (item instanceof LessonWord) {
           Word word = ((LessonWord) item).getWord();
-          if ((nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+          if ((/*nonEmpty(word.getSound()) && */nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && nonEmpty(word.getGrammarType()) &&
-              ((word.getGrammarType().equals("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the")))
-                  || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
-              || (nonEmpty(word.getPartOfSpeech()) && !word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              ((word.getGrammarType().contains("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the"))) || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
+              || (/*nonEmpty(word.getSound()) && */nonEmpty(word.getPartOfSpeech()) && !word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+                  && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())
+              || (/*nonEmpty(word.getSound()) && */nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              && nonEmpty(word.getGrammarType()) &&
+              word.getGrammarType().equals("plural") && (word.getArticle().equals("")))) {
+            setStyle("-fx-background-color: #11ff00");
+          } else if ((nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              && nonEmpty(word.getGrammarType()) &&
+              ((word.getGrammarType().contains("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the"))) || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
+              || (!word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())
               || (nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && nonEmpty(word.getGrammarType()) &&
               word.getGrammarType().equals("plural") && (word.getArticle().equals("")))) {
-            setStyle("-fx-background-color: #11ff00");
+            setStyle("-fx-background-color: #ff7700");
           } else {
             setStyle("");
           }
@@ -101,6 +115,26 @@ public class ViewController implements Initializable {
         }
       }
     });
+
+    textFieldFilterLessons.textProperty().addListener((observable, oldValue, newValue) -> {
+      if (!CollectionUtils.isEmpty(lessons)) {
+        List<Lesson> filtered = lessons.stream()
+                                              .filter(l -> l.getEnglishName().toLowerCase().contains(newValue.toLowerCase())
+                                                      || l.getPolishName().toLowerCase().contains(newValue.toLowerCase()))
+                                              .collect(Collectors.toList());
+        listViewLessons.setItems(FXCollections.observableArrayList(filtered));
+      }
+    });
+
+    textFieldFilterLearnItems.textProperty().addListener((observable, oldValue, newValue) -> {
+      if (!CollectionUtils.isEmpty(learnItems)) {
+        List<LearnItem> filtered = learnItems.stream()
+                                            .filter(item -> item.getName().toLowerCase().contains(newValue))
+                                            .collect(Collectors.toList());
+        listViewLearnItems.setItems(FXCollections.observableArrayList(filtered));
+      }
+    });
+
   }
 
   public void listViewCoursesOnMouseClicked(MouseEvent mouseEvent) {
@@ -153,13 +187,13 @@ public class ViewController implements Initializable {
   }
 
   public void listViewLearnItemChildrenOnMouseClicked(MouseEvent mouseEvent) {
-    selectedLearnItemChildren = listViewLearnItemChildren.getSelectionModel().getSelectedItem();
-    if (selectedLearnItemChildren != null) {
-      if (selectedLearnItemChildren instanceof Sentence) {
-        injectService.getSentenceController().setSentenceForm((Sentence) selectedLearnItemChildren);
+    selectedLearnItemChild = listViewLearnItemChildren.getSelectionModel().getSelectedItem();
+    if (selectedLearnItemChild != null) {
+      if (selectedLearnItemChild instanceof WordSentence) {
+        injectService.getSentenceController().setSentenceForm(((WordSentence) selectedLearnItemChild).getSentence());
         injectService.getMainController().tabPane.getSelectionModel().select(3);
-      } else if (selectedLearnItemChildren instanceof ExerciseItem) {
-        injectService.getExerciseItemController().setExerciseForm((ExerciseItem) selectedLearnItemChildren);
+      } else if (selectedLearnItemChild instanceof ExerciseItem) {
+        injectService.getExerciseItemController().setExerciseForm((ExerciseItem) selectedLearnItemChild);
         injectService.getMainController().tabPane.getSelectionModel().select(6);
       }
     }
@@ -173,17 +207,17 @@ public class ViewController implements Initializable {
     selectedCourse = null;
     selectedLesson = null;
     selectedLearnItem = null;
-    selectedLearnItemChildren = null;
+    selectedLearnItemChild = null;
   }
 
   private void fillInLessonsListView(Course course) {
-    List<Lesson> lessons = lessonService.getAllByCourse(course).stream()
+    lessons = lessonService.getAllByCourse(course).stream()
         .sorted(Comparator.comparing(Lesson::getPosition))
         .collect(Collectors.toList());
     listViewLessons.setItems(FXCollections.observableArrayList(lessons));
     selectedLesson = null;
     selectedLearnItem = null;
-    selectedLearnItemChildren = null;
+    selectedLearnItemChild = null;
   }
 
   private void fillInLearnItemsListView(Lesson lesson) {
@@ -191,31 +225,31 @@ public class ViewController implements Initializable {
     List<LessonWord> lessonWords = lessonWordService.getAllByLesson(lesson);
     List<Exercise> exercises = exerciseService.getAllByLesson(lesson);
 
-    List<LearnItem> learnItems = new ArrayList<>(notes);
+    learnItems = new ArrayList<>(notes);
     learnItems.addAll(lessonWords);
     learnItems.addAll(exercises);
     learnItems = learnItems.stream().sorted(Comparator.comparing(LearnItem::getPosition)).collect(Collectors.toList());
 
     listViewLearnItems.setItems(FXCollections.observableArrayList(learnItems));
     selectedLearnItem = null;
-    selectedLearnItemChildren = null;
+    selectedLearnItemChild = null;
   }
 
   private void fillInLessonItemChildrenListView(LearnItem selectedItem) {
     if (selectedItem instanceof Exercise) {
       Exercise exercise = (Exercise) selectedItem;
-      List<LearnItemChildren> learnItemChildren = exerciseItemService.getAllByExercise(exercise).stream()
-          .sorted(Comparator.comparing(ExerciseItem::getPosition))
-          .collect(Collectors.toList());
+      List<LearnItemChild> learnItemChildren = exerciseItemService.getAllByExercise(exercise).stream()
+                                                                  .sorted(Comparator.comparing(ExerciseItem::getPosition))
+                                                                  .collect(Collectors.toList());
       listViewLearnItemChildren.setItems(FXCollections.observableArrayList(learnItemChildren));
     } else if (selectedItem instanceof LessonWord) {
       Word word = ((LessonWord) selectedItem).getWord();
-      List<LearnItemChildren> learnItemChildren = wordSentenceService.getAllByWord(word).stream()
-          .sorted(Comparator.comparing(WordSentence::getPosition))
-          .collect(Collectors.toList());
+      List<LearnItemChild> learnItemChildren = wordSentenceService.getAllByWord(word).stream()
+                                                                  .sorted(Comparator.comparing(WordSentence::getPosition))
+                                                                  .collect(Collectors.toList());
       listViewLearnItemChildren.setItems(FXCollections.observableArrayList(learnItemChildren));
     }
-    selectedLearnItemChildren = null;
+    selectedLearnItemChild = null;
   }
 
   public void refreshListViewCourses() {
@@ -336,13 +370,13 @@ public class ViewController implements Initializable {
   }
 
   public void buttonLearnItemChildrenPositionUpOnAction(ActionEvent actionEvent) {
-    if (selectedLearnItemChildren != null) {
-      if (selectedLearnItemChildren instanceof WordSentence) {
-        WordSentence currentSentence = (WordSentence) selectedLearnItemChildren;
+    if (selectedLearnItemChild != null) {
+      if (selectedLearnItemChild instanceof WordSentence) {
+        WordSentence currentSentence = (WordSentence) selectedLearnItemChild;
         wordSentenceService.getPreviousSentence(currentSentence.getWord().getId(), currentSentence.getPosition())
             .ifPresent(previousSentence -> replaceSentence(currentSentence, previousSentence));
-      } else if (selectedLearnItemChildren instanceof ExerciseItem) {
-        ExerciseItem currentExerciseItem = (ExerciseItem) selectedLearnItemChildren;
+      } else if (selectedLearnItemChild instanceof ExerciseItem) {
+        ExerciseItem currentExerciseItem = (ExerciseItem) selectedLearnItemChild;
         exerciseItemService.getPreviousExerciseItem(currentExerciseItem.getExercise().getId(), currentExerciseItem.getPosition())
             .ifPresent(previousExerciseItem -> replaceExerciseItem(currentExerciseItem, previousExerciseItem));
       }
@@ -350,13 +384,13 @@ public class ViewController implements Initializable {
   }
 
   public void buttonLearnItemChildrenPositionDownOnAction(ActionEvent actionEvent) {
-    if (selectedLearnItemChildren != null) {
-      if (selectedLearnItemChildren instanceof WordSentence) {
-        WordSentence currentSentence = (WordSentence) selectedLearnItemChildren;
+    if (selectedLearnItemChild != null) {
+      if (selectedLearnItemChild instanceof WordSentence) {
+        WordSentence currentSentence = (WordSentence) selectedLearnItemChild;
         wordSentenceService.getNextSentence(currentSentence.getWord().getId(), currentSentence.getPosition())
             .ifPresent(previousSentence -> replaceSentence(currentSentence, previousSentence));
-      } else if (selectedLearnItemChildren instanceof ExerciseItem) {
-        ExerciseItem currentExerciseItem = (ExerciseItem) selectedLearnItemChildren;
+      } else if (selectedLearnItemChild instanceof ExerciseItem) {
+        ExerciseItem currentExerciseItem = (ExerciseItem) selectedLearnItemChild;
         exerciseItemService.getNextExerciseItem(currentExerciseItem.getExercise().getId(), currentExerciseItem.getPosition())
             .ifPresent(previousExerciseItem -> replaceExerciseItem(currentExerciseItem, previousExerciseItem));
       }
@@ -401,7 +435,7 @@ public class ViewController implements Initializable {
     currentSentence = wordSentenceService.save(currentSentence);
     wordSentenceService.save(otherSentence);
     refreshListViewLessonItemChildren();
-    selectedLearnItemChildren = currentSentence;
+    selectedLearnItemChild = currentSentence;
   }
 
   private void replaceExerciseItem(ExerciseItem currentExerciseItem, ExerciseItem otherExerciseItem) {
@@ -411,7 +445,7 @@ public class ViewController implements Initializable {
     currentExerciseItem = exerciseItemService.save(currentExerciseItem);
     exerciseItemService.save(otherExerciseItem);
     refreshListViewLessonItemChildren();
-    selectedLearnItemChildren = currentExerciseItem;
+    selectedLearnItemChild = currentExerciseItem;
   }
 
   private boolean nonEmpty(String text) {

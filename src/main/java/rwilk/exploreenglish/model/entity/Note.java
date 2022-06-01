@@ -43,6 +43,14 @@ public final class Note implements Serializable, LearnItem {
   private Lesson lesson;
 
   @Override
+  public String getName() {
+    int index = note.indexOf("\n");
+    return index != -1
+            ? note.substring(0, index)
+            : "";
+  }
+
+  @Override
   public String toString() {
     return "[N]" + id + ". " + note;
   }

@@ -16,34 +16,26 @@ public class FormUtils {
 
   public static boolean allFieldsFilled(List<Control> controls) {
     for (Control control : controls) {
-      if (control instanceof TextField) {
-        TextField textField = (TextField) control;
+      if (control instanceof TextField textField) {
         if (StringUtils.isEmpty(textField.getText())) {
           return false;
         }
-      } else if (control instanceof ComboBox) {
-        ComboBox comboBox = (ComboBox) control;
-        if (comboBox.getSelectionModel().getSelectedItem() == null) {
-          return false;
-        }
+      } else if (control instanceof ComboBox<?> comboBox && comboBox.getSelectionModel().getSelectedItem() == null) {
+        return false;
       }
     }
     return true;
   }
 
-  public static void clear(List<Object> controls) {
-    for (Object control : controls) {
-      if (control instanceof TextField) {
-        TextField textField = (TextField) control;
+  public static void clear(final List<Object> controls) {
+    for (final Object control : controls) {
+      if (control instanceof TextField textField) {
         textField.clear();
-      } else if (control instanceof ComboBox) {
-        ComboBox comboBox = (ComboBox) control;
+      } else if (control instanceof ComboBox<?> comboBox) {
         comboBox.getSelectionModel().clearSelection();
-      } else if (control instanceof ToggleGroup) {
-        ToggleGroup toggleGroup = (ToggleGroup) control;
+      } else if (control instanceof ToggleGroup toggleGroup) {
         toggleGroup.selectToggle(null);
-      } else if (control instanceof ListView) {
-        ListView listView = (ListView) control;
+      } else if (control instanceof ListView<?> listView) {
         listView.setItems(null);
       }
     }

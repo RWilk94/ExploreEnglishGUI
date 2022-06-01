@@ -17,6 +17,7 @@ import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.WordService;
+import rwilk.exploreenglish.service.WordSoundService;
 import rwilk.exploreenglish.utils.WordUtils;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class WordController implements Initializable {
   private final LessonService lessonService;
   private final WordService wordService;
   private final LessonWordService lessonWordService;
+  private final WordSoundService wordSoundService;
   public TabPane tabPane;
   private WordFormController wordFormController;
   private WordTableController wordTableController;
@@ -38,11 +40,13 @@ public class WordController implements Initializable {
   public AnchorPane anchorPaneTable;
 
   public WordController(InjectService injectService, LessonService lessonService, WordService wordService,
-                        LessonWordService lessonWordService) {
+                        LessonWordService lessonWordService,
+                        final WordSoundService wordSoundService) {
     this.injectService = injectService;
     this.lessonService = lessonService;
     this.wordService = wordService;
     this.lessonWordService = lessonWordService;
+    this.wordSoundService = wordSoundService;
     injectService.setWordController(this);
   }
 
@@ -103,13 +107,13 @@ public class WordController implements Initializable {
   }
 
   public void setLessonComboBox(Lesson lesson) {
-    wordFormController.comboBoxLesson.getSelectionModel().select(lesson);
+    wordFormController.getComboBoxLesson().getSelectionModel().select(lesson);
   }
 
   public void setMeaningAndProperties(String text, String partOfSpeech) {
     if (StringUtils.isNoneEmpty(text)) {
-      wordFormController.textFieldSynonym.setText(WordUtils.extractSynonym(text));
-      wordFormController.textFieldOpposite.setText(WordUtils.extractOpposite(text));
+//      wordFormController.textFieldSynonym.setText(WordUtils.extractSynonym(text));
+//      wordFormController.textFieldOpposite.setText(WordUtils.extractOpposite(text));
 
       String extractedPartOfSpeech = WordUtils.extractPartOfSpeech(partOfSpeech);
       Toggle toggleButtonPOS = wordFormController.getToggleGroupPartOfSpeech().getToggles().stream()
@@ -141,9 +145,9 @@ public class WordController implements Initializable {
             .orElse(null));
       }
       if (text.contains("[")) {
-        wordFormController.textFieldPolishName.setText(text.substring(0, text.indexOf("[")).trim());
+        wordFormController.getTextFieldPolishName().setText(text.substring(0, text.indexOf("[")).trim());
       } else {
-        wordFormController.textFieldPolishName.setText(text);
+        wordFormController.getTextFieldPolishName().setText(text);
       }
     }
   }
@@ -158,6 +162,10 @@ public class WordController implements Initializable {
 
   public LessonWordService getLessonWordService() {
     return lessonWordService;
+  }
+
+  public WordSoundService getWordSoundService() {
+    return wordSoundService;
   }
 
   public WordTableController getWordTableController() {

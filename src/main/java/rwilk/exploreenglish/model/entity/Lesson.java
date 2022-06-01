@@ -28,7 +28,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "lessons", uniqueConstraints = @UniqueConstraint(columnNames={"english_name", "polish_name"}))
+@Table(name = "lessons", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id", "english_name", "polish_name"}),
+        @UniqueConstraint(columnNames = {"course_id", "english_name", "polish_name"})
+})
 public final class Lesson implements Serializable {
 
   private static final long serialVersionUID = 4141601594703098085L;

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rwilk.exploreenglish.model.LearnItemChildren;
+import rwilk.exploreenglish.model.LearnItemChild;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ import javax.persistence.UniqueConstraint;
 @AllArgsConstructor
 @Entity
 @Table(name = "word_sentence", uniqueConstraints = @UniqueConstraint(columnNames={"word_id", "sentence_id"}))
-public final class WordSentence implements LearnItemChildren {
+public final class WordSentence implements LearnItemChild {
 
   private static final long serialVersionUID = -4744082827489819635L;
   @Id

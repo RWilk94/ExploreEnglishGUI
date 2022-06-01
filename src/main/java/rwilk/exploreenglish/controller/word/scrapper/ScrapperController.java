@@ -8,19 +8,24 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.scrapper.bab.BabScrapper;
 import rwilk.exploreenglish.scrapper.cambridge.CambridgeDictionaryScrapper;
 import rwilk.exploreenglish.scrapper.diki.DikiScrapper;
+import rwilk.exploreenglish.scrapper.longman.LongmanScrapper;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.TermService;
+import rwilk.exploreenglish.utils.WordUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -28,18 +33,24 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 public class ScrapperController implements Initializable, CommandLineRunner {
+  private final Map<String, List<Term>> cache = new HashMap<>();
+
   private final InjectService injectService;
   private final BabScrapper babScrapper;
   private final DikiScrapper dikiScrapper;
   private final CambridgeDictionaryScrapper cambridgeDictionaryScrapper;
+  private final LongmanScrapper longmanScrapper;
   private final TermService termService;
   public TabPane tabPaneScrapper;
 
-  public ScrapperController(InjectService injectService, BabScrapper babScrapper, DikiScrapper dikiScrapper, CambridgeDictionaryScrapper cambridgeDictionaryScrapper, TermService termService) {
+  public ScrapperController(final InjectService injectService, final BabScrapper babScrapper,
+                            final DikiScrapper dikiScrapper, final CambridgeDictionaryScrapper cambridgeDictionaryScrapper,
+                            final LongmanScrapper longmanScrapper, final TermService termService) {
     this.injectService = injectService;
     this.babScrapper = babScrapper;
     this.dikiScrapper = dikiScrapper;
     this.cambridgeDictionaryScrapper = cambridgeDictionaryScrapper;
+    this.longmanScrapper = longmanScrapper;
     this.termService = termService;
     this.injectService.setScrapperController(this);
   }
@@ -49,28 +60,28 @@ public class ScrapperController implements Initializable, CommandLineRunner {
 
   }
 
-  public void webScrap(String englishTerm) {
+  public void webScrap(final List<String> englishTerms, final boolean forceTranslate) {
     tabPaneScrapper.getTabs().clear();
-//    CompletableFuture.supplyAsync(
-//        () -> dikiScrapper.webScrap(englishTerm))
-//        .thenAccept(this::createTab)
-//        .exceptionally(ex -> {
-//          createEmptyTab("diki");
-//          return null;
-//        });
-//    CompletableFuture.supplyAsync(
-//        () -> babScrapper.webScrap(englishTerm))
-//        .thenAccept(this::createTab)
-//        .exceptionally(ex -> {
-//          createEmptyTab("bab");
-//          return null;
-//        });
     CompletableFuture.supplyAsync(
         () -> {
           List<Term> terms = new ArrayList<>();
-          terms.addAll(dikiScrapper.webScrap(englishTerm));
-          terms.addAll(babScrapper.webScrap(englishTerm));
-          terms.addAll(cambridgeDictionaryScrapper.webScrap(englishTerm));
+          for (String englishTerm : englishTerms) {
+            englishTerm = WordUtils.trim(englishTerm);
+
+            if (CollectionUtils.isNotEmpty(cache.get(englishTerm))) {
+              terms.addAll(cache.get(englishTerm));
+            } else {
+              terms.addAll(dikiScrapper.webScrap(englishTerm, forceTranslate));
+              terms.addAll(babScrapper.webScrap(englishTerm, forceTranslate));
+              terms.addAll(cambridgeDictionaryScrapper.webScrap(englishTerm, forceTranslate));
+              terms.addAll(longmanScrapper.webScrap(englishTerm, forceTranslate));
+
+              if (cache.size() > 20) {
+                cache.clear();
+              }
+              cache.put(englishTerm, terms);
+            }
+          }
           return terms;
         })
         .thenAccept(this::createTab)

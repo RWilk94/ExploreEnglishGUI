@@ -5,11 +5,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.InjectService;
+import rwilk.exploreenglish.utils.SoundUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 public class ScrapperTabController implements Initializable {
 
@@ -59,7 +64,7 @@ public class ScrapperTabController implements Initializable {
 
     if (StringUtils.isNoneEmpty(term.getEnglishSentence()) && StringUtils.isNoneEmpty(term.getPolishSentence())) {
       String[] split = StringUtils.split(term.getEnglishSentence(), ";");
-      String[] split1 = StringUtils.split(term.getPolishSentence(), ";");
+      String[] split1 = StringUtils.split(term.getPolishSentence().replace(".mp3; https://", ".mp3 https://"), ";");
       List<String> sentences = new ArrayList<>();
       if (split.length == split1.length) {
         for (int i = 0; i < split.length; i++) {
@@ -79,6 +84,51 @@ public class ScrapperTabController implements Initializable {
   }
 
   public void buttonLoadDataOnAction(ActionEvent actionEvent) {
+  }
+
+  public void downloadEnglishMp3(final ActionEvent actionEvent) {
+    final String fieldText = textFieldOtherNames.getText();
+    if (StringUtils.isNotBlank(fieldText) && fieldText.contains("https://www")) {
+      String trimmedText = fieldText.substring(fieldText.indexOf("https"), fieldText.lastIndexOf("]"));
+      if (trimmedText.contains("?version")) {
+        trimmedText = trimmedText.substring(0, trimmedText.indexOf("?version"));
+      }
+      SoundUtils.downloadFile(trimmedText);
+
+      final ClipboardContent content = new ClipboardContent();
+      content.putString(trimmedText);
+      Clipboard.getSystemClipboard().setContent(content);
+    }
+
+  }
+
+  public void downloadAmericanMp3(final ActionEvent actionEvent) {
+    final String fieldText = textFieldAmericanName.getText();
+    if (StringUtils.isNotBlank(fieldText) && fieldText.contains("https://www")) {
+      String trimmedText = fieldText.substring(fieldText.indexOf("https"), fieldText.lastIndexOf("]"));
+      if (trimmedText.contains("?version")) {
+        trimmedText = trimmedText.substring(0, trimmedText.indexOf("?version"));
+      }
+      SoundUtils.downloadFile(trimmedText);
+
+      final ClipboardContent content = new ClipboardContent();
+      content.putString(trimmedText);
+      Clipboard.getSystemClipboard().setContent(content);
+    }
+  }
+
+  public void listViewSentenceOnMouseClicked(final MouseEvent mouseEvent) {
+    String selectedSentence = listViewSentences.getSelectionModel().getSelectedItem();
+    if (StringUtils.isNotBlank(selectedSentence)) {
+      if (selectedSentence.contains("https://www")) {
+        final String trimmedText = selectedSentence.substring(selectedSentence.indexOf("https"));
+        SoundUtils.downloadFile(trimmedText);
+
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(selectedSentence);
+        Clipboard.getSystemClipboard().setContent(content);
+      }
+    }
   }
 
 }

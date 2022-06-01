@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.scrapper.diki;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,8 +15,11 @@ import rwilk.exploreenglish.utils.WordUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,13 +32,15 @@ public class DikiScrapper implements CommandLineRunner {
     this.termService = termService;
   }
 
-  public List<Term> webScrap(String englishWord) {
+  public List<Term> webScrap(String englishWord, boolean forceTranslate) {
     log.info("[Diki scrapper] {}", englishWord);
 
-    List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishWord, SOURCE);
-    if (!cachedResults.isEmpty()) {
-      log.info("[Diki scrapper] return cached results");
-      return cachedResults;
+    if (!forceTranslate) {
+      List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishWord, SOURCE);
+      if (!cachedResults.isEmpty()) {
+        log.info("[Diki scrapper] return cached results");
+        return cachedResults;
+      }
     }
 
     try {
@@ -160,7 +166,16 @@ public class DikiScrapper implements CommandLineRunner {
                   String exampleSentenceTranslation = element1.select("div.exampleSentence").select("span.exampleSentenceTranslation").text();
                   exampleSentence = exampleSentence.substring(0, exampleSentence.indexOf(exampleSentenceTranslation)).trim();
                   englishSentences.add(exampleSentence);
-                  polishSentences.add(exampleSentenceTranslation);
+
+                  List<String> audioHrefs = element1.select("span.audioIcon").stream()
+                                                    .map(el -> el.attr("data-audio-url"))
+                                                    .map("https://www.diki.pl"::concat)
+                                                    .collect(Collectors.toList());
+                  if (audioHrefs.isEmpty()) {
+                    polishSentences.add(exampleSentenceTranslation);
+                  } else {
+                    polishSentences.add(exampleSentenceTranslation.concat(" ").concat(String.join("; ", audioHrefs)));
+                  }
                 } else if (element1.hasClass("ref")) {
                   for (Element element3 : element1.select("div.ref").first().children()) {
                     if (element3.text().contains("synonim:")) {
@@ -263,5 +278,29 @@ public class DikiScrapper implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
+    // remove duplications
+/*    final Map<String, List<Term>> collection = termService.getAll()
+        .stream()
+        .collect(Collectors.groupingBy(Term::getSource));
+
+    collection.forEach((s, terms) -> {
+      final Map<String, List<Term>> collect = terms.stream()
+          .collect(Collectors.groupingBy(term -> StringUtils.trimToEmpty(term.getEnglishName())
+              .concat("=")
+              .concat(StringUtils.trimToEmpty(term.getPolishName()))));
+
+      final Map<String, List<Term>> dupl = new HashMap<>();
+      collect.forEach((s1, terms1) -> {
+        if (terms1.size() > 1) {
+          dupl.put(s1, terms1);
+        }
+      });
+
+      dupl.forEach((s1, terms1) -> {
+        final List<Term> toRemove = terms1.subList(1, terms1.size());
+        toRemove.forEach(termService::delete);
+      });
+
+    });*/
   }
 }

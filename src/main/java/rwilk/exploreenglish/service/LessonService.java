@@ -65,8 +65,12 @@ public class LessonService {
     lessonRepository.deleteById(id);
   }
 
-  public Integer getCountByCourse(Course course) {
-    return (int) lessonRepository.countAllByCourse(course);
+  public Integer getNextPosition(Long courseId) {
+    Integer maxPosition = lessonRepository.maxPosition(courseId);
+    if (maxPosition == null) {
+      maxPosition = 0;
+    }
+    return maxPosition + 1;
   }
 
   public Optional<Lesson> getPreviousLesson(Long courseId, Integer position) {

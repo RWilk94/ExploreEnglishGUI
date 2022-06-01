@@ -10,6 +10,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 public class TermTableController implements Initializable, CommandLineRunner {
 
@@ -123,8 +125,12 @@ public class TermTableController implements Initializable, CommandLineRunner {
   }
 
   private void fillInTableView() {
-    terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
-    tableTerms.setItems(FXCollections.observableArrayList(terms));
+    new Thread(() -> {
+      terms = termService.getAllByIsIgnoredAndIsAdded(false, false);
+
+      Platform.runLater(() -> tableTerms.setItems(FXCollections.observableArrayList(terms)));
+
+    }).start();
   }
 
   public void tableViewTermsOnMouseClicked(MouseEvent mouseEvent) {
@@ -137,28 +143,30 @@ public class TermTableController implements Initializable, CommandLineRunner {
     }
   }
 
-  private void filterTableByName(String value) {
+  private void filterTableByName(final String value) {
     new Thread(() -> {
-      List<Term> filteredTerms = terms.stream().filter(term ->
+      log.info("START [{}]", value);
+      final List<Term> filteredTerms = terms.stream().filter(term ->
           (term.getEnglishName() != null && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
-                .contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                .contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase())
               || (term.getPolishName() != null && WordUtils.removeNonLiteralCharacters(term.getPolishName())
                 .toLowerCase().contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
               || (term.getAmericanName() != null && WordUtils.removeNonLiteralCharacters(term.getAmericanName())
-                .toLowerCase().contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
+                .toLowerCase().contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase())))
               || (term.getOtherName() != null && WordUtils.removeNonLiteralCharacters(term.getOtherName())
                 .toLowerCase().contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase())))
           .collect(Collectors.toList());
+      log.info("FINISH [{}]", value);
       Platform.runLater(() -> tableTerms.setItems(FXCollections.observableArrayList(filteredTerms)));
     }).start();
   }
 
-  private void filterTableByCategory(String value) {
+  private void filterTableByCategory(final String value) {
     new Thread(() -> {
-      List<Term> filteredTerms = terms.stream()
+      final List<Term> filteredTerms = terms.stream()
           .filter(term ->
               term.getCategory().toLowerCase().contains(value.toLowerCase()))
-          .collect(Collectors.toList());
+          .toList();
       Platform.runLater(() -> tableTerms.setItems(FXCollections.observableArrayList(filteredTerms)));
     }).start();
   }

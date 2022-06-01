@@ -1,29 +1,24 @@
 package rwilk.exploreenglish.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.entity.Word;
+import rwilk.exploreenglish.model.entity.WordSound;
 import rwilk.exploreenglish.repository.LessonWordRepository;
 import rwilk.exploreenglish.repository.WordRepository;
-import rwilk.exploreenglish.utils.WordUtils;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class WordService {
 
   private final LessonWordRepository lessonWordRepository;
   private final WordRepository wordRepository;
   private final WordSentenceService wordSentenceService;
-
-  public WordService(LessonWordRepository lessonWordRepository,
-                     WordRepository wordRepository,
-                     WordSentenceService wordSentenceService) {
-    this.lessonWordRepository = lessonWordRepository;
-    this.wordRepository = wordRepository;
-    this.wordSentenceService = wordSentenceService;
-  }
+  private final WordSoundService wordItemService;
 
   public List<Word> getAll() {
     return wordRepository.findAll();
@@ -34,14 +29,20 @@ public class WordService {
   }
 
   public List<Word> getAllByEnglishNamesLike(String pattern) {
-    return wordRepository.findAllByEnglishNamesLike(WordUtils.removeNonLiteralCharacters(pattern));
+    return wordItemService.getAllByEnglishNameLike(pattern)
+        .stream()
+        .map(WordSound::getWord)
+        .toList();
   }
 
   public List<Word> getAllByEnglishNames(String pattern) {
-    return wordRepository.findAllByEnglishNames(WordUtils.removeNonLiteralCharacters(pattern));
+    return wordItemService.getAllByEnglishName(pattern)
+        .stream()
+        .map(WordSound::getWord)
+        .toList();
   }
 
-  public Word save(Word word) {
+  public Word save(final Word word) {
     return wordRepository.save(word);
   }
 

@@ -15,7 +15,11 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
   List<Lesson> findAllByCourse(Course course);
 
-  long countAllByCourse(Course course);
+  @Query(value = "select max(l.`position`) " +
+          "from lessons l " +
+          "where l.course_id = :courseId",
+          nativeQuery = true)
+  Integer maxPosition(@Param("courseId") Long courseId);
 
   @Query(value = "select *" +
       "from lessons l " +

@@ -27,7 +27,7 @@ import rwilk.exploreenglish.service.WordService;
 import rwilk.exploreenglish.utils.WordUtils;
 
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -35,6 +35,7 @@ public class ExportService {
 
   private final static String PARAM_SEPARATOR = ", ";
   private final static String QUOTE_SIGN = "'";
+  private final static Integer CHUNK_SIZE = 1;
   private final CourseService courseService;
   private final LessonService lessonService;
   private final LessonWordService lessonWordService;
@@ -62,6 +63,7 @@ public class ExportService {
   }
 
   public void export() {
+    exportVersion();
     exportCourses(courseService.getAll());
     exportLessons(lessonService.getAll());
     exportLessonWords(lessonWordService.getAll());
@@ -74,10 +76,16 @@ public class ExportService {
     exportTerms(termService.getAll());
   }
 
+  public void exportVersion() {
+    String tag = "VERSIONS";
+    StringBuilder sb = new StringBuilder(String.valueOf(System.currentTimeMillis()));
+    exportFile(sb, tag.toLowerCase() + ".txt", tag);
+  }
+
   private void exportCourses(List<Course> courses) {
     String tag = "COURSES";
     log.info("START GENERATING {}", tag);
-    List<List<Course>> chunks = ListUtils.partition(courses, 100);
+    List<List<Course>> chunks = ListUtils.partition(courses, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Course> chunk : chunks) {
       sql.append("INSERT INTO 'courses' ('id', 'english_name', 'polish_name', 'image', 'position') VALUES ");
@@ -103,7 +111,7 @@ public class ExportService {
   private void exportLessons(List<Lesson> lessons) {
     String tag = "LESSONS";
     log.info("START GENERATING {}", tag);
-    List<List<Lesson>> chunks = ListUtils.partition(lessons, 100);
+    List<List<Lesson>> chunks = ListUtils.partition(lessons, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Lesson> chunk : chunks) {
       sql.append("INSERT INTO 'lessons' ('id', 'english_name', 'polish_name', 'image', 'position', 'course_id') VALUES ");
@@ -131,7 +139,7 @@ public class ExportService {
   private void exportLessonWords(List<LessonWord> lessonWords) {
     String tag = "LESSON_WORDS";
     log.info("START GENERATING {}", tag);
-    List<List<LessonWord>> chunks = ListUtils.partition(lessonWords, 100);
+    List<List<LessonWord>> chunks = ListUtils.partition(lessonWords, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<LessonWord> chunk : chunks) {
       sql.append("INSERT INTO 'lesson_word' ('id', 'position', 'lesson_id', 'word_id') VALUES ");
@@ -155,7 +163,7 @@ public class ExportService {
   private void exportWords(List<Word> words) {
     String tag = "WORDS";
     log.info("START GENERATING {}", tag);
-    List<List<Word>> chunks = ListUtils.partition(words, 100);
+    List<List<Word>> chunks = ListUtils.partition(words, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Word> chunk : chunks) {
       sql.append("INSERT INTO 'words' ('id', 'english_name', 'polish_name', 'part_of_speech', 'sound', 'article', " +
@@ -168,31 +176,31 @@ public class ExportService {
             .append("(")
             .append(word.getId()) // COLUMN_ID
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getEnglishNames().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
+            .append(QUOTE_SIGN).append(word.englishNamesAsString().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
             .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(word.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
             .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(word.getPartOfSpeech().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PART OF SPEECH
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(word.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOUND
-            .append(PARAM_SEPARATOR)
+            // .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(word.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOUND
+            // .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(word.getArticle().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ARTICLE
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getComparative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN COMPARATIVE
+//            .append(QUOTE_SIGN).append(word.getComparative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN COMPARATIVE
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getSuperlative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SUPERLATIVE
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getPastTense().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST TENSE
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getPastParticiple().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST PARTICIPLE
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getSuperlative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SUPERLATIVE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getPastTense().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST TENSE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getPastParticiple().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST PARTICIPLE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getGrammarType().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN GRAMMAR TYPE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getPlural().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PLURAL
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getSynonym().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SYNONYM
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getOpposite().replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN OPPOSITE
+            .append(QUOTE_SIGN).append(word.getGrammarType().replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN GRAMMAR TYPE
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getPlural().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PLURAL
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getSynonym().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SYNONYM
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getOpposite().replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN OPPOSITE
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, word);
       }
@@ -203,7 +211,7 @@ public class ExportService {
   private void exportWordSentences(List<WordSentence> wordSentences) {
     String tag = "WORD_SENTENCE";
     log.info("START GENERATING {}", tag);
-    List<List<WordSentence>> chunks = ListUtils.partition(wordSentences, 100);
+    List<List<WordSentence>> chunks = ListUtils.partition(wordSentences, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<WordSentence> chunk : chunks) {
       sql.append("INSERT INTO 'word_sentence' ('id', 'position', 'word_id', 'sentence_id') VALUES ");
@@ -227,7 +235,7 @@ public class ExportService {
   private void exportSentences(List<Sentence> sentences) {
     String tag = "SENTENCES";
     log.info("START GENERATING {}", tag);
-    List<List<Sentence>> chunks = ListUtils.partition(sentences, 100);
+    List<List<Sentence>> chunks = ListUtils.partition(sentences, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Sentence> chunk : chunks) {
       sql.append("INSERT INTO 'sentences' ('id', 'english_name', 'polish_name', 'sound', " +
@@ -252,7 +260,7 @@ public class ExportService {
   private void exportNotes(List<Note> notes) {
     String tag = "NOTES";
     log.info("START GENERATING {}", tag);
-    List<List<Note>> chunks = ListUtils.partition(notes, 100);
+    List<List<Note>> chunks = ListUtils.partition(notes, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Note> chunk : chunks) {
       sql.append("INSERT INTO 'notes' ('id', 'note', 'viewed', 'position', 'lesson_id') VALUES ");
@@ -277,7 +285,7 @@ public class ExportService {
   private void exportExercises(List<Exercise> exercises) {
     String tag = "EXERCISES";
     log.info("START GENERATING {}", tag);
-    List<List<Exercise>> chunks = ListUtils.partition(exercises, 100);
+    List<List<Exercise>> chunks = ListUtils.partition(exercises, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Exercise> chunk : chunks) {
       sql.append("INSERT INTO 'exercises' ('id', 'name', 'type', 'position', 'lesson_id', 'progress', 'skip', " +
@@ -304,10 +312,10 @@ public class ExportService {
   private void exportExerciseItems(List<ExerciseItem> exerciseItems) {
     String tag = "EXERCISES_ITEMS";
     log.info("START GENERATING {}", tag);
-    List<List<ExerciseItem>> chunks = ListUtils.partition(exerciseItems, 100);
+    List<List<ExerciseItem>> chunks = ListUtils.partition(exerciseItems, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<ExerciseItem> chunk : chunks) {
-      sql.append("INSERT INTO 'exercise_item' ('id', 'question', 'correct_answer', 'final_answer', " +
+      sql.append("INSERT INTO 'exercise_items' ('id', 'question', 'correct_answer', 'final_answer', " +
           "'first_possible_answer', 'second_possible_answer', 'third_possible_answer', 'forth_possible_answer', " +
           "'dialogue_english', 'dialogue_polish', 'description', 'position', 'exercise_id') VALUES ");
       for (ExerciseItem exerciseItem : chunk) {
@@ -347,7 +355,7 @@ public class ExportService {
   private void exportTerms(List<Term> terms) {
     String tag = "TERMS";
     log.info("START GENERATING {}", tag);
-    List<List<Term>> chunks = ListUtils.partition(terms, 100);
+    List<List<Term>> chunks = ListUtils.partition(terms, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Term> chunk : chunks) {
       sql.append("INSERT INTO 'terms' ('id', 'english_names', 'polish_name', 'part_of_speech', " +
@@ -362,7 +370,7 @@ public class ExportService {
         if (StringUtils.isBlank(englishNames)) {
           englishNames = "";
         } else {
-          englishNames = englishNames.substring(englishNames.length() - 1).equals(";")
+          englishNames = englishNames.endsWith(";")
               ? englishNames.substring(0, englishNames.length() - 1)
               : englishNames;
           if (englishNames.startsWith("a ")) {
@@ -442,4 +450,71 @@ public class ExportService {
     }
   }
 
+//  @Override
+//  public void run(String... args) throws Exception {
+//
+//    final Lesson lesson = lessonService.getById(121L).get();
+//
+//    final List<Triple<Integer, String, String>> triples = Arrays.asList(
+//        Triple.of(1 , "", ""),
+//        Triple.of(2 , "", ""),
+//        Triple.of(3 , "", ""),
+//        Triple.of(4 , "", ""),
+//        Triple.of(5 , "", ""),
+//        Triple.of(6 , "", ""),
+//        Triple.of(7 , "", ""),
+//        Triple.of(8 , "", ""),
+//        Triple.of(9 , "", ""),
+//        Triple.of(10, "", ""),
+//        Triple.of(11, "", ""),
+//        Triple.of(12, "", ""),
+//        Triple.of(13, "", ""),
+//        Triple.of(14, "", ""),
+//        Triple.of(15, "", ""),
+//        Triple.of(16, "", ""),
+//        Triple.of(17, "", ""),
+//        Triple.of(18, "", ""),
+//        Triple.of(19, "", ""),
+//        Triple.of(20, "", ""),
+//        Triple.of(21, "", ""),
+//        Triple.of(22, "", ""),
+//        Triple.of(23, "", ""),
+//        Triple.of(24, "", ""),
+//        Triple.of(25, "", ""),
+//        Triple.of(26, "", ""),
+//        Triple.of(27, "", ""),
+//        Triple.of(28, "", ""),
+//        Triple.of(29, "", ""),
+//        Triple.of(30, "", "")
+//    );
+//
+//    triples.forEach(item -> {
+//      Word word = Word.builder()
+//          .id(null)
+//          .englishNames(item.getRight())
+//          .polishName(item.getMiddle())
+//          .partOfSpeech(PartOfSpeechEnum.WYRAZENIE.getValue())
+//          .article("")
+//          .grammarType("")
+//          .comparative("")
+//          .superlative("")
+//          .pastTense("")
+//          .pastParticiple("")
+//          .plural("")
+//          .opposite("")
+//          .synonym("")
+//          .build();
+//      try {
+//        word = wordService.save(word);
+//        final LessonWord lessonWord = LessonWord.builder()
+//            .lesson(lesson)
+//            .word(word)
+//            .position(lessonWordService.getCountByLesson(lesson))
+//            .build();
+//
+//        lessonWordService.save(lessonWord);
+//      } catch (Exception e) {}
+//
+//    });
+//  }
 }

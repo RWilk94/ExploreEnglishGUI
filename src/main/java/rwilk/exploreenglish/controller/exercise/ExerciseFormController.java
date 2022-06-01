@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.exercise;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -95,8 +96,12 @@ public class ExerciseFormController implements Initializable {
   }
 
   public void initializeLessonComboBox() {
-    List<Lesson> lessons = exerciseController.getLessonService().getAll();
-    comboBoxLesson.setItems(FXCollections.observableArrayList(lessons));
+    new Thread(() -> {
+      List<Lesson> lessons = exerciseController.getLessonService().getAll();
+
+      Platform.runLater(() -> comboBoxLesson.setItems(FXCollections.observableArrayList(lessons)));
+
+    }).start();
   }
 
   private void initializeLessonType() {

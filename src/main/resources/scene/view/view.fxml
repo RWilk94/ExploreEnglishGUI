@@ -3,46 +3,68 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
 <HBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="rwilk.exploreenglish.controller.view.ViewController"
-            prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="rwilk.exploreenglish.controller.view.ViewController"
+      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
-  <VBox HBox.hgrow="ALWAYS">
-    <ListView HBox.hgrow="ALWAYS" fx:id="listViewCourses" onMouseClicked="#listViewCoursesOnMouseClicked">
-    </ListView>
-    <HBox HBox.hgrow="ALWAYS">
-      <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonCoursePositionUpOnAction"/>
-      <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonCoursePositionDownOnAction"/>
-    </HBox>
-  </VBox>
+  <SplitPane dividerPositions="0.5" HBox.hgrow="ALWAYS">
+    <SplitPane dividerPositions="0.5" HBox.hgrow="ALWAYS">
+      <VBox HBox.hgrow="ALWAYS">
+        <ListView HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="listViewCourses"
+                  onMouseClicked="#listViewCoursesOnMouseClicked">
+        </ListView>
+        <HBox HBox.hgrow="ALWAYS">
+          <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonCoursePositionUpOnAction"/>
+          <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonCoursePositionDownOnAction"/>
+        </HBox>
+      </VBox>
+      <VBox HBox.hgrow="ALWAYS">
+        <TextField fx:id="textFieldFilterLessons" promptText="Filter lessons here..." HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
+          </HBox.margin>
+        </TextField>
+        <ListView HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="listViewLessons"
+                  onMouseClicked="#listViewLessonsOnMouseClicked">
+        </ListView>
+        <HBox HBox.hgrow="ALWAYS">
+          <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLessonPositionUpOnAction"/>
+          <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLessonPositionDownOnAction"/>
+        </HBox>
+      </VBox>
+    </SplitPane>
 
-  <VBox HBox.hgrow="ALWAYS">
-    <ListView HBox.hgrow="ALWAYS" fx:id="listViewLessons" onMouseClicked="#listViewLessonsOnMouseClicked">
-    </ListView>
-    <HBox HBox.hgrow="ALWAYS">
-      <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLessonPositionUpOnAction"/>
-      <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLessonPositionDownOnAction"/>
-    </HBox>
-  </VBox>
+    <SplitPane dividerPositions="0.5" HBox.hgrow="ALWAYS">
+      <VBox HBox.hgrow="ALWAYS">
+        <TextField fx:id="textFieldFilterLearnItems" promptText="Filter lessons here..." HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
+          </HBox.margin>
+        </TextField>
+        <ListView HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="listViewLearnItems"
+                  onMouseClicked="#listViewLearnItemsOnMouseClicked">
+        </ListView>
+        <HBox HBox.hgrow="ALWAYS">
+          <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemsPositionUpOnAction"/>
+          <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                  onAction="#buttonLearnItemsPositionDownOnAction"/>
+        </HBox>
+      </VBox>
 
-  <VBox HBox.hgrow="ALWAYS">
-    <ListView HBox.hgrow="ALWAYS" fx:id="listViewLearnItems" onMouseClicked="#listViewLearnItemsOnMouseClicked">
-    </ListView>
-    <HBox HBox.hgrow="ALWAYS">
-      <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemsPositionUpOnAction"/>
-      <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemsPositionDownOnAction"/>
-    </HBox>
-  </VBox>
-
-  <VBox HBox.hgrow="ALWAYS">
-    <ListView HBox.hgrow="ALWAYS" fx:id="listViewLearnItemChildren" onMouseClicked="#listViewLearnItemChildrenOnMouseClicked">
-    </ListView>
-    <HBox HBox.hgrow="ALWAYS">
-      <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemChildrenPositionUpOnAction"/>
-      <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#buttonLearnItemChildrenPositionDownOnAction"/>
-    </HBox>
-  </VBox>
+      <VBox HBox.hgrow="ALWAYS">
+        <ListView HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="listViewLearnItemChildren"
+                  onMouseClicked="#listViewLearnItemChildrenOnMouseClicked">
+        </ListView>
+        <HBox HBox.hgrow="ALWAYS">
+          <Button text="UP" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                  onAction="#buttonLearnItemChildrenPositionUpOnAction"/>
+          <Button text="DOWN" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                  onAction="#buttonLearnItemChildrenPositionDownOnAction"/>
+        </HBox>
+      </VBox>
+    </SplitPane>
+  </SplitPane>
 
 </HBox>
