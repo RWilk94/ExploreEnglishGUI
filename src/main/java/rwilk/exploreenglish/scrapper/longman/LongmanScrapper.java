@@ -27,18 +27,20 @@ public class LongmanScrapper {
 
   public static void main(String[] args) {
     LongmanScrapper scrapper = new LongmanScrapper(null);
-    scrapper.webScrap("dog");
+    scrapper.webScrap("large", false);
 //    scrapper.webScrap("good morning");
 
   }
 
-  public List<Term> webScrap(final String key) {
+  public List<Term> webScrap(final String key, final boolean forceTranslate) {
     log.info("[Longman scrapper] {}", key);
 
-    List<Term> cachedResults = termService.getTermsByCategoryAndSource(key, SOURCE);
-    if (!cachedResults.isEmpty()) {
-      log.info("[Longman scrapper] return cached results");
-      return cachedResults;
+    if (!forceTranslate) {
+      List<Term> cachedResults = termService.getTermsByCategoryAndSource(key, SOURCE);
+      if (!cachedResults.isEmpty()) {
+        log.info("[Longman scrapper] return cached results");
+        return cachedResults;
+      }
     }
 
     try {
@@ -72,11 +74,27 @@ public class LongmanScrapper {
         final List<String> polishSentence = new ArrayList<>();
 
         for (Element sense : element.select("span.Sense")) {
-          final String def = Optional.ofNullable(sense.select("span.DEF"))
+          String def = Optional.ofNullable(sense.select("span.DEF"))
                                      .map(Elements::text)
                                      .orElse("");
           if (StringUtils.isNotBlank(def)) {
-            definitions.add(def);
+            final String opposite = sense.select("span.OPP").text();
+            if (StringUtils.isNoneEmpty(opposite)) {
+              def = def
+                  .concat("[")
+                  .concat("przeciwieństwo: ")
+                  .concat(opposite.replace("OPP", "").trim())
+                  .concat("] ");
+            }
+            final String synonym =  sense.select("span.SYN").text();
+            if (StringUtils.isNoneEmpty(synonym)) {
+              def = def
+                  .concat("[")
+                  .concat("synonim: ")
+                  .concat(synonym.replace("SYN", "").trim())
+                  .concat("]");
+            }
+            definitions.add(def.trim());
           }
 
           final String relatedWord = Optional.ofNullable(sense.select("span.RELATEDWD"))

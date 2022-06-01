@@ -177,17 +177,17 @@ public class ExerciseItemFormController implements Initializable {
           .collect(Collectors.toList());
       // FIXME otherName split(";")[0]
       if (lessonWords.size() >= 4) {
-        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
-        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
-        textFieldThirdPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
-        textFieldFourthPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString()); // TODO add english items
+        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString());
+        textFieldThirdPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString());
+        textFieldFourthPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString());
       } else if (lessonWords.size() >= 3) {
-        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
-        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
-        textFieldThirdPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString());
+        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString());
+        textFieldThirdPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString());
       } else if (lessonWords.size() >= 2) {
-        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
-        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().getEnglishNames());
+        textFieldFirstPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString());
+        textFieldSecondPossibleAnswer.setText(lessonWords.remove(getIndex(lessonWords)).getWord().englishNamesAsString());
       }
     }
   }

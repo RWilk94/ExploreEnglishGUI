@@ -1,8 +1,9 @@
 spring:
   datasource:
+#    url: "jdbc:mysql://192.168.1.51:3306/explore_english?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8"
     url: "jdbc:mysql://localhost:3306/explore_english?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8"
-    username: ""
-    password: ""
+    username: "explore_english"
+    password: "explore_englis"
     driver-class-name: "com.mysql.cj.jdbc.Driver"
     # 30 sec. as maximum number of milliseconds that a client will wait for a connection from the pool
     connection-timeout: 30000
@@ -26,4 +27,3 @@ spring:
         dialect: org.hibernate.dialect.MySQL55Dialect
     hibernate:
       ddl-auto: update
-

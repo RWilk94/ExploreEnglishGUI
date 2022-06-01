@@ -12,7 +12,8 @@ import java.util.Optional;
 @Service
 public class TermService {
 
-  private static final List<String> EXCLUDED_SOURCES = Arrays.asList("diki", "bab", "cambridge", "Longman");
+  private static final List<String> EXCLUDED_SOURCES = Arrays.asList("diki", "bab", "cambridge", "Longman", "oxfordDictionary"
+                                                                     /*"ETUTOR", "LanGeek", "speakLanguages"*/);
   private final TermRepository termRepository;
 
   public TermService(TermRepository termRepository) {

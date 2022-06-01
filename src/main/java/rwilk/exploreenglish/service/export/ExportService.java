@@ -176,31 +176,31 @@ public class ExportService {
             .append("(")
             .append(word.getId()) // COLUMN_ID
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getEnglishNames().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
+            .append(QUOTE_SIGN).append(word.englishNamesAsString().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
             .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(word.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
             .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(word.getPartOfSpeech().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PART OF SPEECH
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(word.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOUND
-            .append(PARAM_SEPARATOR)
+            // .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(word.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOUND
+            // .append(PARAM_SEPARATOR)
             .append(QUOTE_SIGN).append(word.getArticle().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ARTICLE
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getComparative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN COMPARATIVE
+//            .append(QUOTE_SIGN).append(word.getComparative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN COMPARATIVE
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getSuperlative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SUPERLATIVE
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getPastTense().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST TENSE
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getPastParticiple().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST PARTICIPLE
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getSuperlative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SUPERLATIVE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getPastTense().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST TENSE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getPastParticiple().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST PARTICIPLE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getGrammarType().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN GRAMMAR TYPE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getPlural().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PLURAL
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getSynonym().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SYNONYM
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getOpposite().replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN OPPOSITE
+            .append(QUOTE_SIGN).append(word.getGrammarType().replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN GRAMMAR TYPE
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getPlural().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PLURAL
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getSynonym().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SYNONYM
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(word.getOpposite().replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN OPPOSITE
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, word);
       }

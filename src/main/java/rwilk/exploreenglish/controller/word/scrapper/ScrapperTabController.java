@@ -89,7 +89,10 @@ public class ScrapperTabController implements Initializable {
   public void downloadEnglishMp3(final ActionEvent actionEvent) {
     final String fieldText = textFieldOtherNames.getText();
     if (StringUtils.isNotBlank(fieldText) && fieldText.contains("https://www")) {
-      final String trimmedText = fieldText.substring(fieldText.indexOf("https"), fieldText.lastIndexOf("]"));
+      String trimmedText = fieldText.substring(fieldText.indexOf("https"), fieldText.lastIndexOf("]"));
+      if (trimmedText.contains("?version")) {
+        trimmedText = trimmedText.substring(0, trimmedText.indexOf("?version"));
+      }
       SoundUtils.downloadFile(trimmedText);
 
       final ClipboardContent content = new ClipboardContent();
@@ -102,7 +105,10 @@ public class ScrapperTabController implements Initializable {
   public void downloadAmericanMp3(final ActionEvent actionEvent) {
     final String fieldText = textFieldAmericanName.getText();
     if (StringUtils.isNotBlank(fieldText) && fieldText.contains("https://www")) {
-      final String trimmedText = fieldText.substring(fieldText.indexOf("https"), fieldText.lastIndexOf("]"));
+      String trimmedText = fieldText.substring(fieldText.indexOf("https"), fieldText.lastIndexOf("]"));
+      if (trimmedText.contains("?version")) {
+        trimmedText = trimmedText.substring(0, trimmedText.indexOf("?version"));
+      }
       SoundUtils.downloadFile(trimmedText);
 
       final ClipboardContent content = new ClipboardContent();

@@ -7,12 +7,12 @@ import java.util.regex.Pattern;
 
 public class WordUtils {
 
-  private final static String REGEX = "[^\\p{IsAlphabetic}\\p{IsDigit}' ]";
+  private static final String REGEX = "[^\\p{IsAlphabetic}\\p{IsDigit}' ]";
 
   private WordUtils() {
   }
   
-  public static String replaceSpecialText(String term) {
+  public static String replaceSpecialText(final String term) {
     return StringUtils.trimToEmpty(StringUtils.trimToEmpty(term)
         .replace(" British English", " (British English)")
         .replace(" American English", " (American English)")
@@ -55,12 +55,13 @@ public class WordUtils {
         .replaceAll(Pattern.quote("(humorous)"), ""));
   }
 
-  public static String replace(String term, String delimiter) {
+  public static String replace(final String term, final String delimiter) {
     return StringUtils.trimToEmpty(term).replaceAll(" ", delimiter);
   }
 
-  public static String removeNonLiteralCharacters(String term) {
-    return StringUtils.trimToEmpty(term).replaceAll(REGEX, "");
+  public static String removeNonLiteralCharacters(final String term) {
+    final Pattern pattern = Pattern.compile(REGEX, Pattern.LITERAL);
+    return pattern.matcher(term).replaceAll("");
   }
 
   public static String trimAndReplace(String term, String delimiter) {
@@ -101,7 +102,7 @@ public class WordUtils {
     return "";
   }
 
-  public static String extractPartOfSpeech(String partOfSpeech) {
+  public static String extractPartOfSpeech(final String partOfSpeech) {
     if (partOfSpeech.equals("rzeczownik") || partOfSpeech.equals("rzecz.") || partOfSpeech.equals("noun")) {
       return PartOfSpeechEnum.RZECZOWNIK.getValue();
     } else if (partOfSpeech.equals("czasownik") || partOfSpeech.contains("czas.") || partOfSpeech.contains("verb")) {
@@ -110,11 +111,11 @@ public class WordUtils {
       return PartOfSpeechEnum.PRZYMIOTNIK.getValue();
     } else if (partOfSpeech.equals("przysłówek") || partOfSpeech.equals("przysł.") || partOfSpeech.equals("adverb")) {
       return PartOfSpeechEnum.PRZYSLOWEK.getValue();
-    } else if (partOfSpeech.equals("phrasal verb") || partOfSpeech.contains("phrasal verb")) {
+    } else if (partOfSpeech.contains("phrasal verb")) {
       return PartOfSpeechEnum.PHRASAL_VERB.getValue();
     } else if (partOfSpeech.equals("wyrażenie")) {
       return PartOfSpeechEnum.WYRAZENIE.getValue();
-    } else if (partOfSpeech.equals("idiom") || partOfSpeech.contains("idiom")) {
+    } else if (partOfSpeech.contains("idiom")) {
       return PartOfSpeechEnum.IDIOM.getValue();
     } else if (partOfSpeech.equals("") || partOfSpeech.equals("determiner") || partOfSpeech.equals("conjunction")
         || partOfSpeech.equals("exclamation") || partOfSpeech.equals("wykrz.") || partOfSpeech.equals("przyimek")

@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.TermService;
@@ -18,7 +19,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class CambridgeDictionaryScrapper {
+public class CambridgeDictionaryScrapper implements CommandLineRunner {
 
   private static final String BASE_URL = "https://dictionary.cambridge.org";
   private static final String SOURCE = "cambridge";
@@ -28,17 +29,19 @@ public class CambridgeDictionaryScrapper {
     this.termService = termService;
   }
 
-  public List<Term> webScrap(String englishTerm) {
-    return webScrap(englishTerm, null);
+  public List<Term> webScrap(String englishTerm, boolean forceTranslate) {
+    return webScrap(englishTerm, null, forceTranslate);
   }
 
-  private List<Term> webScrap(String englishTerm, String requestUrl) {
+  private List<Term> webScrap(String englishTerm, String requestUrl, boolean forceTranslate) {
     log.info("[CambridgeDictionary scrapper] {} {}", englishTerm, StringUtils.trimToEmpty(requestUrl));
 
-    List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishTerm, SOURCE);
-    if (!cachedResults.isEmpty()) {
-      log.info("[CambridgeDictionary scrapper] return cached results");
-      return cachedResults;
+    if (!forceTranslate) {
+      List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishTerm, SOURCE);
+      if (!cachedResults.isEmpty()) {
+        log.info("[CambridgeDictionary scrapper] return cached results");
+        return cachedResults;
+      }
     }
 
     try {
@@ -47,19 +50,26 @@ public class CambridgeDictionaryScrapper {
           + WordUtils.trimAndReplace(englishTerm, "-");
 
       Document document = Jsoup.connect(requestUrl != null ? requestUrl : url)
-          .cookie("XSRF-TOKEN", "88c1b5fa-e8fc-4065-96cc-95c48356acb2")
+          // .cookie("XSRF-TOKEN", "88c1b5fa-e8fc-4065-96cc-95c48356acb2")
           .userAgent("Mozilla")
           .timeout(10000)
           .get();
-      Elements elements = document.select("div.entry-body");
 
-      Elements header = elements.select("div.normal-entry");
+      Elements elements = document.select("div.entry-body__el");
+      for (Element entryBody : elements) {
+
+
+
+
+      // Elements elements = document.select("div.entry-body");
+
+      Elements header = entryBody.select("div.pos-header");
       String partOfSpeech = header.select("span.pos").text();
       String pastTense = "";
       String pastParticiple = "";
       String comparative = "";
       String superlative = "";
-      String grammarTag = Optional.of(header.select("span.gram").select("span.gcs").text()).orElse("");
+      String grammarTag = Optional.of(header.select("span.gram").select("span.gc").text()).orElse("");
 
       Elements grammarElements = header.select("span.inf-group");
       for (Element grammarElement : grammarElements) {
@@ -75,7 +85,7 @@ public class CambridgeDictionaryScrapper {
         }
       }
 
-      Elements body = elements.select("div.normal-entry-body").select("div.sense-block");
+      Elements body = entryBody.select("div.pos-body").select("div.dsense");
 
       List<String> meanings = new ArrayList<>();
       List<String> englishSentences = new ArrayList<>();
@@ -108,7 +118,7 @@ public class CambridgeDictionaryScrapper {
         }
       }
       Term term = Term.builder()
-          .englishName(document.select("div.di-title").text())
+          .englishName(document.select("div.di-title").select("span.hw").get(0).text())
           .americanName("")
           .otherName("")
           .polishName(String.join("; ", meanings))
@@ -124,6 +134,7 @@ public class CambridgeDictionaryScrapper {
       terms.add(term);
       terms.addAll(otherTerms);
 
+    }
       // other links
       List<String> urls = new ArrayList<>();
       for (Element element : document.select("amp-accordion").select("li")) {
@@ -133,7 +144,7 @@ public class CambridgeDictionaryScrapper {
       }
       if (requestUrl == null) {
         for (String otherUrl : urls) {
-          terms.addAll(webScrap(englishTerm, otherUrl));
+          terms.addAll(webScrap(englishTerm, otherUrl, forceTranslate));
         }
       }
       if (requestUrl == null) {
@@ -168,4 +179,11 @@ public class CambridgeDictionaryScrapper {
     return "";
   }
 
+  @Override
+  public void run(final String... args) throws Exception {
+
+//    final List<Term> terms = webScrap("purse", true);
+//    System.out.println();
+
+  }
 }

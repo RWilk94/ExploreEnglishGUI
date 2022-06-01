@@ -112,7 +112,7 @@ public class WordTableController implements Initializable {
     }
     new Thread(() -> {
       List<Word> filteredWords = words.stream()
-                                      .filter(word -> word.getEnglishNames().toLowerCase().contains(
+                                      .filter(word -> word.englishNamesAsString().toLowerCase().contains(
                                               value.toLowerCase()))
                                       .collect(Collectors.toList());
       Platform.runLater(() -> tableWords.setItems(FXCollections.observableArrayList(filteredWords)));

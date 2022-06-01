@@ -42,7 +42,7 @@ public class DocService implements CommandLineRunner {
 
   public void generateDocument() {
 
-    final Optional<Course> courseOptional = courseService.getById(3L);
+    final Optional<Course> courseOptional = courseService.getById(12L);
     courseOptional.ifPresent(course -> {
       final Document document = createDocument();
       final Section section = createSection(document);
@@ -58,7 +58,7 @@ public class DocService implements CommandLineRunner {
 
       AtomicInteger index = new AtomicInteger(1);
 
-      final List<Lesson> lessons = lessonService.getAllByCourse(course);
+      final List<Lesson> lessons = lessonService.getAllByCourse(course).subList(0, 15);
       lessons.forEach(lesson -> {
         header(createParagraph(section), String.valueOf(index.getAndIncrement()).concat(". ").concat(lesson.getPolishName()));
 
@@ -168,7 +168,7 @@ public class DocService implements CommandLineRunner {
   public List<String> getOtherNames(Word word) {
     String activeWordVersion = getActiveWordVersion(word);
     List<String> otherNames = new ArrayList<>();
-    for (String enName : word.getEnglishNames().split(";")) {
+    for (String enName : word.englishNamesAsString().split(";")) {
       if (!StringUtils.trim(enName).equals(activeWordVersion)) {
         otherNames.add(StringUtils.trim(enName));
       }
@@ -181,7 +181,7 @@ public class DocService implements CommandLineRunner {
     final String britishEnglishTag = "(" + "British English".toLowerCase() + ")";
     final String americanEnglishTag = "(" + "American English".toLowerCase() + ")";
 
-    for (String enName : word.getEnglishNames().split(";")) {
+    for (String enName : word.englishNamesAsString().split(";")) {
       if ("British English".equalsIgnoreCase(englishVariety)) {
         if (enName.toLowerCase().contains(britishEnglishTag) ||
                 !enName.toLowerCase().contains(americanEnglishTag)) {
@@ -194,7 +194,7 @@ public class DocService implements CommandLineRunner {
         }
       }
     }
-    return word.getEnglishNames().split(";")[0];
+    return word.englishNamesAsString().split(";")[0];
   }
 
   @Override

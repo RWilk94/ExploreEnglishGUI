@@ -158,7 +158,7 @@ public class TermDuplicatedTableController implements Initializable {
   private void fillInTableView() {
     new Thread(() -> {
       List<Word> words = wordService.getAll();
-      List<Term> termsFromWords = words.stream().map(Term::new).collect(Collectors.toList());
+      List<Term> termsFromWords = words.stream().map(Term::new).toList();
 
       terms.addAll(termsFromWords);
       terms.addAll(termService.getAll());
@@ -203,11 +203,11 @@ public class TermDuplicatedTableController implements Initializable {
                   .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
                   || (term.getOtherName() != null && WordUtils.removeNonLiteralCharacters(term.getOtherName()).toLowerCase()
                   .equals(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
-                  || ((value.startsWith("a ") || value.startsWith("an ") || value.startsWith("the ")) && term.getEnglishName() != null && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  || ((value.startsWith("a ") || value.startsWith("an ") || value.startsWith("the ") || value.startsWith("to ")) && term.getEnglishName() != null && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
                   .equals(WordUtils.removeNonLiteralCharacters(value.substring(value.indexOf(" ")).toLowerCase())))
                   || (term.getIsAdded() && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
                   .contains(WordUtils.removeNonLiteralCharacters(value).toLowerCase()))
-                  || ((value.startsWith("a ") || value.startsWith("an ") || value.startsWith("the ")) && term.getIsAdded() && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
+                  || ((value.startsWith("a ") || value.startsWith("an ") || value.startsWith("the ")  || value.startsWith("to ")) && term.getIsAdded() && WordUtils.removeNonLiteralCharacters(term.getEnglishName()).toLowerCase()
                   .contains(WordUtils.removeNonLiteralCharacters(value.substring(value.indexOf(" ")).toLowerCase())))
               )
           .collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.entity.Course;
@@ -9,15 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CourseService {
 
   private final CourseRepository courseRepository;
   private final LessonService lessonService;
-
-  public CourseService(CourseRepository courseRepository, LessonService lessonService) {
-    this.courseRepository = courseRepository;
-    this.lessonService = lessonService;
-  }
 
   public List<Course> getAll() {
     return courseRepository.findAll();

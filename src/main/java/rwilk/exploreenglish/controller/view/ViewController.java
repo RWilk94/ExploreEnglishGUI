@@ -87,15 +87,24 @@ public class ViewController implements Initializable {
         }
         if (item instanceof LessonWord) {
           Word word = ((LessonWord) item).getWord();
-          if ((nonEmpty(word.getSound()) && nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+          if ((/*nonEmpty(word.getSound()) && */nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && nonEmpty(word.getGrammarType()) &&
-              ((word.getGrammarType().equals("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the"))) || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
-              || (nonEmpty(word.getSound()) && !word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              ((word.getGrammarType().contains("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the"))) || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
+              || (/*nonEmpty(word.getSound()) && */nonEmpty(word.getPartOfSpeech()) && !word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
                   && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())
-              || (nonEmpty(word.getSound()) && nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              || (/*nonEmpty(word.getSound()) && */nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
               && nonEmpty(word.getGrammarType()) &&
               word.getGrammarType().equals("plural") && (word.getArticle().equals("")))) {
             setStyle("-fx-background-color: #11ff00");
+          } else if ((nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              && nonEmpty(word.getGrammarType()) &&
+              ((word.getGrammarType().contains("countable") && (word.getArticle().equals("a") || word.getArticle().equals("an") || word.getArticle().equals("the"))) || word.getGrammarType().equals("uncountable") && StringUtils.trimToEmpty(word.getArticle()).isEmpty()))
+              || (!word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              && StringUtils.trimToEmpty(word.getGrammarType()).isEmpty() && StringUtils.trimToEmpty(word.getArticle()).isEmpty())
+              || (nonEmpty(word.getPartOfSpeech()) && word.getPartOfSpeech().equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
+              && nonEmpty(word.getGrammarType()) &&
+              word.getGrammarType().equals("plural") && (word.getArticle().equals("")))) {
+            setStyle("-fx-background-color: #ff7700");
           } else {
             setStyle("");
           }

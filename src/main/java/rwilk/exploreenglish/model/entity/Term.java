@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.collections4.ListUtils;
+import rwilk.exploreenglish.model.WordTypeEnum;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -68,16 +71,24 @@ public final class Term implements Serializable {
   @Column(name = "is_ignored")
   private Boolean isIgnored;
 
-  public Term(Word word) {
-    this.englishName = word.getEnglishNames();
+  public Term(final Word word) {
+    this.englishName = extract(word, WordTypeEnum.WORD);
     this.polishName = word.getPolishName();
-    this.comparative = word.getComparative();
-    this.superlative = word.getSuperlative();
-    this.pastTense = word.getPastTense();
-    this.pastParticiple = word.getPastParticiple();
-    this.plural = word.getPlural();
-    this.synonym = word.getSynonym();
+    this.comparative = extract(word, WordTypeEnum.COMPARATIVE);
+    this.superlative = extract(word, WordTypeEnum.SUPERLATIVE);
+    this.pastTense = extract(word, WordTypeEnum.PAST_TENSE);
+    this.pastParticiple = extract(word, WordTypeEnum.PAST_PARTICIPLE);
+    this.plural = extract(word, WordTypeEnum.PLURAL);
+    this.synonym = extract(word, WordTypeEnum.SYNONYM);
     this.partOfSpeech = word.getPartOfSpeech();
     this.isAdded = true;
+  }
+
+  private String extract(final Word word, final WordTypeEnum wordType) {
+    return String.join(";", ListUtils.emptyIfNull(word.getEnglishNames()
+                                               .stream()
+                                               .filter(wordSound -> wordType.toString().equals(wordSound.getType()))
+                                               .map(WordSound::getEnglishName)
+                                               .toList()));
   }
 }

@@ -13,8 +13,11 @@ import javafx.stage.Stage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import rwilk.exploreenglish.exception.ExceptionControllerAdvice;
 
 @SpringBootApplication
+@EnableJpaRepositories
 public class ExploreEnglishGUI extends Application {
 
   private ConfigurableApplicationContext context;
@@ -33,12 +36,13 @@ public class ExploreEnglishGUI extends Application {
 
   @Override
   public void start(Stage primaryStage) {
+    Thread.setDefaultUncaughtExceptionHandler(ExceptionControllerAdvice::showError);
+
     primaryStage.setTitle("ExploreEnglishGUI");
     Scene scene = new Scene(rootNode, 1366, 766);
     scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
-    if (rootNode instanceof BorderPane) {
-      BorderPane root = (BorderPane) rootNode;
+    if (rootNode instanceof BorderPane root) {
       root.setTop(createMenuBar(scene));
     }
 

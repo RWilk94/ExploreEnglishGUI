@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import rwilk.exploreenglish.model.LearnItem;
 
@@ -20,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -58,8 +60,12 @@ public final class LessonWord implements Serializable, LearnItem {
 
   @Override
   public String getName() {
-    return StringUtils.defaultString(word.getEnglishNames())
-               .concat(StringUtils.defaultString(word.getPolishName()));
+    return StringUtils.defaultString(
+            String.join(";", ListUtils.emptyIfNull(word.getEnglishNames()
+                                                       .stream()
+                                                       .map(WordSound::getEnglishName)
+                                                       .collect(Collectors.toList()))))
+        .concat(StringUtils.defaultString(word.getPolishName()));
   }
 
   @Override
