@@ -11,6 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import lombok.Getter;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -168,7 +170,7 @@ public class WordFormController implements Initializable {
   public void buttonAddOnAction() {
       Word word = Word.builder()
           .id(null)
-          .englishNames(listViewWordVariants.getItems().stream()
+          .englishNames(ListUtils.emptyIfNull(listViewWordVariants.getItems()).stream()
                                     .filter(Objects::nonNull)
                                     .toList())
           .polishName(trimToEmpty(textFieldPolishName.getText()))
@@ -293,6 +295,14 @@ public class WordFormController implements Initializable {
   private void setWordForm(final String polishName, final List<WordSound> wordSounds) {
     textFieldPolishName.setText(trimToEmpty(polishName));
     listViewWordVariants.setItems(FXCollections.observableArrayList(wordSounds));
+    if (!CollectionUtils.isEmpty(wordSounds)) {
+      wordSounds.stream()
+                .filter(wordSound -> wordSound.getType().equals(WordTypeEnum.WORD.toString()))
+                .findFirst()
+                .ifPresent(this::setWordSoundForm);
+    } else {
+      buttonClearWordSoundOnAction();
+    }
   }
 
   public void initializeLessonComboBox() {
@@ -314,9 +324,10 @@ public class WordFormController implements Initializable {
   }
 
   public void translate(final boolean changeTab) {
-    if (!trimToEmpty(textFieldEnglishNames.getText()).isEmpty()) {
+    final String textToTranslate = StringUtils.defaultIfBlank(trimToEmpty(textFieldEnglishNames.getText()), trimToEmpty(textFieldEnglishName.getText()));
+    if (StringUtils.isNoneBlank(textToTranslate)) {
       wordController.getInjectService().getScrapperController()
-          .webScrap(Arrays.stream(textFieldEnglishNames.getText().split(";")).toList(), changeTab);
+          .webScrap(Arrays.stream(textToTranslate.split(";")).toList(), changeTab);
       if (changeTab) {
         wordController.getTabPane().getSelectionModel().select(1);
       }
@@ -394,6 +405,8 @@ public class WordFormController implements Initializable {
     wordController.getWordSoundService().delete(wordSound);
 
     refreshListViewWordVariants(wordSound.getWord().getId());
+    wordController.refreshTableView();
+    wordController.refreshChildComboBoxes();
   }
 
   public void buttonEditWordSoundOnAction() {
@@ -413,6 +426,8 @@ public class WordFormController implements Initializable {
 
     setWordSoundForm(updated);
     refreshListViewWordVariants(updated.getWord().getId());
+    wordController.refreshTableView();
+    wordController.refreshChildComboBoxes();
   }
 
   public void buttonAddWordSoundOnAction() {
@@ -449,6 +464,8 @@ public class WordFormController implements Initializable {
         }
       });
     }
+    wordController.refreshTableView();
+    wordController.refreshChildComboBoxes();
   }
 
   public void toggleButtonAOnAction() {

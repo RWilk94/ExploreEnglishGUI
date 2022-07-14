@@ -236,15 +236,14 @@ public class ViewController implements Initializable {
   }
 
   private void fillInLessonItemChildrenListView(LearnItem selectedItem) {
-    if (selectedItem instanceof Exercise) {
-      Exercise exercise = (Exercise) selectedItem;
-      List<LearnItemChild> learnItemChildren = exerciseItemService.getAllByExercise(exercise).stream()
+    if (selectedItem instanceof Exercise exercise) {
+      final List<LearnItemChild> learnItemChildren = exerciseItemService.getAllByExercise(exercise).stream()
                                                                   .sorted(Comparator.comparing(ExerciseItem::getPosition))
                                                                   .collect(Collectors.toList());
       listViewLearnItemChildren.setItems(FXCollections.observableArrayList(learnItemChildren));
-    } else if (selectedItem instanceof LessonWord) {
-      Word word = ((LessonWord) selectedItem).getWord();
-      List<LearnItemChild> learnItemChildren = wordSentenceService.getAllByWord(word).stream()
+    } else if (selectedItem instanceof LessonWord lessonWord) {
+      final Word word = lessonWord.getWord();
+      final List<LearnItemChild> learnItemChildren = wordSentenceService.getAllByWord(word).stream()
                                                                   .sorted(Comparator.comparing(WordSentence::getPosition))
                                                                   .collect(Collectors.toList());
       listViewLearnItemChildren.setItems(FXCollections.observableArrayList(learnItemChildren));

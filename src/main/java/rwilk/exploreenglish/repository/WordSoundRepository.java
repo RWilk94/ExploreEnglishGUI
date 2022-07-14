@@ -2,6 +2,7 @@ package rwilk.exploreenglish.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.model.entity.WordSound;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface WordSoundRepository extends JpaRepository<WordSound, Long> {
   List<WordSound> findAllByEnglishNameLike(final String pattern);
 
   List<WordSound> findAllByEnglishName(final String englishName);
+
+  void deleteAllByWord(final Word word);
 
 }

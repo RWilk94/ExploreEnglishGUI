@@ -9,4 +9,5 @@ public enum WordTypeEnum {
   PLURAL,
   SYNONYM,
   OPPOSITE,
+  SENTENCE,
 }

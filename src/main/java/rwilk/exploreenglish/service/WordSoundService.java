@@ -42,4 +42,9 @@ public class WordSoundService {
     wordSoundRepository.delete(wordSound);
   }
 
+  @Transactional
+  public void deleteByWord(final Word word) {
+    wordSoundRepository.deleteAllByWord(word);
+  }
+
 }

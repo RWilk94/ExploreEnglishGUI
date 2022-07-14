@@ -50,6 +50,7 @@ public class WordService {
   public void delete(Word word) {
     wordSentenceService.deleteByWord(word);
     lessonWordRepository.deleteAllByWord(word);
+    wordItemService.deleteByWord(word);
     wordRepository.delete(word);
   }
 

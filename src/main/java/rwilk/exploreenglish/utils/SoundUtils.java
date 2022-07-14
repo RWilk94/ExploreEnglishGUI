@@ -36,10 +36,11 @@ public class SoundUtils {
 
   public static void downloadFile(final String fieldText) {
     try {
+      final String fileName = fieldText.substring(fieldText.lastIndexOf("/") + 1);
       final URLConnection connection = new URL(trim(fieldText)).openConnection();
       final InputStream inputStream = connection.getInputStream();
       final OutputStream outputStream =
-              new FileOutputStream("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\temp-file.mp3");
+              new FileOutputStream("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\" + fileName);
 
       byte[] buffer = new byte[4096];
       int length;
@@ -48,7 +49,7 @@ public class SoundUtils {
       }
       outputStream.close();
 
-      playFile("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\temp-file.mp3");
+      playFile("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\" + fileName);
 
     } catch (Exception e) {
       log.error("An exception occurred during downloading a file {}", fieldText);
@@ -58,6 +59,7 @@ public class SoundUtils {
   private static void playFile(final String pathToFile) {
     Media hit = new Media(new File(pathToFile).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(hit);
+    mediaPlayer.setOnError(() -> log.error("An exception occurred during playing a file {}, root cause: {} ", pathToFile, mediaPlayer.getError().toString()));
     mediaPlayer.play();
   }
 

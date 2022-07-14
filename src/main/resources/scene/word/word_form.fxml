@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rwilk.exploreenglish.controller.word.WordFormController">
+<ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="rwilk.exploreenglish.controller.word.WordFormController">
 
   <VBox>
 
@@ -212,206 +212,222 @@
       </VBox>
     </HBox>
 
-    <HBox BorderPane.alignment="TOP_CENTER">
-      <VBox>
-        <Label minWidth="100" text="Part of Speech">
-          <HBox.margin>
-            <Insets bottom="2.5" left="5.0" right="5.0" top="10.0" />
-          </HBox.margin>
-        </Label>
-        <HBox>
-          <ToggleButton fx:id="toggleButtonNoun" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked" text="rzeczownik" userData="rzeczownik">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonVerb" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked" text="czasownik" userData="czasownik">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonAdjective" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked" text="przymiotnik" userData="przymiotnik">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonAdverb" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked" text="przysłówek" userData="przysłówek">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonPhrasalVerb" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked" text="phrasal verb" userData="phrasal verb">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonSentence" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked" text="wyrażenie" userData="wyrażenie">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonIdiom" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked" text="idiom" userData="idiom">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonOther" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked" text="inne" userData="inne">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-        </HBox>
-        <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-        </HBox.margin>
-      </VBox>
-    </HBox>
-
-    <HBox BorderPane.alignment="TOP_CENTER">
-      <VBox HBox.hgrow="ALWAYS">
-        <Label minWidth="100" text="Article">
-          <HBox.margin>
-            <Insets bottom="2.5" left="5.0" right="5.0" top="10.0" />
-          </HBox.margin>
-        </Label>
-
-        <HBox>
-          <ToggleButton fx:id="toggleButtonA" onAction="#toggleButtonAOnAction" text="a" userData="a">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonAn" onAction="#toggleButtonAOnAction" text="an" userData="an">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonThe" text="the" userData="the">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonNone" text=" " userData="">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-        </HBox>
-        <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-        </HBox.margin>
-      </VBox>
+    <HBox HBox.hgrow="ALWAYS" BorderPane.alignment="TOP_CENTER">
 
       <VBox HBox.hgrow="ALWAYS">
-      <Label minWidth="100" text="Level">
-        <HBox.margin>
-          <Insets bottom="2.5" left="5.0" right="5.0" top="10.0" />
-        </HBox.margin>
-      </Label>
 
-        <HBox>
-          <ToggleButton fx:id="toggleButtonA1" text="a1" userData="a1">
+        <HBox HBox.hgrow="ALWAYS" BorderPane.alignment="TOP_CENTER">
+          <VBox>
+            <Label minWidth="100" text="Part of Speech">
+              <HBox.margin>
+                <Insets bottom="2.5" left="5.0" right="5.0" top="10.0"/>
+              </HBox.margin>
+            </Label>
+            <HBox>
+              <ToggleButton fx:id="toggleButtonNoun" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="rzeczownik" userData="rzeczownik">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonVerb" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="czasownik" userData="czasownik">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonAdjective" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="przymiotnik" userData="przymiotnik">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonAdverb" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="przysłówek" userData="przysłówek">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonPhrasalVerb" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="phrasal verb" userData="phrasal verb">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonSentence" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="wyrażenie" userData="wyrażenie">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonIdiom" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="idiom" userData="idiom">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonOther" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="inne" userData="inne">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+            </HBox>
             <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
             </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonA2" text="a2" userData="a2">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonB1" text="b1" userData="b1">
-          <HBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-          </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonB2" text="b2" userData="b2">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonC1" text="c1" userData="c1">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonC2" text="c2" userData="c2">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
+          </VBox>
         </HBox>
-        <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-        </HBox.margin>
+
+        <HBox HBox.hgrow="ALWAYS" BorderPane.alignment="TOP_CENTER">
+          <VBox HBox.hgrow="ALWAYS">
+            <Label minWidth="100" text="Article">
+              <HBox.margin>
+                <Insets bottom="2.5" left="5.0" right="5.0" top="10.0"/>
+              </HBox.margin>
+            </Label>
+
+            <HBox>
+              <ToggleButton fx:id="toggleButtonA" onAction="#toggleButtonAOnAction" text="a" userData="a">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonAn" onAction="#toggleButtonAOnAction" text="an" userData="an">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonThe" text="the" userData="the">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonNone" text=" " userData="">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+            </HBox>
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </VBox>
+
+          <VBox HBox.hgrow="ALWAYS">
+            <Label minWidth="100" text="Level">
+              <HBox.margin>
+                <Insets bottom="2.5" left="5.0" right="5.0" top="10.0"/>
+              </HBox.margin>
+            </Label>
+
+            <HBox>
+              <ToggleButton fx:id="toggleButtonA1" text="a1" userData="a1">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonA2" text="a2" userData="a2">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonB1" text="b1" userData="b1">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonB2" text="b2" userData="b2">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonC1" text="c1" userData="c1">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonC2" text="c2" userData="c2">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+            </HBox>
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </VBox>
+
+          <VBox HBox.hgrow="ALWAYS">
+            <Label minWidth="100" text="Grammar">
+              <HBox.margin>
+                <Insets bottom="2.5" left="5.0" right="5.0" top="10.0"/>
+              </HBox.margin>
+            </Label>
+
+            <HBox>
+              <ToggleButton fx:id="toggleButtonCountable" text="countable" userData="countable">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonUncountable" text="uncountable" userData="uncountable">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonCountableAndUncountable"
+                            onAction="#toggleButtonCountableAndUncountableOnAction" text="countable and uncountable"
+                            userData="countable and uncountable">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonPlural" onAction="#toggleButtonPluralOnAction" text="plural"
+                            userData="plural">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonEmpty" text=" " userData="">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+            </HBox>
+            <HBox.margin>
+              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+            </HBox.margin>
+          </VBox>
+        </HBox>
+
       </VBox>
 
-      <VBox HBox.hgrow="ALWAYS">
-        <Label minWidth="100" text="Grammar">
-          <HBox.margin>
-            <Insets bottom="2.5" left="5.0" right="5.0" top="10.0" />
-          </HBox.margin>
-        </Label>
+      <VBox HBox.hgrow="NEVER" prefWidth="65">
+        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonDeleteOnAction" text="Delete" styleClass="button-delete">
+          <VBox.margin>
+            <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
+          </VBox.margin>
+        </Button>
 
-        <HBox>
-          <ToggleButton fx:id="toggleButtonCountable" text="countable" userData="countable">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonUncountable" text="uncountable" userData="uncountable">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonCountableAndUncountable" onAction="#toggleButtonCountableAndUncountableOnAction" text="countable and uncountable" userData="countable and uncountable">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonPlural" onAction="#toggleButtonPluralOnAction" text="plural" userData="plural">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-          <ToggleButton fx:id="toggleButtonEmpty" text=" " userData="">
-            <HBox.margin>
-              <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-            </HBox.margin>
-          </ToggleButton>
-        </HBox>
-        <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
-        </HBox.margin>
+        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonClearOnAction" text="Clear" styleClass="button-clear">
+          <VBox.margin>
+            <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
+          </VBox.margin>
+        </Button>
+
+        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonEditOnAction" text="Edit" styleClass="button-edit">
+          <VBox.margin>
+            <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
+          </VBox.margin>
+        </Button>
+        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonAddOnAction" text="Add" styleClass="button-add">
+          <VBox.margin>
+            <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
+          </VBox.margin>
+        </Button>
       </VBox>
     </HBox>
-
-    <HBox>
-      <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonDeleteOnAction" text="Delete">
-        <HBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </HBox.margin>
-      </Button>
-      <HBox alignment="BOTTOM_RIGHT">
-        <Button mnemonicParsing="false" onAction="#buttonClearOnAction" text="Clear">
-          <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </HBox.margin>
-        </Button>
-
-        <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonEditOnAction" text="Edit">
-          <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </HBox.margin>
-        </Button>
-        <Button layoutX="331.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonAddOnAction" text="Add">
-          <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </HBox.margin>
-        </Button>
-      </HBox>
-    </HBox>
-
 
   </VBox>
 

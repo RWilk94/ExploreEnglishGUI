@@ -70,7 +70,7 @@ public final class Word implements Serializable {
   private List<WordSentence> wordSentences;
 
   public String englishNamesAsString() {
-    return String.join(";", ListUtils.emptyIfNull(englishNames
+    return String.join("; ", ListUtils.emptyIfNull(englishNames
                                                       .stream()
                                                       .map(WordSound::getEnglishName)
                                                       .toList()));
@@ -83,6 +83,7 @@ public final class Word implements Serializable {
     if (StringUtils.isNoneEmpty(article)) {
       stringBuilder.append(article).append(" ");
     }
+    stringBuilder.append(englishNamesAsString()).append(" ");
     stringBuilder.append("(").append(polishName).append(")");
     if (StringUtils.isNoneEmpty(grammarType)) {
       stringBuilder.append("[").append(grammarType).append("]");

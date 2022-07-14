@@ -53,9 +53,6 @@
         </cellValueFactory>
       </TableColumn>
       <TableColumn fx:id="columnEnglishName" minWidth="20.0" prefWidth="-1.0" text="En Name">
-        <cellValueFactory>
-          <PropertyValueFactory property="englishNames"/>
-        </cellValueFactory>
       </TableColumn>
       <TableColumn fx:id="columnPolishName" minWidth="20.0" prefWidth="-1.0" text="Pl Name">
         <cellValueFactory>
@@ -72,41 +69,16 @@
           <PropertyValueFactory property="partOfSpeech"/>
         </cellValueFactory>
       </TableColumn>
-      <TableColumn fx:id="columnComparative" minWidth="20.0" prefWidth="-1.0" text="Comparative">
-        <cellValueFactory>
-          <PropertyValueFactory property="comparative"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnSuperlative" minWidth="20.0" prefWidth="-1.0" text="Superlative">
-        <cellValueFactory>
-          <PropertyValueFactory property="superlative"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnPastTense" minWidth="20.0" prefWidth="-1.0" text="PastTense">
-        <cellValueFactory>
-          <PropertyValueFactory property="pastTense"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnPastParticiple" minWidth="20.0" prefWidth="-1.0" text="PastParticiple">
-        <cellValueFactory>
-          <PropertyValueFactory property="pastParticiple"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnPlural" minWidth="20.0" prefWidth="-1.0" text="Plural">
-        <cellValueFactory>
-          <PropertyValueFactory property="plural"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnOpposite" minWidth="20.0" prefWidth="-1.0" text="Opposite">
-        <cellValueFactory>
-          <PropertyValueFactory property="opposite"/>
-        </cellValueFactory>
-      </TableColumn>
-      <TableColumn fx:id="columnSynonym" minWidth="20.0" prefWidth="-1.0" text="Synonym">
-        <cellValueFactory>
-          <PropertyValueFactory property="synonym"/>
-        </cellValueFactory>
-      </TableColumn>
+      <TableColumn fx:id="columnAmeSound" minWidth="20.0" prefWidth="-1.0" text="AmE Sound" />
+      <TableColumn fx:id="columnBreSound" minWidth="20.0" prefWidth="-1.0" text="BrE Sound" />
+      <TableColumn fx:id="columnComparative" minWidth="20.0" prefWidth="-1.0" text="Comparative" />
+      <TableColumn fx:id="columnSuperlative" minWidth="20.0" prefWidth="-1.0" text="Superlative" />
+      <TableColumn fx:id="columnPastTense" minWidth="20.0" prefWidth="-1.0" text="PastTense" />
+      <TableColumn fx:id="columnPastParticiple" minWidth="20.0" prefWidth="-1.0" text="PastParticiple" />
+      <TableColumn fx:id="columnPlural" minWidth="20.0" prefWidth="-1.0" text="Plural" />
+      <TableColumn fx:id="columnOpposite" minWidth="20.0" prefWidth="-1.0" text="Opposite" />
+      <TableColumn fx:id="columnSynonym" minWidth="20.0" prefWidth="-1.0" text="Synonym" />
+      <TableColumn fx:id="columnSentence" minWidth="20.0" prefWidth="-1.0" text="Sentence" />
     </columns>
   </TableView>
 

@@ -1,6 +1,8 @@
 package rwilk.exploreenglish.controller.word;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -12,13 +14,14 @@ import javafx.scene.input.MouseEvent;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import rwilk.exploreenglish.model.WordTypeEnum;
 import rwilk.exploreenglish.model.entity.Word;
+import rwilk.exploreenglish.model.entity.WordSound;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Controller
@@ -33,6 +36,8 @@ public class WordTableController implements Initializable {
   public TableColumn<Word, String> columnPolishName;
   public TableColumn<Word, String> columnLevel;
   public TableColumn<Word, String> columnPartOfSpeech;
+  public TableColumn<Word, String> columnAmeSound;
+  public TableColumn<Word, String> columnBreSound;
   public TableColumn<Word, String> columnComparative;
   public TableColumn<Word, String> columnSuperlative;
   public TableColumn<Word, String> columnPastTense;
@@ -40,6 +45,7 @@ public class WordTableController implements Initializable {
   public TableColumn<Word, String> columnPlural;
   public TableColumn<Word, String> columnOpposite;
   public TableColumn<Word, String> columnSynonym;
+  public TableColumn<Word, String> columnSentence;
   public TextField textFieldFilterByLesson;
   public TextField textFieldFilterByCourse;
   public TextField textFieldFilterByEnName;
@@ -76,11 +82,11 @@ public class WordTableController implements Initializable {
   }
 
   private void initializeTableView() {
-    initializeColumns(Arrays.asList(columnEnglishName, columnPolishName), 0.16);
-    initializeColumns(Collections.singletonList(columnPartOfSpeech), 0.10);
-    initializeColumns(Arrays.asList(columnComparative, columnSuperlative, columnPastTense, columnPastParticiple,
-        columnPlural, columnOpposite, columnSynonym), 0.2);
-    initializeColumns(Arrays.asList(columnId, columnLevel), 0.05);
+    initializeColumns(List.of(columnEnglishName, columnPolishName), 0.16);
+    initializeColumns(List.of(columnPartOfSpeech, columnAmeSound, columnBreSound), 0.10);
+    initializeColumns(List.of(columnComparative, columnSuperlative, columnPastTense, columnPastParticiple,
+        columnPlural, columnOpposite, columnSynonym, columnSentence), 0.2);
+    initializeColumns(List.of(columnId, columnLevel), 0.05);
 
     tableWords.setRowFactory(row -> new TableRow<Word>() {
       @Override
@@ -93,6 +99,28 @@ public class WordTableController implements Initializable {
         }
       }
     });
+
+    columnEnglishName.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.WORD, WordSound::getEnglishName));
+    columnAmeSound.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.WORD, WordSound::getAmericanSound));
+    columnBreSound.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.WORD, WordSound::getBritishSound));
+    columnComparative.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.COMPARATIVE, WordSound::getEnglishName));
+    columnSuperlative.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.SUPERLATIVE, WordSound::getEnglishName));
+    columnPastTense.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.PAST_TENSE, WordSound::getEnglishName));
+    columnPastParticiple.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.PAST_PARTICIPLE, WordSound::getEnglishName));
+    columnPlural.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.PLURAL, WordSound::getEnglishName));
+    columnOpposite.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.OPPOSITE, WordSound::getEnglishName));
+    columnSynonym.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.SYNONYM, WordSound::getEnglishName));
+    columnSentence.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.SENTENCE, WordSound::getEnglishName));
+  }
+
+  private ObjectBinding<String> bindCellValue(final List<WordSound> wordSounds, final WordTypeEnum wordType,
+                                              final Function<WordSound, String> mapFunction) {
+    return Bindings.createObjectBinding(() -> StringUtils.defaultString(
+        ListUtils.emptyIfNull(wordSounds)
+            .stream()
+            .filter(wordSound -> wordType.toString().equals(wordSound.getType()))
+            .map(mapFunction)
+            .collect(Collectors.joining("; "))));
   }
 
   private void initializeColumns(List<TableColumn<?, ?>> tableColumns, double other) {
