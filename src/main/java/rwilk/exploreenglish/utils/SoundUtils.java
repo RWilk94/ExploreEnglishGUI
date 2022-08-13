@@ -56,6 +56,29 @@ public class SoundUtils {
     }
   }
 
+  public static String checkIfFileExists(final String fieldText) {
+    try {
+      final String fileName = fieldText.substring(fieldText.lastIndexOf("/") + 1);
+      final URLConnection connection = new URL(trim(fieldText)).openConnection();
+      final InputStream inputStream = connection.getInputStream();
+      final OutputStream outputStream =
+        new FileOutputStream("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\" + fileName);
+
+      byte[] buffer = new byte[4096];
+      int length;
+      while ((length = inputStream.read(buffer)) > 0) {
+        outputStream.write(buffer, 0, length);
+      }
+      outputStream.close();
+
+      return fieldText;
+
+    } catch (Exception e) {
+      log.error("An exception occurred during downloading a file {}", fieldText);
+      return null;
+    }
+  }
+
   private static void playFile(final String pathToFile) {
     Media hit = new Media(new File(pathToFile).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(hit);

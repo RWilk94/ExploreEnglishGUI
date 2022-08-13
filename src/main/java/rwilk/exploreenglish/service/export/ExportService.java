@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.service.export;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -10,10 +11,9 @@ import rwilk.exploreenglish.model.entity.ExerciseItem;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Note;
-import rwilk.exploreenglish.model.entity.Sentence;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
-import rwilk.exploreenglish.model.entity.WordSentence;
+import rwilk.exploreenglish.model.entity.WordSound;
 import rwilk.exploreenglish.service.CourseService;
 import rwilk.exploreenglish.service.ExerciseItemService;
 import rwilk.exploreenglish.service.ExerciseService;
@@ -24,6 +24,7 @@ import rwilk.exploreenglish.service.SentenceService;
 import rwilk.exploreenglish.service.TermService;
 import rwilk.exploreenglish.service.WordSentenceService;
 import rwilk.exploreenglish.service.WordService;
+import rwilk.exploreenglish.service.WordSoundService;
 import rwilk.exploreenglish.utils.WordUtils;
 
 import java.io.PrintWriter;
@@ -31,15 +32,18 @@ import java.util.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ExportService {
 
-  private final static String PARAM_SEPARATOR = ", ";
-  private final static String QUOTE_SIGN = "'";
-  private final static Integer CHUNK_SIZE = 1;
+  private static final String PARAM_SEPARATOR = ", ";
+  private static final String QUOTE_SIGN = "'";
+  private static final Integer CHUNK_SIZE = 1;
+  private static final String LOG_PREFIX = "START GENERATING {}";
   private final CourseService courseService;
   private final LessonService lessonService;
   private final LessonWordService lessonWordService;
   private final WordService wordService;
+  private final WordSoundService wordSoundService;
   private final WordSentenceService wordSentenceService;
   private final SentenceService sentenceService;
   private final NoteService noteService;
@@ -47,33 +51,19 @@ public class ExportService {
   private final ExerciseItemService exerciseItemService;
   private final TermService termService;
 
-  public ExportService(CourseService courseService, LessonService lessonService, LessonWordService lessonWordService,
-                       WordService wordService, WordSentenceService wordSentenceService, SentenceService sentenceService,
-                       NoteService noteService, ExerciseService exerciseService, ExerciseItemService exerciseItemService, TermService termService) {
-    this.courseService = courseService;
-    this.lessonService = lessonService;
-    this.lessonWordService = lessonWordService;
-    this.wordService = wordService;
-    this.wordSentenceService = wordSentenceService;
-    this.sentenceService = sentenceService;
-    this.noteService = noteService;
-    this.exerciseService = exerciseService;
-    this.exerciseItemService = exerciseItemService;
-    this.termService = termService;
-  }
-
   public void export() {
     exportVersion();
     exportCourses(courseService.getAll());
     exportLessons(lessonService.getAll());
     exportLessonWords(lessonWordService.getAll());
     exportWords(wordService.getAll());
-    exportWordSentences(wordSentenceService.getAll());
-    exportSentences(sentenceService.getAll());
+    exportWordSounds(wordSoundService.getAll());
+    // exportWordSentences(wordSentenceService.getAll());
+    // exportSentences(sentenceService.getAll());
     exportNotes(noteService.getAll());
     exportExercises(exerciseService.getAll());
     exportExerciseItems(exerciseItemService.getAll());
-    exportTerms(termService.getAll());
+    // exportTerms(termService.getAll());
   }
 
   public void exportVersion() {
@@ -82,54 +72,56 @@ public class ExportService {
     exportFile(sb, tag.toLowerCase() + ".txt", tag);
   }
 
-  private void exportCourses(List<Course> courses) {
-    String tag = "COURSES";
-    log.info("START GENERATING {}", tag);
-    List<List<Course>> chunks = ListUtils.partition(courses, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<Course> chunk : chunks) {
+  private void exportCourses(final List<Course> courses) {
+    final String tag = "COURSES";
+    log.info(LOG_PREFIX, tag);
+
+    final List<List<Course>> chunks = ListUtils.partition(courses, CHUNK_SIZE);
+    final StringBuilder sql = new StringBuilder();
+    for (final List<Course> chunk : chunks) {
       sql.append("INSERT INTO 'courses' ('id', 'english_name', 'polish_name', 'image', 'position') VALUES ");
 
-      for (Course course : chunk) {
+      for (final Course course : chunk) {
         sql.append("\n")
-            .append("(")
-            .append(course.getId()) // COLUMN_ID
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(course.getEnglishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(course.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
-            .append(PARAM_SEPARATOR)
-            .append("NULL") // COLUMN IMAGE
-            .append(PARAM_SEPARATOR)
-            .append(course.getPosition()); // COLUMN POSITION
+           .append("(")
+           .append(course.getId()) // COLUMN_ID
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(course.getEnglishName())).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(course.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
+           .append(PARAM_SEPARATOR)
+           .append("NULL") // COLUMN IMAGE
+           .append(PARAM_SEPARATOR)
+           .append(course.getPosition()); // COLUMN POSITION
         insertEndLineCharacter(sql, chunk, course);
       }
     }
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
-  private void exportLessons(List<Lesson> lessons) {
-    String tag = "LESSONS";
-    log.info("START GENERATING {}", tag);
-    List<List<Lesson>> chunks = ListUtils.partition(lessons, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<Lesson> chunk : chunks) {
+  private void exportLessons(final List<Lesson> lessons) {
+    final String tag = "LESSONS";
+    log.info(LOG_PREFIX, tag);
+
+    final List<List<Lesson>> chunks = ListUtils.partition(lessons, CHUNK_SIZE);
+    final StringBuilder sql = new StringBuilder();
+    for (final List<Lesson> chunk : chunks) {
       sql.append("INSERT INTO 'lessons' ('id', 'english_name', 'polish_name', 'image', 'position', 'course_id') VALUES ");
 
-      for (Lesson lesson : chunk) {
+      for (final Lesson lesson : chunk) {
         sql.append("\n")
-            .append("(")
-            .append(lesson.getId()) // COLUMN_ID
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(lesson.getEnglishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(lesson.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
-            .append(PARAM_SEPARATOR)
-            .append("NULL") // COLUMN IMAGE
-            .append(PARAM_SEPARATOR)
-            .append(lesson.getPosition()) // COLUMN POSITION
-            .append(PARAM_SEPARATOR)
-            .append(lesson.getCourse().getId()); // COLUMN COURSE ID
+           .append("(")
+           .append(lesson.getId()) // COLUMN_ID
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(lesson.getEnglishName())).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(lesson.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
+           .append(PARAM_SEPARATOR)
+           .append("NULL") // COLUMN IMAGE
+           .append(PARAM_SEPARATOR)
+           .append(lesson.getPosition()) // COLUMN POSITION
+           .append(PARAM_SEPARATOR)
+           .append(lesson.getCourse().getId()); // COLUMN COURSE ID
         insertEndLineCharacter(sql, chunk, lesson);
       }
     }
@@ -137,14 +129,15 @@ public class ExportService {
   }
 
   private void exportLessonWords(List<LessonWord> lessonWords) {
-    String tag = "LESSON_WORDS";
-    log.info("START GENERATING {}", tag);
-    List<List<LessonWord>> chunks = ListUtils.partition(lessonWords, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<LessonWord> chunk : chunks) {
+    final String tag = "LESSON_WORDS";
+    log.info(LOG_PREFIX, tag);
+
+    final List<List<LessonWord>> chunks = ListUtils.partition(lessonWords, CHUNK_SIZE);
+    final StringBuilder sql = new StringBuilder();
+    for (final List<LessonWord> chunk : chunks) {
       sql.append("INSERT INTO 'lesson_word' ('id', 'position', 'lesson_id', 'word_id') VALUES ");
 
-      for (LessonWord lessonWord : chunk) {
+      for (final LessonWord lessonWord : chunk) {
         sql.append("\n")
             .append("(")
             .append(lessonWord.getId()) // COLUMN ID
@@ -160,47 +153,30 @@ public class ExportService {
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
-  private void exportWords(List<Word> words) {
-    String tag = "WORDS";
-    log.info("START GENERATING {}", tag);
-    List<List<Word>> chunks = ListUtils.partition(words, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<Word> chunk : chunks) {
-      sql.append("INSERT INTO 'words' ('id', 'english_name', 'polish_name', 'part_of_speech', 'sound', 'article', " +
-          "'comparative', 'superlative', 'past_tense', 'past_participle', 'grammar_type', 'plural', 'synonym', " +
-          "'opposite', 'progress', 'skip', 'difficult', 'correct', 'wrong', 'next_repeat', " +
-          "'series') VALUES ");
+  private void exportWords(final List<Word> words) {
+    final String tag = "WORDS";
+    log.info(LOG_PREFIX, tag);
 
-      for (Word word : chunk) {
+    final List<List<Word>> chunks = ListUtils.partition(words, CHUNK_SIZE);
+    final StringBuilder sql = new StringBuilder();
+    for (final List<Word> chunk : chunks) {
+      sql.append("INSERT INTO 'words' ('id', 'polish_name', 'part_of_speech', 'article', 'grammar_type', 'level'"
+                 + "'progress', 'skip', 'difficult', 'correct', 'wrong', 'next_repeat', 'series') VALUES ");
+
+      for (final Word word : chunk) {
         sql.append("\n")
-            .append("(")
-            .append(word.getId()) // COLUMN_ID
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.englishNamesAsString().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getPartOfSpeech().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PART OF SPEECH
-            .append(PARAM_SEPARATOR)
-            // .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(word.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOUND
-            // .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getArticle().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ARTICLE
-            .append(PARAM_SEPARATOR)
-//            .append(QUOTE_SIGN).append(word.getComparative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN COMPARATIVE
-//            .append(PARAM_SEPARATOR)
-//            .append(QUOTE_SIGN).append(word.getSuperlative().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SUPERLATIVE
-//            .append(PARAM_SEPARATOR)
-//            .append(QUOTE_SIGN).append(word.getPastTense().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST TENSE
-//            .append(PARAM_SEPARATOR)
-//            .append(QUOTE_SIGN).append(word.getPastParticiple().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST PARTICIPLE
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(word.getGrammarType().replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN GRAMMAR TYPE
-//            .append(PARAM_SEPARATOR)
-//            .append(QUOTE_SIGN).append(word.getPlural().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PLURAL
-//            .append(PARAM_SEPARATOR)
-//            .append(QUOTE_SIGN).append(word.getSynonym().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SYNONYM
-//            .append(PARAM_SEPARATOR)
-//            .append(QUOTE_SIGN).append(word.getOpposite().replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN OPPOSITE
+           .append("(")
+           .append(word.getId()) // COLUMN_ID
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(word.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(word.getPartOfSpeech())).append(QUOTE_SIGN) // COLUMN PART OF SPEECH
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(word.getArticle())).append(QUOTE_SIGN) // COLUMN ARTICLE
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(word.getGrammarType())).append(QUOTE_SIGN) // COLUMN GRAMMAR TYPE
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(word.getLevel())).append(QUOTE_SIGN); // COLUMN LEVEL
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, word);
       }
@@ -208,96 +184,131 @@ public class ExportService {
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
-  private void exportWordSentences(List<WordSentence> wordSentences) {
-    String tag = "WORD_SENTENCE";
-    log.info("START GENERATING {}", tag);
-    List<List<WordSentence>> chunks = ListUtils.partition(wordSentences, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<WordSentence> chunk : chunks) {
-      sql.append("INSERT INTO 'word_sentence' ('id', 'position', 'word_id', 'sentence_id') VALUES ");
+  private void exportWordSounds(final List<WordSound> wordSounds) {
+    final String tag = "WORD_SOUNDS";
+    log.info(LOG_PREFIX, tag);
 
-      for (WordSentence wordSentence : chunk) {
+    final List<List<WordSound>> chunks = ListUtils.partition(wordSounds, CHUNK_SIZE);
+    final StringBuilder sql = new StringBuilder();
+    for (final List<WordSound> chunk : chunks) {
+      sql.append("INSERT INTO 'word_sounds' ('id', 'type', 'english_name', 'british_sound', 'american_sound', " +
+                 "'word_id') VALUES ");
+
+      for (final WordSound wordSound : chunk) {
         sql.append("\n")
-            .append("(")
-            .append(wordSentence.getId()) // COLUMN ID
-            .append(PARAM_SEPARATOR)
-            .append(wordSentence.getPosition()) // COLUMN POSITION
-            .append(PARAM_SEPARATOR)
-            .append(wordSentence.getWord().getId()) // COLUMN WORD ID
-            .append(PARAM_SEPARATOR)
-            .append(wordSentence.getSentence().getId()); // COLUMN SENTENCE ID
-        insertEndLineCharacter(sql, chunk, wordSentence);
+           .append("(")
+           .append(wordSound.getId()) // COLUMN_ID
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(wordSound.getType())).append(QUOTE_SIGN) // COLUMN TYPE
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(wordSound.getEnglishName())).append(QUOTE_SIGN) // COLUMN ENGLISH_NAME
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(wordSound.getBritishSound())).append(QUOTE_SIGN) // COLUMN BRITISH_SOUND
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceApostrophe(wordSound.getAmericanSound())).append(QUOTE_SIGN) // COLUMN AMERICAN_SOUND
+           .append(PARAM_SEPARATOR)
+           .append(wordSound.getWord().getId()); // COLUMN WORD_ID
+        insertEndLineCharacter(sql, chunk, wordSound);
       }
     }
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
-  private void exportSentences(List<Sentence> sentences) {
-    String tag = "SENTENCES";
-    log.info("START GENERATING {}", tag);
-    List<List<Sentence>> chunks = ListUtils.partition(sentences, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<Sentence> chunk : chunks) {
-      sql.append("INSERT INTO 'sentences' ('id', 'english_name', 'polish_name', 'sound', " +
-          "'progress', 'skip', 'difficult', 'correct', 'wrong', 'next_repeat', 'series') VALUES ");
-      for (Sentence sentence : chunk) {
-        sql.append("\n")
-            .append("(")
-            .append(sentence.getId()) // COLUMN_ID
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(sentence.getEnglishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(sentence.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(sentence.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN SOUND
-        insertRepeatablePart(sql);
-        insertEndLineCharacter(sql, chunk, sentence);
-      }
-    }
-    exportFile(sql, tag.toLowerCase() + ".txt", tag);
-  }
+//  private void exportWordSentences(List<WordSentence> wordSentences) {
+//    // TODO and below
+//    String tag = "WORD_SENTENCE";
+//    log.info(LOG_PREFIX, tag);
+//    List<List<WordSentence>> chunks = ListUtils.partition(wordSentences, CHUNK_SIZE);
+//    StringBuilder sql = new StringBuilder();
+//    for (List<WordSentence> chunk : chunks) {
+//      sql.append("INSERT INTO 'word_sentence' ('id', 'position', 'word_id', 'sentence_id') VALUES ");
+//
+//      for (WordSentence wordSentence : chunk) {
+//        sql.append("\n")
+//            .append("(")
+//            .append(wordSentence.getId()) // COLUMN ID
+//            .append(PARAM_SEPARATOR)
+//            .append(wordSentence.getPosition()) // COLUMN POSITION
+//            .append(PARAM_SEPARATOR)
+//            .append(wordSentence.getWord().getId()) // COLUMN WORD ID
+//            .append(PARAM_SEPARATOR)
+//            .append(wordSentence.getSentence().getId()); // COLUMN SENTENCE ID
+//        insertEndLineCharacter(sql, chunk, wordSentence);
+//      }
+//    }
+//    exportFile(sql, tag.toLowerCase() + ".txt", tag);
+//  }
 
-  private void exportNotes(List<Note> notes) {
-    String tag = "NOTES";
-    log.info("START GENERATING {}", tag);
-    List<List<Note>> chunks = ListUtils.partition(notes, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<Note> chunk : chunks) {
+//  private void exportSentences(List<Sentence> sentences) {
+//    String tag = "SENTENCES";
+//    log.info(LOG_PREFIX, tag);
+//    List<List<Sentence>> chunks = ListUtils.partition(sentences, CHUNK_SIZE);
+//    StringBuilder sql = new StringBuilder();
+//    for (List<Sentence> chunk : chunks) {
+//      sql.append("INSERT INTO 'sentences' ('id', 'english_name', 'polish_name', 'sound', " +
+//          "'progress', 'skip', 'difficult', 'correct', 'wrong', 'next_repeat', 'series') VALUES ");
+//      for (Sentence sentence : chunk) {
+//        sql.append("\n")
+//            .append("(")
+//            .append(sentence.getId()) // COLUMN_ID
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(sentence.getEnglishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(sentence.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
+//            .append(PARAM_SEPARATOR)
+//            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(sentence.getSound()).replaceAll("'", "''")).append(QUOTE_SIGN); // COLUMN SOUND
+//        insertRepeatablePart(sql);
+//        insertEndLineCharacter(sql, chunk, sentence);
+//      }
+//    }
+//    exportFile(sql, tag.toLowerCase() + ".txt", tag);
+//  }
+
+  private void exportNotes(final List<Note> notes) {
+    final String tag = "NOTES";
+    log.info(LOG_PREFIX, tag);
+
+    final List<List<Note>> chunks = ListUtils.partition(notes, CHUNK_SIZE);
+    final StringBuilder sql = new StringBuilder();
+    for (final List<Note> chunk : chunks) {
       sql.append("INSERT INTO 'notes' ('id', 'note', 'viewed', 'position', 'lesson_id') VALUES ");
-      for (Note note : chunk) {
+
+      for (final Note note : chunk) {
         sql.append("\n")
-            .append("(")
-            .append(note.getId()) // COLUMN_ID
-            .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(note.getNote().replaceAll("'", "''").replaceAll("\\n", "\\\\n")).append(QUOTE_SIGN) // COLUMN NOTE
-            .append(PARAM_SEPARATOR)
-            .append("0")
-            .append(PARAM_SEPARATOR)
-            .append(note.getPosition()) // COLUMN POSITION
-            .append(PARAM_SEPARATOR)
-            .append(note.getLesson().getId()); // COLUMN LESSON ID
+           .append("(")
+           .append(note.getId()) // COLUMN_ID
+           .append(PARAM_SEPARATOR)
+           .append(QUOTE_SIGN).append(replaceNewLine(replaceApostrophe(note.getNote()))).append(QUOTE_SIGN) // COLUMN NOTE
+           .append(PARAM_SEPARATOR)
+           .append("0") // COLUMNT VIEWED
+           .append(PARAM_SEPARATOR)
+           .append(note.getPosition()) // COLUMN POSITION
+           .append(PARAM_SEPARATOR)
+           .append(note.getLesson().getId()); // COLUMN LESSON ID
         insertEndLineCharacter(sql, chunk, note);
       }
     }
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
-  private void exportExercises(List<Exercise> exercises) {
-    String tag = "EXERCISES";
-    log.info("START GENERATING {}", tag);
-    List<List<Exercise>> chunks = ListUtils.partition(exercises, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<Exercise> chunk : chunks) {
+  private void exportExercises(final List<Exercise> exercises) {
+    final String tag = "EXERCISES";
+    log.info(LOG_PREFIX, tag);
+
+    final List<List<Exercise>> chunks = ListUtils.partition(exercises, CHUNK_SIZE);
+    final StringBuilder sql = new StringBuilder();
+    for (final List<Exercise> chunk : chunks) {
       sql.append("INSERT INTO 'exercises' ('id', 'name', 'type', 'position', 'lesson_id', 'progress', 'skip', " +
           "'difficult', 'correct', 'wrong', 'next_repeat', 'series') VALUES ");
-      for (Exercise exercise : chunk) {
+
+      for (final Exercise exercise : chunk) {
         sql.append("\n")
             .append("(")
             .append(exercise.getId()) // COLUMN_ID
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(exercise.getName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN NAME
+            .append(QUOTE_SIGN).append(replaceApostrophe(exercise.getName())).append(QUOTE_SIGN) // COLUMN NAME
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(exercise.getType().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN TYPE
+            .append(QUOTE_SIGN).append(replaceApostrophe(exercise.getType())).append(QUOTE_SIGN) // COLUMN TYPE
             .append(PARAM_SEPARATOR)
             .append(exercise.getPosition()) // COLUMN POSITION
             .append(PARAM_SEPARATOR)
@@ -309,39 +320,41 @@ public class ExportService {
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
-  private void exportExerciseItems(List<ExerciseItem> exerciseItems) {
-    String tag = "EXERCISES_ITEMS";
-    log.info("START GENERATING {}", tag);
-    List<List<ExerciseItem>> chunks = ListUtils.partition(exerciseItems, CHUNK_SIZE);
-    StringBuilder sql = new StringBuilder();
-    for (List<ExerciseItem> chunk : chunks) {
+  private void exportExerciseItems(final List<ExerciseItem> exerciseItems) {
+    final String tag = "EXERCISES_ITEMS";
+    log.info(LOG_PREFIX, tag);
+
+    final List<List<ExerciseItem>> chunks = ListUtils.partition(exerciseItems, CHUNK_SIZE);
+    final StringBuilder sql = new StringBuilder();
+    for (final List<ExerciseItem> chunk : chunks) {
       sql.append("INSERT INTO 'exercise_items' ('id', 'question', 'correct_answer', 'final_answer', " +
           "'first_possible_answer', 'second_possible_answer', 'third_possible_answer', 'forth_possible_answer', " +
           "'dialogue_english', 'dialogue_polish', 'description', 'position', 'exercise_id') VALUES ");
-      for (ExerciseItem exerciseItem : chunk) {
+
+      for (final ExerciseItem exerciseItem : chunk) {
         sql.append("\n")
             .append("(")
             .append(exerciseItem.getId()) // COLUMN_ID
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(exerciseItem.getQuestion().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN QUESTION
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getQuestion())).append(QUOTE_SIGN) // COLUMN QUESTION
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(exerciseItem.getCorrectAnswer().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN CORRECT ANSWER
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getCorrectAnswer())).append(QUOTE_SIGN) // COLUMN CORRECT ANSWER
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(exerciseItem.getFinalAnswer()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN FINAL ANSWER
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getFinalAnswer())).append(QUOTE_SIGN) // COLUMN FINAL ANSWER
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(exerciseItem.getFirstPossibleAnswer()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN FIRST POSSIBLE ANSWER
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getFirstPossibleAnswer())).append(QUOTE_SIGN) // COLUMN FIRST POSSIBLE ANSWER
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(exerciseItem.getSecondPossibleAnswer()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SECOND POSSIBLE ANSWER
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getSecondPossibleAnswer())).append(QUOTE_SIGN) // COLUMN SECOND POSSIBLE ANSWER
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(exerciseItem.getThirdPossibleAnswer()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN THIRD POSSIBLE ANSWER
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getThirdPossibleAnswer())).append(QUOTE_SIGN) // COLUMN THIRD POSSIBLE ANSWER
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(exerciseItem.getForthPossibleAnswer()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN FORTH POSSIBLE ANSWER
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getForthPossibleAnswer())).append(QUOTE_SIGN) // COLUMN FORTH POSSIBLE ANSWER
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(exerciseItem.getDialogueEnglish()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN DIALOGUE ENGLISH
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDialogueEnglish())).append(QUOTE_SIGN) // COLUMN DIALOGUE ENGLISH
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(exerciseItem.getDialoguePolish()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN DIALOGUE POLISH
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDialoguePolish())).append(QUOTE_SIGN) // COLUMN DIALOGUE POLISH
             .append(PARAM_SEPARATOR)
-            .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(exerciseItem.getDescription()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN DESCRIPTION
+            .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDescription())).append(QUOTE_SIGN) // COLUMN DESCRIPTION
             .append(PARAM_SEPARATOR)
             .append(exerciseItem.getPosition()) // COLUMN POSITION
             .append(PARAM_SEPARATOR)
@@ -354,7 +367,7 @@ public class ExportService {
 
   private void exportTerms(List<Term> terms) {
     String tag = "TERMS";
-    log.info("START GENERATING {}", tag);
+    log.info(LOG_PREFIX, tag);
     List<List<Term>> chunks = ListUtils.partition(terms, CHUNK_SIZE);
     StringBuilder sql = new StringBuilder();
     for (List<Term> chunk : chunks) {
@@ -434,7 +447,7 @@ public class ExportService {
   }
 
   private void insertEndLineCharacter(StringBuilder sql, Object chunk, Object course) {
-    if (((List) chunk).indexOf(course) + 1 == ((List) chunk).size()) {
+    if (((List<?>) chunk).indexOf(course) + 1 == ((List<?>) chunk).size()) {
       sql.append(");\n");
     } else {
       sql.append("),");
@@ -448,6 +461,14 @@ public class ExportService {
     } catch (Exception e) {
       log.error("ERROR WHILE GENERATING {}: ", tag, e);
     }
+  }
+
+  private String replaceApostrophe(final String text) {
+    return StringUtils.trimToEmpty(StringUtils.defaultString(text)).replace("'", "''");
+  }
+
+  private String replaceNewLine(final String text) {
+    return StringUtils.trimToEmpty(StringUtils.defaultString(text)).replace("\\n", "\\\\n");
   }
 
 //  @Override

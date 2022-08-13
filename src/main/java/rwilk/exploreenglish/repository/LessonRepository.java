@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
-  List<Lesson> findAllByCourse(Course course);
+  List<Lesson> findAllByCourseOrderByPosition(Course course);
 
   @Query(value = "select max(l.`position`) " +
           "from lessons l " +

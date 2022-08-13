@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.controller.word;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
@@ -13,9 +14,26 @@ import rwilk.exploreenglish.model.PartOfSpeechEnum;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
+import rwilk.exploreenglish.repository.CourseRepository;
+import rwilk.exploreenglish.repository.ExerciseItemRepository;
+import rwilk.exploreenglish.repository.ExerciseRepository;
+import rwilk.exploreenglish.repository.LessonRepository;
+import rwilk.exploreenglish.repository.LessonWordRepository;
+import rwilk.exploreenglish.repository.NoteRepository;
+import rwilk.exploreenglish.repository.SentenceRepository;
+import rwilk.exploreenglish.repository.WordRepository;
+import rwilk.exploreenglish.repository.WordSoundRepository;
+import rwilk.exploreenglish.repository.release.ReleaseCourseRepository;
+import rwilk.exploreenglish.repository.release.ReleaseExerciseRepository;
+import rwilk.exploreenglish.repository.release.ReleaseExerciseRowRepository;
+import rwilk.exploreenglish.repository.release.ReleaseLessonRepository;
+import rwilk.exploreenglish.repository.release.ReleaseNoteRepository;
+import rwilk.exploreenglish.repository.release.ReleaseSentenceRepository;
+import rwilk.exploreenglish.repository.release.ReleaseWordRepository;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
+import rwilk.exploreenglish.service.ReleaseWordService;
 import rwilk.exploreenglish.service.WordService;
 import rwilk.exploreenglish.service.WordSoundService;
 import rwilk.exploreenglish.utils.WordUtils;
@@ -23,6 +41,8 @@ import rwilk.exploreenglish.utils.WordUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import lombok.Getter;
 
 @Controller
 public class WordController implements Initializable {
@@ -32,21 +52,56 @@ public class WordController implements Initializable {
   private final WordService wordService;
   private final LessonWordService lessonWordService;
   private final WordSoundService wordSoundService;
-  public TabPane tabPane;
+  private final ReleaseWordService releaseWordService;
+
+  @Getter private final ReleaseCourseRepository releaseCourseRepository;
+  @Getter private final CourseRepository courseRepository;
+  @Getter private final ReleaseExerciseRepository releaseExerciseRepository;
+  @Getter private final ExerciseRepository exerciseRepository;
+  @Getter private final ReleaseExerciseRowRepository releaseExerciseRowRepository;
+  @Getter private final ExerciseItemRepository exerciseItemRepository;
+  @Getter private final ReleaseLessonRepository releaseLessonRepository;
+  @Getter private final LessonRepository lessonRepository;
+  @Getter private final ReleaseNoteRepository releaseNoteRepository;
+  @Getter private final NoteRepository noteRepository;
+  @Getter private final ReleaseSentenceRepository releaseSentenceRepository;
+  @Getter private final SentenceRepository sentenceRepository;
+  @Getter private final ReleaseWordRepository releaseWordRepository;
+  @Getter private final WordRepository wordRepository;
+  @Getter private final LessonWordRepository lessonWordRepository;
+  @Getter private final WordSoundRepository wordSoundRepository;
+  @FXML private TabPane tabPane;
   private WordFormController wordFormController;
   private WordTableController wordTableController;
 
-  public AnchorPane anchorPaneForm;
-  public AnchorPane anchorPaneTable;
+  @FXML private AnchorPane anchorPaneForm;
+  @FXML private AnchorPane anchorPaneTable;
 
-  public WordController(InjectService injectService, LessonService lessonService, WordService wordService,
-                        LessonWordService lessonWordService,
-                        final WordSoundService wordSoundService) {
+  public WordController(final InjectService injectService, final LessonService lessonService,
+                        final WordService wordService, final LessonWordService lessonWordService,
+                        final WordSoundService wordSoundService, final ReleaseWordService releaseWordService, final ReleaseCourseRepository releaseCourseRepository, final CourseRepository courseRepository, final ReleaseExerciseRepository releaseExerciseRepository, final ExerciseRepository exerciseRepository, final ReleaseExerciseRowRepository releaseExerciseRowRepository, final ExerciseItemRepository exerciseItemRepository, final ReleaseLessonRepository releaseLessonRepository, final LessonRepository lessonRepository, final ReleaseNoteRepository releaseNoteRepository, final NoteRepository noteRepository, final ReleaseSentenceRepository releaseSentenceRepository, final SentenceRepository sentenceRepository, final ReleaseWordRepository releaseWordRepository, final WordRepository wordRepository, final LessonWordRepository lessonWordRepository, final WordSoundRepository wordSoundRepository) {
     this.injectService = injectService;
     this.lessonService = lessonService;
     this.wordService = wordService;
     this.lessonWordService = lessonWordService;
     this.wordSoundService = wordSoundService;
+    this.releaseWordService = releaseWordService;
+    this.releaseCourseRepository = releaseCourseRepository;
+    this.courseRepository = courseRepository;
+    this.releaseExerciseRepository = releaseExerciseRepository;
+    this.exerciseRepository = exerciseRepository;
+    this.releaseExerciseRowRepository = releaseExerciseRowRepository;
+    this.exerciseItemRepository = exerciseItemRepository;
+    this.releaseLessonRepository = releaseLessonRepository;
+    this.lessonRepository = lessonRepository;
+    this.releaseNoteRepository = releaseNoteRepository;
+    this.noteRepository = noteRepository;
+    this.releaseSentenceRepository = releaseSentenceRepository;
+    this.sentenceRepository = sentenceRepository;
+    this.releaseWordRepository = releaseWordRepository;
+    this.wordRepository = wordRepository;
+    this.lessonWordRepository = lessonWordRepository;
+    this.wordSoundRepository = wordSoundRepository;
     injectService.setWordController(this);
   }
 
@@ -178,6 +233,10 @@ public class WordController implements Initializable {
 
   public InjectService getInjectService() {
     return injectService;
+  }
+
+  public ReleaseWordService getReleaseWordService() {
+    return releaseWordService;
   }
 
   public TabPane getTabPane() {

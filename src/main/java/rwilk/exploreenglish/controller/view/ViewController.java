@@ -167,20 +167,21 @@ public class ViewController implements Initializable {
   public void listViewLearnItemsOnMouseClicked(MouseEvent mouseEvent) {
     selectedLearnItem = listViewLearnItems.getSelectionModel().getSelectedItem();
     if (selectedLearnItem != null) {
-      if (selectedLearnItem instanceof LessonWord) {
-        Word word = ((LessonWord)selectedLearnItem).getWord();
+      if (selectedLearnItem instanceof LessonWord lessonWord) {
+        final Word word = lessonWord.getWord();
         fillInLessonItemChildrenListView(selectedLearnItem);
         injectService.getWordController().setWordForm(word);
+        injectService.getWordController().getWordTableController().textFieldFilterByPlName.setText(word.getPolishName());
         injectService.getMainController().tabPane.getSelectionModel().select(2);
         injectService.getSentenceController().setWordComboBox(word);
-      } else if (selectedLearnItem instanceof Exercise) {
+      } else if (selectedLearnItem instanceof Exercise exercise) {
         fillInLessonItemChildrenListView(selectedLearnItem);
-        injectService.getExerciseController().setExerciseForm((Exercise) selectedLearnItem);
+        injectService.getExerciseController().setExerciseForm(exercise);
         injectService.getMainController().tabPane.getSelectionModel().select(5);
-        injectService.getExerciseItemController().setExerciseComboBox((Exercise) selectedLearnItem);
-      } else if (selectedLearnItem instanceof Note) {
+        injectService.getExerciseItemController().setExerciseComboBox(exercise);
+      } else if (selectedLearnItem instanceof Note note) {
         listViewLearnItemChildren.setItems(null);
-        injectService.getNoteController().setNoteForm((Note) selectedLearnItem);
+        injectService.getNoteController().setNoteForm(note);
         injectService.getMainController().tabPane.getSelectionModel().select(4);
       }
     }

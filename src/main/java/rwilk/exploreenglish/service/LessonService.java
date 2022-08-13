@@ -9,7 +9,10 @@ import rwilk.exploreenglish.repository.LessonRepository;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class LessonService {
 
   private final LessonRepository lessonRepository;
@@ -17,32 +20,24 @@ public class LessonService {
   private final NoteService noteService;
   private final ExerciseService exerciseService;
 
-  public LessonService(LessonRepository lessonRepository, LessonWordService lessonWordService,
-                       NoteService noteService, ExerciseService exerciseService) {
-    this.lessonRepository = lessonRepository;
-    this.lessonWordService = lessonWordService;
-    this.noteService = noteService;
-    this.exerciseService = exerciseService;
-  }
-
   public List<Lesson> getAll() {
     return lessonRepository.findAll();
   }
 
-  public List<Lesson> getAllByCourse(Course course) {
-    return lessonRepository.findAllByCourse(course);
+  public List<Lesson> getAllByCourse(final Course course) {
+    return lessonRepository.findAllByCourseOrderByPosition(course);
   }
 
-  public Optional<Lesson> getById(Long id) {
+  public Optional<Lesson> getById(final Long id) {
     return lessonRepository.findById(id);
   }
 
-  public Lesson save(Lesson Lesson) {
-    return lessonRepository.save(Lesson);
+  public Lesson save(final Lesson lesson) {
+    return lessonRepository.save(lesson);
   }
 
   @Transactional
-  public void delete(Lesson lesson) {
+  public void delete(final Lesson lesson) {
     lessonWordService.deleteByLesson(lesson);
     noteService.deleteByLesson(lesson);
     exerciseService.deleteByLesson(lesson);
@@ -50,7 +45,7 @@ public class LessonService {
   }
 
   @Transactional
-  public void deleteByCourse(Course course) {
+  public void deleteByCourse(final Course course) {
     List<Lesson> lessons = getAllByCourse(course);
     for (Lesson lesson : lessons) {
       lessonWordService.deleteByLesson(lesson);

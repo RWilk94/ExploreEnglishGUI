@@ -11,7 +11,7 @@ public enum PartOfSpeechEnum {
   IDIOM("idiom"),
   EMPTY("inne");
 
-  private String value;
+  private final String value;
 
   PartOfSpeechEnum(String value) {
     this.value = value;

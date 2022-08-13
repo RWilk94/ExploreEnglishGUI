@@ -42,7 +42,7 @@ public class DocService implements CommandLineRunner {
 
   public void generateDocument() {
 
-    final Optional<Course> courseOptional = courseService.getById(12L);
+    final Optional<Course> courseOptional = courseService.getById(1L);
     courseOptional.ifPresent(course -> {
       final Document document = createDocument();
       final Section section = createSection(document);
@@ -199,6 +199,6 @@ public class DocService implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    generateDocument();
+    // generateDocument();
   }
 }

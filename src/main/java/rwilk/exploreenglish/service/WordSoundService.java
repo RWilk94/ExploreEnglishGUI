@@ -21,6 +21,10 @@ public class WordSoundService {
     return wordSoundRepository.findById(id);
   }
 
+  public List<WordSound> getAll() {
+    return wordSoundRepository.findAll();
+  }
+
   public List<WordSound> getAllByWordId(final Long wordId) {
     return wordSoundRepository.findAllByWord_Id(wordId);
   }

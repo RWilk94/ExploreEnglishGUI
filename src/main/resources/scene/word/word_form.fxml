@@ -69,6 +69,13 @@
           <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
         </HBox.margin>
       </Button>
+
+
+      <Button onAction="#migrateReleaseWords" text="Migrate">
+        <HBox.margin>
+          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+        </HBox.margin>
+      </Button>
     </HBox>
 
     <HBox HBox.hgrow="ALWAYS">
@@ -151,6 +158,11 @@
         </HBox.margin>
       </VBox>
       <Button onAction="#buttonBrePlaySoundOnAction" text="Play">
+        <HBox.margin>
+          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+        </HBox.margin>
+      </Button>
+      <Button onAction="#buttonCheckSoundsOnAction" text="Check">
         <HBox.margin>
           <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
         </HBox.margin>

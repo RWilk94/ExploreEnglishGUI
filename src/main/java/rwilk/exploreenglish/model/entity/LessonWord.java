@@ -20,8 +20,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 @Table(name = "lesson_word", uniqueConstraints = @UniqueConstraint(columnNames={"lesson_id", "word_id"}))
 public final class LessonWord implements Serializable, LearnItem {
 
-  private static final long serialVersionUID = -4744082827489819635L;
+  @Serial private static final long serialVersionUID = -4744082827489819635L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
@@ -64,7 +65,7 @@ public final class LessonWord implements Serializable, LearnItem {
             String.join(";", ListUtils.emptyIfNull(word.getEnglishNames()
                                                        .stream()
                                                        .map(WordSound::getEnglishName)
-                                                       .collect(Collectors.toList()))))
+                                                       .toList())))
         .concat(StringUtils.defaultString(word.getPolishName()));
   }
 
