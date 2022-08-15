@@ -40,7 +40,7 @@ public class ExportDocumentService implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    generate();
+    // generate();
   }
 
   public void generate() {

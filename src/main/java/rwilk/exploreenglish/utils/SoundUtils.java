@@ -1,19 +1,24 @@
 package rwilk.exploreenglish.utils;
 
-import javafx.scene.control.TextField;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.Mp3File;
+
+import lombok.extern.slf4j.Slf4j;
+
+import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 @Slf4j
 public class SoundUtils {
@@ -48,8 +53,18 @@ public class SoundUtils {
         outputStream.write(buffer, 0, length);
       }
       outputStream.close();
+      inputStream.close();
 
-      playFile("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\" + fileName);
+      Mp3File mp3file = new Mp3File("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\" + fileName);
+      if (mp3file.hasId3v2Tag()) {
+        final ID3v2 tag = mp3file.getId3v2Tag();
+        tag.clearFrameSet("TIT2");
+        tag.clearFrameSet("TPE1");
+        tag.clearFrameSet("WOAR");
+        mp3file.save("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\_" + fileName);
+      }
+
+      playFile("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\_" + fileName);
 
     } catch (Exception e) {
       log.error("An exception occurred during downloading a file {}", fieldText);
@@ -70,6 +85,7 @@ public class SoundUtils {
         outputStream.write(buffer, 0, length);
       }
       outputStream.close();
+      inputStream.close();
 
       return fieldText;
 

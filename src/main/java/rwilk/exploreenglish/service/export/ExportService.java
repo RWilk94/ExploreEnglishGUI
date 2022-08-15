@@ -215,7 +215,6 @@ public class ExportService {
   }
 
 //  private void exportWordSentences(List<WordSentence> wordSentences) {
-//    // TODO and below
 //    String tag = "WORD_SENTENCE";
 //    log.info(LOG_PREFIX, tag);
 //    List<List<WordSentence>> chunks = ListUtils.partition(wordSentences, CHUNK_SIZE);
