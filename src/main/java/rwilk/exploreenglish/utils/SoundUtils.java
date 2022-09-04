@@ -62,9 +62,10 @@ public class SoundUtils {
         tag.clearFrameSet("TPE1");
         tag.clearFrameSet("WOAR");
         mp3file.save("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\_" + fileName);
+        playFile("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\_" + fileName);
+      } else {
+        playFile("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\" + fileName);
       }
-
-      playFile("C:\\Corelogic\\TAX\\ExploreEnglishGUI\\files\\_" + fileName);
 
     } catch (Exception e) {
       log.error("An exception occurred during downloading a file {}", fieldText);
