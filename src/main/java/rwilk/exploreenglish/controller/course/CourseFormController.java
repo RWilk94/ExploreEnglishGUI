@@ -1,14 +1,15 @@
 package rwilk.exploreenglish.controller.course;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
-import org.springframework.stereotype.Controller;
-import rwilk.exploreenglish.model.entity.Course;
-
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import org.springframework.stereotype.Controller;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
+import rwilk.exploreenglish.model.entity.Course;
 
 @Controller
 public class CourseFormController implements Initializable {
@@ -58,10 +59,10 @@ public class CourseFormController implements Initializable {
   public void buttonAddOnAction(ActionEvent actionEvent) {
     if (!textFieldEnName.getText().isEmpty() && !textFieldPlName.getText().isEmpty()) {
       Course course = Course.builder()
-          .englishName(textFieldEnName.getText().trim())
-          .polishName(textFieldPlName.getText().trim())
-          .position(courseController.getCourseService().getCount())
-          .build();
+                            .englishName(textFieldEnName.getText().trim())
+                            .polishName(textFieldPlName.getText().trim())
+                            .position(courseController.getCourseService().getCount())
+                            .build();
       course = courseController.getCourseService().save(course);
       setCourseForm(course);
       courseController.refreshTableView();
@@ -82,5 +83,6 @@ public class CourseFormController implements Initializable {
 
   public void buttonGenerateDocumentOnAction(final ActionEvent actionEvent) {
     courseController.getDocService().generateDocument();
+    courseController.getExportDocumentService().generate();
   }
 }

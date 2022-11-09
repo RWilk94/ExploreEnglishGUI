@@ -3,7 +3,6 @@ package rwilk.exploreenglish.service.export;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -22,22 +21,23 @@ import lombok.extern.slf4j.Slf4j;
 
 import rwilk.exploreenglish.model.WordTypeEnum;
 import rwilk.exploreenglish.model.entity.Course;
+import rwilk.exploreenglish.model.entity.Definition;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Word;
-import rwilk.exploreenglish.model.entity.Definition;
 import rwilk.exploreenglish.scrapper.longman.LongmanScrapper;
 import rwilk.exploreenglish.service.CourseService;
+import rwilk.exploreenglish.service.DefinitionService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.WordService;
-import rwilk.exploreenglish.service.DefinitionService;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExportDocumentService implements CommandLineRunner {
 
+  private static final String COLOR_BLUE = "4472C4";
   private final CourseService courseService;
   private final LessonService lessonService;
   private final LessonWordService lessonWordService;
@@ -158,7 +158,7 @@ public class ExportDocumentService implements CommandLineRunner {
     if (StringUtils.isNoneBlank(text)) {
       final XWPFRun run = paragraph.createRun();
       run.setBold(true);
-      run.setColor("4472C4");
+      run.setColor(COLOR_BLUE);
       run.setText("[" + text + "] ");
     }
   }
@@ -167,7 +167,7 @@ public class ExportDocumentService implements CommandLineRunner {
     if (StringUtils.isNoneBlank(text)) {
       final XWPFRun run = paragraph.createRun();
       run.setBold(true);
-      run.setColor("4472C4");
+      run.setColor(COLOR_BLUE);
       run.setText(text);
     }
   }
@@ -188,7 +188,7 @@ public class ExportDocumentService implements CommandLineRunner {
   private void appendPartOfSpeech(final XWPFParagraph paragraph, final String text) {
     if (StringUtils.isNoneBlank(text)) {
       final XWPFRun run = paragraph.createRun();
-      run.setText(" [" + text + "] ");
+      run.setText("[" + text + "] ");
     }
   }
 
@@ -234,10 +234,10 @@ public class ExportDocumentService implements CommandLineRunner {
     if (CollectionUtils.isNotEmpty(definitions)) {
       definitions.forEach(wordSound -> {
         final XWPFParagraph paragraph = document.createParagraph();
+        paragraph.setIndentFromLeft(707);
         final XWPFRun englishSentence = paragraph.createRun();
         englishSentence.setItalic(true);
-        englishSentence.setColor("4472C4");
-        englishSentence.setText("\t" + wordSound.getEnglishName());
+        englishSentence.setText(wordSound.getEnglishName());
 
         if (StringUtils.isNoneBlank(wordSound.getAdditionalInformation())) {
           final XWPFRun polishSentence = paragraph.createRun();
