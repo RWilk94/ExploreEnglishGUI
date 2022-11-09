@@ -1,23 +1,28 @@
 package rwilk.exploreenglish.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.lang3.StringUtils;
+import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.io.Serializable;
-import java.util.List;
+
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import rwilk.exploreenglish.model.WordTypeEnum;
 
 @Getter
 @Setter
@@ -40,7 +45,7 @@ public final class Word implements Serializable {
 
   @Column(name = "article")
   private String article;
-//  @Column(name = "comparative")
+  //  @Column(name = "comparative")
 //  private String comparative;
 //  @Column(name = "superlative")
 //  private String superlative;
@@ -59,20 +64,36 @@ public final class Word implements Serializable {
 //  @Column(name = "opposite")
 //  private String opposite;
 
+  @Column(name = "is_ready", columnDefinition = "int default 0")
+  private Integer isReady;
+
   @OneToMany(mappedBy = "word")
   private List<LessonWord> lessonWords;
 
-  @OneToMany(mappedBy = "word")
-  private List<WordSound> englishNames;
+  @OneToMany(mappedBy = "word", fetch = FetchType.EAGER)
+  private List<Definition> definitions;
 
   @Transient
   private List<WordSentence> wordSentences;
 
   public String englishNamesAsString() {
-    return String.join("; ", ListUtils.emptyIfNull(englishNames
-                                                      .stream()
-                                                      .map(WordSound::getEnglishName)
-                                                      .toList()));
+    final List<String> definitions = this.definitions
+      .stream()
+      .filter(definition -> WordTypeEnum.WORD.toString().equals(definition.getType()))
+      .map(Definition::getEnglishName)
+      .toList();
+
+    return String.join("; ", ListUtils.emptyIfNull(definitions));
+  }
+
+  public String englishSentencesAsString() {
+    final List<String> sentences = this.definitions
+      .stream()
+      .filter(definition -> !WordTypeEnum.WORD.toString().equals(definition.getType()))
+      .map(Definition::getEnglishName)
+      .toList();
+
+    return String.join("; ", ListUtils.emptyIfNull(sentences));
   }
 
   @Override
@@ -85,8 +106,9 @@ public final class Word implements Serializable {
     stringBuilder.append(englishNamesAsString()).append(" ");
     stringBuilder.append("(").append(polishName).append(")");
     if (StringUtils.isNoneEmpty(grammarType)) {
-      stringBuilder.append("[").append(grammarType).append("]");
+      stringBuilder.append(" [").append(grammarType).append("]");
     }
+    stringBuilder.append(" ").append(englishSentencesAsString());
     return stringBuilder.toString();
   }
 }

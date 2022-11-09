@@ -3,6 +3,7 @@ package rwilk.exploreenglish.service.export;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,10 +25,13 @@ import rwilk.exploreenglish.model.entity.Course;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Word;
-import rwilk.exploreenglish.model.entity.WordSound;
+import rwilk.exploreenglish.model.entity.Definition;
+import rwilk.exploreenglish.scrapper.longman.LongmanScrapper;
 import rwilk.exploreenglish.service.CourseService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
+import rwilk.exploreenglish.service.WordService;
+import rwilk.exploreenglish.service.DefinitionService;
 
 @Slf4j
 @Service
@@ -37,10 +41,56 @@ public class ExportDocumentService implements CommandLineRunner {
   private final CourseService courseService;
   private final LessonService lessonService;
   private final LessonWordService lessonWordService;
+  private final WordService wordService;
+  private final LongmanScrapper longmanScrapper;
+  private final DefinitionService definitionService;
 
   @Override
   public void run(final String... args) throws Exception {
     // generate();
+
+/*    final List<Word> words = wordService.getAll().stream()
+                                        .filter(word -> word.getIsReady() == 0)
+                                        .toList();
+    log.info("Scrapping word definition sounds... Found {} words", words.size());
+    for (final Word word : words) {
+      final List<Definition> definitions = word.getDefinitions().stream()
+                                               .filter(definition -> WordTypeEnum.WORD.toString().equals(definition.getType()))
+                                               .filter(definition -> definition.getBritishSound().contains("[")
+                                                                     && definition.getBritishSound().contains("]")
+                                                                     && definition.getBritishSound().contains("="))
+                                               .toList();
+
+      log.info("Scrapping word {} definition sounds... Found {} definitions", word, definitions.size());
+
+      for (final Definition definition : definitions) {
+        final List<Term> terms = longmanScrapper.webScrap(definition.getEnglishName(), true);
+
+        final List<String> sounds = new ArrayList<>();
+        sounds.addAll(terms.stream()
+                           .map(Term::getEnglishName)
+                           .filter(text -> text.contains("www.ldoceonline.com") && text.contains(".mp3"))
+                           .toList());
+        sounds.addAll(terms.stream()
+                           .map(Term::getAmericanName)
+                           .filter(text -> text.contains("www.ldoceonline.com") && text.contains(".mp3"))
+                           .toList());
+        sounds.addAll(terms.stream()
+                           .map(Term::getOtherName)
+                           .filter(text -> text.contains("www.ldoceonline.com") && text.contains(".mp3"))
+                           .toList());
+
+        if (CollectionUtils.isNotEmpty(sounds)) {
+          definition.setBritishSound(definition.getBritishSound()
+                                               .concat(String.join("; ", sounds)));
+          log.info("Scrapping word {} definition sounds... Save new {} sounds", word, sounds.size());
+          definitionService.save(definition);
+        }
+      }
+      word.setIsReady(1);
+      wordService.save(word);
+    }*/
+
   }
 
   public void generate() {
@@ -85,10 +135,10 @@ public class ExportDocumentService implements CommandLineRunner {
     appendArticle(paragraph, word.getArticle());
     appendEnglishWord(paragraph,
                       String.join(" / ",
-                                  ListUtils.emptyIfNull(word.getEnglishNames()
+                                  ListUtils.emptyIfNull(word.getDefinitions()
                                                             .stream()
                                                             .filter(wordSound -> wordSound.getType().equals(WordTypeEnum.WORD.toString()))
-                                                            .map(WordSound::getEnglishName)
+                                                            .map(Definition::getEnglishName)
                                                             .toList())));
     appendEqualSign(paragraph);
     appendPolishWord(paragraph, word.getPolishName());
@@ -150,15 +200,15 @@ public class ExportDocumentService implements CommandLineRunner {
   }
 
   private void appendAdditional(final XWPFParagraph paragraph, final Word word, final WordTypeEnum wordType) {
-    final List<WordSound> wordSounds = word.getEnglishNames()
-                                           .stream()
-                                           .filter(wordSound -> wordSound.getType().equals(wordType.toString()))
-                                           .toList();
-    if (CollectionUtils.isNotEmpty(wordSounds)) {
+    final List<Definition> definitions = word.getDefinitions()
+                                             .stream()
+                                             .filter(wordSound -> wordSound.getType().equals(wordType.toString()))
+                                             .toList();
+    if (CollectionUtils.isNotEmpty(definitions)) {
       final XWPFRun run = paragraph.createRun();
       final StringBuilder sb = new StringBuilder();
       sb.append("[");
-      wordSounds.forEach(wordSound -> {
+      definitions.forEach(wordSound -> {
         if (sb.length() > 1) {
           sb.append("; ");
         }
@@ -177,12 +227,12 @@ public class ExportDocumentService implements CommandLineRunner {
   }
 
   private void appendSentences(final XWPFDocument document, final Word word) {
-    final List<WordSound> wordSounds = word.getEnglishNames()
-                                           .stream()
-                                           .filter(wordSound -> wordSound.getType().equals(WordTypeEnum.SENTENCE.toString()))
-                                           .toList();
-    if (CollectionUtils.isNotEmpty(wordSounds)) {
-      wordSounds.forEach(wordSound -> {
+    final List<Definition> definitions = word.getDefinitions()
+                                             .stream()
+                                             .filter(wordSound -> wordSound.getType().equals(WordTypeEnum.SENTENCE.toString()))
+                                             .toList();
+    if (CollectionUtils.isNotEmpty(definitions)) {
+      definitions.forEach(wordSound -> {
         final XWPFParagraph paragraph = document.createParagraph();
         final XWPFRun englishSentence = paragraph.createRun();
         englishSentence.setItalic(true);

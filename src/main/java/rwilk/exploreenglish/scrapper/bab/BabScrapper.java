@@ -44,7 +44,6 @@ public class BabScrapper {
           .replaceAll("somebody", "sb");
 
       Document document = Jsoup.connect(url)
-          .cookie("PHPSESSID", "hiot553t266gcels7oesf22no2")
           .userAgent("Mozilla")
           .timeout(10000)
           .get();

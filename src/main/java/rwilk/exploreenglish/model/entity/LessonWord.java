@@ -62,9 +62,9 @@ public final class LessonWord implements Serializable, LearnItem {
   @Override
   public String getName() {
     return StringUtils.defaultString(
-            String.join(";", ListUtils.emptyIfNull(word.getEnglishNames()
+            String.join(";", ListUtils.emptyIfNull(word.getDefinitions()
                                                        .stream()
-                                                       .map(WordSound::getEnglishName)
+                                                       .map(Definition::getEnglishName)
                                                        .toList())))
         .concat(StringUtils.defaultString(word.getPolishName()));
   }

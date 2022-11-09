@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -85,10 +84,10 @@ public final class Term implements Serializable {
   }
 
   private String extract(final Word word, final WordTypeEnum wordType) {
-    return String.join(";", ListUtils.emptyIfNull(word.getEnglishNames()
+    return String.join(";", ListUtils.emptyIfNull(word.getDefinitions()
                                                .stream()
                                                .filter(wordSound -> wordType.toString().equals(wordSound.getType()))
-                                               .map(WordSound::getEnglishName)
+                                               .map(Definition::getEnglishName)
                                                .toList()));
   }
 }

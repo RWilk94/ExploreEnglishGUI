@@ -2,6 +2,7 @@ package rwilk.exploreenglish.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,9 +24,10 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "word_sounds")
-public final class WordSound implements Serializable {
+public final class Definition implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

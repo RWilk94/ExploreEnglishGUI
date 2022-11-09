@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.entity.Word;
-import rwilk.exploreenglish.model.entity.WordSound;
+import rwilk.exploreenglish.model.entity.Definition;
 import rwilk.exploreenglish.repository.LessonWordRepository;
 import rwilk.exploreenglish.repository.WordRepository;
 
@@ -18,7 +18,7 @@ public class WordService {
   private final LessonWordRepository lessonWordRepository;
   private final WordRepository wordRepository;
   private final WordSentenceService wordSentenceService;
-  private final WordSoundService wordItemService;
+  private final DefinitionService wordItemService;
 
   public List<Word> getAll() {
     return wordRepository.findAll();
@@ -31,14 +31,14 @@ public class WordService {
   public List<Word> getAllByEnglishNamesLike(String pattern) {
     return wordItemService.getAllByEnglishNameLike(pattern)
         .stream()
-        .map(WordSound::getWord)
+        .map(Definition::getWord)
         .toList();
   }
 
   public List<Word> getAllByEnglishNames(String pattern) {
     return wordItemService.getAllByEnglishName(pattern)
         .stream()
-        .map(WordSound::getWord)
+        .map(Definition::getWord)
         .toList();
   }
 

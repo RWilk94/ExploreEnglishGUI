@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.WordTypeEnum;
 import rwilk.exploreenglish.model.entity.Word;
-import rwilk.exploreenglish.model.entity.WordSound;
+import rwilk.exploreenglish.model.entity.Definition;
 
 import java.net.URL;
 import java.util.List;
@@ -100,23 +100,23 @@ public class WordTableController implements Initializable {
       }
     });
 
-    columnEnglishName.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.WORD, WordSound::getEnglishName));
-    columnAmeSound.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.WORD, WordSound::getAmericanSound));
-    columnBreSound.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.WORD, WordSound::getBritishSound));
-    columnComparative.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.COMPARATIVE, WordSound::getEnglishName));
-    columnSuperlative.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.SUPERLATIVE, WordSound::getEnglishName));
-    columnPastTense.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.PAST_TENSE, WordSound::getEnglishName));
-    columnPastParticiple.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.PAST_PARTICIPLE, WordSound::getEnglishName));
-    columnPlural.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.PLURAL, WordSound::getEnglishName));
-    columnOpposite.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.OPPOSITE, WordSound::getEnglishName));
-    columnSynonym.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.SYNONYM, WordSound::getEnglishName));
-    columnSentence.setCellValueFactory(param -> bindCellValue(param.getValue().getEnglishNames(), WordTypeEnum.SENTENCE, WordSound::getEnglishName));
+    columnEnglishName.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.WORD, Definition::getEnglishName));
+    columnAmeSound.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.WORD, Definition::getAmericanSound));
+    columnBreSound.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.WORD, Definition::getBritishSound));
+    columnComparative.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.COMPARATIVE, Definition::getEnglishName));
+    columnSuperlative.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.SUPERLATIVE, Definition::getEnglishName));
+    columnPastTense.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.PAST_TENSE, Definition::getEnglishName));
+    columnPastParticiple.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.PAST_PARTICIPLE, Definition::getEnglishName));
+    columnPlural.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.PLURAL, Definition::getEnglishName));
+    columnOpposite.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.OPPOSITE, Definition::getEnglishName));
+    columnSynonym.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.SYNONYM, Definition::getEnglishName));
+    columnSentence.setCellValueFactory(param -> bindCellValue(param.getValue().getDefinitions(), WordTypeEnum.SENTENCE, Definition::getEnglishName));
   }
 
-  private ObjectBinding<String> bindCellValue(final List<WordSound> wordSounds, final WordTypeEnum wordType,
-                                              final Function<WordSound, String> mapFunction) {
+  private ObjectBinding<String> bindCellValue(final List<Definition> definitions, final WordTypeEnum wordType,
+                                              final Function<Definition, String> mapFunction) {
     return Bindings.createObjectBinding(() -> StringUtils.defaultString(
-        ListUtils.emptyIfNull(wordSounds)
+        ListUtils.emptyIfNull(definitions)
             .stream()
             .filter(wordSound -> wordType.toString().equals(wordSound.getType()))
             .map(mapFunction)

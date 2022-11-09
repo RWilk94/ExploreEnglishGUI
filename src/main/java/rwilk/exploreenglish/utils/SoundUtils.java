@@ -15,8 +15,6 @@ import com.mpatric.mp3agic.Mp3File;
 import lombok.extern.slf4j.Slf4j;
 
 import javafx.scene.control.TextField;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -32,10 +30,6 @@ public class SoundUtils {
 
       textField.setText(trimmedText);
       SoundUtils.downloadFile(trimmedText);
-
-      final ClipboardContent content = new ClipboardContent();
-      content.putString(trimmedText);
-      Clipboard.getSystemClipboard().setContent(content);
     }
   }
 

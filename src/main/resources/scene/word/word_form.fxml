@@ -71,7 +71,7 @@
       </Button>
 
 
-      <Button onAction="#migrateReleaseWords" text="Migrate">
+      <Button onAction="#getLongmanSounds" text="get Longman sounds">
         <HBox.margin>
           <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
         </HBox.margin>
@@ -274,6 +274,24 @@
               </ToggleButton>
               <ToggleButton fx:id="toggleButtonIdiom" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
                             text="idiom" userData="idiom">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonNumber" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="liczebnik" userData="liczebnik">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonPronoun" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="zaimek" userData="zaimek">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonDeterminer" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="określnik" userData="określnik">
                 <HBox.margin>
                   <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
                 </HBox.margin>

@@ -11,6 +11,9 @@ import javafx.scene.input.MouseEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+
+import rwilk.exploreenglish.controller.word.WordFormController;
+import rwilk.exploreenglish.model.WordTypeEnum;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.utils.SoundUtils;
@@ -20,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -57,10 +59,12 @@ public class ScrapperTabController implements Initializable {
     textFieldSuperlative.setText(StringUtils.trimToEmpty(term.getSuperlative()));
     textFieldPlural.setText(StringUtils.trimToEmpty(term.getPlural()));
     textFieldPartOfSpeech.setText(StringUtils.trimToEmpty(term.getPartOfSpeech()));
+    textFieldSynonym.setText(StringUtils.trimToEmpty(term.getSynonym()));
 
     listViewMeaning.setItems(FXCollections.observableArrayList(
-        Arrays.stream(StringUtils.split(StringUtils.trimToEmpty(term.getPolishName()), ";")).map(StringUtils::trim).collect(Collectors.toList())
-    ));
+        Arrays.stream(StringUtils.split(StringUtils.trimToEmpty(term.getPolishName()), ";"))
+              .map(StringUtils::trim)
+              .toList()));
 
     if (StringUtils.isNoneEmpty(term.getEnglishSentence()) && StringUtils.isNoneEmpty(term.getPolishSentence())) {
       String[] split = StringUtils.split(term.getEnglishSentence(), ";");
@@ -120,13 +124,27 @@ public class ScrapperTabController implements Initializable {
   public void listViewSentenceOnMouseClicked(final MouseEvent mouseEvent) {
     String selectedSentence = listViewSentences.getSelectionModel().getSelectedItem();
     if (StringUtils.isNotBlank(selectedSentence)) {
+      final String enSentence = selectedSentence.substring(0, selectedSentence.indexOf("(")).trim();
+      final String plSentence = selectedSentence.substring(selectedSentence.indexOf("(") + 1, selectedSentence.indexOf(")")).trim();
+      final WordFormController wordFormController = injectService.getWordController().getWordFormController();
+      wordFormController.buttonClearWordSoundOnAction();
+      wordFormController.getTextFieldEnglishName().setText(enSentence);
+      wordFormController.getTextFieldAdditionalInformation().setText(plSentence);
+      wordFormController.getComboBoxWordType().getSelectionModel().select(WordTypeEnum.SENTENCE);
+
       if (selectedSentence.contains("https://www")) {
         final String trimmedText = selectedSentence.substring(selectedSentence.indexOf("https"));
         SoundUtils.downloadFile(trimmedText);
 
         final ClipboardContent content = new ClipboardContent();
-        content.putString(selectedSentence);
+        content.putString(trimmedText);
         Clipboard.getSystemClipboard().setContent(content);
+
+        if (trimmedText.contains("en-ame")) {
+          wordFormController.getTextFieldAmericanSound().setText(trimmedText);
+        } else {
+          wordFormController.getTextFieldBritishSound().setText(trimmedText);
+        }
       }
     }
   }

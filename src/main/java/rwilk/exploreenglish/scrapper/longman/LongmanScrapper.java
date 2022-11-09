@@ -50,6 +50,16 @@ public class LongmanScrapper {
 
       final List<Term> terms = new ArrayList<>();
       for (Element element : elements) {
+        final List<String> definitions = new ArrayList<>();
+        final List<String> relatedWords = new ArrayList<>();
+        final List<String> pluralForms = new ArrayList<>();
+        final List<String> comparativeForms = new ArrayList<>();
+        final List<String> superlativeForms = new ArrayList<>();
+        final List<String> pastTenseForms = new ArrayList<>();
+        final List<String> pastParticipleForms = new ArrayList<>();
+        final List<String> englishSentence = new ArrayList<>();
+        final List<String> polishSentence = new ArrayList<>();
+
         final Element head = element.select("span.Head").first();
         final String enName = head.select("span.HWD").text();
         final String enMp3File = head.select("span.speaker").select("span.brefile").attr("data-src-mp3");
@@ -68,33 +78,85 @@ public class LongmanScrapper {
         final String grammarTag = Optional.ofNullable(head.select("span.GRAM"))
                                           .map(Elements::text)
                                           .orElse("");
-        final List<String> definitions = new ArrayList<>();
-        final List<String> relatedWords = new ArrayList<>();
-        final List<String> englishSentence = new ArrayList<>();
-        final List<String> polishSentence = new ArrayList<>();
+        final String plural = head.select("span.Inflections")
+                                  .select("span.PLURALFORM")
+                                  .text();
+        if (StringUtils.isNoneEmpty(plural)) {
+          pluralForms.add(plural);
+        }
+        final String comparative = head.select("span.Inflections")
+                                  .select("span.COMP")
+                                  .text();
+        if (StringUtils.isNoneEmpty(comparative)) {
+          comparativeForms.add(comparative.replace("comparative", "").trim());
+        }
+        final String superlative = head.select("span.Inflections")
+                                       .select("span.SUPERL")
+                                       .text();
+        if (StringUtils.isNoneEmpty(superlative)) {
+          String text = superlative.replace("superlative", "").trim();
+          if (text.startsWith(", ")) {
+            text = text.replaceFirst(", ", "").trim();
+          }
+          superlativeForms.add(text);
+        }
+        final String pastTense = head.select("span.Inflections")
+                                       .select("span.PASTTENSE")
+                                       .text();
+        if (StringUtils.isNoneEmpty(pastTense)) {
+          pastTenseForms.add(pastTense.replace("past tense", "").trim());
+        }
+        final String pastParticiple = head.select("span.Inflections")
+                                     .select("span.PASTPART")
+                                     .text();
+        if (StringUtils.isNoneEmpty(pastParticiple)) {
+          String text = pastParticiple.replace("past participle", "").trim();
+          if (text.startsWith(", ")) {
+            text = text.replaceFirst(", ", "").trim();
+          }
+          pastParticipleForms.add(text);
+        }
 
         for (Element sense : element.select("span.Sense")) {
-          String def = Optional.ofNullable(sense.select("span.DEF"))
+          final StringBuilder definition = new StringBuilder();
+          final String def = Optional.ofNullable(sense.select("span.DEF"))
                                      .map(Elements::text)
                                      .orElse("");
           if (StringUtils.isNotBlank(def)) {
+            final String american = sense.select("span.AMEQUIV").text();
+            if (StringUtils.isNoneEmpty(american)) {
+              if (american.contains("SYN")) {
+                relatedWords.add(american.replace("SYN", "").trim());
+              }
+              definition
+                .append("[")
+                .append(american.trim())
+                .append("] ");
+            }
+            final String grammar =  sense.select("span.GRAM").text();
+            if (StringUtils.isNoneEmpty(grammar)) {
+              definition
+                .append(grammar)
+                .append(" ");
+            }
             final String opposite = sense.select("span.OPP").text();
             if (StringUtils.isNoneEmpty(opposite)) {
-              def = def
-                  .concat("[")
-                  .concat("przeciwieństwo: ")
-                  .concat(opposite.replace("OPP", "").trim())
-                  .concat("] ");
+              definition
+                .append("[")
+                .append("przeciwieństwo: ")
+                .append(opposite.replace("OPP", "").trim())
+                .append("] ");
             }
             final String synonym =  sense.select("span.SYN").text();
             if (StringUtils.isNoneEmpty(synonym)) {
-              def = def
-                  .concat("[")
-                  .concat("synonim: ")
-                  .concat(synonym.replace("SYN", "").trim())
-                  .concat("]");
+              definition
+                .append("[")
+                .append("synonim: ")
+                .append(synonym.replace("SYN", "").trim())
+                .append("] ");
             }
-            definitions.add(def.trim());
+            definition.append(def);
+            definitions.add(definition.toString().trim());
           }
 
           final String relatedWord = Optional.ofNullable(sense.select("span.RELATEDWD"))
@@ -114,7 +176,7 @@ public class LongmanScrapper {
               mp3Href = mp3Hrefs.get(0).attr("data-src-mp3");
             }
             englishSentence.add(text);
-            polishSentence.add(StringUtils.isBlank(mp3Href) ? "EMPTY" : mp3Href);
+            polishSentence.add(StringUtils.isBlank(mp3Href) ? "EMPTY" : "(".concat(mp3Href).concat(")"));
           }
 
         }
@@ -131,12 +193,16 @@ public class LongmanScrapper {
                               .englishName(enName)
                               .otherName(otherName)
                               .americanName(enName.concat(" [").concat(usMp3File).concat("]"))
-                              .polishName(String.join("; ", definitions))
+                              .polishName(StringUtils.left(String.join("; ", definitions), 2000))
                               .partOfSpeech(StringUtils.isBlank(grammarTag)
-                                                    ? partOfSpeech
-                                                    : partOfSpeech.concat(" ").concat(grammarTag))
+                                            ? partOfSpeech
+                                            : partOfSpeech.concat(" ").concat(grammarTag))
                               .synonym(String.join("; ", relatedWords))
-                              .comparative(otherForms)
+                              .plural(String.join("; ", pluralForms))
+                              .comparative(String.join("; ", comparativeForms))
+                              .superlative(String.join("; ", superlativeForms))
+                              .pastTense(String.join("; ", pastTenseForms))
+                              .pastParticiple(String.join("; ", pastParticipleForms))
                               .englishSentence(StringUtils.left(String.join("; ", englishSentence), 2000))
                               .polishSentence(StringUtils.left(String.join("; ", polishSentence), 2000))
                               .source("Longman")

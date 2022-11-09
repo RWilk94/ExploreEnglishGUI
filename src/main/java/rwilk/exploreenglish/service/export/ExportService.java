@@ -13,7 +13,7 @@ import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Note;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
-import rwilk.exploreenglish.model.entity.WordSound;
+import rwilk.exploreenglish.model.entity.Definition;
 import rwilk.exploreenglish.service.CourseService;
 import rwilk.exploreenglish.service.ExerciseItemService;
 import rwilk.exploreenglish.service.ExerciseService;
@@ -24,7 +24,7 @@ import rwilk.exploreenglish.service.SentenceService;
 import rwilk.exploreenglish.service.TermService;
 import rwilk.exploreenglish.service.WordSentenceService;
 import rwilk.exploreenglish.service.WordService;
-import rwilk.exploreenglish.service.WordSoundService;
+import rwilk.exploreenglish.service.DefinitionService;
 import rwilk.exploreenglish.utils.WordUtils;
 
 import java.io.PrintWriter;
@@ -43,7 +43,7 @@ public class ExportService {
   private final LessonService lessonService;
   private final LessonWordService lessonWordService;
   private final WordService wordService;
-  private final WordSoundService wordSoundService;
+  private final DefinitionService definitionService;
   private final WordSentenceService wordSentenceService;
   private final SentenceService sentenceService;
   private final NoteService noteService;
@@ -53,17 +53,59 @@ public class ExportService {
 
   public void export() {
     exportVersion();
-    exportCourses(courseService.getAll());
-    exportLessons(lessonService.getAll());
-    exportLessonWords(lessonWordService.getAll());
-    exportWords(wordService.getAll());
-    exportWordSounds(wordSoundService.getAll());
-    // exportWordSentences(wordSentenceService.getAll());
-    // exportSentences(sentenceService.getAll());
-    exportNotes(noteService.getAll());
-    exportExercises(exerciseService.getAll());
-    exportExerciseItems(exerciseItemService.getAll());
-    // exportTerms(termService.getAll());
+
+    final Course course = courseService.getById(1L).get();
+    final List<Lesson> lessons = lessonService.getAllByCourse(course);
+    final List<LessonWord> lessonWords = new ArrayList<>();
+    final List<Word> words = new ArrayList<>();
+    final List<Definition> definitions = new ArrayList<>();
+    final List<Note> notes = new ArrayList<>();
+    final List<Exercise> exercises = new ArrayList<>();
+    final List<ExerciseItem> exerciseItems = new ArrayList<>();
+
+    for (final Lesson lesson : lessons) {
+      final List<LessonWord> lessonWordsLocal = lessonWordService.getAllByLesson(lesson);
+      lessonWords.addAll(lessonWordsLocal);
+
+      final List<Note> notesLocal = noteService.getAllByLesson(lesson);
+      notes.addAll(notesLocal);
+
+      final List<Exercise> exercisesLocal = exerciseService.getAllByLesson(lesson);
+      exercises.addAll(exercisesLocal);
+
+      for (final Exercise exercise : exercisesLocal) {
+        final List<ExerciseItem> exerciseItemsLocal = exerciseItemService.getAllByExercise(exercise);
+        exerciseItems.addAll(exerciseItemsLocal);
+      }
+    }
+    for (final LessonWord lessonWord : lessonWords) {
+      if (!words.stream().map(Word::getId).toList().contains(lessonWord.getWord().getId())) {
+        words.add(lessonWord.getWord());
+
+        final List<Definition> wordSoundsLocal = definitionService.getAllByWordId(lessonWord.getWord().getId());
+        definitions.addAll(wordSoundsLocal);
+      }
+    }
+
+    exportCourses(List.of(course));
+    exportLessons(lessons);
+    exportLessonWords(lessonWords.stream().distinct().toList());
+    exportWords(words.stream().distinct().toList());
+    exportWordSounds(definitions.stream().distinct().toList());
+    exportNotes(notes.stream().distinct().toList());
+    exportExercises(exercises.stream().distinct().toList());
+    exportExerciseItems(exerciseItems.stream().distinct().toList());
+//    exportCourses(courseService.getAll());
+//    exportLessons(lessonService.getAll());
+//    exportLessonWords(lessonWordService.getAll());
+//    exportWords(wordService.getAll());
+//    exportWordSounds(wordSoundService.getAll());
+//    // exportWordSentences(wordSentenceService.getAll());
+//    // exportSentences(sentenceService.getAll());
+//    exportNotes(noteService.getAll());
+//    exportExercises(exerciseService.getAll());
+//    exportExerciseItems(exerciseItemService.getAll());
+//    // exportTerms(termService.getAll());
   }
 
   public void exportVersion() {
@@ -135,7 +177,7 @@ public class ExportService {
     final List<List<LessonWord>> chunks = ListUtils.partition(lessonWords, CHUNK_SIZE);
     final StringBuilder sql = new StringBuilder();
     for (final List<LessonWord> chunk : chunks) {
-      sql.append("INSERT INTO 'lesson_word' ('id', 'position', 'lesson_id', 'word_id') VALUES ");
+      sql.append("INSERT INTO 'lesson_words' ('id', 'position', 'lesson_id', 'word_id') VALUES ");
 
       for (final LessonWord lessonWord : chunk) {
         sql.append("\n")
@@ -160,7 +202,7 @@ public class ExportService {
     final List<List<Word>> chunks = ListUtils.partition(words, CHUNK_SIZE);
     final StringBuilder sql = new StringBuilder();
     for (final List<Word> chunk : chunks) {
-      sql.append("INSERT INTO 'words' ('id', 'polish_name', 'part_of_speech', 'article', 'grammar_type', 'level'"
+      sql.append("INSERT INTO 'words' ('id', 'polish_name', 'part_of_speech', 'article', 'grammar_type', 'level', "
                  + "'progress', 'skip', 'difficult', 'correct', 'wrong', 'next_repeat', 'series') VALUES ");
 
       for (final Word word : chunk) {
@@ -184,31 +226,31 @@ public class ExportService {
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
   }
 
-  private void exportWordSounds(final List<WordSound> wordSounds) {
-    final String tag = "WORD_SOUNDS";
+  private void exportWordSounds(final List<Definition> definitions) {
+    final String tag = "DEFINITIONS";
     log.info(LOG_PREFIX, tag);
 
-    final List<List<WordSound>> chunks = ListUtils.partition(wordSounds, CHUNK_SIZE);
+    final List<List<Definition>> chunks = ListUtils.partition(definitions, CHUNK_SIZE);
     final StringBuilder sql = new StringBuilder();
-    for (final List<WordSound> chunk : chunks) {
-      sql.append("INSERT INTO 'word_sounds' ('id', 'type', 'english_name', 'british_sound', 'american_sound', " +
+    for (final List<Definition> chunk : chunks) {
+      sql.append("INSERT INTO 'definitions' ('id', 'type', 'english_name', 'british_sound', 'american_sound', " +
                  "'word_id') VALUES ");
 
-      for (final WordSound wordSound : chunk) {
+      for (final Definition definition : chunk) {
         sql.append("\n")
            .append("(")
-           .append(wordSound.getId()) // COLUMN_ID
+           .append(definition.getId()) // COLUMN_ID
            .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(wordSound.getType())).append(QUOTE_SIGN) // COLUMN TYPE
+           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getType())).append(QUOTE_SIGN) // COLUMN TYPE
            .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(wordSound.getEnglishName())).append(QUOTE_SIGN) // COLUMN ENGLISH_NAME
+           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getEnglishName())).append(QUOTE_SIGN) // COLUMN ENGLISH_NAME
            .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(wordSound.getBritishSound())).append(QUOTE_SIGN) // COLUMN BRITISH_SOUND
+           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getBritishSound())).append(QUOTE_SIGN) // COLUMN BRITISH_SOUND
            .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(wordSound.getAmericanSound())).append(QUOTE_SIGN) // COLUMN AMERICAN_SOUND
+           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getAmericanSound())).append(QUOTE_SIGN) // COLUMN AMERICAN_SOUND
            .append(PARAM_SEPARATOR)
-           .append(wordSound.getWord().getId()); // COLUMN WORD_ID
-        insertEndLineCharacter(sql, chunk, wordSound);
+           .append(definition.getWord().getId()); // COLUMN WORD_ID
+        insertEndLineCharacter(sql, chunk, definition);
       }
     }
     exportFile(sql, tag.toLowerCase() + ".txt", tag);
@@ -320,7 +362,7 @@ public class ExportService {
   }
 
   private void exportExerciseItems(final List<ExerciseItem> exerciseItems) {
-    final String tag = "EXERCISES_ITEMS";
+    final String tag = "EXERCISE_ITEMS";
     log.info(LOG_PREFIX, tag);
 
     final List<List<ExerciseItem>> chunks = ListUtils.partition(exerciseItems, CHUNK_SIZE);
@@ -467,7 +509,7 @@ public class ExportService {
   }
 
   private String replaceNewLine(final String text) {
-    return StringUtils.trimToEmpty(StringUtils.defaultString(text)).replace("\\n", "\\\\n");
+    return StringUtils.trimToEmpty(StringUtils.defaultString(text)).replaceAll("\\n", "\\\\n");
   }
 
 //  @Override
