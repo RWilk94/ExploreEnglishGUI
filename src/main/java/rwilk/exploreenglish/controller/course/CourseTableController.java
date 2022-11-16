@@ -1,18 +1,19 @@
 package rwilk.exploreenglish.controller.course;
 
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Controller;
+
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.entity.Course;
-
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 @Controller
 public class CourseTableController implements Initializable {
@@ -34,7 +35,7 @@ public class CourseTableController implements Initializable {
     textFieldSearch.setOnMouseClicked(view -> filterTableByName(textFieldSearch.getText()));
   }
 
-  public void init(CourseController courseController) {
+  public void init(final rwilk.exploreenglish.controller.course.CourseController courseController) {
     this.courseController = courseController;
     fillInTableView();
   }
@@ -59,10 +60,10 @@ public class CourseTableController implements Initializable {
 
   private void filterTableByName(String value) {
     List<Course> filteredCourses = courses.stream()
-        .filter(course ->
-            course.getEnglishName().toLowerCase().contains(value.toLowerCase())
-                || course.getPolishName().toLowerCase().contains(value.toLowerCase()))
-        .collect(Collectors.toList());
+                                          .filter(course ->
+                                                    course.getEnglishName().toLowerCase().contains(value.toLowerCase())
+                                                    || course.getPolishName().toLowerCase().contains(value.toLowerCase()))
+                                          .collect(Collectors.toList());
     tableCourses.setItems(FXCollections.observableArrayList(filteredCourses));
   }
 

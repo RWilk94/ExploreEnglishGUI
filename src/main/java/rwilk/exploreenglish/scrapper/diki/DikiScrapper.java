@@ -1,7 +1,11 @@
 package rwilk.exploreenglish.scrapper.diki;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.ListUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,17 +13,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.TermService;
 import rwilk.exploreenglish.utils.WordUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -46,12 +45,12 @@ public class DikiScrapper implements CommandLineRunner {
     try {
       List<Term> results = new ArrayList<>();
 
-      String url = "http://www.diki.pl/slownik-angielskiego?q=" + WordUtils.trimAndReplace(englishWord, "+");
+      String url = "https://www.diki.pl/slownik-angielskiego?q=" + WordUtils.trimAndReplace(englishWord, "+");
       Document document = Jsoup.connect(url)
-          // .cookie("autoLoginToken", "aCCJem50QmbkPp163sFnocX9ypt4eTHl5hA00rEs")
-          .userAgent("Mozilla").timeout(10000).get();
+                               // .cookie("autoLoginToken", "aCCJem50QmbkPp163sFnocX9ypt4eTHl5hA00rEs")
+                               .userAgent("Mozilla").timeout(10000).get();
       Elements elements = document.select("div.diki-results-left-column").get(0).child(0)
-          .select("div.dictionaryEntity"); // return elements containing translations
+                                  .select("div.dictionaryEntity"); // return elements containing translations
 
       for (Element dictionaryEntity : elements) {
         Term term = new Term();
@@ -96,12 +95,12 @@ public class DikiScrapper implements CommandLineRunner {
             if (StringUtils.isNoneEmpty(term.getPartOfSpeech())) {
               results.add(term);
               term = Term.builder()
-                  .englishName(term.getEnglishName())
-                  .americanName(term.getAmericanName())
-                  .otherName(StringUtils.trimToEmpty(term.getOtherName()))
-                  .popularity(term.getPopularity())
-                  .source(term.getSource())
-                  .build();
+                         .englishName(term.getEnglishName())
+                         .americanName(term.getAmericanName())
+                         .otherName(StringUtils.trimToEmpty(term.getOtherName()))
+                         .popularity(term.getPopularity())
+                         .source(term.getSource())
+                         .build();
             }
             String partOfSpeech = element.select("span.partOfSpeech").text();
             term.setPartOfSpeech(partOfSpeech);
@@ -138,18 +137,18 @@ public class DikiScrapper implements CommandLineRunner {
             if (StringUtils.isNoneEmpty(term.getPolishName())) {
               results.add(term);
               term = Term.builder()
-                  .englishName(term.getEnglishName())
-                  .americanName(term.getAmericanName())
-                  .otherName(StringUtils.trimToEmpty(term.getOtherName()))
-                  .comparative(term.getComparative())
-                  .superlative(term.getSuperlative())
-                  .pastTense(term.getPastTense())
-                  .pastParticiple(term.getPastParticiple())
-                  .plural(term.getPlural())
-                  .partOfSpeech(term.getPartOfSpeech())
-                  .popularity(term.getPopularity())
-                  .source(term.getSource())
-                  .build();
+                         .englishName(term.getEnglishName())
+                         .americanName(term.getAmericanName())
+                         .otherName(StringUtils.trimToEmpty(term.getOtherName()))
+                         .comparative(term.getComparative())
+                         .superlative(term.getSuperlative())
+                         .pastTense(term.getPastTense())
+                         .pastParticiple(term.getPastParticiple())
+                         .plural(term.getPlural())
+                         .partOfSpeech(term.getPartOfSpeech())
+                         .popularity(term.getPopularity())
+                         .source(term.getSource())
+                         .build();
             }
             List<String> meanings = new ArrayList<>();
             List<String> englishSentences = new ArrayList<>();
@@ -186,16 +185,16 @@ public class DikiScrapper implements CommandLineRunner {
                   }
                 } else if (element1.hasClass("grammarTag")) {
                   singleMeaning.set(singleMeaning.size() - 1, singleMeaning.get(singleMeaning.size() - 1)
-                      .concat(" [grammarTag: ").concat(element1.text()
-                          .replaceFirst(Pattern.quote("["), "")
-                          .replaceFirst(Pattern.quote("]"), "")
-                          .trim())
-                      .concat("]"));
+                                                                           .concat(" [grammarTag: ").concat(element1.text()
+                                                                                                                    .replaceFirst(Pattern.quote("["), "")
+                                                                                                                    .replaceFirst(Pattern.quote("]"), "")
+                                                                                                                    .trim())
+                                                                           .concat("]"));
                 } else if (element1.hasClass("meaningAdditionalInformation")) {
                   if (StringUtils.isNoneEmpty(element1.text())) {
                     singleMeaning.set(singleMeaning.size() - 1, singleMeaning.get(singleMeaning.size() - 1)
-                        .concat(" (").concat(element1.text().trim())
-                        .concat(")"));
+                                                                             .concat(" (").concat(element1.text().trim())
+                                                                             .concat(")"));
                   }
                 }
               }

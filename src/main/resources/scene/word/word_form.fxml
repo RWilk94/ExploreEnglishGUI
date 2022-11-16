@@ -1,51 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.*?>
-
-<ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="rwilk.exploreenglish.controller.word.WordFormController">
+<ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="rwilk.exploreenglish.controller.word.WordFormController">
 
   <VBox>
 
     <HBox>
       <VBox>
-        <Label text="Id" />
+        <Label text="Id"/>
         <TextField fx:id="textFieldId" editable="false" HBox.hgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </TextField>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
       <VBox VBox.vgrow="ALWAYS">
-        <Label text="Lesson:" />
+        <Label text="Lesson:"/>
         <ComboBox fx:id="comboBoxLesson" minWidth="200" prefWidth="150.0">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </ComboBox>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
-      <ListView fx:id="listViewLessons" maxHeight="100" minHeight="40" onMouseClicked="#listViewLessonsOnMouseClicked" HBox.hgrow="ALWAYS">
+      <ListView fx:id="listViewLessons" maxHeight="100" minHeight="40" onMouseClicked="#listViewLessonsOnMouseClicked"
+                HBox.hgrow="ALWAYS">
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5"/>
         </HBox.margin>
       </ListView>
 
       <VBox VBox.vgrow="ALWAYS">
         <Button onAction="#buttonAddLessonOnAction" prefWidth="65" text="Add">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="22.5"/>
           </VBox.margin>
         </Button>
         <Button onAction="#buttonRemoveLessonOnAction" prefWidth="65" text="Remove">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </Button>
       </VBox>
@@ -53,118 +61,118 @@
 
     <HBox HBox.hgrow="ALWAYS">
       <VBox HBox.hgrow="ALWAYS">
-        <Label text="English Names" />
+        <Label text="English Names"/>
         <TextField fx:id="textFieldEnglishNames" HBox.hgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </TextField>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
 
       <Button onAction="#buttonTranslateOnAction" text="Translate">
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5"/>
         </HBox.margin>
       </Button>
 
 
       <Button onAction="#getLongmanSounds" text="get Longman sounds">
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5"/>
         </HBox.margin>
       </Button>
     </HBox>
 
     <HBox HBox.hgrow="ALWAYS">
       <VBox maxWidth="50">
-        <Label text="Id" />
+        <Label text="Id"/>
         <TextField fx:id="textFieldWordSoundId" editable="false">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </TextField>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
 
       <VBox HBox.hgrow="ALWAYS">
-        <Label text="English Name" />
+        <Label text="English Name"/>
         <TextField fx:id="textFieldEnglishName" HBox.hgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </TextField>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
 
       <VBox HBox.hgrow="ALWAYS">
-        <Label text="Additional Information" />
+        <Label text="Additional Information"/>
         <TextField fx:id="textFieldAdditionalInformation" HBox.hgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </TextField>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
 
       <VBox HBox.hgrow="ALWAYS">
-        <Label text="Word Type" />
+        <Label text="Word Type"/>
         <ComboBox fx:id="comboBoxWordType" HBox.hgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </ComboBox>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
     </HBox>
 
     <HBox>
       <VBox HBox.hgrow="ALWAYS">
-        <Label text="Ame Sound" />
+        <Label text="Ame Sound"/>
         <TextField fx:id="textFieldAmericanSound" HBox.hgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </TextField>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
       <Button onAction="#buttonAmePlaySoundOnAction" text="Play">
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5"/>
         </HBox.margin>
       </Button>
 
       <VBox HBox.hgrow="ALWAYS">
-        <Label text="Bre Sound" />
+        <Label text="Bre Sound"/>
         <TextField fx:id="textFieldBritishSound" HBox.hgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </TextField>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
       <Button onAction="#buttonBrePlaySoundOnAction" text="Play">
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5"/>
         </HBox.margin>
       </Button>
       <Button onAction="#buttonCheckSoundsOnAction" text="Check">
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="22.5"/>
         </HBox.margin>
       </Button>
     </HBox>
@@ -172,39 +180,40 @@
 
     <HBox HBox.hgrow="ALWAYS">
       <VBox HBox.hgrow="ALWAYS">
-        <Label text="Word variants" />
-        <ListView fx:id="listViewWordVariants" maxHeight="100" minHeight="60" maxWidth="Infinity" onMouseClicked="#listViewWordVariantsOnMouseClicked" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <Label text="Word variants"/>
+        <ListView fx:id="listViewWordVariants" maxHeight="100" minHeight="60" maxWidth="Infinity"
+                  onMouseClicked="#listViewWordVariantsOnMouseClicked" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </ListView>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
 
       <VBox HBox.hgrow="ALWAYS" maxWidth="65">
         <Button text="Clear" prefWidth="65" onAction="#buttonClearWordSoundOnAction">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="22.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="22.5"/>
           </VBox.margin>
         </Button>
 
         <Button text="Delete" prefWidth="65" onAction="#buttonDeleteWordSoundOnAction">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </Button>
 
         <Button text="Edit" prefWidth="65" onAction="#buttonEditWordSoundOnAction">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </Button>
 
         <Button text="Add" prefWidth="65" onAction="#buttonAddWordSoundOnAction">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </Button>
       </VBox>
@@ -212,14 +221,14 @@
 
     <HBox HBox.hgrow="ALWAYS">
       <VBox HBox.hgrow="ALWAYS">
-        <Label text="PlName" />
+        <Label text="PlName"/>
         <TextField fx:id="textFieldPolishName" HBox.hgrow="ALWAYS">
           <VBox.margin>
-            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+            <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
           </VBox.margin>
         </TextField>
         <HBox.margin>
-          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+          <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
         </HBox.margin>
       </VBox>
     </HBox>
@@ -256,6 +265,12 @@
               </ToggleButton>
               <ToggleButton fx:id="toggleButtonAdverb" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
                             text="przysłówek" userData="przysłówek">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonPreposition" onMouseClicked="#toggleButtonPartOfSpeechOnMouseClicked"
+                            text="przyimek" userData="przyimek">
                 <HBox.margin>
                   <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
                 </HBox.margin>
@@ -434,19 +449,22 @@
       </VBox>
 
       <VBox HBox.hgrow="NEVER" prefWidth="65">
-        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonDeleteOnAction" text="Delete" styleClass="button-delete">
+        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonDeleteOnAction" text="Delete"
+                styleClass="button-delete">
           <VBox.margin>
             <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
           </VBox.margin>
         </Button>
 
-        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonClearOnAction" text="Clear" styleClass="button-clear">
+        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonClearOnAction" text="Clear"
+                styleClass="button-clear">
           <VBox.margin>
             <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
           </VBox.margin>
         </Button>
 
-        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonEditOnAction" text="Edit" styleClass="button-edit">
+        <Button prefWidth="65" mnemonicParsing="false" onAction="#buttonEditOnAction" text="Edit"
+                styleClass="button-edit">
           <VBox.margin>
             <Insets bottom="2.5" left="5.0" right="5.0" top="2.5"/>
           </VBox.margin>

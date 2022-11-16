@@ -39,28 +39,27 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.MouseEvent;
 import rwilk.exploreenglish.custom.ToggleGroup2;
 import rwilk.exploreenglish.exception.RequiredFieldsAreEmptyException;
 import rwilk.exploreenglish.exception.RequiredObjectNotFoundException;
 import rwilk.exploreenglish.model.WordTypeEnum;
+import rwilk.exploreenglish.model.entity.Definition;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.LessonWord;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
-import rwilk.exploreenglish.model.entity.Definition;
 import rwilk.exploreenglish.model.entity.release.ReleaseSentence;
 import rwilk.exploreenglish.model.entity.release.ReleaseWord;
+import rwilk.exploreenglish.repository.DefinitionRepository;
 import rwilk.exploreenglish.repository.LessonRepository;
 import rwilk.exploreenglish.repository.LessonWordRepository;
 import rwilk.exploreenglish.repository.WordRepository;
-import rwilk.exploreenglish.repository.DefinitionRepository;
 import rwilk.exploreenglish.repository.release.ReleaseSentenceRepository;
 import rwilk.exploreenglish.repository.release.ReleaseWordRepository;
 import rwilk.exploreenglish.scrapper.longman.LongmanScrapper;
+import rwilk.exploreenglish.service.DefinitionService;
 import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.WordService;
-import rwilk.exploreenglish.service.DefinitionService;
 import rwilk.exploreenglish.utils.FormUtils;
 import rwilk.exploreenglish.utils.SoundUtils;
 import rwilk.exploreenglish.utils.WordUtils;
@@ -75,21 +74,38 @@ public class WordFormController implements Initializable, CommandLineRunner {
   private final List<Object> controls = new ArrayList<>();
 
   @FXML private TextField textFieldId;
-  @Getter @FXML private ComboBox<Lesson> comboBoxLesson;
+  @Getter
+  @FXML
+  private ComboBox<Lesson> comboBoxLesson;
   @FXML private ListView<Lesson> listViewLessons;
   @FXML private TextField textFieldEnglishNames;
-  @Getter @FXML private TextField textFieldWordSoundId;
-  @Getter @FXML private TextField  textFieldEnglishName;
-  @Getter @FXML private TextField  textFieldAdditionalInformation;
-  @Getter @FXML private ComboBox<WordTypeEnum> comboBoxWordType;
-  @Getter @FXML private TextField  textFieldAmericanSound;
-  @Getter @FXML private TextField textFieldBritishSound;
+  @Getter
+  @FXML
+  private TextField textFieldWordSoundId;
+  @Getter
+  @FXML
+  private TextField textFieldEnglishName;
+  @Getter
+  @FXML
+  private TextField textFieldAdditionalInformation;
+  @Getter
+  @FXML
+  private ComboBox<WordTypeEnum> comboBoxWordType;
+  @Getter
+  @FXML
+  private TextField textFieldAmericanSound;
+  @Getter
+  @FXML
+  private TextField textFieldBritishSound;
   @FXML private ListView<Definition> listViewWordVariants;
-  @Getter @FXML private TextField textFieldPolishName;
+  @Getter
+  @FXML
+  private TextField textFieldPolishName;
   @FXML private ToggleButton toggleButtonNoun;
   @FXML private ToggleButton toggleButtonVerb;
   @FXML private ToggleButton toggleButtonAdjective;
   @FXML private ToggleButton toggleButtonAdverb;
+  @FXML private ToggleButton toggleButtonPreposition;
   @FXML private ToggleButton toggleButtonPhrasalVerb;
   @FXML private ToggleButton toggleButtonSentence;
   @FXML private ToggleButton toggleButtonIdiom;
@@ -138,7 +154,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
           } else {
             setStyle("");
           }
-        } if (item != null) {
+        }
+        if (item != null) {
           this.setText(item.toString());
           setStyle("");
         } else {
@@ -149,8 +166,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
     });
 
     textFieldEnglishNames.textProperty()
-        .addListener((observable, oldValue, newValue) ->
-                         wordController.getWordTableController().textFieldFilterByEnName.setText(newValue));
+                         .addListener((observable, oldValue, newValue) ->
+                                        wordController.getWordTableController().textFieldFilterByEnName.setText(newValue));
 
 //    textFieldPolishName.textProperty().addListener((observable, oldValue, newValue) ->
 //        wordController.getWordTableController().textFieldFilterByPlName.setText(newValue));
@@ -166,7 +183,7 @@ public class WordFormController implements Initializable, CommandLineRunner {
   public void buttonDeleteOnAction() {
     if (StringUtils.isNotEmpty(textFieldId.getText())) {
       wordController.getWordService().getById(Long.valueOf(textFieldId.getText()))
-          .ifPresent(word -> wordController.getWordService().delete(word));
+                    .ifPresent(word -> wordController.getWordService().delete(word));
       buttonClearOnAction();
       wordController.refreshTableView();
       wordController.refreshChildTableView();
@@ -179,52 +196,52 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
   public void buttonEditOnAction() {
     wordController.getWordService().getById(Long.valueOf(textFieldId.getText()))
-        .ifPresent(word -> {
-          word.setDefinitions(listViewWordVariants.getItems().stream()
-                                                  .filter(Objects::nonNull)
-                                                  .toList());
-          word.setPolishName(trimToEmpty(textFieldPolishName.getText()));
-          word.setPartOfSpeech(trimToEmpty(getSelectedToggleText(toggleGroupPartOfSpeech)));
-          word.setArticle(trimToEmpty(getSelectedToggleText(toggleGroupArticle)));
-          word.setLevel(trimToEmpty(getSelectedToggleText(toggleGroupLevel)));
-          word.setGrammarType(trimToEmpty(getSelectedToggleText(toggleGroupGrammar)));
+                  .ifPresent(word -> {
+                    word.setDefinitions(listViewWordVariants.getItems().stream()
+                                                            .filter(Objects::nonNull)
+                                                            .toList());
+                    word.setPolishName(trimToEmpty(textFieldPolishName.getText()));
+                    word.setPartOfSpeech(trimToEmpty(getSelectedToggleText(toggleGroupPartOfSpeech)));
+                    word.setArticle(trimToEmpty(getSelectedToggleText(toggleGroupArticle)));
+                    word.setLevel(trimToEmpty(getSelectedToggleText(toggleGroupLevel)));
+                    word.setGrammarType(trimToEmpty(getSelectedToggleText(toggleGroupGrammar)));
 
-          word = wordController.getWordService().save(word);
+                    word = wordController.getWordService().save(word);
 
-          setWordForm(word);
-          wordController.refreshTableView();
-          wordController.refreshChildComboBoxes();
-        });
+                    setWordForm(word);
+                    wordController.refreshTableView();
+                    wordController.refreshChildComboBoxes();
+                  });
   }
 
   public void buttonAddOnAction() {
-      Word word = Word.builder()
-          .id(null)
-          .definitions(ListUtils.emptyIfNull(listViewWordVariants.getItems()).stream()
-                                    .filter(Objects::nonNull)
-                                    .toList())
-          .polishName(trimToEmpty(textFieldPolishName.getText()))
-          .partOfSpeech(trimToEmpty(getSelectedToggleText(toggleGroupPartOfSpeech)))
-          .article(trimToEmpty(getSelectedToggleText(toggleGroupArticle)))
-          .level(trimToEmpty(getSelectedToggleText(toggleGroupLevel)))
-          .grammarType(trimToEmpty(getSelectedToggleText(toggleGroupGrammar)))
-          .build();
-      word = wordController.getWordService().save(word);
-      setWordForm(word);
+    Word word = Word.builder()
+                    .id(null)
+                    .definitions(ListUtils.emptyIfNull(listViewWordVariants.getItems()).stream()
+                                          .filter(Objects::nonNull)
+                                          .toList())
+                    .polishName(trimToEmpty(textFieldPolishName.getText()))
+                    .partOfSpeech(trimToEmpty(getSelectedToggleText(toggleGroupPartOfSpeech)))
+                    .article(trimToEmpty(getSelectedToggleText(toggleGroupArticle)))
+                    .level(trimToEmpty(getSelectedToggleText(toggleGroupLevel)))
+                    .grammarType(trimToEmpty(getSelectedToggleText(toggleGroupGrammar)))
+                    .build();
+    word = wordController.getWordService().save(word);
+    setWordForm(word);
 
-      if (comboBoxLesson.getSelectionModel().getSelectedItem() != null) {
-        final LessonWord lessonWord = LessonWord.builder()
-            .id(null)
-            .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
-            .position(wordController.getLessonWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
-            .word(word)
-            .build();
-        wordController.getLessonWordService().save(lessonWord);
-        setLessonWordForm();
-      }
+    if (comboBoxLesson.getSelectionModel().getSelectedItem() != null) {
+      final LessonWord lessonWord = LessonWord.builder()
+                                              .id(null)
+                                              .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
+                                              .position(wordController.getLessonWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
+                                              .word(word)
+                                              .build();
+      wordController.getLessonWordService().save(lessonWord);
+      setLessonWordForm();
+    }
 
-      wordController.refreshTableView();
-      wordController.refreshChildComboBoxes();
+    wordController.refreshTableView();
+    wordController.refreshChildComboBoxes();
   }
 
   public void setWordForm(final Word word) {
@@ -233,42 +250,42 @@ public class WordFormController implements Initializable, CommandLineRunner {
     setWordForm(word.getPolishName(), word.getDefinitions());
 
     toggleGroupPartOfSpeech.selectToggle(toggleGroupPartOfSpeech.getToggles().stream()
-        .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getPartOfSpeech())))
-        .findFirst()
-        .orElse(null));
+                                                                .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getPartOfSpeech())))
+                                                                .findFirst()
+                                                                .orElse(null));
     toggleGroupArticle.selectToggle(toggleGroupArticle.getToggles().stream()
-        .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getArticle())))
-        .findFirst()
-        .orElse(null));
-    toggleGroupLevel.selectToggle(toggleGroupLevel.getToggles().stream()
-                                                      .filter(toggle -> toggle.getUserData().toString().equals(
-                                                          trimToEmpty(word.getLevel())))
+                                                      .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getArticle())))
                                                       .findFirst()
                                                       .orElse(null));
+    toggleGroupLevel.selectToggle(toggleGroupLevel.getToggles().stream()
+                                                  .filter(toggle -> toggle.getUserData().toString().equals(
+                                                    trimToEmpty(word.getLevel())))
+                                                  .findFirst()
+                                                  .orElse(null));
     toggleGroupGrammar.selectToggle(toggleGroupGrammar.getToggles().stream()
-        .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getGrammarType())))
-        .findFirst()
-        .orElse(null));
+                                                      .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getGrammarType())))
+                                                      .findFirst()
+                                                      .orElse(null));
   }
 
   public void setWordForm(final Term term) {
     textFieldId.clear();
 
     toggleGroupPartOfSpeech.selectToggle(toggleGroupPartOfSpeech.getToggles().stream()
-        .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(term.getPartOfSpeech())))
-        .findFirst()
-        .orElse(null));
+                                                                .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(term.getPartOfSpeech())))
+                                                                .findFirst()
+                                                                .orElse(null));
     toggleGroupArticle.selectToggle(null);
     toggleGroupLevel.selectToggle(null);
     toggleGroupGrammar.selectToggle(null);
 
     String englishNames = (StringUtils.isNoneEmpty(term.getEnglishName()) ? term.getEnglishName() + "; " : "")
-        .concat((StringUtils.isNoneEmpty(term.getAmericanName()) ? term.getAmericanName() + "; " : ""))
-        .concat((StringUtils.isNoneEmpty(term.getOtherName()) ? term.getOtherName() + "; " : ""))
-        .trim();
+      .concat((StringUtils.isNoneEmpty(term.getAmericanName()) ? term.getAmericanName() + "; " : ""))
+      .concat((StringUtils.isNoneEmpty(term.getOtherName()) ? term.getOtherName() + "; " : ""))
+      .trim();
     englishNames = englishNames.endsWith(";")
-        ? englishNames.substring(0, englishNames.length() - 1)
-        : englishNames;
+                   ? englishNames.substring(0, englishNames.length() - 1)
+                   : englishNames;
     if (englishNames.startsWith("a ")) {
       toggleGroupArticle.selectToggle(toggleButtonA);
       toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
@@ -305,21 +322,21 @@ public class WordFormController implements Initializable, CommandLineRunner {
     }
 
     return Arrays.stream(value.split(";"))
-        .map(StringUtils::trim)
-        .map(text -> {
-          String enName = WordUtils.replaceSpecialText(text);
-          String additional = "";
-          if (enName.contains("(") && enName.contains(")")) {
-            additional = enName.substring(enName.indexOf("(") + 1, enName.indexOf(")"));
-            enName = enName.substring(0, enName.indexOf("("));
-          }
-          return Definition.builder()
-                           .englishName(enName)
-                           .additionalInformation(additional)
-                           .type(type.toString())
-                           .build();
-        })
-        .toList();
+                 .map(StringUtils::trim)
+                 .map(text -> {
+                   String enName = WordUtils.replaceSpecialText(text);
+                   String additional = "";
+                   if (enName.contains("(") && enName.contains(")")) {
+                     additional = enName.substring(enName.indexOf("(") + 1, enName.indexOf(")"));
+                     enName = enName.substring(0, enName.indexOf("("));
+                   }
+                   return Definition.builder()
+                                    .englishName(enName)
+                                    .additionalInformation(additional)
+                                    .type(type.toString())
+                                    .build();
+                 })
+                 .toList();
   }
 
   private List<Definition> wordSoundFromTerm(final WordTypeEnum type, final String value, final String sound) {
@@ -381,7 +398,7 @@ public class WordFormController implements Initializable, CommandLineRunner {
     final String textToTranslate = StringUtils.defaultIfBlank(trimToEmpty(textFieldEnglishNames.getText()), trimToEmpty(textFieldEnglishName.getText()));
     if (StringUtils.isNoneBlank(textToTranslate)) {
       wordController.getInjectService().getScrapperController()
-          .webScrap(Arrays.stream(textToTranslate.split(";")).toList(), changeTab);
+                    .webScrap(Arrays.stream(textToTranslate.split(";")).toList(), changeTab);
       if (changeTab) {
         wordController.getTabPane().getSelectionModel().select(1);
       }
@@ -395,11 +412,11 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
       final Word word = getWordById();
       wordController.getLessonWordService().save(
-          LessonWord.builder()
-              .word(word)
-              .lesson(lesson)
-              .position(wordController.getLessonWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
-              .build());
+        LessonWord.builder()
+                  .word(word)
+                  .lesson(lesson)
+                  .position(wordController.getLessonWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
+                  .build());
       setLessonWordForm();
       wordController.refreshTableView();
       wordController.refreshChildComboBoxes();
@@ -412,7 +429,7 @@ public class WordFormController implements Initializable, CommandLineRunner {
       final Long wordId = Long.parseLong(textFieldId.getText());
 
       wordController.getLessonWordService().getByLessonIdAndWordId(lesson.getId(), wordId)
-          .ifPresent(lessonWord -> wordController.getLessonWordService().deleteById(lessonWord.getId()));
+                    .ifPresent(lessonWord -> wordController.getLessonWordService().deleteById(lessonWord.getId()));
       setLessonWordForm();
       wordController.refreshTableView();
       wordController.refreshChildComboBoxes();
@@ -549,7 +566,7 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
   private Word getWordById() {
     return wordController.getWordService().getById(Long.valueOf(textFieldId.getText()))
-        .orElseThrow(() -> new RequiredObjectNotFoundException(NOT_FOUND_WORD_INSTANCE));
+                         .orElseThrow(() -> new RequiredObjectNotFoundException(NOT_FOUND_WORD_INSTANCE));
   }
 
   private Definition getWordSoundById() {
@@ -575,12 +592,12 @@ public class WordFormController implements Initializable, CommandLineRunner {
   private void setLessonWordForm() {
     if (StringUtils.isNotBlank(textFieldId.getText())) {
       final Word word = wordController.getWordService().getById(Long.parseLong(textFieldId.getText()))
-          .orElseThrow(() -> new RequiredObjectNotFoundException(NOT_FOUND_WORD_INSTANCE));
+                                      .orElseThrow(() -> new RequiredObjectNotFoundException(NOT_FOUND_WORD_INSTANCE));
       List<LessonWord> lessonWords = wordController.getLessonWordService().getAllByWord(word);
       listViewLessons.setItems(null);
       listViewLessons.setItems(FXCollections.observableArrayList(lessonWords.stream()
-                                                                     .map(LessonWord::getLesson)
-                                                                     .toList()));
+                                                                            .map(LessonWord::getLesson)
+                                                                            .toList()));
       refreshListViewWordVariants(word.getId());
     }
   }
@@ -588,8 +605,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
   private void setToggleGroups() {
     toggleGroupPartOfSpeech = new ToggleGroup2("toggleGroupPartOfSpeech");
     setToggleGroup(List.of(toggleButtonNoun, toggleButtonVerb, toggleButtonAdjective, toggleButtonAdverb,
-                           toggleButtonPhrasalVerb, toggleButtonSentence, toggleButtonIdiom, toggleButtonNumber,
-                           toggleButtonPronoun, toggleButtonDeterminer, toggleButtonOther),
+                           toggleButtonPreposition, toggleButtonPhrasalVerb, toggleButtonSentence, toggleButtonIdiom,
+                           toggleButtonNumber, toggleButtonPronoun, toggleButtonDeterminer, toggleButtonOther),
                    toggleGroupPartOfSpeech);
 
     toggleGroupArticle = new ToggleGroup2("toggleGroupArticle");
@@ -704,10 +721,10 @@ public class WordFormController implements Initializable, CommandLineRunner {
           definitionRepository.saveAll(definitions);
         }
         final LessonWord lessonWord = LessonWord.builder()
-                                           .lesson(lessonRepository.findById(target.getLessonId()).get())
-                                           .word(savedWord)
-                                           .position(Long.valueOf(lessonWordRepository.countAllByLesson(target.getLessonId())).intValue() + 1)
-                                           .build();
+                                                .lesson(lessonRepository.findById(target.getLessonId()).get())
+                                                .word(savedWord)
+                                                .position(Long.valueOf(lessonWordRepository.countAllByLesson(target.getLessonId())).intValue() + 1)
+                                                .build();
 //        log.info("SAVING LESSON_WORD [{}]", lessonWord);
         lessonWordRepository.save(lessonWord);
         target.setPartOfSpeech("MIGRATED");
@@ -880,35 +897,35 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
     if (CollectionUtils.isNotEmpty(definitions)) {
       final List<String> sounds = Arrays.stream(input.split(";"))
-                                         .filter(StringUtils::isNoneBlank)
-                                         .map(StringUtils::trim)
-                                         .toList();
+                                        .filter(StringUtils::isNoneBlank)
+                                        .map(StringUtils::trim)
+                                        .toList();
 
       for (final String sound : sounds) {
         definitions.stream()
                    .filter(definition -> definition.getEnglishName().equals(sound.substring(sound.indexOf("[") + 1, sound.indexOf("="))))
-          .findFirst()
-          .ifPresent(definition -> {
-            if (StringUtils.isAllEmpty(definition.getBritishSound(), definition.getAmericanSound())) {
-              final String longmanAme = "https://www.ldoceonline.com/media/english/ameProns/";
-              final String longmanBre = "https://www.ldoceonline.com/media/english/breProns/";
-              final String dikiBre = "https://www.diki.pl/images-common/en/mp3/";
-              final String dikiAme = "https://www.diki.pl/images-common/en-ame/mp3/";
+                   .findFirst()
+                   .ifPresent(definition -> {
+                     if (StringUtils.isAllEmpty(definition.getBritishSound(), definition.getAmericanSound())) {
+                       final String longmanAme = "https://www.ldoceonline.com/media/english/ameProns/";
+                       final String longmanBre = "https://www.ldoceonline.com/media/english/breProns/";
+                       final String dikiBre = "https://www.diki.pl/images-common/en/mp3/";
+                       final String dikiAme = "https://www.diki.pl/images-common/en-ame/mp3/";
 
-              final String expectedSound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
+                       final String expectedSound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
 
-              final String americanSound = checkSound(longmanAme + expectedSound, dikiAme + expectedSound);
-              final String britishSound = checkSound(longmanBre + expectedSound, dikiBre + expectedSound);
+                       final String americanSound = checkSound(longmanAme + expectedSound, dikiAme + expectedSound);
+                       final String britishSound = checkSound(longmanBre + expectedSound, dikiBre + expectedSound);
 
-              if (StringUtils.isNoneEmpty(americanSound)) {
-                definition.setAmericanSound(americanSound);
-              }
-              if (StringUtils.isNoneEmpty(britishSound)) {
-                definition.setBritishSound(britishSound);
-              }
-              wordController.getDefinitionService().save(definition);
-            }
-          });
+                       if (StringUtils.isNoneEmpty(americanSound)) {
+                         definition.setAmericanSound(americanSound);
+                       }
+                       if (StringUtils.isNoneEmpty(britishSound)) {
+                         definition.setBritishSound(britishSound);
+                       }
+                       wordController.getDefinitionService().save(definition);
+                     }
+                   });
       }
     }
   }
@@ -943,10 +960,10 @@ public class WordFormController implements Initializable, CommandLineRunner {
 //    if (StringUtils.isNoneEmpty(finalUrl)) {
 //      return finalUrl;
 //    } else {
-      final String finalBackupUrl = SoundUtils.checkIfFileExists(backupUrl);
-      if (StringUtils.isNoneEmpty(finalBackupUrl)) {
-        return finalBackupUrl;
-      }
+    final String finalBackupUrl = SoundUtils.checkIfFileExists(backupUrl);
+    if (StringUtils.isNoneEmpty(finalBackupUrl)) {
+      return finalBackupUrl;
+    }
 //    }
     return "";
   }
@@ -1010,13 +1027,13 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
           for (Definition definition : word.getDefinitions()) {
             if (firstWord.getDefinitions()
-                     .stream()
-              .filter(item -> item.getType().equals(definition.getType()))
-              .filter(item -> StringUtils.equals(item.getEnglishName(), definition.getEnglishName()))
-              .filter(item -> StringUtils.equals(item.getAdditionalInformation(), definition.getAdditionalInformation()))
-              .filter(item -> StringUtils.equals(item.getBritishSound(), definition.getBritishSound()))
-              .filter(item -> StringUtils.equals(item.getAmericanSound(), definition.getAmericanSound()))
-              .count() == 0) {
+                         .stream()
+                         .filter(item -> item.getType().equals(definition.getType()))
+                         .filter(item -> StringUtils.equals(item.getEnglishName(), definition.getEnglishName()))
+                         .filter(item -> StringUtils.equals(item.getAdditionalInformation(), definition.getAdditionalInformation()))
+                         .filter(item -> StringUtils.equals(item.getBritishSound(), definition.getBritishSound()))
+                         .filter(item -> StringUtils.equals(item.getAmericanSound(), definition.getAmericanSound()))
+                         .count() == 0) {
               definition.setWord(firstWord);
               firstWord.getDefinitions().add(definition);
             }
