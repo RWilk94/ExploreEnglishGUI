@@ -1,11 +1,13 @@
 package rwilk.exploreenglish.controller.word;
 
+import static org.apache.commons.lang3.StringUtils.isAllBlank;
 import static org.apache.commons.lang3.StringUtils.isAnyBlank;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
+import static rwilk.exploreenglish.exception.ExceptionControllerAdvice.NOT_FOUND_DEFINITION_INSTANCE;
 import static rwilk.exploreenglish.exception.ExceptionControllerAdvice.NOT_FOUND_WORD_INSTANCE;
-import static rwilk.exploreenglish.exception.ExceptionControllerAdvice.NOT_FOUND_WORD_SOUND_INSTANCE;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -502,8 +504,28 @@ public class WordFormController implements Initializable, CommandLineRunner {
   }
 
   public void buttonAddWordSoundOnAction() {
-    if (isBlank(textFieldEnglishName.getText())
-        || comboBoxWordType.getSelectionModel().getSelectedItem() == null) {
+    if (isNoneBlank(textFieldId.getText())
+        && isNoneBlank(textFieldWordSoundId.getText())
+        && isAllBlank(textFieldEnglishName.getText(),
+                      textFieldAdditionalInformation.getText(),
+                      textFieldAmericanSound.getText(),
+                      textFieldBritishSound.getText())
+        && comboBoxWordType.getSelectionModel().getSelectedItem() == null) {
+
+      final Word word = wordController.getWordService()
+                                      .getById(Long.parseLong(textFieldId.getText()))
+                                      .orElseThrow(() -> new RequiredObjectNotFoundException(NOT_FOUND_WORD_INSTANCE));
+      final Definition definition = wordController.getDefinitionService()
+                                                  .getById(Long.parseLong(textFieldWordSoundId.getText()))
+                                                  .orElseThrow(() -> new RequiredObjectNotFoundException(NOT_FOUND_DEFINITION_INSTANCE));
+      definition.setWord(word);
+      wordController.getDefinitionService().save(definition);
+      refreshListViewWordVariants(word.getId());
+      wordController.refreshTableView();
+      wordController.refreshChildComboBoxes();
+      return;
+    } else if (isBlank(textFieldEnglishName.getText())
+               || comboBoxWordType.getSelectionModel().getSelectedItem() == null) {
       throw new RequiredFieldsAreEmptyException("Cannot add WORD_SOUND due to empty required fields.");
     } else if (isBlank(textFieldId.getText())) {
       buttonAddOnAction();
@@ -571,7 +593,7 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
   private Definition getWordSoundById() {
     return wordController.getDefinitionService().getById(Long.valueOf(textFieldWordSoundId.getText()))
-                         .orElseThrow(() -> new RequiredObjectNotFoundException(NOT_FOUND_WORD_SOUND_INSTANCE));
+                         .orElseThrow(() -> new RequiredObjectNotFoundException(NOT_FOUND_DEFINITION_INSTANCE));
   }
 
   private void refreshListViewWordVariants(final Long wordId) {

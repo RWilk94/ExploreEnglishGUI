@@ -1,14 +1,15 @@
 package rwilk.exploreenglish.exception;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ExceptionControllerAdvice {
 
   public static final String NOT_FOUND_WORD_INSTANCE = "Not found WORD instance.";
-  public static final String NOT_FOUND_WORD_SOUND_INSTANCE = "Not found WORD_SOUND instance.";
+  public static final String NOT_FOUND_DEFINITION_INSTANCE = "Not found DEFINITION instance.";
 
   private ExceptionControllerAdvice() {
   }
