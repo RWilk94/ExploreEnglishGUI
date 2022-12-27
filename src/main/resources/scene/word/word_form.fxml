@@ -411,12 +411,14 @@
             </Label>
 
             <HBox>
-              <ToggleButton fx:id="toggleButtonCountable" text="countable" userData="countable">
+              <ToggleButton fx:id="toggleButtonCountable" text="countable"
+                            onAction="#toggleButtonCountableOrUncountable" userData="countable">
                 <HBox.margin>
                   <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
                 </HBox.margin>
               </ToggleButton>
-              <ToggleButton fx:id="toggleButtonUncountable" text="uncountable" userData="uncountable">
+              <ToggleButton fx:id="toggleButtonUncountable" text="uncountable"
+                            onAction="#toggleButtonPluralOnAction" userData="uncountable">
                 <HBox.margin>
                   <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
                 </HBox.margin>
@@ -430,6 +432,12 @@
               </ToggleButton>
               <ToggleButton fx:id="toggleButtonPlural" onAction="#toggleButtonPluralOnAction" text="plural"
                             userData="plural">
+                <HBox.margin>
+                  <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
+                </HBox.margin>
+              </ToggleButton>
+              <ToggleButton fx:id="toggleButtonSingular" onAction="#toggleButtonPluralOnAction" text="singular"
+                            userData="singular">
                 <HBox.margin>
                   <Insets bottom="2.5" left="2.5" right="2.5" top="2.5"/>
                 </HBox.margin>

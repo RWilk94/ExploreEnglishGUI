@@ -1,5 +1,14 @@
 package rwilk.exploreenglish.controller.word;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+
+import lombok.Getter;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -8,13 +17,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Toggle;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Controller;
 import rwilk.exploreenglish.model.PartOfSpeechEnum;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.repository.CourseRepository;
+import rwilk.exploreenglish.repository.DefinitionRepository;
 import rwilk.exploreenglish.repository.ExerciseItemRepository;
 import rwilk.exploreenglish.repository.ExerciseRepository;
 import rwilk.exploreenglish.repository.LessonRepository;
@@ -22,7 +30,6 @@ import rwilk.exploreenglish.repository.LessonWordRepository;
 import rwilk.exploreenglish.repository.NoteRepository;
 import rwilk.exploreenglish.repository.SentenceRepository;
 import rwilk.exploreenglish.repository.WordRepository;
-import rwilk.exploreenglish.repository.DefinitionRepository;
 import rwilk.exploreenglish.repository.release.ReleaseCourseRepository;
 import rwilk.exploreenglish.repository.release.ReleaseExerciseRepository;
 import rwilk.exploreenglish.repository.release.ReleaseExerciseRowRepository;
@@ -30,19 +37,13 @@ import rwilk.exploreenglish.repository.release.ReleaseLessonRepository;
 import rwilk.exploreenglish.repository.release.ReleaseNoteRepository;
 import rwilk.exploreenglish.repository.release.ReleaseSentenceRepository;
 import rwilk.exploreenglish.repository.release.ReleaseWordRepository;
+import rwilk.exploreenglish.service.DefinitionService;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.ReleaseWordService;
 import rwilk.exploreenglish.service.WordService;
-import rwilk.exploreenglish.service.DefinitionService;
 import rwilk.exploreenglish.utils.WordUtils;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import lombok.Getter;
 
 @Controller
 public class WordController implements Initializable {
@@ -171,33 +172,39 @@ public class WordController implements Initializable {
 //      wordFormController.textFieldOpposite.setText(WordUtils.extractOpposite(text));
 
       String extractedPartOfSpeech = WordUtils.extractPartOfSpeech(partOfSpeech);
-      Toggle toggleButtonPOS = wordFormController.getToggleGroupPartOfSpeech().getToggles().stream()
-          .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(extractedPartOfSpeech))
-          .findFirst()
-          .orElse(null);
+      Toggle toggleButtonPOS = wordFormController.getToggleGroupPartOfSpeech()
+                                                 .getToggles()
+                                                 .stream()
+                                                 .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(extractedPartOfSpeech))
+                                                 .findFirst()
+                                                 .orElse(null);
       wordFormController.getToggleGroupPartOfSpeech().selectToggle(toggleButtonPOS);
 
       String grammarTag = WordUtils.extractGrammarTag(text);
-      Toggle toggleButtonGT = wordFormController.getToggleGroupGrammar().getToggles().stream()
-          .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(grammarTag))
-          .findFirst()
-          .orElse(null);
+      Toggle toggleButtonGT = wordFormController.getToggleGroupGrammar()
+                                                .getToggles()
+                                                .stream()
+                                                .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(grammarTag))
+                                                .findFirst()
+                                                .orElse(null);
       if (extractedPartOfSpeech.equals(PartOfSpeechEnum.RZECZOWNIK.getValue())
           && toggleButtonGT != null && !toggleButtonGT.getUserData().toString().isEmpty()) {
         wordFormController.getToggleGroupGrammar().selectToggle(toggleButtonGT);
         if (toggleButtonGT.getUserData().toString().equals("countable and uncountable")) {
           wordFormController.getToggleGroupArticle().selectToggle(
-              wordFormController.getToggleGroupArticle().getToggles().stream()
-                  .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(""))
-                  .findFirst()
-                  .orElse(null));
+            wordFormController.getToggleGroupArticle().getToggles().stream()
+                              .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(""))
+                              .findFirst()
+                              .orElse(null));
         }
       } else {
-        wordFormController.getToggleGroupGrammar().selectToggle(wordFormController.getToggleGroupGrammar().getToggles()
-            .stream()
-            .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(""))
-            .findFirst()
-            .orElse(null));
+        wordFormController.getToggleGroupGrammar().selectToggle(
+          wordFormController.getToggleGroupGrammar()
+                            .getToggles()
+                            .stream()
+                            .filter(toggle -> toggle.getUserData().toString().equalsIgnoreCase(""))
+                            .findFirst()
+                            .orElse(null));
       }
       if (text.contains("[")) {
         wordFormController.getTextFieldPolishName().setText(text.substring(0, text.indexOf("[")).trim());

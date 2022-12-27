@@ -12,6 +12,7 @@ import static rwilk.exploreenglish.exception.ExceptionControllerAdvice.NOT_FOUND
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -45,6 +46,7 @@ import rwilk.exploreenglish.custom.ToggleGroup2;
 import rwilk.exploreenglish.exception.RequiredFieldsAreEmptyException;
 import rwilk.exploreenglish.exception.RequiredObjectNotFoundException;
 import rwilk.exploreenglish.model.WordTypeEnum;
+import rwilk.exploreenglish.model.entity.Course;
 import rwilk.exploreenglish.model.entity.Definition;
 import rwilk.exploreenglish.model.entity.Lesson;
 import rwilk.exploreenglish.model.entity.LessonWord;
@@ -52,6 +54,7 @@ import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.model.entity.Word;
 import rwilk.exploreenglish.model.entity.release.ReleaseSentence;
 import rwilk.exploreenglish.model.entity.release.ReleaseWord;
+import rwilk.exploreenglish.repository.CourseRepository;
 import rwilk.exploreenglish.repository.DefinitionRepository;
 import rwilk.exploreenglish.repository.LessonRepository;
 import rwilk.exploreenglish.repository.LessonWordRepository;
@@ -60,6 +63,7 @@ import rwilk.exploreenglish.repository.release.ReleaseSentenceRepository;
 import rwilk.exploreenglish.repository.release.ReleaseWordRepository;
 import rwilk.exploreenglish.scrapper.longman.LongmanScrapper;
 import rwilk.exploreenglish.service.DefinitionService;
+import rwilk.exploreenglish.service.LessonService;
 import rwilk.exploreenglish.service.LessonWordService;
 import rwilk.exploreenglish.service.WordService;
 import rwilk.exploreenglish.utils.FormUtils;
@@ -129,6 +133,7 @@ public class WordFormController implements Initializable, CommandLineRunner {
   @FXML private ToggleButton toggleButtonUncountable;
   @FXML private ToggleButton toggleButtonCountableAndUncountable;
   @FXML private ToggleButton toggleButtonPlural;
+  @FXML private ToggleButton toggleButtonSingular;
   @FXML private ToggleButton toggleButtonEmpty;
   @Getter private ToggleGroup2 toggleGroupPartOfSpeech;
   @Getter private ToggleGroup2 toggleGroupArticle;
@@ -563,12 +568,18 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
   public void toggleButtonAOnAction() {
     toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
-    toggleGroupGrammar.selectToggle(toggleButtonCountable);
+    if (toggleGroupGrammar.getSelectedToggle() == null || toggleGroupGrammar.getSelectedToggle() != toggleButtonCountableAndUncountable) {
+      toggleGroupGrammar.selectToggle(toggleButtonCountable);
+    }
   }
 
   public void toggleButtonPluralOnAction() {
     toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
     toggleGroupArticle.selectToggle(toggleButtonNone);
+  }
+
+  public void toggleButtonCountableOrUncountable() {
+    toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
   }
 
   public void toggleButtonPartOfSpeechOnMouseClicked() {
@@ -580,10 +591,11 @@ public class WordFormController implements Initializable, CommandLineRunner {
   }
 
   public void toggleButtonCountableAndUncountableOnAction() {
-    if (toggleGroupPartOfSpeech.getSelectedToggle() == null && toggleGroupArticle.getSelectedToggle() == null) {
-      toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
-      toggleGroupArticle.selectToggle(toggleButtonNone);
-    }
+    toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
+//    if (toggleGroupPartOfSpeech.getSelectedToggle() == null && toggleGroupArticle.getSelectedToggle() == null) {
+//      toggleGroupPartOfSpeech.selectToggle(toggleButtonNoun);
+//      toggleGroupArticle.selectToggle(toggleButtonNone);
+//    }
   }
 
   private Word getWordById() {
@@ -638,7 +650,7 @@ public class WordFormController implements Initializable, CommandLineRunner {
     setToggleGroup(Arrays.asList(toggleButtonA1, toggleButtonA2, toggleButtonB1, toggleButtonB2, toggleButtonC1, toggleButtonC2), toggleGroupLevel);
 
     toggleGroupGrammar = new ToggleGroup2("toggleGroupGrammar");
-    setToggleGroup(Arrays.asList(toggleButtonCountable, toggleButtonUncountable, toggleButtonCountableAndUncountable, toggleButtonPlural, toggleButtonEmpty), toggleGroupGrammar);
+    setToggleGroup(Arrays.asList(toggleButtonCountable, toggleButtonUncountable, toggleButtonCountableAndUncountable, toggleButtonPlural, toggleButtonSingular, toggleButtonEmpty), toggleGroupGrammar);
   }
 
   private void setToggleGroup(List<ToggleButton> toggleButtons, ToggleGroup toggleGroup) {
@@ -926,8 +938,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
       for (final String sound : sounds) {
         definitions.stream()
                    .filter(definition -> definition.getEnglishName().equals(sound.substring(sound.indexOf("[") + 1, sound.indexOf("="))))
-                   .findFirst()
-                   .ifPresent(definition -> {
+                   .toList()
+                   .forEach(definition -> {
                      if (StringUtils.isAllEmpty(definition.getBritishSound(), definition.getAmericanSound())) {
                        final String longmanAme = "https://www.ldoceonline.com/media/english/ameProns/";
                        final String longmanBre = "https://www.ldoceonline.com/media/english/breProns/";
@@ -1072,9 +1084,66 @@ public class WordFormController implements Initializable, CommandLineRunner {
   }
 
   public void getLongmanSounds() {
-
     // longmanScrapper.webScrap(englishTerm, forceTranslate)
+    getDefinitionSoundsForWordSentences();
+  }
 
+  public void getDefinitionSoundsForWordSentences() {
+    final CourseRepository courseRepository = wordController.getCourseRepository();
+    final LessonService lessonService = wordController.getLessonService();
+    final WordService wordService = wordController.getWordService();
+    final LessonWordService lessonWordService = wordController.getLessonWordService();
+    final DefinitionService definitionService = wordController.getDefinitionService();
+
+    final Course course = courseRepository.findById(1L).orElseThrow(() -> new RequiredObjectNotFoundException("Course"));
+    final List<Lesson> lessons = lessonService.getAllByCourse(course);
+
+    final List<Word> words = new ArrayList<>();
+    final List<Long> wordIds = new ArrayList<>();
+    for (final Lesson lesson : lessons) {
+      final List<LessonWord> lessonWords = lessonWordService.getAllByLesson(lesson);
+      for (final LessonWord lessonWord : lessonWords) {
+        final Word word = lessonWord.getWord();
+        if (!wordIds.contains(word.getId())) {
+          words.add(word);
+          wordIds.add(word.getId());
+        }
+      }
+    }
+
+    final List<Definition> definitions = words.stream()
+                                              .map(Word::getDefinitions)
+                                              .flatMap(Collection::stream)
+                                              .filter(definition -> WordTypeEnum.WORD.toString().equals(definition.getType()))
+                                              .filter(definition -> definition.getEnglishName().split(" ").length > 2)
+                                              .toList();
+
+    for (final Definition definition : definitions) {
+      final String longmanAme = "https://www.ldoceonline.com/media/english/ameProns/";
+      final String longmanBre = "https://www.ldoceonline.com/media/english/breProns/";
+
+      final String dikiBre = "https://www.diki.pl/images-common/en/mp3/";
+      final String dikiAme = "https://www.diki.pl/images-common/en-ame/mp3/";
+
+      String sound = definition.getBritishSound();
+      log.info("SCRAPING {} index {}", definition.getEnglishName(), definitions.indexOf(definition));
+      if (StringUtils.isNoneBlank(sound) && sound.contains("=") && sound.contains("]")) {
+        sound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
+        final String british = checkSound2(longmanBre + sound, dikiBre + sound);
+        final String american = checkSound2(longmanAme + sound, dikiAme + sound);
+        if (StringUtils.isNoneEmpty(british) || StringUtils.isNoneEmpty(american)) {
+          definition.setBritishSound(null);
+          definition.setAmericanSound(null);
+          if (StringUtils.isNoneEmpty(british)) {
+            definition.setBritishSound(british);
+          }
+          if (StringUtils.isNoneEmpty(american)) {
+            definition.setAmericanSound(american);
+          }
+          definitionService.save(definition);
+        }
+      }
+    }
   }
 
   public void checkSentences() {

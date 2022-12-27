@@ -1,20 +1,22 @@
 package rwilk.exploreenglish.scrapper.longman;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.TermService;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -85,8 +87,8 @@ public class LongmanScrapper {
           pluralForms.add(plural);
         }
         final String comparative = head.select("span.Inflections")
-                                  .select("span.COMP")
-                                  .text();
+                                       .select("span.COMP")
+                                       .text();
         if (StringUtils.isNoneEmpty(comparative)) {
           comparativeForms.add(comparative.replace("comparative", "").trim());
         }
@@ -101,14 +103,14 @@ public class LongmanScrapper {
           superlativeForms.add(text);
         }
         final String pastTense = head.select("span.Inflections")
-                                       .select("span.PASTTENSE")
-                                       .text();
+                                     .select("span.PASTTENSE")
+                                     .text();
         if (StringUtils.isNoneEmpty(pastTense)) {
           pastTenseForms.add(pastTense.replace("past tense", "").trim());
         }
         final String pastParticiple = head.select("span.Inflections")
-                                     .select("span.PASTPART")
-                                     .text();
+                                          .select("span.PASTPART")
+                                          .text();
         if (StringUtils.isNoneEmpty(pastParticiple)) {
           String text = pastParticiple.replace("past participle", "").trim();
           if (text.startsWith(", ")) {
@@ -127,13 +129,15 @@ public class LongmanScrapper {
             if (StringUtils.isNoneEmpty(american)) {
               if (american.contains("SYN")) {
                 relatedWords.add(american.replace("SYN", "").trim());
+              } else {
+                relatedWords.add(american.trim());
               }
               definition
                 .append("[")
                 .append(american.trim())
                 .append("] ");
             }
-            final String grammar =  sense.select("span.GRAM").text();
+            final String grammar = sense.select("span.GRAM").text();
             if (StringUtils.isNoneEmpty(grammar)) {
               definition
                 .append(grammar)
@@ -147,8 +151,9 @@ public class LongmanScrapper {
                 .append(opposite.replace("OPP", "").trim())
                 .append("] ");
             }
-            final String synonym =  sense.select("span.SYN").text();
+            final String synonym = sense.select("span.SYN").text();
             if (StringUtils.isNoneEmpty(synonym)) {
+              relatedWords.add(synonym.replace("SYN", "").trim());
               definition
                 .append("[")
                 .append("synonim: ")
