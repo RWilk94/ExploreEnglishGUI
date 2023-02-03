@@ -82,7 +82,7 @@ public class CourseFormController implements Initializable {
   }
 
   public void buttonGenerateDocumentOnAction(final ActionEvent actionEvent) {
-    courseController.getDocService().generateDocument();
+    // courseController.getDocService().generateDocument();
     courseController.getExportDocumentService().generate();
   }
 }

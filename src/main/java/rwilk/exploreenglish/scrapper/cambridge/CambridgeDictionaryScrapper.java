@@ -1,6 +1,10 @@
 package rwilk.exploreenglish.scrapper.cambridge;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,14 +12,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.TermService;
 import rwilk.exploreenglish.utils.WordUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -42,99 +44,100 @@ public class CambridgeDictionaryScrapper implements CommandLineRunner {
         log.info("[CambridgeDictionary scrapper] return cached results");
         return cachedResults;
       }
+    } else {
+      final List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishTerm, SOURCE);
+      termService.deleteAll(cachedResults);
     }
 
     try {
       List<Term> terms = new ArrayList<>();
       String url = BASE_URL + "/us/dictionary/english-polish/"
-          + WordUtils.trimAndReplace(englishTerm, "-");
+                   + WordUtils.trimAndReplace(englishTerm, "-");
 
       Document document = Jsoup.connect(requestUrl != null ? requestUrl : url)
-          // .cookie("XSRF-TOKEN", "88c1b5fa-e8fc-4065-96cc-95c48356acb2")
-          .userAgent("Mozilla")
-          .timeout(10000)
-          .get();
+                               // .cookie("XSRF-TOKEN", "88c1b5fa-e8fc-4065-96cc-95c48356acb2")
+                               .userAgent("Mozilla")
+                               .timeout(10000)
+                               .get();
 
       Elements elements = document.select("div.entry-body__el");
       for (Element entryBody : elements) {
 
 
+        // Elements elements = document.select("div.entry-body");
 
+        Elements header = entryBody.select("div.pos-header");
+        String partOfSpeech = header.select("span.pos").text();
+        String pastTense = "";
+        String pastParticiple = "";
+        String comparative = "";
+        String superlative = "";
+        String grammarTag = Optional.of(header.select("span.gram").select("span.gc").text()).orElse("");
 
-      // Elements elements = document.select("div.entry-body");
+        Elements grammarElements = header.select("span.inf-group");
+        for (Element grammarElement : grammarElements) {
 
-      Elements header = entryBody.select("div.pos-header");
-      String partOfSpeech = header.select("span.pos").text();
-      String pastTense = "";
-      String pastParticiple = "";
-      String comparative = "";
-      String superlative = "";
-      String grammarTag = Optional.of(header.select("span.gram").select("span.gc").text()).orElse("");
-
-      Elements grammarElements = header.select("span.inf-group");
-      for (Element grammarElement : grammarElements) {
-
-        if (StringUtils.trimToEmpty(grammarElement.text()).contains("past tense")) {
-          pastTense = grammarElement.text().replace("past tense ", "").trim();
-        } else if (StringUtils.trimToEmpty(grammarElement.text()).contains("past participle")) {
-          pastParticiple = grammarElement.text().replace("past participle ", "").trim();
-        } else if (StringUtils.isNoneEmpty(grammarElement.text()) && StringUtils.isEmpty(comparative)) {
-          comparative = grammarElement.text();
-        } else {
-          superlative = "the " + grammarElement.text();
+          if (StringUtils.trimToEmpty(grammarElement.text()).contains("past tense")) {
+            pastTense = grammarElement.text().replace("past tense ", "").trim();
+          } else if (StringUtils.trimToEmpty(grammarElement.text()).contains("past participle")) {
+            pastParticiple = grammarElement.text().replace("past participle ", "").trim();
+          } else if (StringUtils.isNoneEmpty(grammarElement.text()) && StringUtils.isEmpty(comparative)) {
+            comparative = grammarElement.text();
+          } else {
+            superlative = "the " + grammarElement.text();
+          }
         }
-      }
 
-      Elements body = entryBody.select("div.pos-body").select("div.dsense");
+        Elements body = entryBody.select("div.pos-body").select("div.dsense");
 
-      List<String> meanings = new ArrayList<>();
-      List<String> englishSentences = new ArrayList<>();
-      List<Term> otherTerms = new ArrayList<>();
-      for (Element element : body) {
-        if (StringUtils.isEmpty(element.select("span.dphrase-title").text())) {
-          String polishName = element.select("span.trans").text();
-          for (Element example : element.select("div.examp")) {
-            englishSentences.add(example.text());
+        List<String> meanings = new ArrayList<>();
+        List<String> englishSentences = new ArrayList<>();
+        List<Term> otherTerms = new ArrayList<>();
+        for (Element element : body) {
+          if (StringUtils.isEmpty(element.select("span.dphrase-title").text())) {
+            String polishName = element.select("span.trans").text();
+            for (Element example : element.select("div.examp")) {
+              englishSentences.add(example.text());
+            }
+            if (StringUtils.isNoneEmpty(grammarTag)) {
+              polishName = polishName.concat(" [grammarTag: ").concat(extractGrammarTag(grammarTag)).concat("]");
+            }
+            meanings.add(polishName);
+          } else {
+            List<String> englishSentences2 = new ArrayList<>();
+            for (Element example : element.select("div.examp")) {
+              englishSentences2.add(example.text());
+            }
+            Term term = Term.builder()
+                            .englishName(element.select("span.dphrase-title").text())
+                            .americanName("")
+                            .otherName("")
+                            .polishName(element.select("span.trans").text())
+                            .englishSentence(String.join("; ", englishSentences2))
+                            .polishSentence("")
+                            .source(SOURCE)
+                            .build();
+            otherTerms.add(term);
           }
-          if (StringUtils.isNoneEmpty(grammarTag)) {
-            polishName = polishName.concat(" [grammarTag: ").concat(extractGrammarTag(grammarTag)).concat("]");
-          }
-          meanings.add(polishName);
-        } else {
-          List<String> englishSentences2 = new ArrayList<>();
-          for (Element example : element.select("div.examp")) {
-            englishSentences2.add(example.text());
-          }
-          Term term = Term.builder()
-              .englishName(element.select("span.dphrase-title").text())
-              .americanName("")
-              .otherName("")
-              .polishName(element.select("span.trans").text())
-              .englishSentence(String.join("; ", englishSentences2))
-              .polishSentence("")
-              .source(SOURCE)
-              .build();
-          otherTerms.add(term);
         }
-      }
-      Term term = Term.builder()
-          .englishName(document.select("div.di-title").select("span.hw").get(0).text())
-          .americanName("")
-          .otherName("")
-          .polishName(String.join("; ", meanings))
-          .englishSentence(String.join("; ", englishSentences))
-          .polishSentence("")
-          .pastTense(pastTense)
-          .pastParticiple(pastParticiple)
-          .comparative(comparative)
-          .superlative(superlative)
-          .partOfSpeech(partOfSpeech)
-          .source(SOURCE)
-          .build();
-      terms.add(term);
-      terms.addAll(otherTerms);
+        Term term = Term.builder()
+                        .englishName(document.select("div.di-title").select("span.hw").get(0).text())
+                        .americanName("")
+                        .otherName("")
+                        .polishName(String.join("; ", meanings))
+                        .englishSentence(String.join("; ", englishSentences))
+                        .polishSentence("")
+                        .pastTense(pastTense)
+                        .pastParticiple(pastParticiple)
+                        .comparative(comparative)
+                        .superlative(superlative)
+                        .partOfSpeech(partOfSpeech)
+                        .source(SOURCE)
+                        .build();
+        terms.add(term);
+        terms.addAll(otherTerms);
 
-    }
+      }
       // other links
       List<String> urls = new ArrayList<>();
       for (Element element : document.select("amp-accordion").select("li")) {

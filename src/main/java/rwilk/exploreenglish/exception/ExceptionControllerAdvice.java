@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 @Slf4j
 public class ExceptionControllerAdvice {
 
+  public static final String NOT_FOUND_COURSE_INSTANCE = "Not found COURSE instance.";
   public static final String NOT_FOUND_WORD_INSTANCE = "Not found WORD instance.";
   public static final String NOT_FOUND_DEFINITION_INSTANCE = "Not found DEFINITION instance.";
 

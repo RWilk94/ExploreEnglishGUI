@@ -1,18 +1,20 @@
 package rwilk.exploreenglish.scrapper.bab;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
+
 import rwilk.exploreenglish.model.entity.Term;
 import rwilk.exploreenglish.service.TermService;
 import rwilk.exploreenglish.utils.WordUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -34,19 +36,22 @@ public class BabScrapper {
         log.info("[Bab scrapper] return cached results");
         return cachedResults;
       }
+    } else {
+      final List<Term> cachedResults = termService.getTermsByCategoryAndSource(englishTerm, SOURCE);
+      termService.deleteAll(cachedResults);
     }
 
     try {
       List<Term> terms = new ArrayList<>();
 
       String url = "https://pl.bab.la/slownik/angielski-polski/" + WordUtils.trimAndReplace(englishTerm, "-")
-          .replaceAll("something", "sth")
-          .replaceAll("somebody", "sb");
+                                                                            .replaceAll("something", "sth")
+                                                                            .replaceAll("somebody", "sb");
 
       Document document = Jsoup.connect(url)
-          .userAgent("Mozilla")
-          .timeout(10000)
-          .get();
+                               .userAgent("Mozilla")
+                               .timeout(10000)
+                               .get();
       Elements elements = document.select("div.quick-results").get(0).children();
 
       boolean skip = false;
@@ -68,7 +73,7 @@ public class BabScrapper {
           term.setEnglishName(englishName);
           if (!result.select("div.quick-result-option").select("span.suffix").isEmpty()) {
             term.setPartOfSpeech(
-                result.select("div.quick-result-option").select("span.suffix").get(0).text().replace("{", "").replace("}", ""));
+              result.select("div.quick-result-option").select("span.suffix").get(0).text().replace("{", "").replace("}", ""));
           } else {
             term.setPartOfSpeech("");
           }

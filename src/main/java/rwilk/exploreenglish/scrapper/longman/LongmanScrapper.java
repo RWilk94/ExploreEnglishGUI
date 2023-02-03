@@ -43,6 +43,9 @@ public class LongmanScrapper {
         log.info("[Longman scrapper] return cached results");
         return cachedResults;
       }
+    } else {
+      final List<Term> cachedResults = termService.getTermsByCategoryAndSource(key, SOURCE);
+      termService.deleteAll(cachedResults);
     }
 
     try {

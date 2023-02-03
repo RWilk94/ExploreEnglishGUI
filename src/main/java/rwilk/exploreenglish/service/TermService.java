@@ -1,19 +1,20 @@
 package rwilk.exploreenglish.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import rwilk.exploreenglish.model.entity.Term;
-import rwilk.exploreenglish.repository.TermRepository;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import rwilk.exploreenglish.model.entity.Term;
+import rwilk.exploreenglish.repository.TermRepository;
 
 @Service
 public class TermService {
 
   private static final List<String> EXCLUDED_SOURCES = Arrays.asList("diki", "bab", "cambridge", "Longman", "oxfordDictionary"
-                                                                     /*"ETUTOR", "LanGeek", "speakLanguages"*/);
+    /*"ETUTOR", "LanGeek", "speakLanguages"*/);
   private final TermRepository termRepository;
 
   public TermService(TermRepository termRepository) {
@@ -56,6 +57,10 @@ public class TermService {
   @Transactional
   public void deleteById(Long id) {
     termRepository.deleteById(id);
+  }
+
+  public void deleteAll(final List<Term> terms) {
+    termRepository.deleteAll(terms);
   }
 
 }

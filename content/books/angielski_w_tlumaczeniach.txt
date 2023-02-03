@@ -46,6 +46,7 @@ Unit 1 The verb ‘to be’ | Czasownik ‘być’. . . . . . . . . . . . . . . 
 28. Dobrze, a ty?
 29. Piękny dzisiaj dzień.
 30. Jesteśmy spóźnieni.
+
 16. It’s a very long film.
 17. Is he tall or short?
 18. She is tall and very beautiful.
@@ -93,6 +94,7 @@ Unit 2 This and That | To i Tamto. . . . . . . . . . . . . . . . . . . . . . . .
 28. Tamta książka jest bardzo droga.
 29. Ten samochód jest czerwony.
 30. Tamten jest niebieski.
+
 1.  This is a dictionary and that is a calendar.
 2.  What’s this?
 3.  It’s a phone.
@@ -234,8 +236,7 @@ Unit 4 These, Those | Te i Tamte. . . . . . . . . . . . . . . . . . . . . . . . 
 28. Tak, są.
 29. Tamte komputery nie są na sprzedaż.
 30. Czy tamte pudełka są puste?
-16. These people are American and those are
-British.
+16. These people are American and those are British.
 17. Aren’t these pictures pretty?
 18. Yes, they are.
 19. Are those people with us?
@@ -336,19 +337,15 @@ Unit 6 Days, Months & Time | Dni, Miesiące i Czas. . . . . . . . . . . . . . . 
 4. Tomorrow is Tuesday.
 5. The meeting is on Wednesday.
 6. Is the meeting on Thursday or on Friday?
-7. Today is Sunday, 21st August (the twenty first of
-August).
+7. Today is Sunday, 21st August (the twenty first of August).
 8. The concert is on Sunday at nine p.m.
 9. The trainings are on Saturdays.
-10. My birthday is in December (on the sixth of
-December).
+10. My birthday is in December (on the sixth of December).
 11. Her birthday is on the twenty-second of March.
 12. His birthday is on the third of July.
-13. Saint Valentine’s Day is on the fourteenth of
-February.
+13. Saint Valentine’s Day is on the fourteenth of February.
 14. New Year’s Eve is on the thirty-first of December.
-15. Christmas Day is on the twenty-fifth of
-December.
+15. Christmas Day is on the twenty-fifth of December.
 
 16. Zajęcia są rano.
 17. Mecz jest po południu.
@@ -490,8 +487,7 @@ Unit 8 Prepositions of place | Przyimki Miejsca. . . . . . . . . . . . . . . . .
 27. Jestem w kuchni.
 28. Lampka jest na stole, nie nad stołem.
 29. Moje biurko jest pomiędzy twoim i jego.
-30. Moje auto jest pomiędzy tym czerwonym
-i niebieskim.
+30. Moje auto jest pomiędzy tym czerwonym i niebieskim.
 16. The post office is on the first floor.
 17. The lift is in front of you.
 18. This wine is from California.
@@ -551,27 +547,22 @@ Unit 9 There is/There are | Jest/Są. . . . . . . . . . . . . . . . . . . . . . 
 24. W centrum miasta nie ma żadnych drzew.
 25. Czy są jakieś wolne krzesła?
 26. Czy jest jakieś centrum handlowe niedaleko?
-27. W kuchni jest lodówka, kuchenka, zmywarka
-i parę talerzy.
+27. W kuchni jest lodówka, kuchenka, zmywarka i parę talerzy.
 28. Czy jest jakiś hotel blisko waszego biura?
 29. W tym pokoju nie ma klimatyzacji.
 30. Czy w pokoju jest telewizor?
-16. There aren’t any books on the shelves./There are
-no books on the shelves.
-17. There isn’t any money here./There is no money
-here.
+16. There aren’t any books on the shelves./There are no books on the shelves.
+17. There isn’t any money here./There is no money here.
 18. Are there any problems?
 19. There are some documents in the drawer.
 20. There are two hospitals in town.
 21. Is there any water in this bottle?
 22. Yes, there is some.
 23. No, there isn’t any.
-24. There aren’t any trees in the city centre./There
-are no trees in the city centre.
+24. There aren’t any trees in the city centre./There are no trees in the city centre.
 25. Are there any free chairs?
 26. Is there a shopping centre near here?
-27. In the kitchen there is a fridge, a cooker, a dishwasher
-and some plates.
+27. In the kitchen there is a fridge, a cooker, a dishwasher and some plates.
 28. Is there a hotel near your office?
 29. There is no air conditioning in this room.
 30. Is there a TV set in the room?
@@ -681,8 +672,7 @@ Unit 11 Have, Like, Want | Mieć, Lubić, Chcieć. . . . . . . . . . . . . . . .
 23. Chcesz pojechać ze mną?
 24. Co chcesz zrobić?
 25. Jaki samochód on chce kupić?
-26. Nie chcemy mieszkać w mieszkaniu. Chcemy
-mieć dom z ogródkiem.
+26. Nie chcemy mieszkać w mieszkaniu. Chcemy mieć dom z ogródkiem.
 27. Czy oni chcą to kupić czy nie?
 28. Dlaczego on chce się uczyć angielskiego?
 29. Czy ona chce mi pomóc?
@@ -697,8 +687,7 @@ mieć dom z ogródkiem.
 23. Do you want to come with me?
 24. What do you want to do?
 25. What kind of car does he want to buy?
-26. We don’t want to live in a flat. We want to have
-a house with a garden.
+26. We don’t want to live in a flat. We want to have a house with a garden.
 27. Do they want to buy it or not?
 28. Why does he want to learn English?
 29. Does she want to help me?
@@ -773,8 +762,7 @@ Unit 13 Frequency Adverbs | Przysłówki Wyrażające Częstotliwość. . . . . 
 3. Oni często są zajęci i rzadko mają dla nas czas.
 4. Zwykle jesteśmy zmęczeni po pracy.
 5. Zawsze wspólnie jemy śniadanie.
-6. Zawsze czekam co najmniej piętnaście minut na
-autobus.
+6. Zawsze czekam co najmniej piętnaście minut na autobus.
 7. Prawie nigdy ich nie widzimy.
 8. Czy często pijesz kawę w pracy?
 9. Ona nigdy nie jeździ do pracy pociągiem.
@@ -804,8 +792,7 @@ autobus.
 17. Codziennie wstajesz wcześnie rano?
 18. Jeżdżę do Londynu co trzy miesiące.
 19. Ja jeżdżę tam raz w miesiącu.
-20. Odwiedzam moich dziadków dwa razy
-w miesiącu.
+20. Odwiedzam moich dziadków dwa razy w miesiącu.
 21. Myję samochód trzy razy w miesiącu.
 22. Zwykle śpię osiem godzin dziennie.
 23. Jak często do ciebie dzwonią?
@@ -904,16 +891,13 @@ Unit 15 Saxon Genitive | Dopełniacz Saksoński. . . . . . . . . . . . . . . . .
 6. Biurko mojej asystentki jest obok mojego.
 7. Gdzie jest płaszcz Adama?
 8. Czy telefon Barbary jest włączony?
-9. Telefon Barbary jest wyłączony, ale możesz użyć
-telefonu Jamesa.
+9. Telefon Barbary jest wyłączony, ale możesz użyć telefonu Jamesa.
 10. Raport jest na biurku szefa.
 11. Czy tamten to samochód Roberta?
 12. Jak ma na imię twoja dziewczyna?
 13. Moja dziewczyna ma na imię Elizabeth.
-14. Siostra mojej dziewczyny też ma na imię
-Elizabeth.
-15. Zarobki naszych pracowników są całkiem
-wysokie.
+14. Siostra mojej dziewczyny też ma na imię Elizabeth.
+15. Zarobki naszych pracowników są całkiem wysokie.
 1. Laura has a new flat.
 2. It’s Laura’s flat.
 3. Is it really Laura’s flat?
@@ -922,8 +906,7 @@ wysokie.
 6. My assistant’s desk is next to mine.
 7. Where is Adam’s coat?
 8. Is Barbara’s phone on?
-9. Barbara’s phone is off, but you can use James’s
-phone.
+9. Barbara’s phone is off, but you can use James’s phone.
 10. The report is on the boss’s desk.
 11. Is that Robert’s car?
 12. What’s your girlfriend’s name?
@@ -932,10 +915,8 @@ phone.
 15. Our workers’ salaries are quite high.
 
 16. Czy to są zabawki twoich dzieci?
-17. Ubrania dla mężczyzn są zwykle na dole (niższym
-piętrze).
-18. Ubrania dla dzieci są zwykle na górze (górnym
-piętrze).
+17. Ubrania dla mężczyzn są zwykle na dole (niższym piętrze).
+18. Ubrania dla dzieci są zwykle na górze (górnym piętrze).
 19. Czy to jest pomysł Johna?
 20. To jest sukienka mojej mamy.
 21. Czy jest spotkanie nauczycieli w poniedziałek?
@@ -945,8 +926,7 @@ piętrze).
 25. To jest mieszkanie moich braci.
 26. Tutaj jest numer do lekarza.
 27. Pieniądze ludzi są w rękach rządu.
-28. Dom moich przyjaciół jest w północnej części
-Londynu.
+28. Dom moich przyjaciół jest w północnej części Londynu.
 29. To są dzieci Jacka i Susan.
 30. Podoba mi się torebka twojej koleżanki.
 16. Are these your children’s toys?
@@ -1074,8 +1054,7 @@ Unit 17 Countable & Uncountable Nouns | Rzeczowniki Policzalne i Niepoliczalne. 
 27. Przynieś dziesięć.
 28. Nie piję dużo herbaty. Wolę kawę.
 29. Jadę za granicę na jakiś czas.
-30. Nie mam dużo bagażu, ponieważ nie zabieram ze
-sobą wielu ubrań.
+30. Nie mam dużo bagażu, ponieważ nie zabieram ze sobą wielu ubrań.
 16. She doesn’t have much time, either.
 17. But I’m not asking about that.
 18. So, what are you asking about?
@@ -1090,8 +1069,7 @@ sobą wielu ubrań.
 27. Bring ten.
 28. I don’t drink much tea. I prefer coffee.
 29. I’m going abroad for some time.
-30. I don’t have much baggage because I don’t take
-many clothes with me.
+30. I don’t have much baggage because I don’t take many clothes with me.
 
 Unit 18 Can | Móc/Umieć/Potrafić. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 74
 1. Czy możesz mi pomóc?
@@ -1106,8 +1084,7 @@ Unit 18 Can | Móc/Umieć/Potrafić. . . . . . . . . . . . . . . . . . . . . . .
 10. Umiesz tańczyć?
 11. Nie możesz tam iść.
 12. Dlaczego nie mogę tam iść?
-13. Ona ma tylko pięć lat, a umie bardzo dobrze
-czytać.
+13. Ona ma tylko pięć lat, a umie bardzo dobrze czytać.
 14. Czy mogę tutaj usiąść?
 15. Oczywiście, że tak.
 1. Can you help me?
@@ -1122,8 +1099,7 @@ czytać.
 10. Can you dance?
 11. You can’t go there.
 12. Why can’t I go there?
-13. She’s only five years old, but she can read very
-well.
+13. She’s only five years old, but she can read very well.
 14. Can I sit here?
 15. Of course, you can.
 
@@ -1198,16 +1174,13 @@ Unit 19 Must & Have to | Musieć. . . . . . . . . . . . . . . . . . . . . . . . 
 21. Czy ja muszę jechać?
 22. Muszę skończyć ten raport na jutro.
 23. O której musimy wyjść?
-24. Mamy jeszcze czas. Nie musimy dzwonić po
-taksówkę. Możemy pojechać metrem.
+24. Mamy jeszcze czas. Nie musimy dzwonić po taksówkę. Możemy pojechać metrem.
 25. O której musimy tam być?
-26. Musimy być na lotnisku dwie godziny przed
-odlotem.
+26. Musimy być na lotnisku dwie godziny przed odlotem.
 27. Gdzie mam podpisać?
 28. Musimy się pośpieszyć.
 29. Nie muszą tego robić.
-30. Nie musisz dzwonić do hydraulika. Mogę to zrobić
-sam.
+30. Nie musisz dzwonić do hydraulika. Mogę to zrobić sam.
 16. Do you have to go now?
 17. They mustn’t enter that room.
 18. You must go to the doctor.
@@ -1216,16 +1189,13 @@ sam.
 21. Do I have to go?
 22. I must finish this report for tomorrow.
 23. What time do we have to leave?
-24. We still have time. We don’t have to call a taxi.
-We can take the metro.
+24. We still have time. We don’t have to call a taxi. We can take the metro.
 25. What time do we have to be there?
-26. We have to be at the airport two hours before the
-departure.
+26. We have to be at the airport two hours before the departure.
 27. Where do I have to sign?
 28. We have to hurry up.
 29. They don’t have to do that.
-30. You don’t have to call the plumber. I can do it
-myself.
+30. You don’t have to call the plumber. I can do it myself.
 
 Unit 20 Comparative Adjectives | Stopień Wyższy Przymiotnika. . . . . . . . . . . . . . . . 82
 1. Jego komputer jest szybszy od twojego.
@@ -1236,8 +1206,7 @@ Unit 20 Comparative Adjectives | Stopień Wyższy Przymiotnika. . . . . . . . . 
 6. Mój zegarek jest droższy od twojego.
 7. Twój jest tańszy od mojego.
 8. Dziś jest bardziej słonecznie niż wczoraj.
-9. Laptopy są lepsze i lżejsze od komputerów
-stacjonarnych.
+9. Laptopy są lepsze i lżejsze od komputerów stacjonarnych.
 10. Ten film jest gorszy od poprzedniego.
 11. Jesteś wyższy od mojego ojca.
 12. Podoba mi się ten obrazek, bo jest większy.
@@ -1298,13 +1267,11 @@ Unit 21 Adverbs | Przysłówki. . . . . . . . . . . . . . . . . . . . . . . . . 
 4. Mówisz bardzo dobrze po angielsku.
 5. Poważnie? (Serio?)
 6. Dzieci się ładnie bawią.
-7. On zawsze odpowiada na moje pytania ze
-złością.
+7. On zawsze odpowiada na moje pytania ze złością.
 8. Czekaj cierpliwie. On już idzie.
 9. Dzisiaj grają bardzo źle.
 10. Poproś grzecznie.
-11. Ona mówi perfekcyjnie po hiszpańsku i ludzie
-myślą, że jest z Hiszpanii.
+11. Ona mówi perfekcyjnie po hiszpańsku i ludzie myślą, że jest z Hiszpanii.
 12. Nasz nauczyciel jasno wszystko wyjaśnia.
 13. On znów musi nagle wyjść.
 14. Ich córka pięknie maluje.
@@ -1319,8 +1286,7 @@ myślą, że jest z Hiszpanii.
 8. Wait patiently. He’s coming.
 9. Today they are playing very badly.
 10. Ask politely.
-11. She speaks Spanish perfectly and people think
-that she’s from Spain.
+11. She speaks Spanish perfectly and people think that she’s from Spain.
 12. Our teacher explains everything clearly.
 13. He has to leave suddenly again.
 14. Their daughter paints beautifully.
@@ -1340,12 +1306,10 @@ that she’s from Spain.
 27. To jest absolutnie niemożliwe.
 28. On naprawdę cię lubi.
 29. Ta książka jest szczególnie interesująca.
-30. Całkowicie się zgadzam. Całkowicie się nie
-zgadzam.
+30. Całkowicie się zgadzam. Całkowicie się nie zgadzam.
 16. I am terribly sorry.
 17. My children pass all their exams easily.
-18. You can’t sing loudly because the children are
-sleeping.
+18. You can’t sing loudly because the children are sleeping.
 19. I am completely sure.
 20. I’m feeling better now.
 21. Can you speak more slowly, please?
@@ -1370,8 +1334,7 @@ Unit 22 Reflexive Pronouns | Zaimki Zwrotne . . . . . . . . . . . . . . . . . . 
 8. Ona tylko myśli o sobie.
 9. Nie obwiniaj się za ten wypadek.
 10. On ciągle mówi o sobie.
-11. Wysyłam ten dokument do siebie, żeby mieć
-kopię.
+11. Wysyłam ten dokument do siebie, żeby mieć kopię.
 12. Pomalujmy pokój sami.
 13. Oni robią to sami.
 14. On nie może sobie sam pomóc.
@@ -1386,8 +1349,7 @@ kopię.
 8. She only thinks about herself.
 9. Don’t blame yourself for the accident.
 10. He constantly talks about himself.
-11. I’m sending this document to myself to have
-a copy.
+11. I’m sending this document to myself to have a copy.
 12. Let’s paint the room ourselves.
 13. They do it themselves.
 14. He can’t help himself.
@@ -1462,8 +1424,7 @@ Unit 23 To be Going to do something | Wyrażenie Zamiaru . . . . . . . . . . . .
 19. On też tu będzie do późnych godzin.
 20. Ja nie zamierzam tu spać.
 21. Więc o której masz zamiar wyjść?
-22. Mamy spotkanie o siódmej, więc zamierzam
-wyjść po nim.
+22. Mamy spotkanie o siódmej, więc zamierzam wyjść po nim.
 23. My będziemy już kończyć za chwilę.
 24. Więc nie dostaniecie awansu.
 25. Czy zamierzasz zmienić pracę?
@@ -1471,16 +1432,14 @@ wyjść po nim.
 27. Zamierzam sobie zrobić przerwę.
 28. My nie przestaniemy pracować.
 29. Zamierzasz wyjść tak ubrany?
-30. Nie zamierzam wychodzić na zewnątrz, bo będzie
-padać.
+30. Nie zamierzam wychodzić na zewnątrz, bo będzie padać.
 16. Are you going to take them with you?
 17. If you’re not going to the party, come with us.
 18. I’m going to stay here a bit longer.
 19. He is going to be here until late, too.
 20. I’m not going to sleep here.
 21. So what time are you going to leave?
-22. We have a meeting at seven, so I’m going to
-leave after that.
+22. We have a meeting at seven, so I’m going to leave after that.
 23. We’re going to finish in a moment.
 24. So, you’re not going to get a promotion.
 25. Are you going to change your job?
@@ -1557,12 +1516,10 @@ Unit 25 Gerund and Infinitive | Czasownik z końcówką -ing oraz Bezokolicznik.
 1. Chcę się czegoś napić.
 2. Chcesz kupić nowe mieszkanie?
 3. Chcesz iść do kina?
-4. Piszę, żeby ci powiedzieć, że spotkanie jest
-o czwartej.
+4. Piszę, żeby ci powiedzieć, że spotkanie jest o czwartej.
 5. Dzwonię do ciebie, żeby zaprosić cię na imprezę.
 6. Jestem tutaj, żeby ci pomóc.
-7. Musisz się nauczyć angielskiego, żeby dostać
-lepszą pracę.
+7. Musisz się nauczyć angielskiego, żeby dostać lepszą pracę.
 8. Lubisz podróżować?
 9. Czy oni lubią pracować z dziećmi?
 10. Nie lubię chodzić na zakupy.
@@ -1594,8 +1551,7 @@ lepszą pracę.
 20. Piszę do pana, żeby podziękować za spotkanie.
 21. Dlaczego do niego dzwonisz?
 22. Żeby mu coś powiedzieć.
-23. Uczenie się języków jest bardzo ważne w dzisiejszych
-czasach.
+23. Uczenie się języków jest bardzo ważne w dzisiejszych czasach.
 24. Muszę już iść.
 25. Czemu?
 26. Chcę odwiedzić moją siostrę.
@@ -1622,8 +1578,7 @@ czasach.
 Unit 26 Prepositions 1 | Przyimki, część 1. . . . . . . . . . . . . . . . . . . . . . . . . . . . 106
 1. Ta lekcja będzie o przyimkach.
 2. Po zajęciach zawsze ze sobą rozmawiamy.
-3. Wyślij mi swój adres e-mail przed naszymi
-następnymi zajęciami.
+3. Wyślij mi swój adres e-mail przed naszymi następnymi zajęciami.
 4. Ten raport jest o strategiach marketingowych.
 5. Nie rozmawiaj z nim o tym.
 6. Ta książka jest o zwierzętach.
@@ -1638,8 +1593,7 @@ następnymi zajęciami.
 15. Sklepy w niedzielę są zamknięte.
 1. This lesson is going to be about prepositions.
 2. After the class, we always talk to each other.
-3. Send me your e-mail address before our next
-class.
+3. Send me your e-mail address before our next class.
 4. This report is about marketing strategies.
 5. Don’t talk to him about this/it.
 6. This book is about animals.
@@ -1654,34 +1608,29 @@ class.
 15. Shops are closed on Sunday.
 
 16. Ten prezent jest dla nas.
-17. Czy zawsze czytasz kontrakt przed podpisaniem
-go?
+17. Czy zawsze czytasz kontrakt przed podpisaniem go?
 18. Po spotkaniu idziemy na kawę.
 19. Martwię się o niego.
 20. Są trzy osoby przed naszym domem.
 21. Jego restauracja jest obok banku.
 22. Poszukaj tego pod łóżkiem.
 23. Nad rzeką jest most.
-24. Pouczę się francuskiego przed wyjazdem do
-Francji.
+24. Pouczę się francuskiego przed wyjazdem do Francji.
 25. Przed pójściem spać, zwykle biorę prysznic.
 26. Co jest na tym obrazku?
-27. Jego biuro jest naprzeciwko centrum
-handlowego.
+27. Jego biuro jest naprzeciwko centrum handlowego.
 28. Za jego domem jest ogród.
 29. Wychodzę po kolacji.
 30. Porozmawiam z nim o tym wypadku.
 16. This present is for us.
-17. Do you always read the contract before signing
-it?
+17. Do you always read the contract before signing it?
 18. After the meeting, we’re going for a coffee.
 19. I’m worried about him.
 20. There are three people in front of our house.
 21. His restaurant is next to the bank.
 22. Look for it under the bed.
 23. There’s a bridge over the river.
-24. I’m going to study French before going to
-France.
+24. I’m going to study French before going to France.
 25. Before going to bed, I usually have a shower.
 26. What’s in this picture?
 27. His office is opposite the shopping centre.
@@ -1794,15 +1743,13 @@ Unit 28 Review - Sprawdź się!. . . . . . . . . . . . . . . . . . . . . . . . .
 23. Oni często chodzą z nami na drinka.
 24. Czy są jakieś pytania?
 25. Dlaczego zawsze musimy na ciebie czekać?
-26. Nasze następne spotkanie jest dwunastego grudnia
-o godzinie piętnastej.
+26. Nasze następne spotkanie jest dwunastego grudnia o godzinie piętnastej.
 27. Ten rower jest mój, nie ich.
 28. Te zdjęcia są czarno-białe.
 29. Tamta marynarka jest fajniejsza niż ta.
 30. Ona nie jest z tego zadowolona.
 16. We don’t send many letters.
-17. There aren’t any volunteers./There are no
-volunteers.
+17. There aren’t any volunteers./There are no volunteers.
 18. Are you using the computer now?
 19. Yesterday’s newspaper is on the table.
 20. How often do you change your phone?
@@ -1811,8 +1758,7 @@ volunteers.
 23. They often go for a drink with us.
 24. Are there any questions?
 25. Why do we always have to wait for you?
-26. Our next meeting is on the twelfth of December
-at three p.m.
+26. Our next meeting is on the twelfth of December at three p.m.
 27. This bicycle is mine, not theirs.
 28. These photos are black and white.
 29. That jacket is nicer than this one.
@@ -1822,26 +1768,22 @@ at three p.m.
 32. Tamte maszyny są szybsze niż te.
 33. Co to jest?
 34. Czyj to jest samochód?
-35. Zaczynam pracę o ósmej, ale zawsze przychodzę
-dziesięć po ósmej.
+35. Zaczynam pracę o ósmej, ale zawsze przychodzę dziesięć po ósmej.
 36. Ile czasu spędzasz w pracy?
 37. Dlaczego do mnie dzwonisz?
 38. Gdzie mieszka twój brat?
 39. Bardzo lubimy oglądać telewizję.
 40. Gdzie chcesz iść?
-41. Zróbmy mu niespodziankę i zorganizujmy
-przyjęcie.
+41. Zróbmy mu niespodziankę i zorganizujmy przyjęcie.
 42. Siostra Marka ma na imię Kate.
 43. Nie lubię jeździć samochodem. A ty?
 44. Czy możesz tutaj przyjść?
-45. Dzisiaj jest dużo śniegu. Możemy jechać na
-narty.
+45. Dzisiaj jest dużo śniegu. Możemy jechać na narty.
 31. We aren’t alone here.
 32. Those machines are faster than these ones.
 33. What’s this?
 34. Whose car is this/it?
-35. I start work at eight, but I always come ten past
-eight.
+35. I start work at eight, but I always come ten past eight.
 36. How much time do you spend at work?
 37. Why are you calling me?
 38. Where does your brother live?
@@ -1863,8 +1805,7 @@ eight.
 53. Nie widzę tego wyraźnie.
 54. Praca Any jest ciężka.
 55. Czy oni są zadowoleni/szczęśliwi?
-56. Za moim domem jest ogród, a przed nim parę
-drzew.
+56. Za moim domem jest ogród, a przed nim parę drzew.
 57. Musimy to zobaczyć.
 58. Zamierzamy iść jutro do kina.
 59. Czy mogę zabrać ze sobą Marka?
@@ -1879,8 +1820,7 @@ drzew.
 53. I can’t see it clearly.
 54. Ana’s job is hard.
 55. Are they happy?
-56. There is a garden behind my house and some
-trees in front of it.
+56. There is a garden behind my house and some trees in front of it.
 57. We must see it.
 58. We’re going to go to the cinema tomorrow.
 59. Can I take Mark with me?
