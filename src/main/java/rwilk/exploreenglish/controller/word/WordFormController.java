@@ -74,9 +74,15 @@ import rwilk.exploreenglish.utils.WordUtils;
 @Controller
 public class WordFormController implements Initializable, CommandLineRunner {
 
+  private static final String LONGMAN_AME = "https://www.ldoceonline.com/media/english/ameProns/";
+  private static final String LONGMAN_BRE = "https://www.ldoceonline.com/media/english/breProns/";
+  private static final String DIKI_BRE = "https://www.diki.pl/images-common/en/mp3/";
+  private static final String DIKI_AME = "https://www.diki.pl/images-common/en-ame/mp3/";
   private WordController wordController;
   @Autowired
   private LongmanScrapper longmanScrapper;
+  @Autowired
+  private DefinitionService definitionService;
   private final List<Object> controls = new ArrayList<>();
 
   @FXML private TextField textFieldId;
@@ -240,7 +246,9 @@ public class WordFormController implements Initializable, CommandLineRunner {
       final LessonWord lessonWord = LessonWord.builder()
                                               .id(null)
                                               .lesson(comboBoxLesson.getSelectionModel().getSelectedItem())
-                                              .position(wordController.getLessonWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
+                                              .position(wordController.getLessonWordService()
+                                                                      .getCountByLesson(comboBoxLesson.getSelectionModel()
+                                                                                                      .getSelectedItem()))
                                               .word(word)
                                               .build();
       wordController.getLessonWordService().save(lessonWord);
@@ -257,11 +265,13 @@ public class WordFormController implements Initializable, CommandLineRunner {
     setWordForm(word.getPolishName(), word.getDefinitions());
 
     toggleGroupPartOfSpeech.selectToggle(toggleGroupPartOfSpeech.getToggles().stream()
-                                                                .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getPartOfSpeech())))
+                                                                .filter(toggle -> toggle.getUserData().toString()
+                                                                                        .equals(trimToEmpty(word.getPartOfSpeech())))
                                                                 .findFirst()
                                                                 .orElse(null));
     toggleGroupArticle.selectToggle(toggleGroupArticle.getToggles().stream()
-                                                      .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getArticle())))
+                                                      .filter(toggle -> toggle.getUserData().toString()
+                                                                              .equals(trimToEmpty(word.getArticle())))
                                                       .findFirst()
                                                       .orElse(null));
     toggleGroupLevel.selectToggle(toggleGroupLevel.getToggles().stream()
@@ -270,7 +280,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
                                                   .findFirst()
                                                   .orElse(null));
     toggleGroupGrammar.selectToggle(toggleGroupGrammar.getToggles().stream()
-                                                      .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(word.getGrammarType())))
+                                                      .filter(toggle -> toggle.getUserData().toString()
+                                                                              .equals(trimToEmpty(word.getGrammarType())))
                                                       .findFirst()
                                                       .orElse(null));
   }
@@ -279,7 +290,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
     textFieldId.clear();
 
     toggleGroupPartOfSpeech.selectToggle(toggleGroupPartOfSpeech.getToggles().stream()
-                                                                .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(term.getPartOfSpeech())))
+                                                                .filter(toggle -> toggle.getUserData().toString()
+                                                                                        .equals(trimToEmpty(term.getPartOfSpeech())))
                                                                 .findFirst()
                                                                 .orElse(null));
     toggleGroupArticle.selectToggle(null);
@@ -422,7 +434,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
         LessonWord.builder()
                   .word(word)
                   .lesson(lesson)
-                  .position(wordController.getLessonWordService().getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
+                  .position(wordController.getLessonWordService()
+                                          .getCountByLesson(comboBoxLesson.getSelectionModel().getSelectedItem()))
                   .build());
       setLessonWordForm();
       wordController.refreshTableView();
@@ -431,7 +444,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
   }
 
   public void buttonRemoveLessonOnAction() {
-    if (comboBoxLesson.getSelectionModel().getSelectedItem() != null && StringUtils.isNoneEmpty(textFieldId.getText())) {
+    if (comboBoxLesson.getSelectionModel()
+                      .getSelectedItem() != null && StringUtils.isNoneEmpty(textFieldId.getText())) {
       final Lesson lesson = comboBoxLesson.getSelectionModel().getSelectedItem();
       final Long wordId = Long.parseLong(textFieldId.getText());
 
@@ -557,7 +571,9 @@ public class WordFormController implements Initializable, CommandLineRunner {
     final List<Definition> actualDefinitions = ListUtils.emptyIfNull(listViewWordVariants.getItems());
     if (definitions.size() > actualDefinitions.size()) {
       definitions.forEach(ws -> {
-        if (actualDefinitions.stream().noneMatch(aws -> aws.getEnglishName().equals(ws.getEnglishName()) && aws.getType().equals(ws.getType()))) {
+        if (actualDefinitions.stream()
+                             .noneMatch(aws -> aws.getEnglishName().equals(ws.getEnglishName()) && aws.getType()
+                                                                                                      .equals(ws.getType()))) {
           listViewWordVariants.getItems().add(ws);
         }
       });
@@ -757,7 +773,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
         final LessonWord lessonWord = LessonWord.builder()
                                                 .lesson(lessonRepository.findById(target.getLessonId()).get())
                                                 .word(savedWord)
-                                                .position(Long.valueOf(lessonWordRepository.countAllByLesson(target.getLessonId())).intValue() + 1)
+                                                .position(Long.valueOf(lessonWordRepository.countAllByLesson(target.getLessonId()))
+                                                              .intValue() + 1)
                                                 .build();
 //        log.info("SAVING LESSON_WORD [{}]", lessonWord);
         lessonWordRepository.save(lessonWord);
@@ -823,7 +840,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
     textFieldId.clear();
 
     toggleGroupPartOfSpeech.selectToggle(toggleGroupPartOfSpeech.getToggles().stream()
-                                                                .filter(toggle -> toggle.getUserData().toString().equals(trimToEmpty(releaseWord.getPartOfSpeech())))
+                                                                .filter(toggle -> toggle.getUserData().toString()
+                                                                                        .equals(trimToEmpty(releaseWord.getPartOfSpeech())))
                                                                 .findFirst()
                                                                 .orElse(null));
     toggleGroupArticle.selectToggle(null);
@@ -868,12 +886,6 @@ public class WordFormController implements Initializable, CommandLineRunner {
   }
 
   public void buttonCheckSoundsOnAction() {
-    final String longmanAme = "https://www.ldoceonline.com/media/english/ameProns/";
-    final String longmanBre = "https://www.ldoceonline.com/media/english/breProns/";
-
-    final String dikiBre = "https://www.diki.pl/images-common/en/mp3/";
-    final String dikiAme = "https://www.diki.pl/images-common/en-ame/mp3/";
-
     String sound = textFieldBritishSound.getText();
 
     final ClipboardContent content = new ClipboardContent();
@@ -887,26 +899,26 @@ public class WordFormController implements Initializable, CommandLineRunner {
     if (sound.contains("https://www.ldoceonline.com/media/english/ameProns")
         || sound.contains("https://www.ldoceonline.com/media/english/breProns")) {
 
-      if (sound.contains(longmanBre)) {
-        englishSound = sound.substring(sound.indexOf(longmanBre));
+      if (sound.contains(LONGMAN_BRE)) {
+        englishSound = sound.substring(sound.indexOf(LONGMAN_BRE));
         englishSound = englishSound.substring(0, englishSound.indexOf("?"));
       }
-      if (sound.contains(longmanAme)) {
-        americanSound = sound.substring(sound.indexOf(longmanAme));
+      if (sound.contains(LONGMAN_AME)) {
+        americanSound = sound.substring(sound.indexOf(LONGMAN_AME));
         americanSound = americanSound.substring(0, americanSound.indexOf("?"));
       }
     }
     if (StringUtils.isNoneEmpty(americanSound)) {
       textFieldAmericanSound.setText(americanSound);
     } else if (StringUtils.isNoneBlank(sound)) {
-      final String expectedSound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
-      checkSound(longmanAme + expectedSound, dikiAme + expectedSound, textFieldAmericanSound);
+      final String expectedSound = extractExpectedSound(sound);
+      checkSound(LONGMAN_AME + expectedSound, DIKI_AME + expectedSound, textFieldAmericanSound);
     }
     if (StringUtils.isNoneEmpty(englishSound)) {
       textFieldBritishSound.setText(englishSound);
     } else if (StringUtils.isNoneBlank(sound)) {
-      final String expectedSound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
-      checkSound(longmanBre + expectedSound, dikiBre + expectedSound, textFieldBritishSound);
+      final String expectedSound = extractExpectedSound(sound);
+      checkSound(LONGMAN_BRE + expectedSound, DIKI_BRE + expectedSound, textFieldBritishSound);
     }
     if (StringUtils.isNoneEmpty(textFieldAmericanSound.getText())
         && StringUtils.isNoneEmpty(textFieldBritishSound.getText())
@@ -915,18 +927,14 @@ public class WordFormController implements Initializable, CommandLineRunner {
         && textFieldBritishSound.getText().contains("=")) {
       textFieldBritishSound.clear();
     }
-
-/*    if (StringUtils.isNoneBlank(sound)) {
-      sound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
-      checkSound(longmanBre + sound, dikiBre + sound, textFieldBritishSound);
-      checkSound(longmanAme + sound, dikiAme + sound, textFieldAmericanSound);
-    }*/
   }
 
   private void checkSoundMultipleDefinitions(final String input) {
     final List<Definition> definitions = listViewWordVariants.getItems().stream()
-                                                             .filter(definition -> !WordTypeEnum.WORD.toString().equals(definition.getType()))
-                                                             .filter(definition -> !WordTypeEnum.SENTENCE.toString().equals(definition.getType()))
+                                                             .filter(definition -> !WordTypeEnum.WORD.toString()
+                                                                                                     .equals(definition.getType()))
+                                                             .filter(definition -> !WordTypeEnum.SENTENCE.toString()
+                                                                                                         .equals(definition.getType()))
                                                              .toList();
 
     if (CollectionUtils.isNotEmpty(definitions)) {
@@ -937,19 +945,14 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
       for (final String sound : sounds) {
         definitions.stream()
-                   .filter(definition -> definition.getEnglishName().equals(sound.substring(sound.indexOf("[") + 1, sound.indexOf("="))))
+                   .filter(definition -> definition.getEnglishName()
+                                                   .equals(sound.substring(sound.indexOf("[") + 1, sound.indexOf("="))))
                    .toList()
                    .forEach(definition -> {
                      if (StringUtils.isAllEmpty(definition.getBritishSound(), definition.getAmericanSound())) {
-                       final String longmanAme = "https://www.ldoceonline.com/media/english/ameProns/";
-                       final String longmanBre = "https://www.ldoceonline.com/media/english/breProns/";
-                       final String dikiBre = "https://www.diki.pl/images-common/en/mp3/";
-                       final String dikiAme = "https://www.diki.pl/images-common/en-ame/mp3/";
-
                        final String expectedSound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
-
-                       final String americanSound = checkSound(longmanAme + expectedSound, dikiAme + expectedSound);
-                       final String britishSound = checkSound(longmanBre + expectedSound, dikiBre + expectedSound);
+                       final String americanSound = checkSound(LONGMAN_AME + expectedSound, DIKI_AME + expectedSound);
+                       final String britishSound = checkSound(LONGMAN_BRE + expectedSound, DIKI_BRE + expectedSound);
 
                        if (StringUtils.isNoneEmpty(americanSound)) {
                          definition.setAmericanSound(americanSound);
@@ -962,6 +965,21 @@ public class WordFormController implements Initializable, CommandLineRunner {
                    });
       }
     }
+  }
+
+  private String extractExpectedSound(final String sound) {
+    return extractExpectedSound(textFieldEnglishName.getText(), sound);
+  }
+
+  private String extractExpectedSound(final String expected, final String sound) {
+    if (StringUtils.isNoneBlank(expected)) {
+      return Arrays.stream(sound.split(";"))
+                   .filter(it -> it.contains(expected))
+                   .findFirst()
+                   .map(it -> it.substring(it.indexOf("=") + 1, it.indexOf("]")))
+                   .orElseThrow(() -> new IllegalArgumentException("Not found sound part."));
+    }
+    throw new IllegalArgumentException("Empty english name.");
   }
 
   private void checkSound(final String url, final String backupUrl, final TextField textField) {
@@ -1020,7 +1038,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
                  .collect(Collectors.groupingBy(Word::getPolishName,
                                                 Collectors.groupingBy(word -> word.getDefinitions()
                                                                                   .stream()
-                                                                                  .filter(wordSound -> WordTypeEnum.WORD.toString().equals(wordSound.getType()))
+                                                                                  .filter(wordSound -> WordTypeEnum.WORD.toString()
+                                                                                                                        .equals(wordSound.getType()))
                                                                                   .map(Definition::getEnglishName)
                                                                                   .findFirst()
                                                                                   .orElse("")
@@ -1085,7 +1104,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
   public void getLongmanSounds() {
     // longmanScrapper.webScrap(englishTerm, forceTranslate)
-    getDefinitionSoundsForWordSentences();
+//    getDefinitionSoundsForWordSentences();
+    // checkSoundDefinition();
   }
 
   public void getDefinitionSoundsForWordSentences() {
@@ -1095,7 +1115,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
     final LessonWordService lessonWordService = wordController.getLessonWordService();
     final DefinitionService definitionService = wordController.getDefinitionService();
 
-    final Course course = courseRepository.findById(1L).orElseThrow(() -> new RequiredObjectNotFoundException("Course"));
+    final Course course = courseRepository.findById(1L)
+                                          .orElseThrow(() -> new RequiredObjectNotFoundException("Course"));
     final List<Lesson> lessons = lessonService.getAllByCourse(course);
 
     final List<Word> words = new ArrayList<>();
@@ -1114,23 +1135,18 @@ public class WordFormController implements Initializable, CommandLineRunner {
     final List<Definition> definitions = words.stream()
                                               .map(Word::getDefinitions)
                                               .flatMap(Collection::stream)
-                                              .filter(definition -> WordTypeEnum.WORD.toString().equals(definition.getType()))
+                                              .filter(definition -> WordTypeEnum.WORD.toString()
+                                                                                     .equals(definition.getType()))
                                               .filter(definition -> definition.getEnglishName().split(" ").length > 2)
                                               .toList();
 
     for (final Definition definition : definitions) {
-      final String longmanAme = "https://www.ldoceonline.com/media/english/ameProns/";
-      final String longmanBre = "https://www.ldoceonline.com/media/english/breProns/";
-
-      final String dikiBre = "https://www.diki.pl/images-common/en/mp3/";
-      final String dikiAme = "https://www.diki.pl/images-common/en-ame/mp3/";
-
       String sound = definition.getBritishSound();
       log.info("SCRAPING {} index {}", definition.getEnglishName(), definitions.indexOf(definition));
       if (StringUtils.isNoneBlank(sound) && sound.contains("=") && sound.contains("]")) {
         sound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
-        final String british = checkSound2(longmanBre + sound, dikiBre + sound);
-        final String american = checkSound2(longmanAme + sound, dikiAme + sound);
+        final String british = checkSound2(LONGMAN_BRE + sound, DIKI_BRE + sound);
+        final String american = checkSound2(LONGMAN_AME + sound, DIKI_AME + sound);
         if (StringUtils.isNoneEmpty(british) || StringUtils.isNoneEmpty(american)) {
           definition.setBritishSound(null);
           definition.setAmericanSound(null);
@@ -1155,7 +1171,8 @@ public class WordFormController implements Initializable, CommandLineRunner {
                                         .stream()
                                         .filter(word -> word.getDefinitions()
                                                             .stream()
-                                                            .anyMatch(wordSound -> WordTypeEnum.SENTENCE.toString().equals(wordSound.getType())))
+                                                            .anyMatch(wordSound -> WordTypeEnum.SENTENCE.toString()
+                                                                                                        .equals(wordSound.getType())))
                                         .toList();
 
     for (final Word word : words) {
@@ -1163,17 +1180,11 @@ public class WordFormController implements Initializable, CommandLineRunner {
         log.info("CHECKING [{}]", definition);
 
         if (WordTypeEnum.SENTENCE.toString().equals(definition.getType())) {
-          final String longmanAme = "https://www.ldoceonline.com/media/english/ameProns/";
-          final String longmanBre = "https://www.ldoceonline.com/media/english/breProns/";
-
-          final String dikiBre = "https://www.diki.pl/images-common/en/mp3/";
-          final String dikiAme = "https://www.diki.pl/images-common/en-ame/mp3/";
-
           String sound = definition.getBritishSound();
           if (StringUtils.isNoneBlank(sound) && sound.contains("=") && sound.contains("]")) {
             sound = sound.substring(sound.indexOf("=") + 1, sound.indexOf("]"));
-            final String british = checkSound2(longmanBre + sound, dikiBre + sound);
-            final String american = checkSound2(longmanAme + sound, dikiAme + sound);
+            final String british = checkSound2(LONGMAN_BRE + sound, DIKI_BRE + sound);
+            final String american = checkSound2(LONGMAN_AME + sound, DIKI_AME + sound);
             if (StringUtils.isNoneEmpty(british) || StringUtils.isNoneEmpty(american)) {
               definition.setBritishSound(null);
               definition.setAmericanSound(null);
@@ -1194,8 +1205,116 @@ public class WordFormController implements Initializable, CommandLineRunner {
 
   }
 
+  public void checkSoundDefinition() {
+    final CourseRepository courseRepository = wordController.getCourseRepository();
+    final LessonService lessonService = wordController.getLessonService();
+    final LessonWordService lessonWordService = wordController.getLessonWordService();
+
+    final Course course = courseRepository.findById(9L)
+                                          .orElseThrow(() -> new RequiredObjectNotFoundException("Course"));
+    final Course course2 = courseRepository.findById(10L)
+                                           .orElseThrow(() -> new RequiredObjectNotFoundException("Course"));
+    final Course course3 = courseRepository.findById(11L)
+                                           .orElseThrow(() -> new RequiredObjectNotFoundException("Course"));
+    final Course course4 = courseRepository.findById(12L)
+                                           .orElseThrow(() -> new RequiredObjectNotFoundException("Course"));
+    final List<Lesson> lessons = lessonService.getAllByCourse(course);
+    lessons.addAll(lessonService.getAllByCourse(course2));
+    lessons.addAll(lessonService.getAllByCourse(course3));
+    lessons.addAll(lessonService.getAllByCourse(course4));
+
+    final List<Word> words = new ArrayList<>();
+    final List<Long> wordIds = new ArrayList<>();
+    for (final Lesson lesson : lessons) {
+      final List<LessonWord> lessonWords = lessonWordService.getAllByLesson(lesson);
+      for (final LessonWord lessonWord : lessonWords) {
+        final Word word = lessonWord.getWord();
+        if (!wordIds.contains(word.getId())) {
+          words.add(word);
+          wordIds.add(word.getId());
+        }
+      }
+    }
+
+    for (final Word word : words) {
+      log.info("{}/{} WebScrap WORD={}", words.indexOf(word), words.size(), word.toString());
+      final List<Definition> definitions = word.getDefinitions();
+
+      String soundText = null;
+
+      for (final Definition definition : definitions) {
+        log.info("{}/{} WebScrap DEFINITION={}", definitions.indexOf(definition), definitions.size(), definition.toString());
+        if (WordTypeEnum.SENTENCE.toString().equals(definition.getType())) {
+          if (StringUtils.isNoneEmpty(definition.getBritishSound())
+              && definition.getBritishSound().contains("=")
+              && definition.getBritishSound().contains("[")
+              && definition.getBritishSound().contains("]")) {
+            webScrapSoundDefinition(definition);
+          }
+
+        } else if (WordTypeEnum.WORD.toString().equals(definition.getType())) {
+          if (StringUtils.isNoneEmpty(definition.getBritishSound())
+              && definition.getBritishSound().contains("=")
+              && definition.getBritishSound().contains("[")
+              && definition.getBritishSound().contains("]")) {
+            soundText = definition.getBritishSound();
+            try {
+              webScrapSoundDefinition(definition);
+            } catch (RuntimeException ie) {
+              log.error("IllegalArgumentException due to", ie);
+            }
+          }
+        } else {
+          if (StringUtils.isNoneEmpty(definition.getBritishSound())
+              && definition.getBritishSound().contains("=")
+              && definition.getBritishSound().contains("[")
+              && definition.getBritishSound().contains("]")) {
+            try {
+              webScrapSoundDefinition(definition);
+            } catch (RuntimeException ie) {
+              log.error("IllegalArgumentException due to", ie);
+            }
+
+          } else if (StringUtils.isEmpty(definition.getBritishSound())
+                     && StringUtils.isEmpty(definition.getAmericanSound())
+                     && StringUtils.isNoneEmpty(soundText)) {
+            try {
+              webScrapSoundDefinition(definition, soundText);
+            } catch (RuntimeException ie) {
+              log.error("IllegalArgumentException due to", ie);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public void webScrapSoundDefinition(final Definition definition) {
+    webScrapSoundDefinition(definition, definition.getBritishSound());
+  }
+
+  public void webScrapSoundDefinition(final Definition definition, final String sound) {
+    final String expectedSound = extractExpectedSound(definition.getEnglishName(), sound);
+    final String americanSound = checkSound(LONGMAN_AME + expectedSound, DIKI_AME + expectedSound);
+    final String britishSound = checkSound(LONGMAN_BRE + expectedSound, DIKI_BRE + expectedSound);
+
+    if (StringUtils.isNoneEmpty(americanSound) || StringUtils.isNoneEmpty(britishSound)) {
+      definition.setBritishSound("");
+    }
+    if (StringUtils.isNoneEmpty(americanSound)) {
+      definition.setAmericanSound(americanSound);
+    }
+    if (StringUtils.isNoneEmpty(britishSound)) {
+      definition.setBritishSound(britishSound);
+    }
+    wordController.getDefinitionService().save(definition);
+  }
+
   @Override
   public void run(final String... args) throws Exception {
+    // checkSoundDefinition();
+
+
 //    final List<Word> words = wordController.getWordService().getAll();
 //    for (final Word word : words) {
 //

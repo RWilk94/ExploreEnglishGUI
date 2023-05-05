@@ -1,15 +1,17 @@
 package rwilk.exploreenglish.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import rwilk.exploreenglish.model.entity.Word;
-import rwilk.exploreenglish.model.entity.Definition;
-import rwilk.exploreenglish.repository.DefinitionRepository;
-import rwilk.exploreenglish.utils.WordUtils;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+
+import rwilk.exploreenglish.model.entity.Definition;
+import rwilk.exploreenglish.model.entity.Word;
+import rwilk.exploreenglish.repository.DefinitionRepository;
+import rwilk.exploreenglish.utils.WordUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +37,10 @@ public class DefinitionService {
 
   public List<Definition> getAllByEnglishName(final String pattern) {
     return definitionRepository.findAllByEnglishName(WordUtils.removeNonLiteralCharacters(pattern));
+  }
+
+  public List<Definition> getAllByTypeAndBritishSoundContains(final String type, final String britishSoundContains) {
+    return definitionRepository.findAllByTypeAndBritishSoundContains(type, britishSoundContains);
   }
 
   public Definition save(final Definition definition) {

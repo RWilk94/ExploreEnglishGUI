@@ -57,12 +57,17 @@ public class ExportService {
   public void export() {
     exportVersion();
 
-    final Course course = courseService.getById(1L).get();
-    final Course course2 = courseService.getById(7L).get();
-    final Course course3 = courseService.getById(13L).get();
-    final List<Lesson> lessons = lessonService.getAllByCourse(course);
-    lessons.addAll(lessonService.getAllByCourse(course2));
-    lessons.addAll(lessonService.getAllByCourse(course3));
+//    final Course course = courseService.getById(1L).get();
+//    final Course course2 = courseService.getById(7L).get();
+//    final Course course3 = courseService.getById(13L).get();
+    final List<Course> courses = courseService.getAll();
+    final List<Lesson> lessons = new ArrayList<>();
+    for (final Course course : courses) {
+      lessons.addAll(lessonService.getAllByCourse(course));
+    }
+//    final List<Lesson> lessons = lessonService.getAllByCourse(course);
+//    lessons.addAll(lessonService.getAllByCourse(course2));
+//    lessons.addAll(lessonService.getAllByCourse(course3));
 
     final List<LessonWord> lessonWords = new ArrayList<>();
     final List<Word> words = new ArrayList<>();
@@ -95,7 +100,8 @@ public class ExportService {
       }
     }
 
-    exportCourses(List.of(course, course2, course3));
+    // exportCourses(List.of(course, course2, course3));
+    exportCourses(courses);
     exportLessons(lessons);
     exportLessonWords(lessonWords.stream().distinct().toList());
     exportWords(words.stream().distinct().toList());
