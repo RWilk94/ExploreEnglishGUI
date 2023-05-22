@@ -57,7 +57,7 @@ public class ReleaseExerciseRow implements Serializable {
   @Column(name = "description", length = 2000)
   String description;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
   ReleaseExercise exercise;
 

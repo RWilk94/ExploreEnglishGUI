@@ -69,7 +69,7 @@ public class ReleaseWord implements Serializable {
   @Column(name = "lesson_id")
   private Long lessonId;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id", insertable = false, updatable = false)
   private ReleaseLesson lesson;
 

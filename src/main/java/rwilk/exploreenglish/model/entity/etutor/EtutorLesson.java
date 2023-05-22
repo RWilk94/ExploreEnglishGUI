@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.model.entity.release;
+package rwilk.exploreenglish.model.entity.etutor;
 
 import java.io.Serializable;
 
@@ -13,32 +13,42 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString
 @Entity
-@Table(name = "release_notes")
-public class ReleaseNote implements Serializable {
+@Table(name = "etutor_lessons")
+public class EtutorLesson implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
-  Long id;
-  @Column(name = "note", length = 2000)
-  String note;
-  @Column(name = "position")
-  Long position;
+  private Long id;
+  @Column(name = "name", length = 2000)
+  private String name;
+  @Column(name = "description", length = 2000)
+  private String description;
+  @Column(name = "href", length = 256)
+  private String href;
+  @Column(name = "image", length = 256)
+  private String image;
 
+  @Column(name = "is_ready")
+  Boolean isReady;
+
+  @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-  @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
-  ReleaseLesson lesson;
+  @JoinColumn(name = "course_id", nullable = false, referencedColumnName = "id")
+  private EtutorCourse course;
+
 }

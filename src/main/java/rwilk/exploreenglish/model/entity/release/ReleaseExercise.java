@@ -1,7 +1,6 @@
 package rwilk.exploreenglish.model.entity.release;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -46,10 +44,10 @@ public class ReleaseExercise implements Serializable {
   String name;
 
 
-  @OneToMany(mappedBy = "exercise", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-  List<ReleaseExerciseRow> exerciseRowReleases;
+//  @OneToMany(mappedBy = "exercise", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+//  List<ReleaseExerciseRow> exerciseRowReleases;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
   ReleaseLesson lesson;
 
