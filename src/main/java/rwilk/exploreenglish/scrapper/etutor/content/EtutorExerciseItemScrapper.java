@@ -39,7 +39,7 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
   @Override
   public void run(final String... args) throws Exception {
     etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.EXERCISE.toString(), false)
-      .subList(0, 3)
+      .subList(0, 10)
       .forEach(this::webScrapExerciseTypeExercise);
   }
 
@@ -85,6 +85,9 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
             driver.findElement(By.id("nextQuestionButton")).click();
           }
         }
+        case "cloze" -> {
+          // TODO
+        }
       }
     });
 
@@ -114,6 +117,8 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
       .finalAnswer(extractFinalAnswer(element))
       .translation(extractTranslation(element))
       .description(extractDescription(element))
+      .answerAmericanSound(extractVoiceAnswer(element, "/en-ame/"))
+      .answerBritishSound(extractVoiceAnswer(element, "/en/"))
       .html(element.getAttribute("innerHTML"))
       .type(ExerciseItemType.CHOICE.toString())
       .exercise(etutorExercise)
@@ -132,6 +137,13 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
       final String finalAnswer = exerciseItem.getFinalAnswer();
       exerciseItem.setTranslation(finalAnswer.substring(finalAnswer.indexOf("(") + 1, finalAnswer.indexOf(")")).trim());
       exerciseItem.setFinalAnswer(finalAnswer.substring(0, finalAnswer.indexOf("(")).trim());
+
+    } else if (StringUtils.isNoneEmpty(exerciseItem.getFinalAnswer())
+               && exerciseItem.getFinalAnswer().contains("=")
+               && StringUtils.isEmpty(exerciseItem.getTranslation())) {
+      final String finalAnswer = exerciseItem.getFinalAnswer();
+      exerciseItem.setTranslation(finalAnswer.substring(finalAnswer.indexOf("=") + 1).trim());
+      exerciseItem.setFinalAnswer(finalAnswer.substring(0, finalAnswer.indexOf("=")).trim());
     }
   }
 
@@ -167,7 +179,11 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
     if (!questionDiv.findElements(By.className("selectedAnswerBox")).isEmpty()) {
       final String correctAnswerText = questionDiv.findElement(By.className("selectedAnswerBox")).getText();
       if (StringUtils.isNoneEmpty(correctAnswerText)) {
-        return questionText.replace(correctAnswerText.concat(" "), "[...] ");
+        if (questionText.contains(correctAnswerText.concat(" "))) {
+          return questionText.replace(correctAnswerText.concat(" "), "[...] ");
+        } else {
+          return questionText.replace(correctAnswerText, "[...] ");
+        }
       }
     }
     return questionText;
@@ -203,7 +219,21 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
     return "";
   }
 
-  // TODO check if below implementation is correct
+  private String extractVoiceAnswer(final WebElement element, final String language) {
+    final List<WebElement> audioIconButtons = element.findElement(By.className("examChoiceQuestion"))
+      .findElements(By.className("icon-sound"));
+
+    if (!audioIconButtons.isEmpty()) {
+      for (WebElement audioIconButton : audioIconButtons) {
+        final String dataAudioUrl = audioIconButton.getAttribute("data-audio-url");
+        if (dataAudioUrl.contains(language)) {
+          return BASE_URL + dataAudioUrl;
+        }
+      }
+    }
+    return "";
+  }
+
   private String extractFinalAnswer(final WebElement element) {
     final String question = element.findElement(By.className("examChoiceQuestion")).getText();
 
@@ -246,6 +276,8 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
       .forthPossibleAnswer(possibleAnswers.size() >= 4 ? possibleAnswers.get(3) : null)
       .question(extractWritingQuestion(element))
       .questionTemplate(extractWritingQuestionTemplate(element))
+      .questionBritishSound(extractWritingBritishVoiceQuestion(element))
+      .questionAmericanSound(extractWritingAmericanVoiceQuestion(element))
       .translation(extractWritingQuestion(element))
       .html(element.getAttribute("innerHTML"))
       .type(ExerciseItemType.WRITING.toString())
@@ -257,7 +289,7 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
     while (suggestNextLetterButton.isDisplayed() && suggestNextLetterButton.isEnabled()) {
       suggestNextLetterButton.click();
       try {
-        Thread.sleep(100);
+        Thread.sleep(300);
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
@@ -265,13 +297,17 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
 
     final String finalAnswer = element.findElement(By.className("masked-writing-core")).getText()
       .replace("\n", " ")
-      .replace(" .", ".");
+      .replace(" .", ".")
+      .replace("' ", "'")
+      .replace(" '", "'");
     final String britishSound = extractBritishSound(element);
     final String americanSound = extractAmericanSound(element);
+    final String description = extractWritingDescription(element);
 
     exerciseItem.setFinalAnswer(finalAnswer);
     exerciseItem.setAnswerBritishSound(britishSound);
     exerciseItem.setAnswerAmericanSound(americanSound);
+    exerciseItem.setDescription(description);
 
     return exerciseItem;
   }
@@ -283,6 +319,11 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
     final StringBuilder sb = new StringBuilder();
     for (final WebElement child : children) {
       if (child.getAttribute("class").equals("wordsBesideMask")) {
+        if (!child.getText().startsWith("'")) {
+          appendSpaceIfRequired(sb);
+        } else if (child.getText().startsWith("'") && sb.toString().endsWith(" ")) {
+          sb.setLength(sb.length() - 1);
+        }
         sb.append(child.getText());
 
       } else if (child.getAttribute("class").equals("masked-element")) {
@@ -290,17 +331,19 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
         if (validValues.contains(",") || validValues.contains(";")) {
           throw new UnsupportedOperationException(validValues);
         }
-        if (!sb.toString().endsWith(" ")) {
-          sb.append(" ");
-        }
+        appendSpaceIfRequired(sb);
 
         final String preMaskText = extractTextOfElementByClassName(child, "partPrecedingTheMask");
         sb.append(preMaskText);
 
+        appendSpaceIfRequired(sb);
         sb.append(validValues, 2, validValues.indexOf("\"]"));
 
+        appendSpaceIfRequired(sb);
         final String postMaskText = extractTextOfElementByClassName(child, "partFollowingTheMask");
         sb.append(postMaskText);
+
+      } else if (child.getAttribute("class").contains("masked-writing-audio-icon")) {
 
       } else {
         throw new UnsupportedOperationException(child.getAttribute("class"));
@@ -330,6 +373,10 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
     return element.findElement(By.className("masked-writing-command")).getText();
   }
 
+  private String extractWritingDescription(final WebElement element) {
+    return extractTextOfElementByClassName(element, "masked-writing-explonation");
+  }
+
   private String extractWritingQuestionTemplate(final WebElement element) {
     final List<WebElement> children = element.findElement(By.className("masked-writing-core"))
       .findElements(By.xpath(XPATH_CHILDREN));
@@ -337,23 +384,35 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
     final StringBuilder sb = new StringBuilder();
     for (final WebElement child : children) {
       if (child.getAttribute("class").equals("wordsBesideMask")) {
+        if (!child.getText().startsWith("'")) {
+          appendSpaceIfRequired(sb);
+        }
         sb.append(child.getText());
       } else if (child.getAttribute("class").equals("masked-element")) {
-        if (!sb.toString().endsWith(" ")) {
-          sb.append(" ");
-        }
+        appendSpaceIfRequired(sb);
+
         final String preMaskText = extractTextOfElementByClassName(child, "partPrecedingTheMask");
         sb.append(preMaskText);
 
+        appendSpaceIfRequired(sb);
         sb.append("[...]");
 
         final String postMaskText = extractTextOfElementByClassName(child, "partFollowingTheMask");
+        appendSpaceIfRequired(sb);
         sb.append(postMaskText);
+      } else if (child.getAttribute("class").contains("masked-writing-audio-icon")) {
+
       } else {
         throw new UnsupportedOperationException(child.getAttribute("class"));
       }
     }
     return sb.toString();
+  }
+
+  private void appendSpaceIfRequired(final StringBuilder sb) {
+    if (StringUtils.isNoneEmpty(sb.toString()) && !sb.toString().endsWith(" ") && !sb.toString().endsWith("'")) {
+      sb.append(" ");
+    }
   }
 
   private String extractTextOfElementByClassName(final WebElement element, final String className) {
@@ -386,4 +445,33 @@ public class EtutorExerciseItemScrapper implements CommandLineRunner {
     }
     return "";
   }
+
+  private String extractWritingBritishVoiceQuestion(final WebElement element) {
+    final List<WebElement> audioIconButtons = element.findElements(By.className("audioIconButton"));
+
+    if (!audioIconButtons.isEmpty()) {
+      for (WebElement audioIconButton : audioIconButtons) {
+        final String dataAudioUrl = audioIconButton.getAttribute("data-audio-url");
+        if (dataAudioUrl.contains("/en/")) {
+          return BASE_URL + dataAudioUrl;
+        }
+      }
+    }
+    return "";
+  }
+
+  private String extractWritingAmericanVoiceQuestion(final WebElement element) {
+    final List<WebElement> audioIconButtons = element.findElements(By.className("audioIconButton"));
+
+    if (!audioIconButtons.isEmpty()) {
+      for (WebElement audioIconButton : audioIconButtons) {
+        final String dataAudioUrl = audioIconButton.getAttribute("data-audio-url");
+        if (dataAudioUrl.contains("/en-ame/")) {
+          return BASE_URL + dataAudioUrl;
+        }
+      }
+    }
+    return "";
+  }
+
 }
