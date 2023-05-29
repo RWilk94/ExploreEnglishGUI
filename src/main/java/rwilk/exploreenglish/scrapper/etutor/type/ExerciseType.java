@@ -7,9 +7,9 @@ public enum ExerciseType {
   TIP("tip"),
   PICTURES_WORDS_LIST("pictures_words_list"), // DONE
   SCREEN("screen"), // DONE
-  PICTURES_LISTENING("pictures_listening"),
+  PICTURES_LISTENING("pictures_listening"), // DONE
   PICTURES_CHOICE("pictures_choice"),
-  EXERCISE("exercise"),
+  EXERCISE("exercise"), // DONE
   MATCHING_PAIRS("matching_pairs"),
   DIALOGUE("dialogue"),
   COMIC_BOOK("comic_book"),

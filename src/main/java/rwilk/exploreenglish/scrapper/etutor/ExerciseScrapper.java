@@ -1,10 +1,8 @@
 package rwilk.exploreenglish.scrapper.etutor;
 
-import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -25,8 +23,9 @@ import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorWordRepository;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Component
-public class EtutorExerciseScrapper implements CommandLineRunner {
+public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner {
 
   private final EtutorCourseRepository etutorCourseRepository;
   private final EtutorDefinitionRepository etutorDefinitionRepository;
@@ -36,13 +35,13 @@ public class EtutorExerciseScrapper implements CommandLineRunner {
   private final EtutorNoteRepository etutorNoteRepository;
   private final EtutorWordRepository etutorWordRepository;
 
-  public EtutorExerciseScrapper(final EtutorCourseRepository etutorCourseRepository,
-                                final EtutorDefinitionRepository etutorDefinitionRepository,
-                                final EtutorExerciseItemRepository etutorExerciseItemRepository,
-                                final EtutorExerciseRepository etutorExerciseRepository,
-                                final EtutorLessonRepository etutorLessonRepository,
-                                final EtutorNoteRepository etutorNoteRepository,
-                                final EtutorWordRepository etutorWordRepository) {
+  public ExerciseScrapper(final EtutorCourseRepository etutorCourseRepository,
+                          final EtutorDefinitionRepository etutorDefinitionRepository,
+                          final EtutorExerciseItemRepository etutorExerciseItemRepository,
+                          final EtutorExerciseRepository etutorExerciseRepository,
+                          final EtutorLessonRepository etutorLessonRepository,
+                          final EtutorNoteRepository etutorNoteRepository,
+                          final EtutorWordRepository etutorWordRepository) {
     this.etutorCourseRepository = etutorCourseRepository;
     this.etutorDefinitionRepository = etutorDefinitionRepository;
     this.etutorExerciseItemRepository = etutorExerciseItemRepository;
@@ -59,14 +58,8 @@ public class EtutorExerciseScrapper implements CommandLineRunner {
   }
 
   public void webScrapContent(final EtutorLesson etutorLesson) {
-    System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
-
     final WebDriver driver = new ChromeDriver();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10).getSeconds());
-    final Cookie cookie = new Cookie("autoLoginToken", "BKygYBbhlF7YeJDEJu6wr3peLRtKg3UjZsGNTDHQ");
-
-    driver.get("https://www.etutor.pl");
-    driver.manage().addCookie(cookie);
+    final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
     driver.get(etutorLesson.getHref());

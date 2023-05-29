@@ -1,9 +1,6 @@
 package rwilk.exploreenglish.scrapper.etutor.content;
 
-import java.time.Duration;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,24 +13,25 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorNote;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
+import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+@SuppressWarnings("unused")
 @Component
-public class EtutorNoteScrapper implements CommandLineRunner {
+public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
 
-  private static final String BASE_URL = "https://www.etutor.pl";
   private final EtutorExerciseRepository etutorExerciseRepository;
   private final EtutorNoteRepository etutorNoteRepository;
 
-  public EtutorNoteScrapper(final EtutorExerciseRepository etutorExerciseRepository,
-                            final EtutorNoteRepository etutorNoteRepository) {
+  public NoteScrapper(final EtutorExerciseRepository etutorExerciseRepository,
+                      final EtutorNoteRepository etutorNoteRepository) {
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.etutorNoteRepository = etutorNoteRepository;
   }
 
   @Override
   public void run(final String... args) throws Exception {
-/*    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.SCREEN.toString(), false)
+  /* etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.SCREEN.toString(), false)
       .subList(0, 100)
       .forEach(this::webScrapScreenTypeExercise);*/
   }
@@ -47,14 +45,8 @@ public class EtutorNoteScrapper implements CommandLineRunner {
     if (ExerciseType.SCREEN != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
-    System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
-
     final WebDriver driver = new ChromeDriver();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10).getSeconds());
-    final Cookie cookie = new Cookie("autoLoginToken", "BKygYBbhlF7YeJDEJu6wr3peLRtKg3UjZsGNTDHQ");
-
-    driver.get(BASE_URL);
-    driver.manage().addCookie(cookie);
+    final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
     driver.get(etutorExercise.getHref());

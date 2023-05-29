@@ -1,13 +1,11 @@
 package rwilk.exploreenglish.scrapper.etutor.content;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,18 +22,17 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorWord;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorWordRepository;
+import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 @Component
-public class EtutorWordScrapper implements CommandLineRunner {
+public class WordScrapper extends BaseScrapper implements CommandLineRunner {
 
-  private static final String BASE_URL = "https://www.etutor.pl";
-  private static final String XPATH_CHILDREN = "./child::*";
   private final EtutorExerciseRepository etutorExerciseRepository;
   private final EtutorWordRepository etutorWordRepository;
 
-  public EtutorWordScrapper(final EtutorExerciseRepository etutorExerciseRepository,
-                            final EtutorWordRepository etutorWordRepository) {
+  public WordScrapper(final EtutorExerciseRepository etutorExerciseRepository,
+                      final EtutorWordRepository etutorWordRepository) {
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.etutorWordRepository = etutorWordRepository;
   }
@@ -56,14 +53,8 @@ public class EtutorWordScrapper implements CommandLineRunner {
     if (ExerciseType.PICTURES_WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
-    System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
-
     final WebDriver driver = new ChromeDriver();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10).getSeconds());
-    final Cookie cookie = new Cookie("autoLoginToken", "BKygYBbhlF7YeJDEJu6wr3peLRtKg3UjZsGNTDHQ");
-
-    driver.get(BASE_URL);
-    driver.manage().addCookie(cookie);
+    final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
     driver.get(etutorExercise.getHref());
@@ -183,8 +174,8 @@ public class EtutorWordScrapper implements CommandLineRunner {
     return List.of(
       EtutorDefinition.builder()
         .additionalInformation(additionalInformation)
-        .americanSound(extractAmericanSound(element))
-        .britishSound(extractBritishSound(element))
+        .americanSound(extractAmericanAudioIcon(element))
+        .britishSound(extractBritishAudioIcon(element))
         .englishName(beautify(englishName))
         .type(WordTypeEnum.SENTENCE.toString())
         .word(etutorWord)
@@ -228,8 +219,8 @@ public class EtutorWordScrapper implements CommandLineRunner {
       EtutorDefinition.builder()
         .id(null)
         .additionalInformation(additionalInformation)
-        .americanSound(extractAmericanSound(element))
-        .britishSound(extractBritishSound(element))
+        .americanSound(extractAmericanAudioIcon(element))
+        .britishSound(extractBritishAudioIcon(element))
         .englishName(beautify(englishName))
         .type(WordTypeEnum.WORD.toString())
         .word(null)
@@ -261,8 +252,8 @@ public class EtutorWordScrapper implements CommandLineRunner {
         }
         case "recordingsAndTranscriptions" -> {
           if (definition != null) {
-            definition.setAmericanSound(extractAmericanSound(childTag));
-            definition.setBritishSound(extractBritishSound(childTag));
+            definition.setAmericanSound(extractAmericanAudioIcon(childTag));
+            definition.setBritishSound(extractBritishAudioIcon(childTag));
           } else {
             throw new UnsupportedOperationException("recordingsAndTranscriptions on null definition");
           }
@@ -293,30 +284,6 @@ public class EtutorWordScrapper implements CommandLineRunner {
 
   private List<EtutorDefinition> extractIrregularFormsDefinition(final WebElement element) {
     return extractAdditionalDefinition(element, WordTypeEnum.COMPARATIVE);
-  }
-
-  private String extractBritishSound(final WebElement element) {
-    return extractSound(element, "British English");
-  }
-
-  private String extractAmericanSound(final WebElement element) {
-    return extractSound(element, "American English");
-  }
-
-  private String extractSound(final WebElement element, final String title) {
-    return element.findElements(By.className("hasRecording")).stream()
-      .map(it -> extractDataAudioUrlAttribute(it, title))
-      .filter(StringUtils::isNoneEmpty)
-      .findFirst()
-      .orElse(null);
-  }
-
-  private String extractDataAudioUrlAttribute(final WebElement element, final String title) {
-    if (StringUtils.defaultString(element.getAttribute("title"), "").equals(title)) {
-      return BASE_URL + element.findElement(By.className("audioIcon"))
-        .getAttribute("data-audio-url");
-    }
-    return "";
   }
 
   private String extractLanguageVariety(final WebElement element) {

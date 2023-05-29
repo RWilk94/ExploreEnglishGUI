@@ -4,7 +4,10 @@ import lombok.Getter;
 
 public enum ExerciseItemType {
   CHOICE("choice"),
-  WRITING("masked-writing");
+  WRITING("masked-writing"),
+  CLOZE("cloze"),
+  PICTURES_LISTENING("pictures-listening"),
+  PICTURES_CHOICE("pictures-choice");
 
   @Getter
   private final String value;

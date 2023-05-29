@@ -1,11 +1,9 @@
 package rwilk.exploreenglish.scrapper.etutor;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,8 +14,9 @@ import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.etutor.EtutorCourse;
 import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository;
 
+@SuppressWarnings("unused")
 @Component
-public class EtutorCourseScrapper implements CommandLineRunner {
+public class CourseScrapper extends BaseScrapper implements CommandLineRunner {
 
   private static final List<String> courseHrefs = List.of(
     "https://www.etutor.pl/lessons/en/a1",
@@ -35,7 +34,7 @@ public class EtutorCourseScrapper implements CommandLineRunner {
     "https://www.etutor.pl/lessons/en/matura-3");
   private final EtutorCourseRepository etutorCourseRepository;
 
-  public EtutorCourseScrapper(final EtutorCourseRepository etutorCourseRepository) {
+  public CourseScrapper(final EtutorCourseRepository etutorCourseRepository) {
     this.etutorCourseRepository = etutorCourseRepository;
   }
 
@@ -45,14 +44,8 @@ public class EtutorCourseScrapper implements CommandLineRunner {
   }
 
   public void webScrapAndSaveCourses() {
-    System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
-
     final WebDriver driver = new ChromeDriver();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10).getSeconds());
-    final Cookie cookie = new Cookie("autoLoginToken", "BKygYBbhlF7YeJDEJu6wr3peLRtKg3UjZsGNTDHQ");
-    
-    driver.get("https://www.etutor.pl");
-    driver.manage().addCookie(cookie);
+    final WebDriverWait wait = super.openDefaultPage(driver);
 
     // create a collection for result elements
     final List<EtutorCourse> etutorCourses = new ArrayList<>();

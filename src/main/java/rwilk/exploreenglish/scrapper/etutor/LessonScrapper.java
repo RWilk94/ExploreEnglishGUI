@@ -1,11 +1,9 @@
 package rwilk.exploreenglish.scrapper.etutor;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,14 +17,15 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorLesson;
 import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorLessonRepository;
 
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Component
-public class EtutorLessonScrapper implements CommandLineRunner {
+public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
 
   private final EtutorCourseRepository etutorCourseRepository;
   private final EtutorLessonRepository etutorLessonRepository;
 
-  public EtutorLessonScrapper(final EtutorCourseRepository etutorCourseRepository,
-                              final EtutorLessonRepository etutorLessonRepository) {
+  public LessonScrapper(final EtutorCourseRepository etutorCourseRepository,
+                        final EtutorLessonRepository etutorLessonRepository) {
     this.etutorCourseRepository = etutorCourseRepository;
     this.etutorLessonRepository = etutorLessonRepository;
   }
@@ -34,18 +33,11 @@ public class EtutorLessonScrapper implements CommandLineRunner {
   @Override
   public void run(final String... args) throws Exception {
     /* call the below method to web scrap etutor courses */
-    // etutorCourseRepository.findAll().forEach(this::webScrapAndSaveLessons);
   }
 
   public void webScrapAndSaveLessons(final EtutorCourse course) {
-    System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
-
     final WebDriver driver = new ChromeDriver();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10).getSeconds());
-    final Cookie cookie = new Cookie("autoLoginToken", "BKygYBbhlF7YeJDEJu6wr3peLRtKg3UjZsGNTDHQ");
-
-    driver.get("https://www.etutor.pl");
-    driver.manage().addCookie(cookie);
+    final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
     driver.get(course.getHref());
