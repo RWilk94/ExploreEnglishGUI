@@ -8,10 +8,10 @@ public enum ExerciseType {
   PICTURES_WORDS_LIST("pictures_words_list"), // DONE
   SCREEN("screen"), // DONE
   PICTURES_LISTENING("pictures_listening"), // DONE
-  PICTURES_CHOICE("pictures_choice"),
+  PICTURES_CHOICE("pictures_choice"), // DONE
   EXERCISE("exercise"), // DONE
   MATCHING_PAIRS("matching_pairs"),
-  DIALOGUE("dialogue"),
+  DIALOGUE("dialogue"), // DONE
   COMIC_BOOK("comic_book"),
   GRAMMAR_NOTE("grammar_note"),
   READING("reading"),

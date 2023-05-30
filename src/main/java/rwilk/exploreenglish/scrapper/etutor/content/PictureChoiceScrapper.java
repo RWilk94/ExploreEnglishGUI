@@ -36,9 +36,9 @@ public class PictureChoiceScrapper extends BaseScrapper implements CommandLineRu
 
   @Override
   public void run(final String... args) throws Exception {
-    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.PICTURES_CHOICE.toString(), false)
-      .subList(0, 5)
-      .forEach(this::webScrap);
+//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.PICTURES_CHOICE.toString(), false)
+//      .subList(0, 5)
+//      .forEach(this::webScrap);
   }
 
   public void webScrap(final EtutorExercise etutorExercise) {

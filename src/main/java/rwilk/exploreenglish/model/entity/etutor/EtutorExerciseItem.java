@@ -22,8 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import rwilk.exploreenglish.model.LearnItemChild;
-
 @Getter
 @Setter
 @Builder
@@ -32,7 +30,7 @@ import rwilk.exploreenglish.model.LearnItemChild;
 @ToString
 @Entity
 @Table(name = "etutor_exercise_items")
-public final class EtutorExerciseItem implements Serializable, LearnItemChild {
+public final class EtutorExerciseItem implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,21 +73,9 @@ public final class EtutorExerciseItem implements Serializable, LearnItemChild {
   @Column(name = "type")
   private String type;
 
-
-/*  @Type(type = "text")
-  @Column(name = "dialogue_english")
-  private String dialogueEnglish;
-  @Type(type = "text")
-  @Column(name = "dialogue_polish")
-  private String dialoguePolish;
-
-  @Column(name = "position")
-  private Integer position;*/
-
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
   private EtutorExercise exercise;
-
 
 }
