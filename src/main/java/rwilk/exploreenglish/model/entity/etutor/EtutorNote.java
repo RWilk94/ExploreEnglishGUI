@@ -52,6 +52,8 @@ public final class EtutorNote implements Serializable {
   @Type(type = "text")
   @Column(name = "foreign_html")
   private String foreignHtml;
+  @Column(name = "audio")
+  private String audio;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})

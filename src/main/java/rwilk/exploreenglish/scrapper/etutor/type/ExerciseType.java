@@ -14,7 +14,7 @@ public enum ExerciseType {
   DIALOGUE("dialogue"), // DONE
   COMIC_BOOK("comic_book"), // DONE
   GRAMMAR_NOTE("grammar_note"),
-  READING("reading"),
+  READING("reading"), // DONE
   PICTURES_MASKED_WRITING("pictures_masked_writing"),
   SPEAKING("speaking"),
   GRAMMAR_LIST("grammar_list"),

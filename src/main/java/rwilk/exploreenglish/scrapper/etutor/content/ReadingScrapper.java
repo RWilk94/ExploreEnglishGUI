@@ -12,41 +12,41 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import rwilk.exploreenglish.model.entity.etutor.EtutorDialog;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExerciseItem;
-import rwilk.exploreenglish.repository.etutor.EtutorDialogRepository;
+import rwilk.exploreenglish.model.entity.etutor.EtutorNote;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseItemRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
+import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.content.exercise.Choice;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 @java.lang.SuppressWarnings({"java:S1192", "java:S3776"})
 @Component
-public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
+public class ReadingScrapper extends BaseScrapper implements CommandLineRunner {
 
   private final EtutorExerciseRepository etutorExerciseRepository;
   private final EtutorExerciseItemRepository etutorExerciseItemRepository;
-  private final EtutorDialogRepository etutorDialogRepository;
+  private final EtutorNoteRepository etutorNoteRepository;
 
-  public DialogScrapper(final EtutorExerciseRepository etutorExerciseRepository,
-                        final EtutorExerciseItemRepository etutorExerciseItemRepository,
-                        final EtutorDialogRepository etutorDialogRepository) {
+  public ReadingScrapper(final EtutorExerciseRepository etutorExerciseRepository,
+                         final EtutorExerciseItemRepository etutorExerciseItemRepository,
+                         final EtutorNoteRepository etutorNoteRepository) {
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.etutorExerciseItemRepository = etutorExerciseItemRepository;
-    this.etutorDialogRepository = etutorDialogRepository;
+    this.etutorNoteRepository = etutorNoteRepository;
   }
 
   @Override
   public void run(final String... args) throws Exception {
-//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.DIALOGUE.toString(), false)
-//      .subList(0, 3)
-//      .forEach(this::webScrap);
+    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.READING.toString(), false)
+      .subList(0, 4)
+      .forEach(this::webScrap);
   }
 
   public void webScrap(final EtutorExercise etutorExercise) {
-    if (ExerciseType.DIALOGUE != ExerciseType.valueOf(etutorExercise.getType())) {
+    if (ExerciseType.READING != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
 
@@ -58,30 +58,24 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
     // and wait for loading
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("exercise")));
 
-    final List<EtutorDialog> etutorDialogs = new ArrayList<>();
     final List<EtutorExerciseItem> exerciseItems = new ArrayList<>();
-    final List<WebElement> dialogElements = driver.findElements(By.className("dialogueRow"));
 
-    for (final WebElement element : dialogElements) {
-      etutorDialogs.add(
-        EtutorDialog.builder()
-          .id(null)
-          .dialogEnglish(extractDialogEnglish(element))
-          .dialogPolish(extractDialogPolish(element))
-          .faceImage(extractFaceImage(element))
-          .audio(extractAudio(driver))
-          .html(element.getAttribute("innerHTML"))
-          .type(ExerciseType.DIALOGUE.toString())
-          .exercise(etutorExercise)
-          .build()
-      );
-    }
+    final WebElement element = driver.findElement(By.className("exercise"));
+    final EtutorNote etutorNote = EtutorNote.builder()
+      .id(null)
+      .nativeContent(extractNativeText(element))
+      .foreignContent(extractForeignText(element))
+      .nativeHtml(extractNativeHtml(element))
+      .foreignHtml(extractForeignHTML(element))
+      .audio(extractAudio(driver))
+      .exercise(etutorExercise)
+      .build();
 
     if (!driver.findElements(By.id("switchToExerciseTestButton")).isEmpty()) {
       final WebElement switchToExerciseTestButton = driver.findElement(By.id("switchToExerciseTestButton"));
       switchToExerciseTestButton.click();
 
-      final WebElement exercise = driver.findElement(By.id("dialogueExerciseTest"))
+      final WebElement exercise = driver.findElement(By.id("readingExerciseTest"))
         .findElement(By.className("exercise"));
       final String instruction = exercise.findElement(By.className("exerciseinstruction")).getText();
 
@@ -106,24 +100,27 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
       }
     }
 
-    etutorDialogRepository.saveAll(etutorDialogs);
+    etutorNoteRepository.save(etutorNote);
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);
     driver.quit();
   }
 
-  private String extractDialogEnglish(final WebElement element) {
-    return element.findElement(By.className("foreignTranscription")).getText();
+  private String extractNativeText(final WebElement element) {
+    return element.findElement(By.className("readingExerciseNativeText")).getText();
   }
 
-  private String extractDialogPolish(final WebElement element) {
-    return element.findElement(By.className("nativeTranscription")).getText();
+  private String extractForeignText(final WebElement element) {
+    return element.findElement(By.className("readingExerciseForeignText")).getText();
   }
 
-  private String extractFaceImage(final WebElement element) {
-    final String style = element.findElement(By.className("dialogueFaceIcon")).getAttribute("style");
-    return BASE_URL + style.substring(style.indexOf("(\"") + 2, style.indexOf("\")"));
+  private String extractNativeHtml(final WebElement element) {
+    return element.findElement(By.className("readingExerciseNativeText")).getAttribute("innerHTML");
+  }
+
+  private String extractForeignHTML(final WebElement element) {
+    return element.findElement(By.className("readingExerciseForeignText")).getAttribute("innerHTML");
   }
 
   private String extractAudio(final WebDriver driver) {
@@ -136,6 +133,4 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
       .map(url -> BASE_URL + url)
       .orElse(null);
   }
-
-
 }
