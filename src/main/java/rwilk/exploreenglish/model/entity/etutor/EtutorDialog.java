@@ -51,6 +51,8 @@ public class EtutorDialog implements Serializable {
   @Type(type = "text")
   @Column(name = "html")
   private String html;
+  @Column(name = "comicImage")
+  private String comicImage;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})

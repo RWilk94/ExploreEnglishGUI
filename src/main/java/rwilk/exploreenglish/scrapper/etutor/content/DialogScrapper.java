@@ -22,6 +22,7 @@ import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.content.exercise.Choice;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+@java.lang.SuppressWarnings({"java:S1192"})
 @Component
 public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
 
@@ -39,9 +40,9 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.DIALOGUE.toString(), false)
-      .subList(0, 3)
-      .forEach(this::webScrap);
+//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.DIALOGUE.toString(), false)
+//      .subList(0, 3)
+//      .forEach(this::webScrap);
   }
 
   public void webScrap(final EtutorExercise etutorExercise) {
@@ -105,7 +106,6 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
       }
     }
 
-    System.out.println();
     etutorDialogRepository.saveAll(etutorDialogs);
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
