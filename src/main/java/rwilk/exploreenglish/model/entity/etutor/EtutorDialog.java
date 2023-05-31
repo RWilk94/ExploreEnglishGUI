@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -53,6 +54,8 @@ public class EtutorDialog implements Serializable {
   private String html;
   @Column(name = "comicImage")
   private String comicImage;
+  @Column(name = "sound_seek_second")
+  private BigDecimal soundSeekSecond;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})

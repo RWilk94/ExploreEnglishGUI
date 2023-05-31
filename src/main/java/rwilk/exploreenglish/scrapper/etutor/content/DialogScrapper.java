@@ -1,8 +1,11 @@
 package rwilk.exploreenglish.scrapper.etutor.content;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,7 +44,7 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
   @Override
   public void run(final String... args) throws Exception {
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.DIALOGUE.toString(), false)
-//      .subList(0, 3)
+//      .subList(0, 4)
 //      .forEach(this::webScrap);
   }
 
@@ -60,9 +63,9 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
 
     final List<EtutorDialog> etutorDialogs = new ArrayList<>();
     final List<EtutorExerciseItem> exerciseItems = new ArrayList<>();
-    final List<WebElement> dialogElements = driver.findElements(By.className("dialogueRow"));
+    final List<WebElement> dialogRowElements = driver.findElements(By.className("dialogueRow"));
 
-    for (final WebElement element : dialogElements) {
+    for (final WebElement element : dialogRowElements) {
       etutorDialogs.add(
         EtutorDialog.builder()
           .id(null)
@@ -70,6 +73,7 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
           .dialogPolish(extractDialogPolish(element))
           .faceImage(extractFaceImage(element))
           .audio(extractAudio(driver))
+          .soundSeekSecond(extractDataSoundSeekSeconds(element))
           .html(element.getAttribute("innerHTML"))
           .type(ExerciseType.DIALOGUE.toString())
           .exercise(etutorExercise)
@@ -119,6 +123,14 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
 
   private String extractDialogPolish(final WebElement element) {
     return element.findElement(By.className("nativeTranscription")).getText();
+  }
+
+  private BigDecimal extractDataSoundSeekSeconds(final WebElement element) {
+    final String attribute = element.getAttribute("data-sound-seek-seconds");
+    if (StringUtils.isNoneEmpty(attribute) && NumberUtils.isParsable(attribute)) {
+      return BigDecimal.valueOf(Double.parseDouble(attribute));
+    }
+    return null;
   }
 
   private String extractFaceImage(final WebElement element) {

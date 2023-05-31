@@ -40,9 +40,9 @@ public class ReadingScrapper extends BaseScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.READING.toString(), false)
-      .subList(0, 4)
-      .forEach(this::webScrap);
+//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.READING.toString(), false)
+//      .subList(0, 4)
+//      .forEach(this::webScrap);
   }
 
   public void webScrap(final EtutorExercise etutorExercise) {
