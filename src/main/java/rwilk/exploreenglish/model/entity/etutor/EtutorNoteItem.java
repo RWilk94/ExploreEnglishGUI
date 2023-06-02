@@ -1,7 +1,6 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -31,38 +29,26 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "etutor_notes")
-public final class EtutorNote implements Serializable {
+@Table(name = "etutor_note_items")
+public final class EtutorNoteItem implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "native_title")
-  private String nativeTitle;
   @Type(type = "text")
-  @Column(name = "native_content")
-  private String nativeContent;
-  @Type(type = "text")
-  @Column(name = "native_html")
-  private String nativeHtml;
-  @Column(name = "foreign_title")
-  private String foreignTitle;
-  @Type(type = "text")
-  @Column(name = "foreign_content")
-  private String foreignContent;
-  @Type(type = "text")
-  @Column(name = "foreign_html")
-  private String foreignHtml;
-  @Column(name = "audio")
-  private String audio;
+  @Column(name = "example")
+  private String example;
+  @Column(name = "british_sound")
+  private String britishSound;
+  @Column(name = "american_sound")
+  private String americanSound;
+  @Column(name = "plain_text")
+  private String plainText;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-  @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
-  private EtutorExercise exercise;
+  @JoinColumn(name = "note_id", nullable = false, referencedColumnName = "id", insertable = true, updatable = true)
+  private EtutorNote note;
 
-  @ToString.Exclude
-  @OneToMany(mappedBy = "note", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-  private List<EtutorNoteItem> noteItems;
 }
