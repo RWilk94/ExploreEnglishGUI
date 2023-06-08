@@ -43,8 +43,11 @@ public final class EtutorNoteItem implements Serializable {
   private String britishSound;
   @Column(name = "american_sound")
   private String americanSound;
+  @Type(type = "text")
   @Column(name = "plain_text")
   private String plainText;
+  @Column(name = "image")
+  private String image;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})

@@ -13,7 +13,7 @@ public enum ExerciseType {
   MATCHING_PAIRS("matching_pairs"), // DONE
   DIALOGUE("dialogue"), // DONE
   COMIC_BOOK("comic_book"), // DONE
-  GRAMMAR_NOTE("grammar_note"),
+  GRAMMAR_NOTE("grammar_note"), // DONE
   READING("reading"), // DONE
   PICTURES_MASKED_WRITING("pictures_masked_writing"),
   SPEAKING("speaking"),

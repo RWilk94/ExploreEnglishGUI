@@ -24,26 +24,26 @@ import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 @SuppressWarnings({"java:S1192", "DuplicatedCode"})
 @Component
-public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
+public class GrammarNoteScrapper extends BaseScrapper implements CommandLineRunner {
 
   private final EtutorExerciseRepository etutorExerciseRepository;
   private final EtutorNoteRepository etutorNoteRepository;
 
-  public NoteScrapper(final EtutorExerciseRepository etutorExerciseRepository,
-                      final EtutorNoteRepository etutorNoteRepository) {
+  public GrammarNoteScrapper(final EtutorExerciseRepository etutorExerciseRepository,
+                             final EtutorNoteRepository etutorNoteRepository) {
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.etutorNoteRepository = etutorNoteRepository;
   }
 
   @Override
   public void run(final String... args) throws Exception {
-//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.SCREEN.toString(), false)
-//      .subList(0, 10)
+//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.GRAMMAR_NOTE.toString(), false)
+//      .subList(0, 20)
 //      .forEach(this::webScrap);
   }
 
   public void webScrap(final EtutorExercise etutorExercise) {
-    if (ExerciseType.SCREEN != ExerciseType.valueOf(etutorExercise.getType())) {
+    if (ExerciseType.GRAMMAR_NOTE != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
     final WebDriver driver = new ChromeDriver();
@@ -80,8 +80,9 @@ public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
       switch (row.getTagName()) {
         case "h2", "h3", "h4" -> etutorNote.getNoteItems().add(buildEtutorNoteFromHeading(etutorNote, row));
         case "p" -> {
-          if (!StringUtils.isEmpty(row.getAttribute("innerHTML"))) {
-            final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, row.getAttribute("innerHTML"));
+          if (StringUtils.isNotEmpty(row.getAttribute("innerHTML"))) {
+            final String innerHTML = row.getAttribute("innerHTML").replace("→", "=");
+            final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, innerHTML);
             etutorNote.getNoteItems().addAll(etutorNoteItems);
           }
         }
@@ -92,10 +93,10 @@ public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
             etutorNote.getNoteItems().addAll(etutorNoteItems);
           }
         }
-        case "blockquote" -> {
-          final WebElement paragraph = row.findElement(By.tagName("p"));
-          if (!StringUtils.isEmpty(paragraph.getAttribute("innerHTML"))) {
-            final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, paragraph.getAttribute("innerHTML"));
+        case "table" -> {
+          for (final WebElement cell : row.findElements(By.tagName("p"))) {
+            final String innerHTML = cell.getAttribute("innerHTML").replace("→", "=");
+            final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, innerHTML);
             etutorNote.getNoteItems().addAll(etutorNoteItems);
           }
         }
@@ -116,5 +117,4 @@ public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
       .note(etutorNote)
       .build();
   }
-
 }
