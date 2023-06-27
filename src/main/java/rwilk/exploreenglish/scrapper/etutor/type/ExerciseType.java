@@ -16,7 +16,7 @@ public enum ExerciseType {
   GRAMMAR_NOTE("grammar_note"), // DONE
   READING("reading"), // DONE
   PICTURES_MASKED_WRITING("pictures_masked_writing"), // DONE
-  SPEAKING("speaking"),
+  SPEAKING("speaking"), // DONE
   GRAMMAR_LIST("grammar_list"),
   WRITING("writing"),
   VIDEO("video"),

@@ -34,9 +34,9 @@ public class PicturesMaskedWritingScrapper extends BaseScrapper implements Comma
 
   @Override
   public void run(final String... args) throws Exception {
-    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.PICTURES_MASKED_WRITING.toString(), false)
-      .subList(0, 5)
-      .forEach(this::webScrap);
+//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.PICTURES_MASKED_WRITING.toString(), false)
+//      .subList(0, 5)
+//      .forEach(this::webScrap);
   }
 
 
