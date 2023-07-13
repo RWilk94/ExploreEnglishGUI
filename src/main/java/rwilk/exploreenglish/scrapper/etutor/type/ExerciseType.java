@@ -17,7 +17,7 @@ public enum ExerciseType {
   READING("reading"), // DONE
   PICTURES_MASKED_WRITING("pictures_masked_writing"), // DONE
   SPEAKING("speaking"), // DONE
-  GRAMMAR_LIST("grammar_list"),
+  GRAMMAR_LIST("grammar_list"), // DONE
   WRITING("writing"),
   VIDEO("video"),
   WORDS_LIST("words_list"); // can be scrapped by WordScrapper
