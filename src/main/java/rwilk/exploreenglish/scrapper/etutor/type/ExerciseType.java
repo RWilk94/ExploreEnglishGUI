@@ -20,7 +20,7 @@ public enum ExerciseType {
   GRAMMAR_LIST("grammar_list"),
   WRITING("writing"),
   VIDEO("video"),
-  WORDS_LIST("words_list");
+  WORDS_LIST("words_list"); // can be scrapped by WordScrapper
 
   @Getter
   private final String value;

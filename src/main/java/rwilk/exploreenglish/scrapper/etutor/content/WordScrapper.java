@@ -39,9 +39,9 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-/*    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.PICTURES_WORDS_LIST.toString(), false)
-      .subList(0, 10)
-      .forEach(this::webScrapPicturesWordsListTypeExercise);*/
+//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.WORDS_LIST.toString(), false)
+//      .subList(0, 10)
+//      .forEach(this::webScrapPicturesWordsListTypeExercise);
   }
 
   /**
@@ -50,7 +50,8 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
    * @param etutorExercise content
    */
   public void webScrapPicturesWordsListTypeExercise(final EtutorExercise etutorExercise) {
-    if (ExerciseType.PICTURES_WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
+    if (ExerciseType.PICTURES_WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())
+        || ExerciseType.WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
     final WebDriver driver = new ChromeDriver();
@@ -120,8 +121,8 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
           final List<EtutorDefinition> sentenceDefinitions = extractSentenceDefinition(childrenTag, etutorWord);
           etutorWord.getDefinitions().addAll(sentenceDefinitions);
         }
-        etutorWords.add(etutorWord);
       }
+      etutorWords.add(etutorWord);
     }
 
     etutorWordRepository.saveAll(etutorWords);
