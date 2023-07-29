@@ -38,4 +38,6 @@ public class EtutorCourse implements Serializable {
   private String href;
   @Column(name = "image", length = 256)
   private String image;
+  @Column(name = "language")
+  private String language;
 }
