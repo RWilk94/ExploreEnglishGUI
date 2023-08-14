@@ -33,6 +33,12 @@ public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
   @Override
   public void run(final String... args) throws Exception {
     /* call the below method to web scrap etutor courses */
+//    etutorCourseRepository.findAll()
+//      .stream()
+//      .filter(course -> course.getId() >= 14L)
+//      .toList()
+//      // .subList(0, 1)
+//      .forEach(this::webScrapAndSaveLessons);
   }
 
   public void webScrapAndSaveLessons(final EtutorCourse course) {
@@ -78,6 +84,7 @@ public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
                    .href(lessonFrame.findElement(By.className("singleLessonTopFrame")).getAttribute("href"))
                    .image(lessonDetailPage.findElement(By.className("titleimage")).getAttribute("src"))
                    .course(course)
+                   .isReady(false)
                    .build()
           ).toList());
     });
