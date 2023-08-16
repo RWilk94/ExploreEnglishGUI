@@ -53,8 +53,10 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
 
   @Override
   public void run(final String... args) throws Exception {
-    etutorLessonRepository.findAllByIsReady(false)
-      .forEach(this::webScrapContent);
+//    etutorLessonRepository.findAllByIsReady(false)
+//      .stream()
+//      .filter(it -> it.getId() <= 1450L)
+//      .forEach(this::webScrapContent);
   }
 
   public void webScrapContent(final EtutorLesson etutorLesson) {
@@ -76,6 +78,7 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
         .image(exerciseElement.findElement(By.tagName("img")).getAttribute("src"))
         .type(getType(exerciseElement.findElement(By.tagName("img")).getAttribute("src")))
         .lesson(etutorLesson)
+        .isReady(false)
         .build()
       )
       .toList();

@@ -136,10 +136,11 @@ public class ExportDocumentService implements CommandLineRunner {
     appendEnglishWord(paragraph,
                       String.join(" / ",
                                   ListUtils.emptyIfNull(word.getDefinitions()
-                                                            .stream()
-                                                            .filter(wordSound -> wordSound.getType().equals(WordTypeEnum.WORD.toString()))
-                                                            .map(Definition::getEnglishName)
-                                                            .toList())));
+                                                          .stream()
+                                                          .filter(wordSound -> wordSound.getType()
+                                                            .equals(WordTypeEnum.WORD.toString()))
+                                                          .map(Definition::getEnglishName)
+                                                          .toList())));
     appendEqualSign(paragraph);
     appendPolishWord(paragraph, word.getPolishName());
     appendPartOfSpeech(paragraph, word.getPartOfSpeech());
@@ -147,6 +148,7 @@ public class ExportDocumentService implements CommandLineRunner {
     appendAdditional(paragraph, word, WordTypeEnum.PLURAL);
     appendAdditional(paragraph, word, WordTypeEnum.PAST_TENSE);
     appendAdditional(paragraph, word, WordTypeEnum.PAST_PARTICIPLE);
+    appendAdditional(paragraph, word, WordTypeEnum.PRESENT_PARTICIPLE);
     appendAdditional(paragraph, word, WordTypeEnum.COMPARATIVE);
     appendAdditional(paragraph, word, WordTypeEnum.SUPERLATIVE);
     appendAdditional(paragraph, word, WordTypeEnum.SYNONYM);
@@ -201,9 +203,9 @@ public class ExportDocumentService implements CommandLineRunner {
 
   private void appendAdditional(final XWPFParagraph paragraph, final Word word, final WordTypeEnum wordType) {
     final List<Definition> definitions = word.getDefinitions()
-                                             .stream()
-                                             .filter(wordSound -> wordSound.getType().equals(wordType.toString()))
-                                             .toList();
+      .stream()
+      .filter(wordSound -> wordSound.getType().equals(wordType.toString()))
+      .toList();
     if (CollectionUtils.isNotEmpty(definitions)) {
       final XWPFRun run = paragraph.createRun();
       final StringBuilder sb = new StringBuilder();
@@ -228,9 +230,9 @@ public class ExportDocumentService implements CommandLineRunner {
 
   private void appendSentences(final XWPFDocument document, final Word word) {
     final List<Definition> definitions = word.getDefinitions()
-                                             .stream()
-                                             .filter(wordSound -> wordSound.getType().equals(WordTypeEnum.SENTENCE.toString()))
-                                             .toList();
+      .stream()
+      .filter(wordSound -> wordSound.getType().equals(WordTypeEnum.SENTENCE.toString()))
+      .toList();
     if (CollectionUtils.isNotEmpty(definitions)) {
       definitions.forEach(wordSound -> {
         final XWPFParagraph paragraph = document.createParagraph();

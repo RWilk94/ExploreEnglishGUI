@@ -39,9 +39,9 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.WORDS_LIST.toString(), false)
+    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.PICTURES_WORDS_LIST.toString(), false)
 //      .subList(0, 10)
-//      .forEach(this::webScrapPicturesWordsListTypeExercise);
+      .forEach(this::webScrapPicturesWordsListTypeExercise);
   }
 
   /**
@@ -50,8 +50,16 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
    * @param etutorExercise content
    */
   public void webScrapPicturesWordsListTypeExercise(final EtutorExercise etutorExercise) {
+//    Platform.runLater(() -> {
+//      final Robot robot = new Robot();
+//      robot.mouseMove(RandomUtils.nextInt(0, 2000), RandomUtils.nextInt(0, 2000));
+//      robot.mouseMove(RandomUtils.nextInt(0, 2000), RandomUtils.nextInt(0, 2000));
+//      robot.mouseMove(RandomUtils.nextInt(0, 2000), RandomUtils.nextInt(0, 2000));
+//      robot.mouseMove(RandomUtils.nextInt(0, 2000), RandomUtils.nextInt(0, 2000));
+//    });
+
     if (ExerciseType.PICTURES_WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())
-        || ExerciseType.WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
+        && ExerciseType.WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
     final WebDriver driver = new ChromeDriver();
@@ -107,6 +115,16 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
                 .concat(childrenTag.getText().trim()));
             etutorWord.setAdditionalInformation(additionalInformation);
             etutorWord.setPolishName(beautify(etutorWord.getPolishName().replace(additionalInformation, "")));
+          }
+          case "languageVariety" -> {
+            final EtutorDefinition definition = etutorWord.getDefinitions()
+              .get(etutorWord.getDefinitions().size() - 1);
+            final String additionalInformation = beautify(
+              StringUtils.defaultString(definition.getAdditionalInformation(), "")
+                .concat(", ")
+                .concat(formatLanguageVariety(childrenTag.getText()).trim())
+            );
+            definition.setAdditionalInformation(additionalInformation);
           }
           default -> throw new MissingEtutorDefinitionTypeException(cssClass);
         }
@@ -262,16 +280,43 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
         case "foreignTermHeader" -> {
           if (definition != null && childTag.getText().equals("stopień wyższy")) {
             definition.setType(WordTypeEnum.COMPARATIVE.toString());
+
           } else if (definition != null && childTag.getText().equals("stopień najwyższy")) {
             definition.setType(WordTypeEnum.SUPERLATIVE.toString());
+
           } else if (childTag.getText().equals("synonim:") || childTag.getText().equals("synonimy:")) {
             // do nothing because definition is null and WordTypeEnum.SYNONYM is passed as param
+
           } else if (definition != null && childTag.getText().equals("past tense")) {
             definition.setType(WordTypeEnum.PAST_TENSE.toString());
+
+          } else if (definition != null && childTag.getText().contains("past tense")) {
+            final String text = childTag.getText();
+            final String additional = formatLanguageVariety(text.substring(
+              text.indexOf("(") + 1,
+              text.indexOf(")")
+            ).trim());
+            definition.setType(WordTypeEnum.PAST_TENSE.toString());
+            definition.setAdditionalInformation(additional);
+
           } else if (definition != null && childTag.getText().equals("past participle")) {
             definition.setType(WordTypeEnum.PAST_PARTICIPLE.toString());
+
+          } else if (definition != null && childTag.getText().contains("past participle")) {
+            final String text = childTag.getText();
+            final String additional = formatLanguageVariety(text.substring(
+              text.indexOf("(") + 1,
+              text.indexOf(")")
+            ).trim());
+            definition.setType(WordTypeEnum.PAST_PARTICIPLE.toString());
+            definition.setAdditionalInformation(additional);
+
           } else if (definition != null && childTag.getText().equals("liczba mnoga")) {
             definition.setType(WordTypeEnum.PLURAL.toString());
+
+          } else if (definition != null && childTag.getText().equals("present participle")) {
+            definition.setType(WordTypeEnum.PRESENT_PARTICIPLE.toString());
+
           } else {
             throw new UnsupportedOperationException(childTag.getText());
           }
