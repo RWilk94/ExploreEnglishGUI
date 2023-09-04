@@ -23,6 +23,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +35,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "etutor_words")
 public class EtutorWord implements Serializable {
@@ -64,12 +66,16 @@ public class EtutorWord implements Serializable {
   private Date modifyDate;
 
   @ToString.Exclude
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-  @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
+  @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+  @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id", insertable = false, updatable = false)
   private EtutorExercise exercise;
 
   @ToString.Exclude
   @OneToMany(mappedBy = "word", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+  private List<EtutorLessonWord> etutorLessonWords;
+
+  @ToString.Exclude
+  @OneToMany(mappedBy = "word", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
   private List<EtutorDefinition> definitions;
 
 }
