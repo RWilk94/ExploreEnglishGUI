@@ -1,13 +1,13 @@
 package rwilk.exploreenglish.scrapper.etutor.content;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.CommandLineRunner;
@@ -37,16 +37,16 @@ public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.SCREEN.toString(), false)
+    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.SCREEN.toString(), false)
 //      .subList(0, 10)
-//      .forEach(this::webScrap);
+      .forEach(this::webScrap);
   }
 
   public void webScrap(final EtutorExercise etutorExercise) {
     if (ExerciseType.SCREEN != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
-    final WebDriver driver = new ChromeDriver();
+    final WebDriver driver = super.getDriver();
     final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
@@ -54,7 +54,12 @@ public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
     // and wait for display list of lessons
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("exercise")));
 
-    final WebElement nativeLessonContent = driver.findElement(By.className("nativeLessonContent"));
+    WebElement nativeLessonContent = null;
+    if (!driver.findElements(By.className("nativeLessonContent")).isEmpty()) {
+      nativeLessonContent = driver.findElement(By.className("nativeLessonContent"));
+    } else {
+      nativeLessonContent = driver.findElement(By.className("exercise"));
+    }
 
     final EtutorNote etutorNote = EtutorNote.builder()
       .nativeTitle(nativeLessonContent.findElement(By.tagName("h1")).getText())
@@ -98,6 +103,42 @@ public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
             final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, paragraph.getAttribute("innerHTML"));
             etutorNote.getNoteItems().addAll(etutorNoteItems);
           }
+        }
+        case "ul" -> {
+          if (!row.findElements(By.tagName("li")).isEmpty()) {
+            final WebElement li = row.findElement(By.tagName("li"));
+            final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, li.getAttribute("innerHTML"));
+            etutorNote.getNoteItems().addAll(etutorNoteItems);
+          }
+        }
+        case "table" -> {
+          if (!row.findElements(By.tagName("thead")).isEmpty()) {
+            final List<WebElement> headerColumns = row.findElement(By.tagName("thead")).findElements(By.tagName("th"));
+            final List<EtutorNoteItem> etutorNoteHeaderItems = headerColumns.stream()
+              .map(it -> NoteItem.webScrap(etutorNote, it.getAttribute("innerHTML")))
+              .flatMap(Collection::stream)
+              .toList();
+            etutorNote.getNoteItems().addAll(etutorNoteHeaderItems);
+          }
+
+          if (!row.findElements(By.tagName("tbody")).isEmpty()) {
+            final List<WebElement> bodyColumns = row.findElement(By.tagName("tbody")).findElements(By.tagName("td"));
+            final List<EtutorNoteItem> etutorNoteBodyItems = bodyColumns.stream()
+              .map(it -> NoteItem.webScrap(etutorNote, it.getAttribute("innerHTML")))
+              .flatMap(Collection::stream)
+              .toList();
+            etutorNote.getNoteItems().addAll(etutorNoteBodyItems);
+          }
+        }
+        case "ol" -> {
+          final List<EtutorNoteItem> etutorNoteItems = row.findElements(By.xpath(XPATH_CHILDREN)).stream()
+            .map(it -> NoteItem.webScrap(etutorNote, it.getAttribute("innerHTML")))
+            .flatMap(Collection::stream)
+            .toList();
+          etutorNote.getNoteItems().addAll(etutorNoteItems);
+        }
+        case "style" -> {
+
         }
         default -> throw new UnsupportedOperationException(row.getTagName());
       }

@@ -53,7 +53,10 @@ public class NoteItem {
           }
 
         } else if (paragraph.startsWith("<span class=\"phoneticTranscription\">")) {
-          if (paragraph.contains("</span></span>")) {
+          if (paragraph.substring(5).indexOf("<span") > paragraph.indexOf("</span>")) {
+            result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</span>") + 7), NoteItemType.PHONETIC_TRANSCRIPTIONS));
+            parse(paragraph.substring(paragraph.indexOf("</span>") + 7), result);
+          } else if (paragraph.contains("</span></span>")) {
             result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</span></span>") + 14), NoteItemType.PHONETIC_TRANSCRIPTIONS));
             parse(paragraph.substring(paragraph.indexOf("</span></span>") + 14), result);
           } else if (paragraph.contains("</span>")) {
@@ -69,13 +72,29 @@ public class NoteItem {
         } else if (paragraph.startsWith("<span style=\"color:null;\">")) {
           parse(paragraph.substring(26), result);
 
-        } else if (paragraph.startsWith("<span style=\"color:#000000;\">")) {
+        } else if (paragraph.startsWith("<span style=\"color:#000000;\">")
+                   || paragraph.startsWith("<span style=\"color:#7f8c8d;\">")
+                   || paragraph.startsWith("<span style=\"color:#009900;\">")
+                   || paragraph.startsWith("<span style=\"color:#2980b9;\">")
+                   || paragraph.startsWith("<span style=\"color:#c0392b;\">")
+        ) {
           parse(paragraph.substring(29), result);
 
-        } else if (paragraph.startsWith("<span id=\"docs-internal-guid") || paragraph.startsWith("<span style=\"font-size")) {
+        } else if (paragraph.startsWith("<span id=\"docs-internal-guid")
+                   || paragraph.startsWith("<span style=\"font-size")
+                   || paragraph.startsWith("<span class=\"dictionaryEntryHeaderAdditionalInformation\">")
+                   || paragraph.startsWith("<span style=\"text-align: justify;\">")
+        ) {
           parse(paragraph.substring(paragraph.indexOf(">") + 1)
                   .replaceFirst("</span>", ""),
                 result);
+
+        } else if (paragraph.startsWith("<span style=\"line-height: 1.5em")
+                   || paragraph.startsWith("<span class=\"tL8wMe EMoHub\"")) {
+          String newParagraph = paragraph.substring(paragraph.indexOf(">") + 1);
+          newParagraph = newParagraph.substring(0, newParagraph.lastIndexOf("</span>"));
+
+          parse(newParagraph, result);
 
         } else {
           throw new UnsupportedOperationException(paragraph);
@@ -144,6 +163,40 @@ public class NoteItem {
         parse(paragraph.substring(paragraph.indexOf(">") + 1)
                 .replaceFirst("</b>", ""),
               result);
+
+      } else if (paragraph.startsWith("<style type=\"text/css\">")) {
+        parse(paragraph.substring(paragraph.indexOf("</style>") + 8), result);
+
+      } else if (paragraph.startsWith("<ul>")) {
+        parse(paragraph.substring(paragraph.indexOf(">") + 1)
+                .replaceFirst("</ul>", ""),
+              result);
+
+      } else if (paragraph.startsWith("<li style=\"text-align: justify;\">")) {
+        parse(paragraph.substring(paragraph.indexOf(">") + 1)
+                .replaceFirst("</li>", ""),
+              result);
+
+      } else if (paragraph.startsWith("<font color=")) {
+        parse(paragraph.substring(paragraph.indexOf("</font>") + 7), result);
+
+      } else if (paragraph.startsWith("</font>")) {
+        parse(paragraph.substring(7), result);
+
+      } else if (paragraph.startsWith("<sup>")) {
+        parse(paragraph.substring(5), result);
+
+      } else if (paragraph.startsWith("</sup>")) {
+        parse(paragraph.substring(6), result);
+
+      } else if (paragraph.startsWith("<a")) {
+        parse(paragraph.substring(paragraph.indexOf(">") + 1).replace("</a>", ""), result);
+
+      } else if (paragraph.startsWith("<u style=\"text-align: justify;\">")) {
+        parse(paragraph.substring(paragraph.indexOf(">") + 1).replace("</u>", ""), result);
+
+      } else if (paragraph.startsWith("<li>")) {
+        parse(paragraph.substring(4).replace("</li>", ""), result);
 
       } else {
         if (paragraph.indexOf("<") == 0) {

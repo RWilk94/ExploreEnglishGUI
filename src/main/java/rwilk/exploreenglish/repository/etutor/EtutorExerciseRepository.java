@@ -8,5 +8,7 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 
 public interface EtutorExerciseRepository extends JpaRepository<EtutorExercise, Long> {
 
+  List<EtutorExercise> findAllByIsReady(Boolean isReady);
+
   List<EtutorExercise> findAllByTypeAndIsReady(String type, Boolean isReady);
 }

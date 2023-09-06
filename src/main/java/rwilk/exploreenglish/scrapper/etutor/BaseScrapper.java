@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BaseScrapper {
@@ -17,6 +19,12 @@ public abstract class BaseScrapper {
 
   protected BaseScrapper() {
     System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
+  }
+
+  protected ChromeDriver getDriver() {
+    final ChromeOptions options = new ChromeOptions();
+    options.addArguments("headless");
+    return new ChromeDriver(options);
   }
 
   protected WebDriverWait openDefaultPage(final WebDriver driver) {
