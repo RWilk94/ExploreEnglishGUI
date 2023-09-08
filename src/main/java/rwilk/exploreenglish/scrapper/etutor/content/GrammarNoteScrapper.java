@@ -99,6 +99,20 @@ public class GrammarNoteScrapper extends BaseScrapper implements CommandLineRunn
             etutorNote.getNoteItems().addAll(etutorNoteItems);
           }
         }
+        case "ul" -> {
+          if (!row.findElements(By.tagName("li")).isEmpty()) {
+            final WebElement li = row.findElement(By.tagName("li"));
+            final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, li.getAttribute("innerHTML"));
+            etutorNote.getNoteItems().addAll(etutorNoteItems);
+          }
+        }
+        case "blockquote" -> {
+          final WebElement paragraph = row.findElement(By.tagName("p"));
+          if (!StringUtils.isEmpty(paragraph.getAttribute("innerHTML"))) {
+            final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, paragraph.getAttribute("innerHTML"));
+            etutorNote.getNoteItems().addAll(etutorNoteItems);
+          }
+        }
         default -> throw new UnsupportedOperationException(row.getTagName());
       }
     }

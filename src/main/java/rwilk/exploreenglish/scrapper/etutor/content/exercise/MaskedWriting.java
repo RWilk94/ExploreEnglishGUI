@@ -55,15 +55,16 @@ public class MaskedWriting {
     final WebElement suggestNextLetterButton = element.findElement(By.xpath("../parent::*"))
       .findElement(By.id("suggestNextLetterButton"));
 
-    final int letterSize = Integer.parseInt(element
-                                              .findElement(By.className("writing-mask"))
-                                              .findElement(By.tagName("input")).getAttribute("size"));
-    for (int i = 0; i < letterSize; i++) {
-      try {
-        suggestNextLetterButton.click();
-        Thread.sleep(100);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
+
+    for (final WebElement webElement : element.findElements(By.className("writing-mask"))) {
+      final int letterSize = Integer.parseInt(webElement.findElement(By.tagName("input")).getAttribute("size"));
+      for (int i = 0; i < letterSize; i++) {
+        try {
+          suggestNextLetterButton.click();
+          Thread.sleep(200);
+        } catch (InterruptedException e) {
+          throw new RuntimeException(e);
+        }
       }
     }
     wait.until(ExpectedConditions.attributeContains(suggestNextLetterButton, "class", "hidden"));

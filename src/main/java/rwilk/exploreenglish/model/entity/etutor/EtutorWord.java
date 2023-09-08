@@ -66,8 +66,8 @@ public class EtutorWord implements Serializable {
   private Date modifyDate;
 
   @ToString.Exclude
-  @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-  @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id", insertable = false, updatable = false)
+  @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+  @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
   private EtutorExercise exercise;
 
   @ToString.Exclude

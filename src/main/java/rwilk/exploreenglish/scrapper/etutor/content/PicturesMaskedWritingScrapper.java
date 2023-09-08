@@ -65,7 +65,7 @@ public class PicturesMaskedWritingScrapper extends BaseScrapper implements Comma
       }
       exerciseItems.add(PicturesMaskedWriting.webScrap(etutorExercise, exercise2, instruction));
       try {
-        Thread.sleep(3000);
+        Thread.sleep(3000 + (countLetterSize(exercise2) * 100));
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
@@ -83,6 +83,15 @@ public class PicturesMaskedWritingScrapper extends BaseScrapper implements Comma
       return element.findElement(By.className("center")).getText().trim();
     }
     return "";
+  }
+
+  private int countLetterSize(final WebElement element) {
+    return element
+      .findElements(By.className("writing-mask"))
+      .stream()
+      .map(it -> it.findElement(By.tagName("input")).getAttribute("size"))
+      .map(Integer::parseInt).mapToInt(it -> it)
+      .sum();
   }
 
 

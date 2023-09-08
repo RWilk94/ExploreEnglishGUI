@@ -84,6 +84,9 @@ public class NoteItem {
                    || paragraph.startsWith("<span style=\"font-size")
                    || paragraph.startsWith("<span class=\"dictionaryEntryHeaderAdditionalInformation\">")
                    || paragraph.startsWith("<span style=\"text-align: justify;\">")
+                   || paragraph.startsWith("<span class=\"lessonRecordedExample")
+                   || paragraph.startsWith("<span style=\"font-family")
+                   || paragraph.startsWith("<span style=\"font-style")
         ) {
           parse(paragraph.substring(paragraph.indexOf(">") + 1)
                   .replaceFirst("</span>", ""),
@@ -95,6 +98,9 @@ public class NoteItem {
           newParagraph = newParagraph.substring(0, newParagraph.lastIndexOf("</span>"));
 
           parse(newParagraph, result);
+
+        } else if (paragraph.startsWith("<span>")) {
+          parse(paragraph.substring(6).replaceFirst("</span>", ""), result);
 
         } else {
           throw new UnsupportedOperationException(paragraph);
@@ -151,6 +157,10 @@ public class NoteItem {
       } else if (paragraph.startsWith("</em>")) {
         parse(paragraph.substring(5), result);
 
+      } else if (paragraph.startsWith("<em ")) {
+        parse(paragraph.substring(paragraph.indexOf(">") + 1)
+                .replaceFirst("</em>", ""), result);
+
       } else if (paragraph.startsWith("<p")) {
         result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</p>") + 4), NoteItemType.PARAGRAPH));
         parse(paragraph.substring(paragraph.indexOf("</p>") + 4), result);
@@ -197,6 +207,10 @@ public class NoteItem {
 
       } else if (paragraph.startsWith("<li>")) {
         parse(paragraph.substring(4).replace("</li>", ""), result);
+
+      } else if (paragraph.startsWith("<u ")) {
+        parse(paragraph.substring(paragraph.indexOf(">") + 1)
+                .replaceFirst("</u>", ""), result);
 
       } else {
         if (paragraph.indexOf("<") == 0) {

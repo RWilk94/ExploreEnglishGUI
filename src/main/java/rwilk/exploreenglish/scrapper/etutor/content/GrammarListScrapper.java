@@ -15,6 +15,7 @@ import rwilk.exploreenglish.model.WordTypeEnum;
 import rwilk.exploreenglish.model.entity.etutor.EtutorDefinition;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExerciseItem;
+import rwilk.exploreenglish.model.entity.etutor.EtutorLessonWord;
 import rwilk.exploreenglish.model.entity.etutor.EtutorWord;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseItemRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
@@ -117,6 +118,18 @@ public class GrammarListScrapper extends BaseScrapper implements CommandLineRunn
           .build()
       );
     }
+
+    etutorWords
+      .forEach(it ->
+                 it.setEtutorLessonWords(List.of(
+                   EtutorLessonWord.builder()
+                     .id(null)
+                     .position(null)
+                     .exercise(it.getExercise())
+                     .word(it)
+                     .build()))
+      );
+
     etutorWordRepository.saveAll(etutorWords);
     etutorExerciseItemRepository.saveAll(etutorExerciseItems);
     etutorExercise.setIsReady(true);

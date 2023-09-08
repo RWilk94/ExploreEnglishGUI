@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import lombok.extern.slf4j.Slf4j;
+
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.scrapper.etutor.content.ComicBookScrapper;
 import rwilk.exploreenglish.scrapper.etutor.content.DialogScrapper;
@@ -23,6 +25,7 @@ import rwilk.exploreenglish.scrapper.etutor.content.SpeakingScrapper;
 import rwilk.exploreenglish.scrapper.etutor.content.WordScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+@Slf4j
 @Component
 public class ContentScrapper implements CommandLineRunner {
 
@@ -68,38 +71,46 @@ public class ContentScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-
-
+    webScrap();
   }
 
   private void webScrap() {
     etutorExerciseRepository.findAllByIsReady(false)
+      .stream()
+      .filter(it -> it.getLesson().getCourse().getId() == 3)
       .forEach(it -> {
-                 switch (Objects.requireNonNull(ExerciseType.fromString(it.getType()))) {
-                   case TIP -> System.out.println();
-                   case PICTURES_WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
-                   case SCREEN -> noteScrapper.webScrap(it);
-                   case PICTURES_LISTENING -> {
-                     try {
-                       pictureListeningScrapper.webScrap(it);
-                     } catch (JsonProcessingException e) {
-                       System.err.println(e);
+                 log.info("START scrapping {}", it);
+
+                 try {
+
+                   switch (Objects.requireNonNull(ExerciseType.fromString(it.getType()))) {
+                     case TIP -> throw new UnsupportedOperationException("TIP hasn't supported yet.");
+                     case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
+                     case SCREEN -> noteScrapper.webScrap(it);
+                     case PICTURES_LISTENING -> {
+                       try {
+                         pictureListeningScrapper.webScrap(it);
+                       } catch (JsonProcessingException e) {
+                         log.error("An error occurred due to: ", e);
+                       }
                      }
+                     case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it);
+                     case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it);
+                     case MATCHING_PAIRS -> matchingPairsScrapper.webScrap(it);
+                     case DIALOGUE -> dialogScrapper.webScrap(it);
+                     case COMIC_BOOK -> comicBookScrapper.webScrap(it);
+                     case GRAMMAR_NOTE -> grammarNoteScrapper.webScrap(it);
+                     case READING -> readingScrapper.webScrap(it);
+                     case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it);
+                     case SPEAKING -> speakingScrapper.webScrap(it);
+                     case GRAMMAR_LIST -> grammarListScrapper.webScrap(it);
+                     case WRITING -> throw new UnsupportedOperationException("WRITING hasn't supported yet.");
+                     case VIDEO -> throw new UnsupportedOperationException("VIDEO hasn't supported yet.");
+                     default -> throw new UnsupportedOperationException("default hasn't supported yet.");
                    }
-                   case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it);
-                   case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it);
-                   case MATCHING_PAIRS -> matchingPairsScrapper.webScrap(it);
-                   case DIALOGUE -> dialogScrapper.webScrap(it);
-                   case COMIC_BOOK -> comicBookScrapper.webScrap(it);
-                   case GRAMMAR_NOTE -> grammarNoteScrapper.webScrap(it);
-                   case READING -> readingScrapper.webScrap(it);
-                   case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it);
-                   case SPEAKING -> speakingScrapper.webScrap(it);
-                   case GRAMMAR_LIST -> grammarListScrapper.webScrap(it);
-                   case WRITING -> System.out.println("TODO");
-                   case VIDEO -> System.out.println("TODO");
-                   case WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
-                   default -> System.err.println();
+                   log.info("FINISH scrapping {}", it);
+                 } catch (Exception e) {
+                   log.error("An error occurred due to: ", e);
                  }
                }
       );

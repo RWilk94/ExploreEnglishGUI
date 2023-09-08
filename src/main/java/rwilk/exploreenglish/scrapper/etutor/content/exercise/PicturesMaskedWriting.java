@@ -27,9 +27,12 @@ public class PicturesMaskedWriting {
 
   private EtutorExerciseItem get(final EtutorExercise etutorExercise, final WebElement element,
                                  final String instruction) {
-    final List<String> possibleAnswers = extractPossibleAnswers(element);
+    List<String> possibleAnswers = extractPossibleAnswers(element);
     if (possibleAnswers.size() > 4) {
-      throw new UnsupportedOperationException("possibleAnswers contains more then 4 items");
+      possibleAnswers = mergePossibleAnswers(possibleAnswers);
+      if (possibleAnswers.size() > 4) {
+        throw new UnsupportedOperationException("possibleAnswers contains more then 4 items");
+      }
     }
 
     final EtutorExerciseItem exerciseItem = EtutorExerciseItem.builder()
@@ -51,9 +54,13 @@ public class PicturesMaskedWriting {
     final WebElement suggestNextLetterButton = element.findElement(By.xpath("../parent::*"))
       .findElement(By.id("suggestNextLetterButton"));
 
-    final int letterSize = Integer.parseInt(element
-                                              .findElement(By.className("writing-mask"))
-                                              .findElement(By.tagName("input")).getAttribute("size"));
+    final int letterSize = element
+      .findElements(By.className("writing-mask"))
+      .stream()
+      .map(it -> it.findElement(By.tagName("input")).getAttribute("size"))
+      .map(Integer::parseInt).mapToInt(it -> it)
+      .sum();
+
     for (int i = 0; i < letterSize; i++) {
       try {
         suggestNextLetterButton.click();
@@ -98,6 +105,29 @@ public class PicturesMaskedWriting {
       }
     }
     return possibleAnswers;
+  }
+
+  private List<String> mergePossibleAnswers(final List<String> possibleAnswers) {
+    final List<String> newPossibleAnswers = new ArrayList<>();
+    final int mergeCounter = possibleAnswers.size() / 2;
+
+    int index = 0;
+
+    for (int i = 0; i < mergeCounter; i++) {
+      final String answer1 = possibleAnswers.get(index);
+      final String answer2 = possibleAnswers.get(index + 1);
+
+      newPossibleAnswers.add(
+        "[" +
+        answer1.substring(answer1.indexOf("[") + 1, answer1.indexOf("]")) +
+        "," +
+        answer2.substring(answer2.indexOf("[") + 1, answer2.indexOf("]")) +
+        "]"
+      );
+
+      index += 2;
+    }
+    return newPossibleAnswers;
   }
 
   private String extractWritingCorrectAnswer(final WebElement element) {

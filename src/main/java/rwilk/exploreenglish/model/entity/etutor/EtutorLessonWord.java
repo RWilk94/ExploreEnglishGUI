@@ -21,6 +21,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +32,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode
 @Table(name = "etutor_lesson_word", uniqueConstraints = @UniqueConstraint(columnNames = {"exercise_id", "word_id"}))
 public final class EtutorLessonWord implements Serializable {
 
