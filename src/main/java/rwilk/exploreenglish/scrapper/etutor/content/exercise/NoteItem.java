@@ -56,6 +56,12 @@ public class NoteItem {
           if (paragraph.substring(5).indexOf("<span") > paragraph.indexOf("</span>")) {
             result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</span>") + 7), NoteItemType.PHONETIC_TRANSCRIPTIONS));
             parse(paragraph.substring(paragraph.indexOf("</span>") + 7), result);
+          } else if (paragraph.contains("</span></span></span></span>")) {
+            result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</span></span></span></span>") + 28), NoteItemType.PHONETIC_TRANSCRIPTIONS));
+            parse(paragraph.substring(paragraph.indexOf("</span></span></span></span>") + 28), result);
+          } else if (paragraph.contains("</span></span></span>")) {
+            result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</span></span></span>") + 21), NoteItemType.PHONETIC_TRANSCRIPTIONS));
+            parse(paragraph.substring(paragraph.indexOf("</span></span></span>") + 21), result);
           } else if (paragraph.contains("</span></span>")) {
             result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</span></span>") + 14), NoteItemType.PHONETIC_TRANSCRIPTIONS));
             parse(paragraph.substring(paragraph.indexOf("</span></span>") + 14), result);
@@ -165,10 +171,13 @@ public class NoteItem {
         result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</p>") + 4), NoteItemType.PARAGRAPH));
         parse(paragraph.substring(paragraph.indexOf("</p>") + 4), result);
 
-      } else if (paragraph.startsWith("<div>")) {
+      } else if (paragraph.startsWith("<div>")
+                 || paragraph.startsWith("<div style=")
+      ) {
         parse(paragraph.substring(paragraph.indexOf(">") + 1)
                 .replaceFirst("</div>", ""),
               result);
+
       } else if (paragraph.startsWith("<b")) {
         parse(paragraph.substring(paragraph.indexOf(">") + 1)
                 .replaceFirst("</b>", ""),
@@ -254,6 +263,8 @@ public class NoteItem {
         }
         case PHONETIC_TRANSCRIPTIONS, UNDERLINE, PARAGRAPH, ITALIC -> {
           noteExample.setPlainText(extractPhoneticTranscription(element.getLeft()));
+          noteExample.setBritishSound(extractBritishSound(element.getLeft()));
+          noteExample.setAmericanSound(extractAmericanSound(element.getLeft()));
 
           noteExamples.add(noteExample);
           noteExample = new EtutorNoteItem();

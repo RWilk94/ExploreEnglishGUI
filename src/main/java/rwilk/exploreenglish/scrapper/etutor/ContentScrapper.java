@@ -2,6 +2,7 @@ package rwilk.exploreenglish.scrapper.etutor;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -84,7 +85,7 @@ public class ContentScrapper implements CommandLineRunner {
                  try {
 
                    switch (Objects.requireNonNull(ExerciseType.fromString(it.getType()))) {
-                     case TIP -> throw new UnsupportedOperationException("TIP hasn't supported yet.");
+                     case TIP -> throw new NotImplementedException("TIP hasn't supported yet.");
                      case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
                      case SCREEN -> noteScrapper.webScrap(it);
                      case PICTURES_LISTENING -> {
@@ -104,13 +105,16 @@ public class ContentScrapper implements CommandLineRunner {
                      case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it);
                      case SPEAKING -> speakingScrapper.webScrap(it);
                      case GRAMMAR_LIST -> grammarListScrapper.webScrap(it);
-                     case WRITING -> throw new UnsupportedOperationException("WRITING hasn't supported yet.");
-                     case VIDEO -> throw new UnsupportedOperationException("VIDEO hasn't supported yet.");
-                     default -> throw new UnsupportedOperationException("default hasn't supported yet.");
+                     case WRITING -> throw new NotImplementedException("WRITING hasn't supported yet.");
+                     case VIDEO -> throw new NotImplementedException("VIDEO hasn't supported yet.");
+                     default -> throw new NotImplementedException("default hasn't supported yet.");
                    }
                    log.info("FINISH scrapping {}", it);
+                 } catch (NotImplementedException n) {
+
                  } catch (Exception e) {
                    log.error("An error occurred due to: ", e);
+                   throw e;
                  }
                }
       );
