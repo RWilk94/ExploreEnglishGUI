@@ -19,7 +19,6 @@ import rwilk.exploreenglish.repository.etutor.EtutorExerciseItemRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorLessonRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
-import rwilk.exploreenglish.repository.etutor.EtutorWordRepository;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
@@ -32,22 +31,19 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
   private final EtutorExerciseRepository etutorExerciseRepository;
   private final EtutorLessonRepository etutorLessonRepository;
   private final EtutorNoteRepository etutorNoteRepository;
-  private final EtutorWordRepository etutorWordRepository;
 
   public ExerciseScrapper(final EtutorCourseRepository etutorCourseRepository,
                           final EtutorDefinitionRepository etutorDefinitionRepository,
                           final EtutorExerciseItemRepository etutorExerciseItemRepository,
                           final EtutorExerciseRepository etutorExerciseRepository,
                           final EtutorLessonRepository etutorLessonRepository,
-                          final EtutorNoteRepository etutorNoteRepository,
-                          final EtutorWordRepository etutorWordRepository) {
+                          final EtutorNoteRepository etutorNoteRepository) {
     this.etutorCourseRepository = etutorCourseRepository;
     this.etutorDefinitionRepository = etutorDefinitionRepository;
     this.etutorExerciseItemRepository = etutorExerciseItemRepository;
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.etutorLessonRepository = etutorLessonRepository;
     this.etutorNoteRepository = etutorNoteRepository;
-    this.etutorWordRepository = etutorWordRepository;
   }
 
   @Override

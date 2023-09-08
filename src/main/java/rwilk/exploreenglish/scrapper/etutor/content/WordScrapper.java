@@ -18,6 +18,7 @@ import rwilk.exploreenglish.exception.MissingEtutorLanguageVarietyException;
 import rwilk.exploreenglish.model.WordTypeEnum;
 import rwilk.exploreenglish.model.entity.etutor.EtutorDefinition;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
+import rwilk.exploreenglish.model.entity.etutor.EtutorLessonWord;
 import rwilk.exploreenglish.model.entity.etutor.EtutorWord;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorWordRepository;
@@ -141,6 +142,16 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
       }
       etutorWords.add(etutorWord);
     }
+
+    etutorWords.forEach(it -> it.setEtutorLessonWords(
+      List.of(
+        EtutorLessonWord.builder()
+          .id(null)
+          .position(null)
+          .exercise(it.getExercise())
+          .word(it)
+          .build()))
+    );
 
     etutorWordRepository.saveAll(etutorWords);
     etutorExercise.setIsReady(true);
