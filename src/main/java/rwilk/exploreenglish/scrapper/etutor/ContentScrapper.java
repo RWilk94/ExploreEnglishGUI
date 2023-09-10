@@ -72,7 +72,7 @@ public class ContentScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    webScrap();
+    // webScrap();
   }
 
   private void webScrap() {

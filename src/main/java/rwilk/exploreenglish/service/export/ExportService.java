@@ -139,16 +139,17 @@ public class ExportService {
 
       for (final Course course : chunk) {
         sql.append("\n")
-           .append("(")
-           .append(course.getId()) // COLUMN_ID
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(course.getEnglishName())).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(course.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
-           .append(PARAM_SEPARATOR)
-           .append("NULL") // COLUMN IMAGE
-           .append(PARAM_SEPARATOR)
-           .append(course.getPosition()); // COLUMN POSITION
+          .append("(")
+          .append(course.getId()) // COLUMN_ID
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(course.getEnglishName()))
+          .append(QUOTE_SIGN) // COLUMN ENGLISH NAME
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(course.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
+          .append(PARAM_SEPARATOR)
+          .append("NULL") // COLUMN IMAGE
+          .append(PARAM_SEPARATOR)
+          .append(course.getPosition()); // COLUMN POSITION
         insertEndLineCharacter(sql, chunk, course);
       }
     }
@@ -166,18 +167,19 @@ public class ExportService {
 
       for (final Lesson lesson : chunk) {
         sql.append("\n")
-           .append("(")
-           .append(lesson.getId()) // COLUMN_ID
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(lesson.getEnglishName())).append(QUOTE_SIGN) // COLUMN ENGLISH NAME
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(lesson.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
-           .append(PARAM_SEPARATOR)
-           .append("NULL") // COLUMN IMAGE
-           .append(PARAM_SEPARATOR)
-           .append(lesson.getPosition()) // COLUMN POSITION
-           .append(PARAM_SEPARATOR)
-           .append(lesson.getCourse().getId()); // COLUMN COURSE ID
+          .append("(")
+          .append(lesson.getId()) // COLUMN_ID
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(lesson.getEnglishName()))
+          .append(QUOTE_SIGN) // COLUMN ENGLISH NAME
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(lesson.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
+          .append(PARAM_SEPARATOR)
+          .append("NULL") // COLUMN IMAGE
+          .append(PARAM_SEPARATOR)
+          .append(lesson.getPosition()) // COLUMN POSITION
+          .append(PARAM_SEPARATOR)
+          .append(lesson.getCourse().getId()); // COLUMN COURSE ID
         insertEndLineCharacter(sql, chunk, lesson);
       }
     }
@@ -195,14 +197,14 @@ public class ExportService {
 
       for (final LessonWord lessonWord : chunk) {
         sql.append("\n")
-           .append("(")
-           .append(lessonWord.getId()) // COLUMN ID
-           .append(PARAM_SEPARATOR)
-           .append(lessonWord.getPosition()) // COLUMN POSITION
-           .append(PARAM_SEPARATOR)
-           .append(lessonWord.getLesson().getId()) // COLUMN LESSON ID
-           .append(PARAM_SEPARATOR)
-           .append(lessonWord.getWord().getId()); // COLUMN WORD ID
+          .append("(")
+          .append(lessonWord.getId()) // COLUMN ID
+          .append(PARAM_SEPARATOR)
+          .append(lessonWord.getPosition()) // COLUMN POSITION
+          .append(PARAM_SEPARATOR)
+          .append(lessonWord.getLesson().getId()) // COLUMN LESSON ID
+          .append(PARAM_SEPARATOR)
+          .append(lessonWord.getWord().getId()); // COLUMN WORD ID
         insertEndLineCharacter(sql, chunk, lessonWord);
       }
     }
@@ -221,18 +223,19 @@ public class ExportService {
 
       for (final Word word : chunk) {
         sql.append("\n")
-           .append("(")
-           .append(word.getId()) // COLUMN_ID
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(word.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(word.getPartOfSpeech())).append(QUOTE_SIGN) // COLUMN PART OF SPEECH
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(word.getArticle())).append(QUOTE_SIGN) // COLUMN ARTICLE
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(word.getGrammarType())).append(QUOTE_SIGN) // COLUMN GRAMMAR TYPE
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(word.getLevel())).append(QUOTE_SIGN); // COLUMN LEVEL
+          .append("(")
+          .append(word.getId()) // COLUMN_ID
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(word.getPolishName())).append(QUOTE_SIGN) // COLUMN POLISH NAME
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(word.getPartOfSpeech()))
+          .append(QUOTE_SIGN) // COLUMN PART OF SPEECH
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(word.getArticle())).append(QUOTE_SIGN) // COLUMN ARTICLE
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(word.getGrammarType())).append(QUOTE_SIGN) // COLUMN GRAMMAR TYPE
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(word.getLevel())).append(QUOTE_SIGN); // COLUMN LEVEL
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, word);
       }
@@ -252,20 +255,24 @@ public class ExportService {
 
       for (final Definition definition : chunk) {
         sql.append("\n")
-           .append("(")
-           .append(definition.getId()) // COLUMN_ID
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getType())).append(QUOTE_SIGN) // COLUMN TYPE
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getEnglishName())).append(QUOTE_SIGN) // COLUMN ENGLISH_NAME
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getBritishSound())).append(QUOTE_SIGN) // COLUMN BRITISH_SOUND
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getAmericanSound())).append(QUOTE_SIGN) // COLUMN AMERICAN_SOUND
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(definition.getAdditionalInformation())).append(QUOTE_SIGN) // COLUMN ADDITIONAL_INFORMATION
-           .append(PARAM_SEPARATOR)
-           .append(definition.getWord().getId()); // COLUMN WORD_ID
+          .append("(")
+          .append(definition.getId()) // COLUMN_ID
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(definition.getType())).append(QUOTE_SIGN) // COLUMN TYPE
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(definition.getEnglishName()))
+          .append(QUOTE_SIGN) // COLUMN ENGLISH_NAME
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(definition.getBritishSound()))
+          .append(QUOTE_SIGN) // COLUMN BRITISH_SOUND
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(definition.getAmericanSound()))
+          .append(QUOTE_SIGN) // COLUMN AMERICAN_SOUND
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(definition.getAdditionalInformation()))
+          .append(QUOTE_SIGN) // COLUMN ADDITIONAL_INFORMATION
+          .append(PARAM_SEPARATOR)
+          .append(definition.getWord().getId()); // COLUMN WORD_ID
         insertEndLineCharacter(sql, chunk, definition);
       }
     }
@@ -332,16 +339,17 @@ public class ExportService {
 
       for (final Note note : chunk) {
         sql.append("\n")
-           .append("(")
-           .append(note.getId()) // COLUMN_ID
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceNewLine(replaceApostrophe(note.getNote()))).append(QUOTE_SIGN) // COLUMN NOTE
-           .append(PARAM_SEPARATOR)
-           .append("0") // COLUMNT VIEWED
-           .append(PARAM_SEPARATOR)
-           .append(note.getPosition()) // COLUMN POSITION
-           .append(PARAM_SEPARATOR)
-           .append(note.getLesson().getId()); // COLUMN LESSON ID
+          .append("(")
+          .append(note.getId()) // COLUMN_ID
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceNewLine(replaceApostrophe(note.getNote())))
+          .append(QUOTE_SIGN) // COLUMN NOTE
+          .append(PARAM_SEPARATOR)
+          .append("0") // COLUMNT VIEWED
+          .append(PARAM_SEPARATOR)
+          .append(note.getPosition()) // COLUMN POSITION
+          .append(PARAM_SEPARATOR)
+          .append(note.getLesson().getId()); // COLUMN LESSON ID
         insertEndLineCharacter(sql, chunk, note);
       }
     }
@@ -360,16 +368,16 @@ public class ExportService {
 
       for (final Exercise exercise : chunk) {
         sql.append("\n")
-           .append("(")
-           .append(exercise.getId()) // COLUMN_ID
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exercise.getName())).append(QUOTE_SIGN) // COLUMN NAME
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exercise.getType())).append(QUOTE_SIGN) // COLUMN TYPE
-           .append(PARAM_SEPARATOR)
-           .append(exercise.getPosition()) // COLUMN POSITION
-           .append(PARAM_SEPARATOR)
-           .append(exercise.getLesson().getId()); // COLUMN LESSON ID
+          .append("(")
+          .append(exercise.getId()) // COLUMN_ID
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exercise.getName())).append(QUOTE_SIGN) // COLUMN NAME
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exercise.getType())).append(QUOTE_SIGN) // COLUMN TYPE
+          .append(PARAM_SEPARATOR)
+          .append(exercise.getPosition()) // COLUMN POSITION
+          .append(PARAM_SEPARATOR)
+          .append(exercise.getLesson().getId()); // COLUMN LESSON ID
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, exercise);
       }
@@ -390,32 +398,42 @@ public class ExportService {
 
       for (final ExerciseItem exerciseItem : chunk) {
         sql.append("\n")
-           .append("(")
-           .append(exerciseItem.getId()) // COLUMN_ID
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getQuestion())).append(QUOTE_SIGN) // COLUMN QUESTION
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getCorrectAnswer())).append(QUOTE_SIGN) // COLUMN CORRECT ANSWER
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getFinalAnswer())).append(QUOTE_SIGN) // COLUMN FINAL ANSWER
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getFirstPossibleAnswer())).append(QUOTE_SIGN) // COLUMN FIRST POSSIBLE ANSWER
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getSecondPossibleAnswer())).append(QUOTE_SIGN) // COLUMN SECOND POSSIBLE ANSWER
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getThirdPossibleAnswer())).append(QUOTE_SIGN) // COLUMN THIRD POSSIBLE ANSWER
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getForthPossibleAnswer())).append(QUOTE_SIGN) // COLUMN FORTH POSSIBLE ANSWER
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDialogueEnglish())).append(QUOTE_SIGN) // COLUMN DIALOGUE ENGLISH
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDialoguePolish())).append(QUOTE_SIGN) // COLUMN DIALOGUE POLISH
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDescription())).append(QUOTE_SIGN) // COLUMN DESCRIPTION
-           .append(PARAM_SEPARATOR)
-           .append(exerciseItem.getPosition()) // COLUMN POSITION
-           .append(PARAM_SEPARATOR)
-           .append(exerciseItem.getExercise().getId()); // COLUMN EXERCISE ID
+          .append("(")
+          .append(exerciseItem.getId()) // COLUMN_ID
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getQuestion()))
+          .append(QUOTE_SIGN) // COLUMN QUESTION
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getCorrectAnswer()))
+          .append(QUOTE_SIGN) // COLUMN CORRECT ANSWER
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getFinalAnswer()))
+          .append(QUOTE_SIGN) // COLUMN FINAL ANSWER
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getFirstPossibleAnswer()))
+          .append(QUOTE_SIGN) // COLUMN FIRST POSSIBLE ANSWER
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getSecondPossibleAnswer()))
+          .append(QUOTE_SIGN) // COLUMN SECOND POSSIBLE ANSWER
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getThirdPossibleAnswer()))
+          .append(QUOTE_SIGN) // COLUMN THIRD POSSIBLE ANSWER
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getForthPossibleAnswer()))
+          .append(QUOTE_SIGN) // COLUMN FORTH POSSIBLE ANSWER
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDialogueEnglish()))
+          .append(QUOTE_SIGN) // COLUMN DIALOGUE ENGLISH
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDialoguePolish()))
+          .append(QUOTE_SIGN) // COLUMN DIALOGUE POLISH
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(replaceApostrophe(exerciseItem.getDescription()))
+          .append(QUOTE_SIGN) // COLUMN DESCRIPTION
+          .append(PARAM_SEPARATOR)
+          .append(exerciseItem.getPosition()) // COLUMN POSITION
+          .append(PARAM_SEPARATOR)
+          .append(exerciseItem.getExercise().getId()); // COLUMN EXERCISE ID
         insertEndLineCharacter(sql, chunk, exerciseItem);
       }
     }
@@ -453,32 +471,43 @@ public class ExportService {
         }
 
         sql.append("\n")
-           .append("(")
-           .append(term.getId()) // COLUMN_ID
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(WordUtils.replaceSpecialText(englishNames).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN ENGLISH NAMES
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(term.getPolishName().replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN POLISH NAME
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPartOfSpeech()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PART OF SPEECH
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getComparative()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN COMPARATIVE
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSuperlative()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SUPERLATIVE
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPastTense()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST TENSE
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPastParticiple()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PAST PARTICIPLE
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPlural()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN PLURAL
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSynonym()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SYNONYM
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getCategory()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN CATEGORY
-           .append(PARAM_SEPARATOR)
-           .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSource()).replaceAll("'", "''")).append(QUOTE_SIGN) // COLUMN SOURCE
-           .append(PARAM_SEPARATOR)
-           .append(term.getIsIgnored() ? 1 : 0); // COLUMN IS_IGNORED
+          .append("(")
+          .append(term.getId()) // COLUMN_ID
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(WordUtils.replaceSpecialText(englishNames).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN ENGLISH NAMES
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(term.getPolishName().replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN POLISH NAME
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPartOfSpeech()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN PART OF SPEECH
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getComparative()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN COMPARATIVE
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSuperlative()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN SUPERLATIVE
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPastTense()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN PAST TENSE
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPastParticiple()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN PAST PARTICIPLE
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getPlural()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN PLURAL
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSynonym()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN SYNONYM
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getCategory()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN CATEGORY
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN).append(StringUtils.trimToEmpty(term.getSource()).replaceAll("'", "''"))
+          .append(QUOTE_SIGN) // COLUMN SOURCE
+          .append(PARAM_SEPARATOR)
+          .append(term.getIsIgnored() ? 1 : 0); // COLUMN IS_IGNORED
         insertRepeatablePart(sql);
         insertEndLineCharacter(sql, chunk, term);
       }
@@ -488,19 +517,19 @@ public class ExportService {
 
   private void insertRepeatablePart(StringBuilder sql) {
     sql.append(PARAM_SEPARATOR)
-       .append(-1) // COLUMN PROGRESS
-       .append(PARAM_SEPARATOR)
-       .append(0) // COLUMN SKIP
-       .append(PARAM_SEPARATOR)
-       .append(0) // COLUMN DIFFICULT
-       .append(PARAM_SEPARATOR)
-       .append(0) // COLUMN CORRECT
-       .append(PARAM_SEPARATOR)
-       .append(0) // COLUMN WRONG
-       .append(PARAM_SEPARATOR)
-       .append(0) // COLUMN NEXT REPEAT
-       .append(PARAM_SEPARATOR)
-       .append(0);// COLUMN SERIES
+      .append(-1) // COLUMN PROGRESS
+      .append(PARAM_SEPARATOR)
+      .append(0) // COLUMN SKIP
+      .append(PARAM_SEPARATOR)
+      .append(0) // COLUMN DIFFICULT
+      .append(PARAM_SEPARATOR)
+      .append(0) // COLUMN CORRECT
+      .append(PARAM_SEPARATOR)
+      .append(0) // COLUMN WRONG
+      .append(PARAM_SEPARATOR)
+      .append(0) // COLUMN NEXT REPEAT
+      .append(PARAM_SEPARATOR)
+      .append(0);// COLUMN SERIES
   }
 
   private void insertEndLineCharacter(StringBuilder sql, Object chunk, Object course) {

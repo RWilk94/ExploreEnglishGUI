@@ -1,0 +1,41 @@
+package rwilk.exploreenglish.export.generator;
+
+import java.io.PrintWriter;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public abstract class SqlGeneratorAbstract<T> {
+
+  private static final Logger logger = LoggerFactory.getLogger(SqlGeneratorAbstract.class);
+  protected static final String LOG_PREFIX = "START GENERATING {}";
+  protected static final Integer CHUNK_SIZE = 1;
+  protected static final String PARAM_SEPARATOR = ", ";
+  protected static final String QUOTE_SIGN = "'";
+
+  abstract void generateSql(final List<T> source);
+
+  protected String replaceApostrophe(final String text) {
+    return StringUtils.trimToEmpty(StringUtils.defaultString(text)).replace("'", "''");
+  }
+
+  protected void insertEndLineCharacter(final StringBuilder sql, final Object chunk, final Object course) {
+    if (((List<?>) chunk).indexOf(course) + 1 == ((List<?>) chunk).size()) {
+      sql.append(");\n");
+    } else {
+      sql.append("),");
+    }
+  }
+
+  protected void exportFile(final StringBuilder sql, final String fileName, final String tag) {
+    try (PrintWriter out = new PrintWriter("scripts/" + fileName)) {
+      out.println(sql.toString());
+      logger.info("FINISH GENERATING {}", tag);
+    } catch (Exception e) {
+      logger.error("ERROR WHILE GENERATING {}: ", tag, e);
+    }
+  }
+
+}
