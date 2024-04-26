@@ -53,6 +53,8 @@ public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
     driver.get(etutorExercise.getHref());
     // and wait for display list of lessons
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("exercise")));
+    // close cookie box
+    super.closeCookieBox(driver);
 
     WebElement nativeLessonContent = null;
     if (!driver.findElements(By.className("nativeLessonContent")).isEmpty()) {

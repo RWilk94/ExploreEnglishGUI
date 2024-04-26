@@ -59,6 +59,8 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
     driver.get(etutorExercise.getHref());
     // and wait for loading
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("exercise")));
+    // close cookie box
+    super.closeCookieBox(driver);
 
     final List<EtutorDialog> etutorDialogs = new ArrayList<>();
     final List<EtutorExerciseItem> exerciseItems = new ArrayList<>();

@@ -48,6 +48,8 @@ public class MatchingPairsScrapper extends BaseScrapper implements CommandLineRu
     driver.get(etutorExercise.getHref());
     // and wait for display list of lessons
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("matching-pairs")));
+    // close cookie box
+    super.closeCookieBox(driver);
 
     final WebElement content = driver.findElement(By.className("matching-pairs"));
 

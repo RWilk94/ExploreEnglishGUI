@@ -50,6 +50,8 @@ public class ComicBookScrapper extends BaseScrapper implements CommandLineRunner
     driver.get(etutorExercise.getHref());
     // and wait for loading
     wait.until(ExpectedConditions.presenceOfElementLocated(By.id("comicBookImage")));
+    // close cookie box
+    super.closeCookieBox(driver);
 
     final List<EtutorDialog> etutorDialogs = new ArrayList<>();
 

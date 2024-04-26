@@ -71,6 +71,10 @@ public class Choice {
   }
 
   private String extractQuestion(final WebElement element) {
+    if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
+      return "";
+    }
+
     final WebElement questionDiv = element.findElement(By.className("examChoiceQuestion"));
 
     final String questionText = questionDiv.getText();
@@ -89,6 +93,10 @@ public class Choice {
   }
 
   private String extractVoiceQuestion(final WebElement element, final String language) {
+    if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
+      return "";
+    }
+
     final List<WebElement> audioIconButtons = element.findElement(By.className("examChoiceQuestion"))
       .findElements(By.className("audioIconButton"));
 
@@ -104,6 +112,10 @@ public class Choice {
   }
 
   private String extractFinalAnswer(final WebElement element) {
+    if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
+      return "";
+    }
+
     final String question = element.findElement(By.className("examChoiceQuestion")).getText();
 
     if (question.equals(extractQuestion(element))) {
@@ -127,6 +139,10 @@ public class Choice {
   }
 
   private String extractVoiceAnswer(final WebElement element, final String language) {
+    if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
+      return "";
+    }
+
     final List<WebElement> audioIconButtons = element.findElement(By.className("examChoiceQuestion"))
       .findElements(By.className("icon-sound"));
 

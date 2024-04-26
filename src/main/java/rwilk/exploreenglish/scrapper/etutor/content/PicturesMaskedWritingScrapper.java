@@ -52,6 +52,8 @@ public class PicturesMaskedWritingScrapper extends BaseScrapper implements Comma
     // and wait for display list of lessons
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("image-container")));
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("exercise")));
+    // close cookie box
+    super.closeCookieBox(driver);
 
     final WebElement exercise = driver.findElement(By.className("exercise"));
     final String instruction = extractExerciseInstruction(exercise);

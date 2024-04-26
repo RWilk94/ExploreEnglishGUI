@@ -53,6 +53,8 @@ public class PictureChoiceScrapper extends BaseScrapper implements CommandLineRu
     // and wait for display list of lessons
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("image-container")));
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("picturetextanswer")));
+    // close cookie box
+    super.closeCookieBox(driver);
 
     final List<EtutorExerciseItem> exerciseItems = new ArrayList<>();
     final String currentUrl = driver.getCurrentUrl();
