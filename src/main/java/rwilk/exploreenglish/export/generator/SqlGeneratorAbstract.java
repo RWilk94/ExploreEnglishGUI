@@ -15,17 +15,17 @@ public abstract class SqlGeneratorAbstract<T> {
   protected static final String PARAM_SEPARATOR = ", ";
   protected static final String QUOTE_SIGN = "'";
 
-  abstract void generateSql(final List<T> source);
+  public abstract void generateSql(final List<T> source);
 
   protected String replaceApostrophe(final String text) {
     return StringUtils.trimToEmpty(StringUtils.defaultString(text)).replace("'", "''");
   }
 
-  protected void insertEndLineCharacter(final StringBuilder sql, final Object chunk, final Object course) {
+  protected String getEndLineCharacter(final Object chunk, final Object course) {
     if (((List<?>) chunk).indexOf(course) + 1 == ((List<?>) chunk).size()) {
-      sql.append(");\n");
+      return ");\n";
     } else {
-      sql.append("),");
+      return "),";
     }
   }
 

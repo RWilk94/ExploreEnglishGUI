@@ -15,7 +15,6 @@ public class EtutorCourseSqlGenerator extends SqlGeneratorAbstract<EtutorCourse>
   private static final Logger logger = LoggerFactory.getLogger(EtutorCourseSqlGenerator.class);
   private static final String TAG = "COURSES";
 
-
   @Override
   public void generateSql(final List<EtutorCourse> source) {
     logger.info(LOG_PREFIX, TAG);
@@ -31,22 +30,22 @@ public class EtutorCourseSqlGenerator extends SqlGeneratorAbstract<EtutorCourse>
           .append("(")
           .append(course.getId()) // COLUMN_ID
           .append(PARAM_SEPARATOR)
-          .append(QUOTE_SIGN) // COLUMN NAME
-          .append(replaceApostrophe(course.getName()))
+          .append(QUOTE_SIGN)
+          .append(replaceApostrophe(course.getName())) // COLUMN NAME
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)
-          .append(QUOTE_SIGN) // COLUMN DESCRIPTION
-          .append(replaceApostrophe(course.getDescription()))
+          .append(QUOTE_SIGN)
+          .append(replaceApostrophe(course.getDescription())) // COLUMN DESCRIPTION
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)
-          .append(QUOTE_SIGN) // COLUMN IMAGE
-          .append(replaceApostrophe(course.getImage()))
+          .append(QUOTE_SIGN)
+          .append(replaceApostrophe(course.getImage())) // COLUMN IMAGE
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)
-          .append(QUOTE_SIGN) // COLUMN LANGUAGE
-          .append(replaceApostrophe(course.getLanguage()))
-          .append(QUOTE_SIGN);
-        insertEndLineCharacter(sql, chunk, course);
+          .append(QUOTE_SIGN)
+          .append(replaceApostrophe(course.getLanguage())) // COLUMN LANGUAGE
+          .append(QUOTE_SIGN)
+          .append(getEndLineCharacter(chunk, course));
       }
     }
     exportFile(sql, TAG.toLowerCase() + ".txt", TAG);
