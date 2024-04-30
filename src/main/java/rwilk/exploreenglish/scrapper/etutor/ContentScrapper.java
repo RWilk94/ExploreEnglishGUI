@@ -73,13 +73,14 @@ public class ContentScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    webScrap();
+    // webScrap();
   }
 
   private void webScrap() {
     etutorExerciseRepository.findAllByIsReady(false)
       .stream()
-      // .filter(it -> it.getLesson().getCourse().getId() == 3)
+      // .skip(150)
+//      .filter(it -> it.getLesson().getCourse().getId() == 3)
       .forEach(it -> {
                  log.info("START scrapping {}", it);
 
@@ -115,7 +116,7 @@ public class ContentScrapper implements CommandLineRunner {
                    log.error(ExceptionUtils.getMessage(n));
                  } catch (Exception e) {
                    log.error("An error occurred due to: ", e);
-                   throw e;
+                   // throw e;
                  }
                }
       );

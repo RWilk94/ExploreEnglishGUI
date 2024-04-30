@@ -36,6 +36,8 @@ public class GrammarNoteScrapper extends BaseScrapper implements CommandLineRunn
 
   @Override
   public void run(final String... args) throws Exception {
+//    webScrap(etutorExerciseRepository.findById(859L).get());
+
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.GRAMMAR_NOTE.toString(), false)
 //      .subList(0, 20)
 //      .forEach(this::webScrap);
@@ -55,15 +57,19 @@ public class GrammarNoteScrapper extends BaseScrapper implements CommandLineRunn
     // close cookie box
     super.closeCookieBox(driver);
 
-    final WebElement nativeLessonContent = driver.findElement(By.className("nativeLessonContent"));
+    final List<WebElement> nativeLessonContents = driver.findElements(By.className("nativeLessonContent"));
 
     final EtutorNote etutorNote = EtutorNote.builder()
-      .nativeTitle(nativeLessonContent.findElement(By.tagName("h1")).getText())
-      .nativeContent(nativeLessonContent.findElement(By.className("contentBox")).getText())
-      .nativeHtml(nativeLessonContent.getAttribute("innerHTML"))
       .noteItems(new ArrayList<>())
       .exercise(etutorExercise)
       .build();
+
+    if (!nativeLessonContents.isEmpty()) {
+      final WebElement nativeLessonContent = nativeLessonContents.get(0);
+      etutorNote.setNativeTitle(nativeLessonContent.findElement(By.tagName("h1")).getText());
+      etutorNote.setNativeContent(nativeLessonContent.findElement(By.className("contentBox")).getText());
+      etutorNote.setNativeHtml(nativeLessonContent.getAttribute("innerHTML"));
+    }
     if (!driver.findElements(By.className("foreignTranslationButton")).isEmpty()) {
       final WebElement foreignLessonContent = driver.findElement(By.className("foreignLessonContent"));
       driver.findElement(By.className("foreignTranslationButton")).click();
@@ -74,7 +80,7 @@ public class GrammarNoteScrapper extends BaseScrapper implements CommandLineRunn
       driver.findElement(By.className("nativeTranslationButton")).click();
     }
 
-    final List<WebElement> noteRows = nativeLessonContent.findElement(By.className("contentBox"))
+    final List<WebElement> noteRows = driver.findElement(By.className("contentBox"))
       .findElements(By.xpath(XPATH_CHILDREN));
 
     for (final WebElement row : noteRows) {
@@ -101,7 +107,7 @@ public class GrammarNoteScrapper extends BaseScrapper implements CommandLineRunn
             etutorNote.getNoteItems().addAll(etutorNoteItems);
           }
         }
-        case "ul" -> {
+        case "ul", "ol" -> {
           if (!row.findElements(By.tagName("li")).isEmpty()) {
             final WebElement li = row.findElement(By.tagName("li"));
             final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, li.getAttribute("innerHTML"));
@@ -114,6 +120,9 @@ public class GrammarNoteScrapper extends BaseScrapper implements CommandLineRunn
             final List<EtutorNoteItem> etutorNoteItems = NoteItem.webScrap(etutorNote, paragraph.getAttribute("innerHTML"));
             etutorNote.getNoteItems().addAll(etutorNoteItems);
           }
+        }
+        case "style", "hr" -> {
+
         }
         default -> throw new UnsupportedOperationException(row.getTagName());
       }

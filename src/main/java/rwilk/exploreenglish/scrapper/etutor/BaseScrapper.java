@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BaseScrapper {
 
-  protected static final String AUTO_LOGIN_TOKEN = "NJ02KFwUtJuO5KxSkna3OBnH7vrKz4dihK7lT9xu";
+  protected static final String AUTO_LOGIN_TOKEN = "zNfLpFO1g3JTwrG2N4gftbPiFWLqNNDMQPmMbeN9";
   protected static final String BASE_URL = "https://www.etutor.pl";
   protected static final String XPATH_CHILDREN = "./child::*";
 
@@ -23,8 +23,9 @@ public abstract class BaseScrapper {
 
   protected ChromeDriver getDriver() {
     final ChromeOptions options = new ChromeOptions();
-    // options.addArguments("headless");
+    options.addArguments("headless");
     options.addArguments("--mute-audio");
+
     return new ChromeDriver(options);
   }
 

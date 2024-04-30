@@ -39,7 +39,7 @@ public class NoteItem {
           result.add(Pair.of(paragraph.substring(0, paragraph.indexOf("</span>") + 7), NoteItemType.EXAMPLE));
           parse(paragraph.substring(paragraph.indexOf("</span>") + 7), result);
 
-        } else if (paragraph.startsWith("<span class=\"recordingsAndTranscriptions\">")) {
+        } else if (paragraph.startsWith("<span class=\"recordingsAndTranscriptions\">") || paragraph.startsWith("<span class=\"en-US hasRecording\"")) {
 
           if (paragraph.contains(" / ") && paragraph.contains("= ") && paragraph.indexOf(" / ") < paragraph.indexOf("= ")) {
             result.add(Pair.of(paragraph.substring(0, paragraph.indexOf(" / ")), NoteItemType.SOUND));
@@ -107,6 +107,13 @@ public class NoteItem {
 
         } else if (paragraph.startsWith("<span>")) {
           parse(paragraph.substring(6).replaceFirst("</span>", ""), result);
+
+        } else if (paragraph.startsWith("<span style=\"color: rgb(255, 115, 0);")
+                   || paragraph.startsWith("<span style=\"text-align: justify;")
+                   || paragraph.startsWith("<span id=\"cke")
+                   || paragraph.startsWith("<span style=\"color: rgb")
+                   || paragraph.startsWith("<span style=\"line-height")) {
+          parse(paragraph.substring(paragraph.indexOf(">") + 1).replaceFirst("</span>", ""), result);
 
         } else {
           throw new UnsupportedOperationException(paragraph);
@@ -220,6 +227,17 @@ public class NoteItem {
       } else if (paragraph.startsWith("<u ")) {
         parse(paragraph.substring(paragraph.indexOf(">") + 1)
                 .replaceFirst("</u>", ""), result);
+
+      } else if (paragraph.startsWith("<strike")) {
+        parse(paragraph.substring(paragraph.indexOf(">") + 1)
+                .replaceFirst("</strike>", ""), result);
+
+      } else if (paragraph.startsWith("</strong>")) {
+        parse(paragraph.substring(8), result);
+
+      } else if (paragraph.startsWith("<strong style=\"font-family")) {
+        parse(paragraph.substring(paragraph.indexOf(">") + 1)
+                .replaceFirst("</strong>", ""), result);
 
       } else {
         if (paragraph.indexOf("<") == 0) {
