@@ -13,7 +13,7 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorNoteItem;
 public class EtutorNoteItemSqlGenerator extends SqlGeneratorAbstract<EtutorNoteItem> {
 
   private static final Logger logger = LoggerFactory.getLogger(EtutorCourseSqlGenerator.class);
-  private static final String TAG = "NOTES";
+  private static final String TAG = "NOTE_ITEMS";
 
   @Override
   public void generateSql(final List<EtutorNoteItem> source) {

@@ -1,31 +1,16 @@
 package rwilk.exploreenglish.scrapper.etutor;
 
-import java.util.Objects;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import lombok.extern.slf4j.Slf4j;
-
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
-import rwilk.exploreenglish.scrapper.etutor.content.ComicBookScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.DialogScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.ExerciseItemScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.GrammarListScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.GrammarNoteScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.MatchingPairsScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.NoteScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.PictureChoiceScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.PictureListeningScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.PicturesMaskedWritingScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.ReadingScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.SpeakingScrapper;
-import rwilk.exploreenglish.scrapper.etutor.content.WordScrapper;
+import rwilk.exploreenglish.scrapper.etutor.content.*;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
+
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -33,25 +18,25 @@ public class ContentScrapper implements CommandLineRunner {
 
   private final EtutorExerciseRepository etutorExerciseRepository;
   private final WordScrapper wordScrapper;
-  private final NoteScrapper noteScrapper;
+  private final Note2Scrapper noteScrapper;
   private final PictureListeningScrapper pictureListeningScrapper;
   private final PictureChoiceScrapper pictureChoiceScrapper;
   private final ExerciseItemScrapper exerciseItemScrapper;
   private final MatchingPairsScrapper matchingPairsScrapper;
   private final DialogScrapper dialogScrapper;
   private final ComicBookScrapper comicBookScrapper;
-  private final GrammarNoteScrapper grammarNoteScrapper;
+  private final GrammarNote2Scrapper grammarNoteScrapper;
   private final ReadingScrapper readingScrapper;
   private final PicturesMaskedWritingScrapper picturesMaskedWritingScrapper;
   private final SpeakingScrapper speakingScrapper;
   private final GrammarListScrapper grammarListScrapper;
 
   public ContentScrapper(final EtutorExerciseRepository etutorExerciseRepository, final WordScrapper wordScrapper,
-                         final NoteScrapper noteScrapper, final PictureListeningScrapper pictureListeningScrapper,
+                         final Note2Scrapper noteScrapper, final PictureListeningScrapper pictureListeningScrapper,
                          final PictureChoiceScrapper pictureChoiceScrapper,
                          final ExerciseItemScrapper exerciseItemScrapper,
                          final MatchingPairsScrapper matchingPairsScrapper, final DialogScrapper dialogScrapper,
-                         final ComicBookScrapper comicBookScrapper, final GrammarNoteScrapper grammarNoteScrapper,
+                         final ComicBookScrapper comicBookScrapper, final GrammarNote2Scrapper grammarNoteScrapper,
                          final ReadingScrapper readingScrapper,
                          final PicturesMaskedWritingScrapper picturesMaskedWritingScrapper,
                          final SpeakingScrapper speakingScrapper, final GrammarListScrapper grammarListScrapper) {

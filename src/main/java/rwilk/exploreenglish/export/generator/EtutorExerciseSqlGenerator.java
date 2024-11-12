@@ -23,7 +23,7 @@ public class EtutorExerciseSqlGenerator extends SqlGeneratorAbstract<EtutorExerc
     final StringBuilder sql = new StringBuilder();
 
     for (final List<EtutorExercise> chunk : chunks) {
-      sql.append("INSERT INTO 'courses' ('id', 'name', 'type', 'image', 'lesson_id') VALUES ");
+      sql.append("INSERT INTO 'exercises' ('id', 'name', 'type', 'image', 'lesson_id') VALUES ");
 
       for (final EtutorExercise exercise : chunk) {
         sql.append("\n")

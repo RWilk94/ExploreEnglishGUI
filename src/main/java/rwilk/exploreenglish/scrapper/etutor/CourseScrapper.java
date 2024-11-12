@@ -53,11 +53,13 @@ public class CourseScrapper extends BaseScrapper implements CommandLineRunner {
   private static final List<String> italianCourses = List.of(
     "https://www.etutor.pl/lessons/it/it-a1",
     "https://www.etutor.pl/lessons/it/it-a2",
-    "https://www.etutor.pl/lessons/it/it-b1");
+    "https://www.etutor.pl/lessons/it/it-b1",
+    "https://www.etutor.pl/lessons/it/it-b2");
   private static final List<String> frenchCourses = List.of(
     "https://www.etutor.pl/lessons/fr/fr-a1",
     "https://www.etutor.pl/lessons/fr/fr-a2",
-    "https://www.etutor.pl/lessons/fr/fr-b1");
+    "https://www.etutor.pl/lessons/fr/fr-b1",
+    "https://www.etutor.pl/lessons/fr/fr-b2");
 
   private final EtutorCourseRepository etutorCourseRepository;
 

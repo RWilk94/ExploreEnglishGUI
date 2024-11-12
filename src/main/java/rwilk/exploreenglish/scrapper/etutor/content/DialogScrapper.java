@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import rwilk.exploreenglish.model.entity.etutor.EtutorDialog;
+import rwilk.exploreenglish.model.entity.etutor.EtutorDialogItem;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExerciseItem;
 import rwilk.exploreenglish.repository.etutor.EtutorDialogRepository;
@@ -62,13 +62,13 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
     // close cookie box
     super.closeCookieBox(driver);
 
-    final List<EtutorDialog> etutorDialogs = new ArrayList<>();
+    final List<EtutorDialogItem> etutorDialogItems = new ArrayList<>();
     final List<EtutorExerciseItem> exerciseItems = new ArrayList<>();
     final List<WebElement> dialogRowElements = driver.findElements(By.className("dialogueRow"));
 
     for (final WebElement element : dialogRowElements) {
-      etutorDialogs.add(
-        EtutorDialog.builder()
+      etutorDialogItems.add(
+        EtutorDialogItem.builder()
           .id(null)
           .dialogEnglish(extractDialogEnglish(element))
           .dialogPolish(extractDialogPolish(element))
@@ -111,7 +111,7 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
       }
     }
 
-    etutorDialogRepository.saveAll(etutorDialogs);
+    etutorDialogRepository.saveAll(etutorDialogItems);
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);

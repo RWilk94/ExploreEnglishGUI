@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BaseScrapper {
 
-  protected static final String AUTO_LOGIN_TOKEN = "zNfLpFO1g3JTwrG2N4gftbPiFWLqNNDMQPmMbeN9";
+  protected static final String AUTO_LOGIN_TOKEN = "qubBSbpjOngfV5F7u2aKTM8LSgPKeLGHJLQsuEV2";
   protected static final String BASE_URL = "https://www.etutor.pl";
   protected static final String XPATH_CHILDREN = "./child::*";
 
@@ -23,7 +23,7 @@ public abstract class BaseScrapper {
 
   protected ChromeDriver getDriver() {
     final ChromeOptions options = new ChromeOptions();
-    options.addArguments("headless");
+//    options.addArguments("headless");
     options.addArguments("--mute-audio");
 
     return new ChromeDriver(options);
@@ -47,8 +47,8 @@ public abstract class BaseScrapper {
   }
 
   protected void closeCookieBox(final WebDriver driver) {
-    if (driver.findElement(By.id("cookie-box")) != null) {
-      driver.findElement(By.id("RequiredOnlyCookiePolicyConfirmation")).click();
+    if (!driver.findElements(By.id("CybotCookiebotDialog")).isEmpty()) {
+      driver.findElement(By.id("CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll")).click();
     }
   }
 

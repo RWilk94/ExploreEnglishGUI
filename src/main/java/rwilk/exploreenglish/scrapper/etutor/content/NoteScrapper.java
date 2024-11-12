@@ -37,9 +37,9 @@ public class NoteScrapper extends BaseScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.SCREEN.toString(), false)
-//      .subList(0, 10)
-      .forEach(this::webScrap);
+//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.SCREEN.toString(), false)
+////      .subList(0, 10)
+//      .forEach(this::webScrap);
   }
 
   public void webScrap(final EtutorExercise etutorExercise) {

@@ -31,7 +31,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "etutor_dialog_items")
-public class EtutorDialog implements Serializable {
+public class EtutorDialogItem implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +52,7 @@ public class EtutorDialog implements Serializable {
   @Type(type = "text")
   @Column(name = "html")
   private String html;
-  @Column(name = "comicImage")
+  @Column(name = "comic_image")
   private String comicImage;
   @Column(name = "sound_seek_second")
   private BigDecimal soundSeekSecond;

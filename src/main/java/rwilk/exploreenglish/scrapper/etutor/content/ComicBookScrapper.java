@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import rwilk.exploreenglish.model.entity.etutor.EtutorDialog;
+import rwilk.exploreenglish.model.entity.etutor.EtutorDialogItem;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.repository.etutor.EtutorDialogRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
@@ -53,7 +53,7 @@ public class ComicBookScrapper extends BaseScrapper implements CommandLineRunner
     // close cookie box
     super.closeCookieBox(driver);
 
-    final List<EtutorDialog> etutorDialogs = new ArrayList<>();
+    final List<EtutorDialogItem> etutorDialogItems = new ArrayList<>();
 
     while (true) {
 
@@ -65,8 +65,8 @@ public class ComicBookScrapper extends BaseScrapper implements CommandLineRunner
       }
 
       final WebElement element = driver.findElement(By.id("comicBookContainer"));
-      etutorDialogs.add(
-        EtutorDialog.builder()
+      etutorDialogItems.add(
+        EtutorDialogItem.builder()
           .id(null)
           .comicImage(extractComicImage(element))
           .dialogPolish(extractTranslation(element))
@@ -86,7 +86,7 @@ public class ComicBookScrapper extends BaseScrapper implements CommandLineRunner
       }
     }
 
-    etutorDialogRepository.saveAll(etutorDialogs);
+    etutorDialogRepository.saveAll(etutorDialogItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);
     driver.quit();
