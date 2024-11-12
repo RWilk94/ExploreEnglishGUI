@@ -48,10 +48,10 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
 
   @Override
   public void run(final String... args) throws Exception {
-//    etutorLessonRepository.findAllByIsReady(false)
-//      .stream()
-//      .filter(it -> it.getId() <= 1450L)
-//      .forEach(this::webScrapContent);
+/*    etutorLessonRepository.findAllByIsReady(false)
+            .stream()
+            .limit(100)
+            .forEach(this::webScrapContent);*/
   }
 
   public void webScrapContent(final EtutorLesson etutorLesson) {
@@ -62,6 +62,8 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
     driver.get(etutorLesson.getHref());
     // and wait for display list of lessons
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("singleLessonDetails")));
+    // close cookie box
+    super.closeCookieBox(driver);
     // extract all exercises
     final List<WebElement> exerciseElements = driver.findElement(By.className("lessonPagesList"))
       .findElements(By.tagName("li"));

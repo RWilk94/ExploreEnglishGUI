@@ -2,6 +2,7 @@ package rwilk.exploreenglish.scrapper.etutor.type;
 
 import lombok.Getter;
 
+@Getter
 public enum ExerciseType {
 
   TIP("tip"),
@@ -20,9 +21,12 @@ public enum ExerciseType {
   GRAMMAR_LIST("grammar_list"), // DONE
   WRITING("writing"),
   VIDEO("video"),
-  WORDS_LIST("words_list"); // can be scrapped by WordScrapper
+  WORDS_LIST("words_list"), // can be scrapped by WordScrapper
+  MATCHING_PAIRS_GRAMMAR("matching_pairs_grammar1"),
+  SCREEN_CULTURAL("screen-cultural"),
+  SCREEN_CULINARY("screen-culinary"),
+  SCREEN_MUSIC("screen-music");
 
-  @Getter
   private final String value;
 
   ExerciseType(final String value) {
