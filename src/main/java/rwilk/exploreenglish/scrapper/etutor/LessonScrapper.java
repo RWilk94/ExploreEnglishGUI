@@ -32,11 +32,7 @@ public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
   @Override
   public void run(final String... args) throws Exception {
     /* call the below method to web scrap etutor courses */
-//    etutorCourseRepository.findAll()
-//      .stream()
-//      .filter(course -> course.getId() >= 14L)
-//      .toList()
-//      // .subList(0, 1)
+//    etutorCourseRepository.findAllByIsReady(false)
 //      .forEach(this::webScrapAndSaveLessons);
   }
 
@@ -48,6 +44,8 @@ public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
     driver.get(course.getHref());
     // and wait for display list of lessons
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("lessonsList")));
+    // close cookie box
+    super.closeCookieBox(driver);
     // get lessons container
     final WebElement lessonsContainer = driver.findElement(By.className("lessonsList"));
     // and extract all single lesson containers to list
@@ -89,6 +87,8 @@ public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
     });
 
     etutorLessonRepository.saveAll(etutorLessons);
+    course.setIsReady(true);
+    etutorCourseRepository.save(course);
     driver.quit();
   }
 }
