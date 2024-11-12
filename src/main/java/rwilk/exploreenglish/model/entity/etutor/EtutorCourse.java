@@ -50,4 +50,6 @@ public class EtutorCourse implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "modify_date")
   private Date modifyDate;
+  @Column(name = "is_ready")
+  Boolean isReady;
 }

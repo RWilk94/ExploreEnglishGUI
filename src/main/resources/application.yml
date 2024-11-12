@@ -26,7 +26,7 @@ spring:
         enable_lazy_load_no_trans: true
         dialect: org.hibernate.dialect.MySQL55Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
 logging.level.org.springframework.web: DEBUG
 logging.level.org.hibernate: ERROR

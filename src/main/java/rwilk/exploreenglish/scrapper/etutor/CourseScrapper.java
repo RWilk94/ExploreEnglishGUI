@@ -1,10 +1,7 @@
 package rwilk.exploreenglish.scrapper.etutor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,119 +17,117 @@ import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository;
 @SuppressWarnings("unused")
 @Component
 public class CourseScrapper extends BaseScrapper implements CommandLineRunner {
-
-  private static final Map<String, LanguageEnum> courseMap = new HashMap<>();
-  private static final List<String> englishCourses = List.of(
-    "https://www.etutor.pl/lessons/en/a1",
-    "https://www.etutor.pl/lessons/en/a2",
-    "https://www.etutor.pl/lessons/en/b1",
-    "https://www.etutor.pl/lessons/en/b2",
-    "https://www.etutor.pl/lessons/en/c1",
-    "https://www.etutor.pl/lessons/en/c2",
-    "https://www.etutor.pl/lessons/en/business-b1",
-    "https://www.etutor.pl/lessons/en/business-b2",
-    "https://www.etutor.pl/lessons/en/business-c",
-    "https://www.etutor.pl/lessons/en/business-ext",
-    "https://www.etutor.pl/lessons/en/matura-1",
-    "https://www.etutor.pl/lessons/en/matura-2",
-    "https://www.etutor.pl/lessons/en/matura-3",
-    "https://www.etutor.pl/lessons/en/travel");
-  private static final List<String> germanCourses = List.of(
-    "https://www.etutor.pl/lessons/de/de-a1",
-    "https://www.etutor.pl/lessons/de/de-a2",
-    "https://www.etutor.pl/lessons/de/de-b1",
-    "https://www.etutor.pl/lessons/de/de-b2",
-    "https://www.etutor.pl/lessons/de/de-c1",
-    "https://www.etutor.pl/lessons/de/reise",
-    "https://www.etutor.pl/lessons/de/bde");
-  private static final List<String> spanishCourses = List.of(
-    "https://www.etutor.pl/lessons/es/es-a1",
-    "https://www.etutor.pl/lessons/es/es-a2",
-    "https://www.etutor.pl/lessons/es/es-b1",
-    "https://www.etutor.pl/lessons/es/es-b2");
-  private static final List<String> italianCourses = List.of(
-    "https://www.etutor.pl/lessons/it/it-a1",
-    "https://www.etutor.pl/lessons/it/it-a2",
-    "https://www.etutor.pl/lessons/it/it-b1",
-    "https://www.etutor.pl/lessons/it/it-b2");
-  private static final List<String> frenchCourses = List.of(
-    "https://www.etutor.pl/lessons/fr/fr-a1",
-    "https://www.etutor.pl/lessons/fr/fr-a2",
-    "https://www.etutor.pl/lessons/fr/fr-b1",
-    "https://www.etutor.pl/lessons/fr/fr-b2");
-
-  private final EtutorCourseRepository etutorCourseRepository;
-
-  public CourseScrapper(final EtutorCourseRepository etutorCourseRepository) {
-    this.etutorCourseRepository = etutorCourseRepository;
-
-    courseMap.putAll(
-      englishCourses.stream()
-        .collect(Collectors.toMap(String::toString, it -> LanguageEnum.ENGLISH))
+    private static final Map<LanguageEnum, List<String>> englishCourses = Map.of(
+            LanguageEnum.ENGLISH, List.of(
+                    "https://www.etutor.pl/lessons/en/a1",
+                    "https://www.etutor.pl/lessons/en/a2",
+                    "https://www.etutor.pl/lessons/en/b1",
+                    "https://www.etutor.pl/lessons/en/b2",
+                    "https://www.etutor.pl/lessons/en/c1",
+                    "https://www.etutor.pl/lessons/en/c2",
+                    "https://www.etutor.pl/lessons/en/business-b1",
+                    "https://www.etutor.pl/lessons/en/business-b2",
+                    "https://www.etutor.pl/lessons/en/business-c",
+                    "https://www.etutor.pl/lessons/en/business-ext",
+                    "https://www.etutor.pl/lessons/en/matura-1",
+                    "https://www.etutor.pl/lessons/en/matura-2",
+                    "https://www.etutor.pl/lessons/en/matura-3",
+                    "https://www.etutor.pl/lessons/en/travel")
     );
-    courseMap.putAll(
-      germanCourses.stream()
-        .collect(Collectors.toMap(String::toString, it -> LanguageEnum.GERMAN))
+    private static final Map<LanguageEnum, List<String>> germanCourses = Map.of(
+            LanguageEnum.GERMAN, List.of(
+                    "https://www.etutor.pl/lessons/de/de-a1",
+                    "https://www.etutor.pl/lessons/de/de-a2",
+                    "https://www.etutor.pl/lessons/de/de-b1",
+                    "https://www.etutor.pl/lessons/de/de-b2",
+                    "https://www.etutor.pl/lessons/de/de-c1",
+                    "https://www.etutor.pl/lessons/de/reise",
+                    "https://www.etutor.pl/lessons/de/bde")
     );
-    courseMap.putAll(
-      spanishCourses.stream()
-        .collect(Collectors.toMap(String::toString, it -> LanguageEnum.SPANISH))
+    private static final Map<LanguageEnum, List<String>> spanishCourses = Map.of(
+            LanguageEnum.SPANISH, List.of(
+                    "https://www.etutor.pl/lessons/es/es-a1",
+                    "https://www.etutor.pl/lessons/es/es-a2",
+                    "https://www.etutor.pl/lessons/es/es-b1",
+                    "https://www.etutor.pl/lessons/es/es-b2")
     );
-    courseMap.putAll(
-      italianCourses.stream()
-        .collect(Collectors.toMap(String::toString, it -> LanguageEnum.ITALIAN))
+    private static final Map<LanguageEnum, List<String>> italianCourses = Map.of(
+            LanguageEnum.ITALIAN, List.of(
+                    "https://www.etutor.pl/lessons/it/it-a1",
+                    "https://www.etutor.pl/lessons/it/it-a2",
+                    "https://www.etutor.pl/lessons/it/it-b1",
+                    "https://www.etutor.pl/lessons/it/it-b2")
     );
-    courseMap.putAll(
-      frenchCourses.stream()
-        .collect(Collectors.toMap(String::toString, it -> LanguageEnum.FRENCH))
+    private static final Map<LanguageEnum, List<String>> frenchCourses = Map.of(
+            LanguageEnum.FRENCH, List.of(
+                    "https://www.etutor.pl/lessons/fr/fr-a1",
+                    "https://www.etutor.pl/lessons/fr/fr-a2",
+                    "https://www.etutor.pl/lessons/fr/fr-b1",
+                    "https://www.etutor.pl/lessons/fr/fr-b2")
     );
-  }
 
-  @Override
-  public void run(final String... args) throws Exception {
-    /* call the below method to web scrap etutor courses */
-    // webScrapAndSaveCourses();
-  }
+    private final EtutorCourseRepository etutorCourseRepository;
 
-  public void webScrapAndSaveCourses() {
-    final WebDriver driver = super.getDriver();
-    final WebDriverWait wait = super.openDefaultPage(driver);
-
-    // create a collection for result elements
-    final List<EtutorCourse> etutorCourses = new ArrayList<>();
-
-    courseMap.forEach((key, value) -> {
-
-      // open course
-      driver.get(key);
-      // and wait for display list of lessons
-      wait.until(ExpectedConditions.presenceOfElementLocated(By.className("lessonsList")));
-
-      etutorCourses.add(
-        EtutorCourse.builder()
-          .name(driver.findElement(By.className("selectMainLevelBox"))
-                  .findElement(By.className("displaySelect"))
-                  .getText())
-          .description(extractDescription(driver))
-          .href(key)
-          .image(driver.findElement(By.className("courseImg"))
-                   .getAttribute("src"))
-          .language(value.toString())
-          .build()
-      );
-
-    });
-    etutorCourseRepository.saveAll(etutorCourses);
-    driver.quit();
-  }
-
-  private String extractDescription(final WebDriver driver) {
-    if (driver.findElements(By.className("selectSubMenuBox")).isEmpty()) {
-      return null;
+    public CourseScrapper(final EtutorCourseRepository etutorCourseRepository) {
+        this.etutorCourseRepository = etutorCourseRepository;
     }
 
-    return driver.findElement(By.className("selectSubMenuBox"))
-      .findElement(By.className("displaySelect"))
-      .getText();
-  }
+    @Override
+    public void run(final String... args) throws Exception {
+        /* call the below method to web scrap etutor courses */
+        // webScrapAndSaveCourses();
+    }
+
+    public void webScrapAndSaveCourses() {
+        webScrap(englishCourses);
+        webScrap(germanCourses);
+        webScrap(spanishCourses);
+        webScrap(italianCourses);
+        webScrap(frenchCourses);
+    }
+
+    private void webScrap(final Map<LanguageEnum, List<String>> courses) {
+        final LanguageEnum language = courses.keySet().stream().findFirst().orElse(null);
+        final List<String> courseList = courses.values().stream().findFirst().orElseThrow(() -> new IllegalStateException("Course list is empty"));
+
+        courseList.forEach(course -> {
+            final WebDriver driver = super.getDriver();
+            final WebDriverWait wait = super.openDefaultPage(driver);
+
+            // open course
+            driver.get(course);
+            // and wait for display list of lessons
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.className("lessonsList")));
+            // close cookie box
+            super.closeCookieBox(driver);
+
+            final EtutorCourse etutorCourse = EtutorCourse.builder()
+                    .name(driver
+                            .findElement(By.className("lessonListHeaderSelectors"))
+                            .findElement(By.className("selectMainLevelBox"))
+                            .findElement(By.className("displaySelect"))
+                            .getText())
+                    .description(extractDescription(driver))
+                    .href(course)
+                    .image(driver.findElement(By.className("courseImg"))
+                            .getAttribute("src"))
+                    .language(language.name())
+                    .build();
+
+            etutorCourseRepository.save(etutorCourse);
+            driver.quit();
+        });
+    }
+
+    private String extractDescription(final WebDriver driver) {
+        if (driver.findElements(By.className("selectSubLevelBox")).isEmpty()) {
+            return null;
+        }
+
+        return driver
+                .findElement(By.className("lessonListHeaderSelectors"))
+                .findElement(By.className("selectSubLevelBox"))
+                .findElement(By.className("displaySelect"))
+                .getText();
+    }
 }
