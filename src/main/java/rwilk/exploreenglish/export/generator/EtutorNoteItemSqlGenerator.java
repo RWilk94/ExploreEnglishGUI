@@ -24,7 +24,7 @@ public class EtutorNoteItemSqlGenerator extends SqlGeneratorAbstract<EtutorNoteI
 
     for (final List<EtutorNoteItem> chunk : chunks) {
       sql.append("INSERT INTO 'note_items' ('id', 'american_sound', 'british_sound', 'example', 'plain_text', " +
-                 "'image', 'note_id') VALUES ");
+                 "'image', 'primary_style', 'secondary_style', 'additional', 'language_type', 'note_id') VALUES ");
 
       for (final EtutorNoteItem noteItem : chunk) {
         sql.append("\n")
@@ -49,6 +49,21 @@ public class EtutorNoteItemSqlGenerator extends SqlGeneratorAbstract<EtutorNoteI
           .append(PARAM_SEPARATOR)
           .append(QUOTE_SIGN)
           .append(replaceApostrophe(noteItem.getImage())) // COLUMN IMAGE
+          .append(QUOTE_SIGN)
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN)
+          .append(replaceApostrophe(noteItem.getPrimaryStyle())) // COLUMN PRIMARY_STYLE
+          .append(QUOTE_SIGN)
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN)
+          .append(replaceApostrophe(noteItem.getSecondaryStyle())) // COLUMN SECONDARY_STYLE
+          .append(QUOTE_SIGN)
+          .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN)
+          .append(replaceApostrophe(noteItem.getAdditional())) // COLUMN ADDITIONAL
+          .append(QUOTE_SIGN)
+          .append(PARAM_SEPARATOR)
+          .append(replaceApostrophe(noteItem.getLanguageType())) // COLUMN LANGUAGE_TYPE
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)
           .append(noteItem.getNote().getId()) // COLUMN NOTE_ID

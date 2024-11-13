@@ -26,7 +26,7 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
                     "'question_british_sound', 'question_american_sound', 'first_possible_answer', " +
                     "'second_possible_answer', 'third_possible_answer', 'forth_possible_answer', 'correct_answer', " +
                     "'answer_british_sound', 'answer_american_sound', 'final_answer', 'translation', 'description', " +
-                    "'type', 'exercise_id') VALUES ");
+                    "'type', 'image', 'exercise_id') VALUES ");
 
             for (final EtutorExerciseItem item : chunk) {
                 sql.append("\n")
@@ -95,6 +95,10 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
                         .append(replaceApostrophe(item.getType())) // COLUMN TYPE
+                        .append(QUOTE_SIGN)
+                        .append(PARAM_SEPARATOR)
+                        .append(QUOTE_SIGN)
+                        .append(replaceApostrophe(item.getImage())) // COLUMN IMAGE
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(item.getExercise().getId()) // COLUMN EXERCISE_ID

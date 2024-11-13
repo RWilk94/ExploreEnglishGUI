@@ -60,23 +60,11 @@ public class ContentScrapper implements CommandLineRunner {
   @Override
   public void run(final String... args) throws Exception {
 //    etutorExerciseRepository.findAllByIsReady(false)
-//            .stream()
-//            .filter(it -> List.of(
-//                            ExerciseType.TIP,
-//                            ExerciseType.SCREEN,
-//                            ExerciseType.GRAMMAR_NOTE,
-//                            ExerciseType.SCREEN_CULTURAL,
-//                            ExerciseType.SCREEN_CULINARY,
-//                            ExerciseType.SCREEN_MUSIC,
-//                            ExerciseType.COMIC_BOOK,
-//                            ExerciseType.PICTURES_MASKED_WRITING
-//                    ).contains(ExerciseType.fromString(it.getType())))
-//            .toList()
 //            .forEach(this::webScrap);
   }
 
   private void webScrap(final EtutorExercise it) {
-    log.info("START scrapping {}", it);
+    log.warn("START scrapping {}", it);
     try {
       switch (Objects.requireNonNull(ExerciseType.fromString(it.getType()))) {
         case TIP,
@@ -102,12 +90,12 @@ public class ContentScrapper implements CommandLineRunner {
         case GRAMMAR_LIST -> grammarListScrapper.webScrap(it);
         case READING -> readingScrapper.webScrap(it);
 
-        case SPEAKING -> speakingScrapper.webScrap(it);
-        case WRITING -> throw new NotImplementedException("WRITING hasn't supported yet.");
+        case SPEAKING -> throw new NotImplementedException("SPEAKING temporary disabled"); // speakingScrapper.webScrap(it);
+        case WRITING -> throw new NotImplementedException("WRITING hasn't supported yet."); // can be done as note
         case VIDEO -> throw new NotImplementedException("VIDEO hasn't supported yet.");
         default -> throw new NotImplementedException("default hasn't supported yet.");
       }
-      log.info("FINISH scrapping {}", it);
+      log.warn("FINISH scrapping {}", it);
     } catch (NotImplementedException n) {
       log.error(ExceptionUtils.getMessage(n));
     } catch (Exception e) {
