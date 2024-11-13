@@ -90,8 +90,6 @@ public class ContentScrapper implements CommandLineRunner {
         case DIALOGUE -> dialogScrapper.webScrap(it);
         case MATCHING_PAIRS, MATCHING_PAIRS_GRAMMAR -> matchingPairsScrapper.webScrap(it);
         case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it);
-
-        case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
         case PICTURES_LISTENING -> {
           try {
             pictureListeningScrapper.webScrap(it);
@@ -99,6 +97,8 @@ public class ContentScrapper implements CommandLineRunner {
             log.error("An error occurred due to: ", e);
           }
         }
+
+        case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
         case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it);
         case READING -> readingScrapper.webScrap(it);
         case SPEAKING -> speakingScrapper.webScrap(it);
