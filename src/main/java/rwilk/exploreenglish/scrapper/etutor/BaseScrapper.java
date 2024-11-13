@@ -25,6 +25,7 @@ public abstract class BaseScrapper {
     final ChromeOptions options = new ChromeOptions();
     options.addArguments("headless");
     options.addArguments("--mute-audio");
+    options.addArguments("use-fake-ui-for-media-stream");
 
     return new ChromeDriver(options);
   }
@@ -65,6 +66,14 @@ public abstract class BaseScrapper {
       return BASE_URL + element.findElement(By.className("audioIcon"))
         .getAttribute("data-audio-url");
     }
+    return extractDataAudioIconUrlAttributeBackup(element, title);
+  }
+
+  private String extractDataAudioIconUrlAttributeBackup(final WebElement element, final String title) {
+    if (StringUtils.defaultString(element.getAttribute("oldtitle"), "").equals(title)) {
+      return BASE_URL + element.findElement(By.className("audioIcon"))
+              .getAttribute("data-audio-url");
+    }
     return "";
   }
 
@@ -88,6 +97,14 @@ public abstract class BaseScrapper {
     if (StringUtils.defaultString(element.getAttribute("title"), "").equals(title)) {
       return BASE_URL + element.findElement(By.className("audioIconButton"))
         .getAttribute("data-audio-url");
+    }
+    return extractDataAudioButtonUrlAttributeBackup(element, title);
+  }
+
+  private String extractDataAudioButtonUrlAttributeBackup(final WebElement element, final String title) {
+    if (StringUtils.defaultString(element.getAttribute("oldtitle"), "").equals(title)) {
+      return BASE_URL + element.findElement(By.className("audioIconButton"))
+              .getAttribute("data-audio-url");
     }
     return "";
   }

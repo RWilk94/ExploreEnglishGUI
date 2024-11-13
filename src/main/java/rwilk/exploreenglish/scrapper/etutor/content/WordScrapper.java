@@ -39,7 +39,7 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.PICTURES_WORDS_LIST.toString(), false)
+//    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.WORDS_LIST.toString(), false)
 //      .subList(0, 10)
 //      .forEach(this::webScrapPicturesWordsListTypeExercise);
   }
