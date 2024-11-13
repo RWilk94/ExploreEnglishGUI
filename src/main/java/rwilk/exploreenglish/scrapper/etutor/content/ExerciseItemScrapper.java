@@ -37,7 +37,7 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
   @Override
   public void run(final String... args) throws Exception {
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.EXERCISE.toString(), false)
-//      .subList(0, 100)
+//      .subList(0, 10)
 //      .forEach(this::webScrapExerciseTypeExercise);
   }
 
@@ -54,7 +54,6 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("exercise")));
     // close cookie box
     super.closeCookieBox(driver);
-
 
     final String instruction = extractExerciseInstruction(driver.findElement(By.className("exercise")));
 
