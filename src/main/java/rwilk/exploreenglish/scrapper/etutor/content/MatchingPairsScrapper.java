@@ -38,7 +38,9 @@ public class MatchingPairsScrapper extends BaseScrapper implements CommandLineRu
   }
 
   public void webScrap(final EtutorExercise etutorExercise) {
-    if (ExerciseType.MATCHING_PAIRS != ExerciseType.valueOf(etutorExercise.getType())) {
+    if (!List.of(
+            ExerciseType.MATCHING_PAIRS_GRAMMAR,
+            ExerciseType.MATCHING_PAIRS).contains(ExerciseType.valueOf(etutorExercise.getType()))) {
       return;
     }
     final WebDriver driver = super.getDriver();

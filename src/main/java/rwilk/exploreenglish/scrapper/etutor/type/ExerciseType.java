@@ -11,7 +11,7 @@ public enum ExerciseType {
     PICTURES_LISTENING("pictures_listening"),
     PICTURES_CHOICE("pictures_choice"),
     EXERCISE("exercise"),
-    MATCHING_PAIRS("matching_pairs"),
+    MATCHING_PAIRS("matching_pairs"), // DONE
     DIALOGUE("dialogue"), // DONE
     COMIC_BOOK("comic_book"), // DONE
     GRAMMAR_NOTE("grammar_note"), // DONE
@@ -22,7 +22,7 @@ public enum ExerciseType {
     WRITING("writing"),
     VIDEO("video"),
     WORDS_LIST("words_list"), // can be scrapped by WordScrapper
-    MATCHING_PAIRS_GRAMMAR("matching_pairs_grammar1"),
+    MATCHING_PAIRS_GRAMMAR("matching_pairs_grammar1"), // DONE
     SCREEN_CULTURAL("screen-cultural"), // DONE
     SCREEN_CULINARY("screen-culinary"), // DONE
     SCREEN_MUSIC("screen-music"); // DONE
