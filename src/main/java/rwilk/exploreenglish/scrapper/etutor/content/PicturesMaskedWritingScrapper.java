@@ -38,7 +38,6 @@ public class PicturesMaskedWritingScrapper extends BaseScrapper implements Comma
 //      .forEach(this::webScrap);
   }
 
-
   public void webScrap(final EtutorExercise etutorExercise) {
     if (ExerciseType.PICTURES_MASKED_WRITING != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
@@ -95,6 +94,5 @@ public class PicturesMaskedWritingScrapper extends BaseScrapper implements Comma
       .map(Integer::parseInt).mapToInt(it -> it)
       .sum();
   }
-
 
 }

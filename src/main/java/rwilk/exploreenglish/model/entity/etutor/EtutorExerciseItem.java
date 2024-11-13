@@ -67,6 +67,8 @@ public final class EtutorExerciseItem implements Serializable {
   private String translation;
   @Column(name = "description")
   private String description;
+  @Column(name = "image")
+  private String image;
   @Type(type = "text")
   @Column(name = "html")
   private String html;

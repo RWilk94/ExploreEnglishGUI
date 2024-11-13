@@ -68,7 +68,8 @@ public class ContentScrapper implements CommandLineRunner {
 //                            ExerciseType.SCREEN_CULTURAL,
 //                            ExerciseType.SCREEN_CULINARY,
 //                            ExerciseType.SCREEN_MUSIC,
-//                            ExerciseType.COMIC_BOOK
+//                            ExerciseType.COMIC_BOOK,
+//                            ExerciseType.PICTURES_MASKED_WRITING
 //                    ).contains(ExerciseType.fromString(it.getType())))
 //            .toList()
 //            .forEach(this::webScrap);
@@ -85,6 +86,7 @@ public class ContentScrapper implements CommandLineRunner {
              SCREEN_CULINARY,
              SCREEN_MUSIC -> noteScrapper.webScrap(it);
         case COMIC_BOOK -> comicBookScrapper.webScrap(it);
+        case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it);
 
         case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
         case PICTURES_LISTENING -> {
@@ -99,7 +101,6 @@ public class ContentScrapper implements CommandLineRunner {
         case MATCHING_PAIRS -> matchingPairsScrapper.webScrap(it);
         case DIALOGUE -> dialogScrapper.webScrap(it);
         case READING -> readingScrapper.webScrap(it);
-        case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it);
         case SPEAKING -> speakingScrapper.webScrap(it);
         case GRAMMAR_LIST -> grammarListScrapper.webScrap(it);
         case WRITING -> throw new NotImplementedException("WRITING hasn't supported yet.");

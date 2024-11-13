@@ -46,6 +46,7 @@ public class PicturesMaskedWriting {
       .question(extractWritingQuestion(element))
       .questionTemplate(extractWritingQuestionTemplate(element))
       .translation(extractWritingQuestion(element))
+      .image(extractImage(element))
       .html(element.getAttribute("innerHTML"))
       .type(ExerciseItemType.WRITING.toString())
       .exercise(etutorExercise)
@@ -242,7 +243,31 @@ public class PicturesMaskedWriting {
       return BASE_URL + element.findElement(By.className("audioIcon"))
         .getAttribute("data-audio-url");
     }
+    return extractDataAudioUrlAttributeBackup(element, title);
+  }
+
+  private String extractDataAudioUrlAttributeBackup(final WebElement element, final String title) {
+    if (StringUtils.defaultString(element.getAttribute("oldtitle"), "").equals(title)) {
+      return BASE_URL + element.findElement(By.className("audioIcon"))
+              .getAttribute("data-audio-url");
+    }
     return "";
+  }
+
+  private String extractImage(final WebElement element) {
+    final WebElement imageContainer = element.findElement(By.className("image-container"));
+
+    if (imageContainer == null || imageContainer.findElements(By.className("picturesGameNonClickableImgDiv")).isEmpty()) {
+      return null;
+    }
+
+    final WebElement imageDiv = imageContainer.findElement(By.className("picturesGameNonClickableImgDiv"));
+    final String style = imageDiv.getAttribute("style");
+
+    if (style != null && style.contains("(") && style.contains(")")) {
+      return BASE_URL + style.substring(style.indexOf("(") + 2, style.indexOf(")") - 1);
+    }
+    return null;
   }
 
 }
