@@ -59,18 +59,19 @@ public class ContentScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    etutorExerciseRepository.findAllByIsReady(false)
-            .stream()
-            .filter(it -> List.of(
-                            ExerciseType.TIP,
-                            ExerciseType.SCREEN,
-                            ExerciseType.GRAMMAR_NOTE,
-                            ExerciseType.SCREEN_CULTURAL,
-                            ExerciseType.SCREEN_CULINARY,
-                            ExerciseType.SCREEN_MUSIC
-                    ).contains(ExerciseType.fromString(it.getType())))
-            .toList()
-            .forEach(this::webScrap);
+//    etutorExerciseRepository.findAllByIsReady(false)
+//            .stream()
+//            .filter(it -> List.of(
+//                            ExerciseType.TIP,
+//                            ExerciseType.SCREEN,
+//                            ExerciseType.GRAMMAR_NOTE,
+//                            ExerciseType.SCREEN_CULTURAL,
+//                            ExerciseType.SCREEN_CULINARY,
+//                            ExerciseType.SCREEN_MUSIC,
+//                            ExerciseType.COMIC_BOOK
+//                    ).contains(ExerciseType.fromString(it.getType())))
+//            .toList()
+//            .forEach(this::webScrap);
   }
 
   private void webScrap(final EtutorExercise it) {
@@ -83,6 +84,7 @@ public class ContentScrapper implements CommandLineRunner {
              SCREEN_CULTURAL,
              SCREEN_CULINARY,
              SCREEN_MUSIC -> noteScrapper.webScrap(it);
+        case COMIC_BOOK -> comicBookScrapper.webScrap(it);
 
         case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
         case PICTURES_LISTENING -> {
@@ -96,7 +98,6 @@ public class ContentScrapper implements CommandLineRunner {
         case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it);
         case MATCHING_PAIRS -> matchingPairsScrapper.webScrap(it);
         case DIALOGUE -> dialogScrapper.webScrap(it);
-        case COMIC_BOOK -> comicBookScrapper.webScrap(it);
         case READING -> readingScrapper.webScrap(it);
         case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it);
         case SPEAKING -> speakingScrapper.webScrap(it);
