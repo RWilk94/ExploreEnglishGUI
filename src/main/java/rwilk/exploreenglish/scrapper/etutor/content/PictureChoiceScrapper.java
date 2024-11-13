@@ -36,7 +36,7 @@ public class PictureChoiceScrapper extends BaseScrapper implements CommandLineRu
   @Override
   public void run(final String... args) throws Exception {
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.PICTURES_CHOICE.toString(), false)
-//      .subList(0, 5)
+//      .subList(0, 3)
 //      .forEach(this::webScrap);
   }
 
@@ -168,6 +168,5 @@ public class PictureChoiceScrapper extends BaseScrapper implements CommandLineRu
     final String imgSource = element.findElement(By.className("picturesGameNonClickableImgDiv")).getAttribute("style");
     return BASE_URL + imgSource.substring(imgSource.indexOf("(\"") + 2, imgSource.indexOf("\")"));
   }
-
 
 }

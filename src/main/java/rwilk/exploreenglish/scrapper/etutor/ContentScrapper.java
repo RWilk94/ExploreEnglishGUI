@@ -97,9 +97,9 @@ public class ContentScrapper implements CommandLineRunner {
             log.error("An error occurred due to: ", e);
           }
         }
+        case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it);
 
         case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
-        case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it);
         case READING -> readingScrapper.webScrap(it);
         case SPEAKING -> speakingScrapper.webScrap(it);
         case GRAMMAR_LIST -> grammarListScrapper.webScrap(it);
