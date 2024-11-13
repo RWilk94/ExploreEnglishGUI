@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.etutor.content;
+package rwilk.exploreenglish.scrapper.etutor.content_v2;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -19,14 +19,13 @@ import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public abstract class Note2BaseScrapper extends BaseScrapper {
+public abstract class BaseNoteScrapperV2 extends BaseScrapper {
 
     protected final EtutorExerciseRepository etutorExerciseRepository;
     protected final EtutorNoteRepository etutorNoteRepository;
 
-    public Note2BaseScrapper(EtutorExerciseRepository etutorExerciseRepository, EtutorNoteRepository etutorNoteRepository) {
+    public BaseNoteScrapperV2(EtutorExerciseRepository etutorExerciseRepository, EtutorNoteRepository etutorNoteRepository) {
         this.etutorExerciseRepository = etutorExerciseRepository;
         this.etutorNoteRepository = etutorNoteRepository;
     }
@@ -69,7 +68,14 @@ public abstract class Note2BaseScrapper extends BaseScrapper {
         final Document jsoupHtml = Jsoup.parse(etutorNote.getNativeHtml());
         final Element rootElement = jsoupHtml.getAllElements().first();
         if (rootElement != null) {
-            printLeafNodesRecursive(rootElement, etutorNote.getNoteItems());
+            printLeafNodesRecursive(rootElement, etutorNote, "native");
+        }
+        if (StringUtils.isNoneBlank(etutorNote.getForeignHtml())) {
+            final Document jsoupForeignHtml = Jsoup.parse(etutorNote.getForeignHtml());
+            final Element rootForeignElement = jsoupForeignHtml.getAllElements().first();
+            if (rootForeignElement != null) {
+                printLeafNodesRecursive(rootForeignElement, etutorNote, "foreign");
+            }
         }
 
         etutorNoteRepository.save(etutorNote);
@@ -78,23 +84,25 @@ public abstract class Note2BaseScrapper extends BaseScrapper {
         driver.quit();
     }
 
-    private void printLeafNodesRecursive(final Element element, final List<EtutorNoteItem> noteItems) {
+    private void printLeafNodesRecursive(final Element element, final EtutorNote note,
+                                         final String language) {
         if (element.children().isEmpty()) {
             System.out.println(element.text());
         } else {
             for (Node child : element.childNodes()) {
-                printLeafNodesRecursive(child, noteItems);
+                printLeafNodesRecursive(child, note, language);
             }
         }
     }
 
-    private void printLeafNodesRecursive(final Node node, final List<EtutorNoteItem> noteItems) {
+    private void printLeafNodesRecursive(final Node node, final EtutorNote note,
+                                         final String language) {
         if (node.childNodes().isEmpty()) {
             if (node instanceof final TextNode textNode) {
                 final String text = textNode.text();
 
                 if (StringUtils.isNoneBlank(text)) {
-                    noteItems.add(
+                    note.getNoteItems().add(
                             EtutorNoteItem.builder()
                                     .plainText(text)
                                     .example(null)
@@ -102,10 +110,12 @@ public abstract class Note2BaseScrapper extends BaseScrapper {
                                     .americanSound(null)
                                     .primaryStyle(getPrimaryStyle(node))
                                     .secondaryStyle(getSecondaryStyle(node))
+                                    .languageType(language)
+                                    .note(note)
                                     .build()
                     );
                 } else {
-                    noteItems.get(noteItems.size() - 1).setAdditional(textNode.getWholeText());
+                    note.getNoteItems().get(note.getNoteItems().size() - 1).setAdditional(textNode.getWholeText());
                 }
 
             } else if (node instanceof final Element element) {
@@ -113,18 +123,20 @@ public abstract class Note2BaseScrapper extends BaseScrapper {
                     final String dataAudioUrl = element.attributes().get("data-audio-url");
                     if (StringUtils.isNoneBlank(dataAudioUrl)) {
                         if (dataAudioUrl.contains("en-ame")) {
-                            noteItems.get(noteItems.size() - 1).setAmericanSound(dataAudioUrl);
+                            note.getNoteItems().get(note.getNoteItems().size() - 1).setAmericanSound(dataAudioUrl);
                         } else {
-                            noteItems.get(noteItems.size() - 1).setBritishSound(dataAudioUrl);
+                            note.getNoteItems().get(note.getNoteItems().size() - 1).setBritishSound(dataAudioUrl);
                         }
                     }
                 }
+            } else if (node.nodeName().equals("#comment")) {
+                // do nothing
             } else {
                 throw new UnsupportedOperationException(node.nodeName());
             }
         } else {
             for (final Node child : node.childNodes()) {
-                printLeafNodesRecursive(child, noteItems);
+                printLeafNodesRecursive(child, note, language);
             }
         }
     }

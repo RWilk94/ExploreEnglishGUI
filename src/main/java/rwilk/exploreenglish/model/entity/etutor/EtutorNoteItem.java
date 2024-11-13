@@ -47,6 +47,8 @@ public final class EtutorNoteItem implements Serializable {
   private String secondaryStyle;
   @Column(name = "additional")
   private String additional;
+  @Column(name = "language_type")
+  private String languageType;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
