@@ -125,7 +125,7 @@ public class ReadingScrapper extends BaseScrapper implements CommandLineRunner {
   }
 
   private String extractAudio(final WebDriver driver) {
-    return driver.findElements(By.tagName("script"))
+    return driver.findElement(By.id("contentWrapper")).findElements(By.tagName("script"))
       .stream()
       .filter(element -> element.getAttribute("innerHTML").contains(".mp3"))
       .findFirst()

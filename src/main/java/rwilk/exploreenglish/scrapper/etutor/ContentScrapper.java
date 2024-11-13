@@ -98,10 +98,10 @@ public class ContentScrapper implements CommandLineRunner {
           }
         }
         case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it);
+        case SPEAKING -> speakingScrapper.webScrap(it);
 
         case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
         case READING -> readingScrapper.webScrap(it);
-        case SPEAKING -> speakingScrapper.webScrap(it);
         case GRAMMAR_LIST -> grammarListScrapper.webScrap(it);
         case WRITING -> throw new NotImplementedException("WRITING hasn't supported yet.");
         case VIDEO -> throw new NotImplementedException("VIDEO hasn't supported yet.");
