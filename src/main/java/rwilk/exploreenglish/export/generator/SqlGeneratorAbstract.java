@@ -21,6 +21,10 @@ public abstract class SqlGeneratorAbstract<T> {
     return StringUtils.trimToEmpty(StringUtils.defaultString(text)).replace("'", "''");
   }
 
+  protected String replaceApostropheWithoutTrim(final String text) {
+    return StringUtils.trimToEmpty(StringUtils.defaultString(text).replace("'", "''").replaceAll("\\n", "\\\\n"));
+  }
+
   protected String getEndLineCharacter(final Object chunk, final Object course) {
     if (((List<?>) chunk).indexOf(course) + 1 == ((List<?>) chunk).size()) {
       return ");\n";

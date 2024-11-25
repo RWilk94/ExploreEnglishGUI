@@ -12,7 +12,6 @@ import rwilk.exploreenglish.scrapper.etutor.content.*;
 import rwilk.exploreenglish.scrapper.etutor.content_v2.note.NoteScrapperV2;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -72,22 +71,22 @@ public class ContentScrapper implements CommandLineRunner {
              GRAMMAR_NOTE,
              SCREEN_CULTURAL,
              SCREEN_CULINARY,
-             SCREEN_MUSIC -> noteScrapper.webScrap(it);
-        case COMIC_BOOK -> comicBookScrapper.webScrap(it);
-        case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it);
-        case DIALOGUE -> dialogScrapper.webScrap(it);
-        case MATCHING_PAIRS, MATCHING_PAIRS_GRAMMAR -> matchingPairsScrapper.webScrap(it);
-        case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it);
+             SCREEN_MUSIC -> noteScrapper.webScrap(it); // DONE in UI
+        case COMIC_BOOK -> comicBookScrapper.webScrap(it); // DONE in UI
+        case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it); // DONE in UI
+        case DIALOGUE -> dialogScrapper.webScrap(it); // DONE in UI
+        case MATCHING_PAIRS, MATCHING_PAIRS_GRAMMAR -> matchingPairsScrapper.webScrap(it); // DONE in UI
+        case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it); // DONE in UI
         case PICTURES_LISTENING -> {
           try {
             pictureListeningScrapper.webScrap(it);
           } catch (JsonProcessingException e) {
             log.error("An error occurred due to: ", e);
           }
-        }
-        case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it);
-        case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it);
-        case GRAMMAR_LIST -> grammarListScrapper.webScrap(it);
+        } // DONE in UI
+        case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it); // DONE in UI
+        case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it); // DONE in UI
+        case GRAMMAR_LIST -> grammarListScrapper.webScrap(it); // need to be web scrapped again
         case READING -> readingScrapper.webScrap(it);
 
         case SPEAKING -> throw new NotImplementedException("SPEAKING temporary disabled"); // speakingScrapper.webScrap(it);

@@ -20,6 +20,7 @@ public class NoteScrapperV2 extends BaseNoteScrapperV2 implements CommandLineRun
 
     @Override
     public void run(final String... args) throws Exception {
+//        webScrap(etutorExerciseRepository.findById(173L).get());
 //        etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.SCREEN.toString(), false)
 //                .subList(0, 10)
 //                .forEach(this::webScrap);

@@ -2,6 +2,11 @@ package rwilk.exploreenglish.scrapper.etutor.content.exercise;
 
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -52,11 +57,8 @@ public class Cloze {
   }
 
   private String extractCorrectAnswer(final WebElement element) {
-    final String sentence = element.findElement(By.className("examClozeFillableSentence")).getText();
-    final String correctAnswer = element.findElement(By.className("examClozeInput"))
-      .getAttribute("data-correct-answer");
-
-    return sentence.concat(correctAnswer);
+    final String correctAnswer = element.findElement(By.className("examClozeInput")).getAttribute("data-correct-answer");;
+    return extractWritingQuestionTemplate(element).replace("[...]", correctAnswer);
   }
 
   private String extractWritingQuestion(final WebElement element) {
@@ -64,8 +66,33 @@ public class Cloze {
   }
 
   private String extractWritingQuestionTemplate(final WebElement element) {
-    final String sentence = element.findElement(By.className("examClozeFillableSentence")).getText();
-    return sentence.concat("[...]");
+    final WebElement webElement = element.findElement(By.className("examClozeFillableSentence"));
+    final Document document = Jsoup.parse(webElement.getAttribute("innerHTML"));
+
+    final StringBuilder questionTemplate = new StringBuilder();
+
+    for (Node child : document.childNodes()) {
+      printLeafNodesRecursive(child, questionTemplate);
+    }
+
+    return questionTemplate.toString().trim();
+  }
+
+  private void printLeafNodesRecursive(final Node node, final StringBuilder stringBuilder) {
+    if (node.childNodes().isEmpty()) {
+      if (node instanceof final TextNode textNode) {
+        final String text = textNode.text();
+        stringBuilder.append(" ").append(text.trim());
+      } else if (node instanceof final Element element) {
+        if (element.tagName().equals("input")) {
+          stringBuilder.append(" ").append("[...]");
+        }
+      }
+    } else {
+      for (Node child : node.childNodes()) {
+        printLeafNodesRecursive(child, stringBuilder);
+      }
+    }
   }
 
 }

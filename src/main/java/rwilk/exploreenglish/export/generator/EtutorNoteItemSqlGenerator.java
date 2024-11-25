@@ -60,9 +60,10 @@ public class EtutorNoteItemSqlGenerator extends SqlGeneratorAbstract<EtutorNoteI
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)
           .append(QUOTE_SIGN)
-          .append(replaceApostrophe(noteItem.getAdditional())) // COLUMN ADDITIONAL
+          .append(replaceApostropheWithoutTrim(noteItem.getAdditional())) // COLUMN ADDITIONAL
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)
+          .append(QUOTE_SIGN)
           .append(replaceApostrophe(noteItem.getLanguageType())) // COLUMN LANGUAGE_TYPE
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)

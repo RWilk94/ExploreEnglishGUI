@@ -19,6 +19,7 @@ import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseNoteScrapperV2 extends BaseScrapper {
 
@@ -123,11 +124,26 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
                     final String dataAudioUrl = element.attributes().get("data-audio-url");
                     if (StringUtils.isNoneBlank(dataAudioUrl)) {
                         if (dataAudioUrl.contains("en-ame")) {
-                            note.getNoteItems().get(note.getNoteItems().size() - 1).setAmericanSound(dataAudioUrl);
+                            note.getNoteItems().get(note.getNoteItems().size() - 1).setAmericanSound(BASE_URL + dataAudioUrl);
                         } else {
-                            note.getNoteItems().get(note.getNoteItems().size() - 1).setBritishSound(dataAudioUrl);
+                            note.getNoteItems().get(note.getNoteItems().size() - 1).setBritishSound(BASE_URL + dataAudioUrl);
                         }
                     }
+                } else {
+                    final List<String> ignoredTags = List.of("head", "br", "img");
+                    final String tagName = ((Element) node).tagName();
+
+                    if (!ignoredTags.contains(tagName)) {
+                        throw new UnsupportedOperationException(tagName);
+                    }
+
+                    if (tagName.equals("img")) {
+                        final String src = element.attributes().get("src");
+                        final String url = src.contains("https") ? src : BASE_URL + src;
+                        note.getNoteItems().get(note.getNoteItems().size() - 1).setImage(url);
+                    }
+
+
                 }
             } else if (node.nodeName().equals("#comment")) {
                 // do nothing

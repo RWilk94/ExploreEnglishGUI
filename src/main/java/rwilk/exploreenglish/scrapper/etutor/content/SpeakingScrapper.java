@@ -47,14 +47,14 @@ public class SpeakingScrapper extends BaseScrapper implements CommandLineRunner 
     // open course
     driver.get(etutorExercise.getHref());
     // and wait for display list of lessons
-    wait.until(ExpectedConditions.presenceOfElementLocated(By.className("lessonhtml")));
+    wait.until(ExpectedConditions.presenceOfElementLocated(By.className("exercise-pronunciation")));
     // close cookie box
     super.closeCookieBox(driver);
 
     final WebElement nativeLessonContent = driver.findElement(By.className("nativeLessonContent"));
 
     final EtutorNote etutorNote = EtutorNote.builder()
-      .nativeTitle(driver.findElement(By.className("lessonhtml")).getAttribute("data-exercise-title"))
+      .nativeTitle(driver.findElement(By.className("exercise-pronunciation")).getAttribute("data-exercise-title"))
       .nativeContent(extractContent(nativeLessonContent.findElement(By.className("contentBox"))))
       .nativeHtml(nativeLessonContent.getAttribute("innerHTML"))
       .noteItems(new ArrayList<>())

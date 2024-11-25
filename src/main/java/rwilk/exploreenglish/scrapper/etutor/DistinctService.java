@@ -39,6 +39,7 @@ public class DistinctService implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
+//    generateEtutorLessonWords();
   }
 
   private void fixEmptyPolishNameInWords() {

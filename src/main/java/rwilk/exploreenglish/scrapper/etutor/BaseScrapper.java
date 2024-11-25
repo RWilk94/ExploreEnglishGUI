@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BaseScrapper {
 
-  protected static final String AUTO_LOGIN_TOKEN = "qubBSbpjOngfV5F7u2aKTM8LSgPKeLGHJLQsuEV2";
+  protected static final String AUTO_LOGIN_TOKEN = "03rW8A7qetBrsxbJzOyy94UZ3cuCokvJs0qTunfM";
   protected static final String BASE_URL = "https://www.etutor.pl";
   protected static final String XPATH_CHILDREN = "./child::*";
 

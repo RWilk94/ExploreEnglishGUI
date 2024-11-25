@@ -36,6 +36,9 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
 
   @Override
   public void run(final String... args) throws Exception {
+
+//    webScrapExerciseTypeExercise(etutorExerciseRepository.findById(501L).get());
+
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.EXERCISE.toString(), false)
 //      .subList(0, 10)
 //      .forEach(this::webScrapExerciseTypeExercise);
@@ -65,8 +68,10 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
         case "choice" -> exerciseItems.add(Choice.webScrap(etutorExercise, element, instruction));
         case "masked-writing" -> exerciseItems.add(MaskedWriting.webScrap(etutorExercise, element, instruction, wait));
         case "cloze" -> {
-          exerciseItems.add(Cloze.webScrap(etutorExercise, element, instruction));
+          final EtutorExerciseItem etutorExerciseItem = Cloze.webScrap(etutorExercise, element, instruction);
           clickSolveQuestionButton(driver);
+          etutorExerciseItem.setDescription(extractDescription(element));
+          exerciseItems.add(etutorExerciseItem);
         }
         default -> throw new UnsupportedOperationException(driver.findElement(By.className("exercise"))
                                                              .getAttribute("data-exercise"));
@@ -99,6 +104,10 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
         && driver.findElement(By.id("solveQuestionButton")).isDisplayed()) {
       driver.findElement(By.id("solveQuestionButton")).click();
     }
+  }
+
+  private String extractDescription(final WebElement element) {
+    return element.findElement(By.className("immediateExplanation")).getText();
   }
 
 }
