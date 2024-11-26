@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.scrapper.etutor.content.*;
+import rwilk.exploreenglish.scrapper.etutor.content_v2.grammarlist.GrammarListScrapperV2;
 import rwilk.exploreenglish.scrapper.etutor.content_v2.note.NoteScrapperV2;
+import rwilk.exploreenglish.scrapper.etutor.content_v2.speaking.SpeakingScrapperV2;
+import rwilk.exploreenglish.scrapper.etutor.content_v2.writing.WritingScrapperV2;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 import java.util.Objects;
@@ -29,8 +32,9 @@ public class ContentScrapper implements CommandLineRunner {
   private final ComicBookScrapper comicBookScrapper;
   private final ReadingScrapper readingScrapper;
   private final PicturesMaskedWritingScrapper picturesMaskedWritingScrapper;
-  private final SpeakingScrapper speakingScrapper;
-  private final GrammarListScrapper grammarListScrapper;
+  private final SpeakingScrapperV2 speakingScrapper;
+  private final GrammarListScrapperV2 grammarListScrapper;
+  private final WritingScrapperV2 writingScrapper;
 
   public ContentScrapper(final EtutorExerciseRepository etutorExerciseRepository, final WordScrapper wordScrapper,
                          final NoteScrapperV2 noteScrapper, final PictureListeningScrapper pictureListeningScrapper,
@@ -40,7 +44,8 @@ public class ContentScrapper implements CommandLineRunner {
                          final ComicBookScrapper comicBookScrapper,
                          final ReadingScrapper readingScrapper,
                          final PicturesMaskedWritingScrapper picturesMaskedWritingScrapper,
-                         final SpeakingScrapper speakingScrapper, final GrammarListScrapper grammarListScrapper) {
+                         final SpeakingScrapperV2 speakingScrapper, final GrammarListScrapperV2 grammarListScrapper,
+                         final WritingScrapperV2 writingScrapper) {
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.wordScrapper = wordScrapper;
     this.noteScrapper = noteScrapper;
@@ -54,6 +59,7 @@ public class ContentScrapper implements CommandLineRunner {
     this.picturesMaskedWritingScrapper = picturesMaskedWritingScrapper;
     this.speakingScrapper = speakingScrapper;
     this.grammarListScrapper = grammarListScrapper;
+    this.writingScrapper = writingScrapper;
   }
 
   @Override
@@ -86,11 +92,11 @@ public class ContentScrapper implements CommandLineRunner {
         } // DONE in UI
         case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it); // DONE in UI
         case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it); // DONE in UI
-        case GRAMMAR_LIST -> grammarListScrapper.webScrap(it); // need to be web scrapped again
+        case GRAMMAR_LIST -> grammarListScrapper.webScrap(it); // CHECK IN UI
         case READING -> readingScrapper.webScrap(it);
 
-        case SPEAKING -> throw new NotImplementedException("SPEAKING temporary disabled"); // speakingScrapper.webScrap(it);
-        case WRITING -> throw new NotImplementedException("WRITING hasn't supported yet."); // can be done as note
+        case SPEAKING -> speakingScrapper.webScrap(it);
+        case WRITING -> writingScrapper.webScrap(it);
         case VIDEO -> throw new NotImplementedException("VIDEO hasn't supported yet.");
         default -> throw new NotImplementedException("default hasn't supported yet.");
       }

@@ -23,6 +23,7 @@ import rwilk.exploreenglish.repository.etutor.EtutorWordRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+// TODO to remove
 @Component
 public class GrammarListScrapper extends BaseScrapper implements CommandLineRunner {
 
@@ -40,6 +41,8 @@ public class GrammarListScrapper extends BaseScrapper implements CommandLineRunn
 
   @Override
   public void run(final String... args) throws Exception {
+//    etutorExerciseRepository.findById(526L).ifPresent(this::webScrap);
+
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.GRAMMAR_LIST.toString(), false)
 //      .subList(0, 10)
 //      .forEach(this::webScrap);

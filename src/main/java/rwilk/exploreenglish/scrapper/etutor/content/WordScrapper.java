@@ -389,7 +389,7 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
     };
   }
 
-  private String beautify(final String englishName) {
+  public static String beautify(final String englishName) {
     if (englishName.trim().endsWith(",")) {
       return englishName.trim().substring(0, englishName.length() - 1).trim();
     }
