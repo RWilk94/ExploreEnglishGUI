@@ -98,7 +98,7 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
       final EtutorWord etutorWord = EtutorWord.builder()
         .image(extractImage(element))
         .exercise(etutorExercise)
-        .polishName(polishName)
+        .nativeTranslation(polishName)
         .definitions(new ArrayList<>())
         .html(element.getAttribute("innerHTML"))
         .build();
@@ -116,7 +116,7 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
                 .concat(", ")
                 .concat(childrenTag.getText().trim()));
             etutorWord.setAdditionalInformation(additionalInformation);
-            etutorWord.setPolishName(beautify(etutorWord.getPolishName().replace(additionalInformation, "")));
+            etutorWord.setNativeTranslation(beautify(etutorWord.getNativeTranslation().replace(additionalInformation, "")));
           }
           case "languageVariety" -> {
             final EtutorDefinition definition = etutorWord.getDefinitions()
@@ -205,9 +205,9 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
     return List.of(
       EtutorDefinition.builder()
         .additionalInformation(additionalInformation)
-        .americanSound(extractAmericanAudioIcon(element))
-        .britishSound(extractBritishAudioIcon(element))
-        .englishName(beautify(englishName))
+        .secondarySound(extractAmericanAudioIcon(element))
+        .primarySound(extractBritishAudioIcon(element))
+        .foreignTranslation(beautify(englishName))
         .type(WordTypeEnum.SENTENCE.toString())
         .word(etutorWord)
         .build()
@@ -250,9 +250,9 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
       EtutorDefinition.builder()
         .id(null)
         .additionalInformation(additionalInformation)
-        .americanSound(extractAmericanAudioIcon(element))
-        .britishSound(extractBritishAudioIcon(element))
-        .englishName(beautify(englishName))
+        .secondarySound(extractAmericanAudioIcon(element))
+        .primarySound(extractBritishAudioIcon(element))
+        .foreignTranslation(beautify(englishName))
         .type(WordTypeEnum.WORD.toString())
         .word(null)
         .build()
@@ -276,15 +276,15 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
       switch (cssClass) {
         case "foreignTermText" -> {
           definition = EtutorDefinition.builder()
-            .englishName(beautify(childTag.getText().trim()))
+            .foreignTranslation(beautify(childTag.getText().trim()))
             .type(wordType.toString())
             .build();
           definitions.add(definition);
         }
         case "recordingsAndTranscriptions" -> {
           if (definition != null) {
-            definition.setAmericanSound(extractAmericanAudioIcon(childTag));
-            definition.setBritishSound(extractBritishAudioIcon(childTag));
+            definition.setSecondarySound(extractAmericanAudioIcon(childTag));
+            definition.setPrimarySound(extractBritishAudioIcon(childTag));
           } else {
             throw new UnsupportedOperationException("recordingsAndTranscriptions on null definition");
           }

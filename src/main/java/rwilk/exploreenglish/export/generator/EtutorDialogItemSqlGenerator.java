@@ -35,11 +35,11 @@ public class EtutorDialogItemSqlGenerator extends SqlGeneratorAbstract<EtutorDia
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostropheWithoutTrim(dialog.getDialogEnglish())) // COLUMN DIALOG_ENGLISH
+                        .append(replaceApostropheWithoutTrim(dialog.getDialogForeign())) // COLUMN DIALOG_ENGLISH
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostropheWithoutTrim(dialog.getDialogPolish())) // COLUMN DIALOG_POLISH
+                        .append(replaceApostropheWithoutTrim(dialog.getDialogNative())) // COLUMN DIALOG_POLISH
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)

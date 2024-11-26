@@ -33,8 +33,8 @@ class NoteItemTest {
 
   private EtutorNoteItem fixture(final EtutorNote etutorNote) {
     return EtutorNoteItem.builder()
-      .britishSound("https://www.etutor.pl/images-common/en/mp3/by.mp3")
-      .americanSound("https://www.etutor.pl/images-common/en-ame/mp3/by.mp3")
+      .primarySound("https://www.etutor.pl/images-common/en/mp3/by.mp3")
+      .secondaryStyle("https://www.etutor.pl/images-common/en-ame/mp3/by.mp3")
       .plainText("By ")
       .note(etutorNote)
       .build();

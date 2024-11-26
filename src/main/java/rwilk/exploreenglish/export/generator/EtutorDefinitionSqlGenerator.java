@@ -35,7 +35,7 @@ public class EtutorDefinitionSqlGenerator extends SqlGeneratorAbstract<EtutorDef
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(definition.getEnglishName())) // COLUMN ENGLISH_NAME
+                        .append(replaceApostrophe(definition.getForeignTranslation())) // COLUMN ENGLISH_NAME
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
@@ -43,11 +43,11 @@ public class EtutorDefinitionSqlGenerator extends SqlGeneratorAbstract<EtutorDef
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(definition.getBritishSound())) // COLUMN BRITISH_SOUND
+                        .append(replaceApostrophe(definition.getPrimarySound())) // COLUMN BRITISH_SOUND
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(definition.getAmericanSound())) // COLUMN AMERICAN_SOUND
+                        .append(replaceApostrophe(definition.getSecondarySound())) // COLUMN AMERICAN_SOUND
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(definition.getWord().getId()) // COLUMN WORD_ID

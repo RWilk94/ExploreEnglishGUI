@@ -76,8 +76,8 @@ public class SpeakingScrapperV2 extends BaseScrapper implements CommandLineRunne
                             .exercise(etutorExercise)
                             .instruction(instruction)
                             .question(question)
-                            .questionAmericanSound(americanSound)
-                            .questionBritishSound(britishSound)
+                            .questionSecondarySound(americanSound)
+                            .questionPrimarySound(britishSound)
                             .translation(translation)
                             .build()
             );

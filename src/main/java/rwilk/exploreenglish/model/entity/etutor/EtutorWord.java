@@ -44,8 +44,8 @@ public class EtutorWord implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "polish_name", length = 2000)
-  private String polishName;
+  @Column(name = "native_translation", length = 2000)
+  private String nativeTranslation;
   @Column(name = "additional_information")
   private String additionalInformation;
   @Column(name = "part_of_speech")

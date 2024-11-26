@@ -44,8 +44,8 @@ public class MaskedWriting {
       .forthPossibleAnswer(possibleAnswers.size() >= 4 ? possibleAnswers.get(3) : null)
       .question(extractWritingQuestion(element))
       .questionTemplate(extractWritingQuestionTemplate(element))
-      .questionBritishSound(extractWritingVoiceQuestion(element, "/en/"))
-      .questionAmericanSound(extractWritingVoiceQuestion(element, "/en-ame/"))
+      .questionPrimarySound(extractWritingVoiceQuestion(element, "/en/"))
+      .questionSecondarySound(extractWritingVoiceQuestion(element, "/en-ame/"))
       .translation(extractWritingQuestion(element))
       .html(element.getAttribute("innerHTML"))
       .type(ExerciseItemType.WRITING.toString())
@@ -82,8 +82,8 @@ public class MaskedWriting {
     final String description = extractWritingDescription(element);
 
     exerciseItem.setFinalAnswer(finalAnswer);
-    exerciseItem.setAnswerBritishSound(britishSound);
-    exerciseItem.setAnswerAmericanSound(americanSound);
+    exerciseItem.setAnswerPrimarySound(britishSound);
+    exerciseItem.setAnswerSecondarySound(americanSound);
     exerciseItem.setDescription(description);
 
     return exerciseItem;

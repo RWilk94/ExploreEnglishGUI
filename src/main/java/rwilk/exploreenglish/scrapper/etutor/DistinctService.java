@@ -43,14 +43,14 @@ public class DistinctService implements CommandLineRunner {
   }
 
   private void fixEmptyPolishNameInWords() {
-    final List<EtutorWord> words = wordRepository.findAllByPolishNameLike("");
+    final List<EtutorWord> words = wordRepository.findAllByNativeTranslationLike("");
 
-    words.forEach(word -> word.setPolishName(
+    words.forEach(word -> word.setNativeTranslation(
                     word.getDefinitions().stream()
                       .filter(definition -> WordTypeEnum.WORD.toString().equals(definition.getType()))
                       .findFirst()
                       .orElseThrow(() -> new IllegalStateException("sa"))
-                      .getEnglishName()
+                      .getForeignTranslation()
                   )
     );
     wordRepository.saveAll(words);
@@ -61,11 +61,11 @@ public class DistinctService implements CommandLineRunner {
       wordRepository.findAll()
         .stream()
         .collect(Collectors.groupingBy(
-          EtutorWord::getPolishName,
+          EtutorWord::getNativeTranslation,
           Collectors.groupingBy(word -> word.getDefinitions()
             .stream()
             .filter(definition -> WordTypeEnum.WORD.toString().equals(definition.getType()))
-            .map(EtutorDefinition::getEnglishName)
+            .map(EtutorDefinition::getForeignTranslation)
             .findFirst()
             .orElse("")
           )
@@ -121,10 +121,10 @@ public class DistinctService implements CommandLineRunner {
             if (firstWord.getDefinitions()
                   .stream()
                   .filter(item -> item.getType().equals(definition.getType()))
-                  .filter(item -> StringUtils.equals(item.getEnglishName(), definition.getEnglishName()))
+                  .filter(item -> StringUtils.equals(item.getForeignTranslation(), definition.getForeignTranslation()))
                   .filter(item -> StringUtils.equals(item.getAdditionalInformation(), definition.getAdditionalInformation()))
-                  .filter(item -> StringUtils.equals(item.getBritishSound(), definition.getBritishSound()))
-                  .filter(item -> StringUtils.equals(item.getAmericanSound(), definition.getAmericanSound()))
+                  .filter(item -> StringUtils.equals(item.getPrimarySound(), definition.getPrimarySound()))
+                  .filter(item -> StringUtils.equals(item.getSecondarySound(), definition.getSecondarySound()))
                   .count() == 0) {
               definition.setWord(firstWord);
               firstWord.getDefinitions().add(definition);

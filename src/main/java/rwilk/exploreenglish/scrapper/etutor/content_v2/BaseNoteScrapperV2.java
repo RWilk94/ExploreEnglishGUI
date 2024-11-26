@@ -107,8 +107,8 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
                             EtutorNoteItem.builder()
                                     .plainText(text)
                                     .example(null)
-                                    .britishSound(null)
-                                    .americanSound(null)
+                                    .primarySound(null)
+                                    .secondarySound(null)
                                     .primaryStyle(getPrimaryStyle(node))
                                     .secondaryStyle(getSecondaryStyle(node))
                                     .languageType(language)
@@ -124,9 +124,9 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
                     final String dataAudioUrl = element.attributes().get("data-audio-url");
                     if (StringUtils.isNoneBlank(dataAudioUrl)) {
                         if (dataAudioUrl.contains("en-ame")) {
-                            note.getNoteItems().get(note.getNoteItems().size() - 1).setAmericanSound(BASE_URL + dataAudioUrl);
+                            note.getNoteItems().get(note.getNoteItems().size() - 1).setSecondarySound(BASE_URL + dataAudioUrl);
                         } else {
-                            note.getNoteItems().get(note.getNoteItems().size() - 1).setBritishSound(BASE_URL + dataAudioUrl);
+                            note.getNoteItems().get(note.getNoteItems().size() - 1).setPrimarySound(BASE_URL + dataAudioUrl);
                         }
                     }
                 } else {

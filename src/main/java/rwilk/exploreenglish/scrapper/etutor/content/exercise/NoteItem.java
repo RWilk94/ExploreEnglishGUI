@@ -273,16 +273,16 @@ public class NoteItem {
           noteExample.setExample(extractExampleTest(element.getLeft()));
         }
         case SOUND -> {
-          noteExample.setBritishSound(extractBritishSound(element.getLeft()));
-          noteExample.setAmericanSound(extractAmericanSound(element.getLeft()));
+          noteExample.setPrimarySound(extractBritishSound(element.getLeft()));
+          noteExample.setSecondarySound(extractAmericanSound(element.getLeft()));
         }
         case SPACE, NEW_LINE -> {
           // do nothing
         }
         case PHONETIC_TRANSCRIPTIONS, UNDERLINE, PARAGRAPH, ITALIC -> {
           noteExample.setPlainText(extractPhoneticTranscription(element.getLeft()));
-          noteExample.setBritishSound(extractBritishSound(element.getLeft()));
-          noteExample.setAmericanSound(extractAmericanSound(element.getLeft()));
+          noteExample.setPrimarySound(extractBritishSound(element.getLeft()));
+          noteExample.setSecondarySound(extractAmericanSound(element.getLeft()));
 
           noteExamples.add(noteExample);
           noteExample = new EtutorNoteItem();

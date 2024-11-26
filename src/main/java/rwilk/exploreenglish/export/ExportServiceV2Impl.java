@@ -57,6 +57,7 @@ public class ExportServiceV2Impl implements ExportServiceV2, CommandLineRunner {
     final List<EtutorLessonWord> etutorLessonWords = etutorLessonWordRepository.findAll();
     final List<EtutorWord> etutorWords = etutorWordRepository.findAll();
 
+    // TODO fix all generators after unifying names
     etutorCourseSqlGenerator.generateSql(etutorCourses);
     etutorLessonSqlGenerator.generateSql(etutorLessons);
     etutorExerciseSqlGenerator.generateSql(etutorExercises);

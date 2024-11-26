@@ -106,8 +106,8 @@ class GrammarNoteScrapperTest {
                             EtutorNoteItem.builder()
                                     .plainText(text)
                                     .example(null)
-                                    .britishSound(null)
-                                    .americanSound(null)
+                                    .primarySound(null)
+                                    .secondarySound(null)
                                     .primaryStyle(getPrimaryStyle(node))
                                     .secondaryStyle(getSecondaryStyle(node))
                                     .build()
@@ -119,9 +119,9 @@ class GrammarNoteScrapperTest {
                     final String dataAudioUrl = element.attributes().get("data-audio-url");
                     if (StringUtils.isNoneBlank(dataAudioUrl)) {
                         if (dataAudioUrl.contains("en-ame")) {
-                            noteItems.get(noteItems.size() - 1).setAmericanSound(dataAudioUrl);
+                            noteItems.get(noteItems.size() - 1).setSecondarySound(dataAudioUrl);
                         } else {
-                            noteItems.get(noteItems.size() - 1).setBritishSound(dataAudioUrl);
+                            noteItems.get(noteItems.size() - 1).setPrimarySound(dataAudioUrl);
                         }
                     }
                 }

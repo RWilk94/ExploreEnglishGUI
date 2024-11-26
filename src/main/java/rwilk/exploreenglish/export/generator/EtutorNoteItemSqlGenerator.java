@@ -32,11 +32,11 @@ public class EtutorNoteItemSqlGenerator extends SqlGeneratorAbstract<EtutorNoteI
           .append(noteItem.getId()) // COLUMN_ID
           .append(PARAM_SEPARATOR)
           .append(QUOTE_SIGN)
-          .append(replaceApostrophe(noteItem.getAmericanSound())) // COLUMN AMERICAN_SOUND
+          .append(replaceApostrophe(noteItem.getSecondarySound())) // COLUMN AMERICAN_SOUND
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)
           .append(QUOTE_SIGN)
-          .append(replaceApostrophe(noteItem.getBritishSound())) // COLUMN BRITISH_SOUND
+          .append(replaceApostrophe(noteItem.getPrimarySound())) // COLUMN BRITISH_SOUND
           .append(QUOTE_SIGN)
           .append(PARAM_SEPARATOR)
           .append(QUOTE_SIGN)

@@ -46,11 +46,11 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(item.getQuestionBritishSound())) // COLUMN QUESTION_BRITISH_SOUND
+                        .append(replaceApostrophe(item.getQuestionPrimarySound())) // COLUMN QUESTION_BRITISH_SOUND
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(item.getQuestionAmericanSound())) // COLUMN QUESTION_AMERICAN_SOUND
+                        .append(replaceApostrophe(item.getQuestionSecondarySound())) // COLUMN QUESTION_AMERICAN_SOUND
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
@@ -74,11 +74,11 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(item.getAnswerBritishSound())) // COLUMN ANSWER_BRITISH_SOUND
+                        .append(replaceApostrophe(item.getAnswerPrimarySound())) // COLUMN ANSWER_BRITISH_SOUND
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(item.getAnswerAmericanSound())) // COLUMN ANSWER_AMERICAN_SOUND
+                        .append(replaceApostrophe(item.getAnswerSecondarySound())) // COLUMN ANSWER_AMERICAN_SOUND
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)

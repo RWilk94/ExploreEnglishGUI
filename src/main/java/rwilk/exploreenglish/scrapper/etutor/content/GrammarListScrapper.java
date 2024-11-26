@@ -91,16 +91,16 @@ public class GrammarListScrapper extends BaseScrapper implements CommandLineRunn
 
       final EtutorWord etutorWord = EtutorWord.builder()
         .exercise(etutorExercise)
-        .polishName(translation)
+        .nativeTranslation(translation)
         .definitions(new ArrayList<>())
         .html(element.getAttribute("innerHTML"))
         .build();
 
       final EtutorDefinition etutorDefinition = EtutorDefinition.builder()
         .word(etutorWord)
-        .englishName(answer)
-        .britishSound(extractBritishAudioIcon(answerElement))
-        .americanSound(extractAmericanAudioIcon(answerElement))
+        .foreignTranslation(answer)
+        .primarySound(extractBritishAudioIcon(answerElement))
+        .secondarySound(extractAmericanAudioIcon(answerElement))
         .type(WordTypeEnum.WORD.toString())
         .build();
 
@@ -114,8 +114,8 @@ public class GrammarListScrapper extends BaseScrapper implements CommandLineRunn
           .questionTemplate(questionText.replace("(...)", "[...]"))
           .correctAnswer(answer)
           .finalAnswer(answer)
-          .answerBritishSound(extractBritishAudioIcon(answerElement))
-          .answerAmericanSound(extractAmericanAudioIcon(answerElement))
+          .answerPrimarySound(extractBritishAudioIcon(answerElement))
+          .answerSecondarySound(extractAmericanAudioIcon(answerElement))
           .firstPossibleAnswer("[\"" + answerElement.findElement(By.className("cloze")).getText().trim() + "\"]")
           .translation(translation)
           .type(ExerciseType.WRITING.toString())

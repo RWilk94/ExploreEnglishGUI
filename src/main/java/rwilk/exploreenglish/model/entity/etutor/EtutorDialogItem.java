@@ -2,17 +2,9 @@ package rwilk.exploreenglish.model.entity.etutor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
@@ -22,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @Setter
@@ -40,11 +33,11 @@ public class EtutorDialogItem implements Serializable {
   @Column(name = "type")
   private String type;
   @Type(type = "text")
-  @Column(name = "dialog_english")
-  private String dialogEnglish;
+  @Column(name = "dialog_foreign")
+  private String dialogForeign;
   @Type(type = "text")
-  @Column(name = "dialog_polish")
-  private String dialogPolish;
+  @Column(name = "dialog_native")
+  private String dialogNative;
   @Column(name = "face_image")
   private String faceImage;
   @Column(name = "audio")
@@ -56,6 +49,11 @@ public class EtutorDialogItem implements Serializable {
   private String comicImage;
   @Column(name = "sound_seek_second")
   private BigDecimal soundSeekSecond;
+
+  @UpdateTimestamp
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "modify_date")
+  private Date modifyDate;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})

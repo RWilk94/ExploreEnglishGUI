@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -13,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @Setter
@@ -32,10 +34,10 @@ public final class EtutorNoteItem implements Serializable {
   @Type(type = "text")
   @Column(name = "example")
   private String example;
-  @Column(name = "british_sound")
-  private String britishSound;
-  @Column(name = "american_sound")
-  private String americanSound;
+  @Column(name = "primary_sound")
+  private String primarySound;
+  @Column(name = "secondary_sound")
+  private String secondarySound;
   @Type(type = "text")
   @Column(name = "plain_text")
   private String plainText;
@@ -49,6 +51,11 @@ public final class EtutorNoteItem implements Serializable {
   private String additional;
   @Column(name = "language_type")
   private String languageType;
+
+  @UpdateTimestamp
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "modify_date")
+  private Date modifyDate;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})

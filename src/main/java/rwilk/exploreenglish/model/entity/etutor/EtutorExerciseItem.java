@@ -1,17 +1,9 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
@@ -21,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @Setter
@@ -42,10 +35,10 @@ public final class EtutorExerciseItem implements Serializable {
   private String question;
   @Column(name = "question_template")
   private String questionTemplate;
-  @Column(name = "question_british_sound")
-  private String questionBritishSound;
-  @Column(name = "question_american_sound")
-  private String questionAmericanSound;
+  @Column(name = "question_primary_sound")
+  private String questionPrimarySound; // British English
+  @Column(name = "question_secondary_sound")
+  private String questionSecondarySound; // American English
   @Column(name = "first_possible_answer")
   private String firstPossibleAnswer;
   @Column(name = "second_possible_answer")
@@ -56,10 +49,10 @@ public final class EtutorExerciseItem implements Serializable {
   private String forthPossibleAnswer;
   @Column(name = "correct_answer")
   private String correctAnswer;
-  @Column(name = "answer_british_sound")
-  private String answerBritishSound;
-  @Column(name = "answer_american_sound")
-  private String answerAmericanSound;
+  @Column(name = "answer_primary_sound")
+  private String answerPrimarySound; // British English
+  @Column(name = "answer_secondary_sound")
+  private String answerSecondarySound; // American English
 
   @Column(name = "final_answer")
   private String finalAnswer;
@@ -74,6 +67,11 @@ public final class EtutorExerciseItem implements Serializable {
   private String html;
   @Column(name = "type")
   private String type;
+
+  @UpdateTimestamp
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "modify_date")
+  private Date modifyDate;
 
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})

@@ -69,7 +69,7 @@ public class ComicBookScrapper extends BaseScrapper implements CommandLineRunner
         EtutorDialogItem.builder()
           .id(null)
           .comicImage(extractComicImage(element))
-          .dialogPolish(extractTranslation(element))
+          .dialogNative(extractTranslation(element))
           .audio(extractAudio(element))
           .html(element.getAttribute("innerHTML"))
           .type(ExerciseType.COMIC_BOOK.toString())

@@ -70,8 +70,8 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
       etutorDialogItems.add(
         EtutorDialogItem.builder()
           .id(null)
-          .dialogEnglish(extractDialogEnglish(element))
-          .dialogPolish(extractDialogPolish(element))
+          .dialogForeign(extractDialogEnglish(element))
+          .dialogNative(extractDialogPolish(element))
           .faceImage(extractFaceImage(element))
           .audio(extractAudio(driver))
           .soundSeekSecond(extractDataSoundSeekSeconds(element))

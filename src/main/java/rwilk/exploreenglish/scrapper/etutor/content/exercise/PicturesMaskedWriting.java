@@ -83,10 +83,10 @@ public class PicturesMaskedWriting {
     final String americanSound = extractAmericanSound(element);
 
     exerciseItem.setFinalAnswer(finalAnswer);
-    exerciseItem.setAnswerBritishSound(britishSound);
-    exerciseItem.setQuestionBritishSound(britishSound);
-    exerciseItem.setAnswerAmericanSound(americanSound);
-    exerciseItem.setQuestionAmericanSound(americanSound);
+    exerciseItem.setAnswerPrimarySound(britishSound);
+    exerciseItem.setQuestionPrimarySound(britishSound);
+    exerciseItem.setAnswerSecondarySound(americanSound);
+    exerciseItem.setQuestionSecondarySound(americanSound);
 
     return exerciseItem;
   }

@@ -31,7 +31,7 @@ public class EtutorWordSqlGenerator extends SqlGeneratorAbstract<EtutorWord> {
                         .append(word.getId()) // COLUMN_ID
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(word.getPolishName())) // COLUMN POLISH_NAME
+                        .append(replaceApostrophe(word.getNativeTranslation())) // COLUMN POLISH_NAME
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)

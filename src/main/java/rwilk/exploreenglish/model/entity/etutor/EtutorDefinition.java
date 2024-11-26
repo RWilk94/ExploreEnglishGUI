@@ -41,14 +41,14 @@ public final class EtutorDefinition implements Serializable {
   private Long id;
   @Column(name = "type")
   private String type;
-  @Column(name = "english_name", length = 2000)
-  private String englishName;
+  @Column(name = "foreign_translation", length = 2000)
+  private String foreignTranslation;
   @Column(name = "additional_information", length = 2000)
   private String additionalInformation;
-  @Column(name = "british_sound", length = 2000)
-  private String britishSound;
-  @Column(name = "american_sound", length = 2000)
-  private String americanSound;
+  @Column(name = "primary_sound", length = 2000)
+  private String primarySound;   // British Sound
+  @Column(name = "secondary_sound", length = 2000)
+  private String secondarySound;   // American Sound
 
   @UpdateTimestamp
   @Temporal(TemporalType.TIMESTAMP)

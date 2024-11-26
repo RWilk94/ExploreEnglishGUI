@@ -110,7 +110,7 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
                     final List<EtutorDefinition> etutorDefinitions = webScrapDefinitions(e);
                     etutorDefinitions.forEach(d -> d.setWord(etutorWord));
                     etutorWord.getDefinitions().addAll(etutorDefinitions);
-                    etutorWord.setPolishName(webScrapPolishName(e));
+                    etutorWord.setNativeTranslation(webScrapPolishName(e));
 
                 } else if (e.tagName().equals("ul") && e.className().contains("sentencesul")) {
                     final List<EtutorDefinition> etutorDefinitions = webScrapSentenceDefinition(e);
@@ -136,7 +136,7 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
                 .select("span.phraseEntityLine")) {
 
             final EtutorDefinition etutorDefinition = EtutorDefinition.builder()
-                    .englishName(el.text().trim())
+                    .foreignTranslation(el.text().trim())
                     .type(WordTypeEnum.WORD.toString())
                     .build();
 
@@ -145,9 +145,9 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
                 final String audioUrl = audioElement.attr("data-audio-url");
 
                 if (audioUrl.contains("/en/")) {
-                    etutorDefinition.setBritishSound(BASE_URL + audioUrl);
+                    etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
                 } else if (audioUrl.contains("/en-ame/")) {
-                    etutorDefinition.setAmericanSound(BASE_URL + audioUrl);
+                    etutorDefinition.setSecondarySound(BASE_URL + audioUrl);
                 }
             }
 
@@ -178,9 +178,9 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
                 final String audioUrl = audioElement.attr("data-audio-url");
 
                 if (audioUrl.contains("/en/")) {
-                    etutorDefinition.setBritishSound(BASE_URL + audioUrl);
+                    etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
                 } else if (audioUrl.contains("/en-ame/")) {
-                    etutorDefinition.setAmericanSound(BASE_URL + audioUrl);
+                    etutorDefinition.setSecondarySound(BASE_URL + audioUrl);
                 }
             }
 
@@ -190,7 +190,7 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
                     .replace(sentenceTranslation, "")
                     .replace("Wpisz treść notatki...", "")
                     .trim());
-            etutorDefinition.setEnglishName(sentenceText);
+            etutorDefinition.setForeignTranslation(sentenceText);
 
             etutorDefinitions.add(etutorDefinition);
         }
@@ -209,20 +209,20 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
 
         final Element translationElement = element.selectFirst("div.sentenceTranslation");
         final String translation = translationElement != null ? translationElement.text().trim() : "";
-        etutorWord.setPolishName(translation);
+        etutorWord.setNativeTranslation(translation);
 
         final Element phraseElement = element.selectFirst("span.phraseEntityLine");
         final String phrase = phraseElement != null ? phraseElement.text().trim() : "";
-        etutorDefinition.setEnglishName(phrase);
+        etutorDefinition.setForeignTranslation(phrase);
 
         final List<Element> audioElements = element.select("span.audioIcon[data-audio-url]");
         for (final Element audioElement : audioElements) {
             final String audioUrl = audioElement.attr("data-audio-url");
 
             if (audioUrl.contains("/en/")) {
-                etutorDefinition.setBritishSound(BASE_URL + audioUrl);
+                etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
             } else if (audioUrl.contains("/en-ame/")) {
-                etutorDefinition.setAmericanSound(BASE_URL + audioUrl);
+                etutorDefinition.setSecondarySound(BASE_URL + audioUrl);
             }
         }
 

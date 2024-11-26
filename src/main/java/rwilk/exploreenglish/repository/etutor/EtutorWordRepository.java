@@ -8,6 +8,6 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorWord;
 
 public interface EtutorWordRepository extends JpaRepository<EtutorWord, Long> {
 
-  List<EtutorWord> findAllByPolishNameLike(String polishName);
+  List<EtutorWord> findAllByNativeTranslationLike(String polishName);
 
 }
