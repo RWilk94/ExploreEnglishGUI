@@ -8,10 +8,11 @@ import org.openqa.selenium.WebElement;
 
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExerciseItem;
+import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseItemType;
 
 @java.lang.SuppressWarnings("java:S1192")
-public class Choice {
+public class Choice extends BaseScrapper {
 
   private static final String BASE_URL = "https://www.etutor.pl";
 
@@ -37,13 +38,13 @@ public class Choice {
       .thirdPossibleAnswer(possibleAnswers.size() >= 3 ? possibleAnswers.get(2) : null)
       .forthPossibleAnswer(possibleAnswers.size() >= 4 ? possibleAnswers.get(3) : null)
       .question(extractQuestion(element))
-      .questionSecondarySound(extractVoiceQuestion(element, "/en-ame/"))
-      .questionPrimarySound(extractVoiceQuestion(element, "/en/"))
+      .questionSecondarySound(extractAmericanAudioButton(element))
+      .questionPrimarySound(extractBritishAudioButton(element))
       .finalAnswer(extractFinalAnswer(element))
       .translation(extractTranslation(element))
       .description(extractDescription(element))
-      .answerSecondarySound(extractVoiceAnswer(element, "/en-ame/"))
-      .answerPrimarySound(extractVoiceAnswer(element, "/en/"))
+      .answerSecondarySound(extractAmericanAudioIcon(element))
+      .answerPrimarySound(extractBritishAudioIcon(element))
       .html(element.getAttribute("innerHTML"))
       .type(ExerciseItemType.CHOICE.toString())
       .exercise(etutorExercise)
@@ -92,25 +93,6 @@ public class Choice {
     return questionText;
   }
 
-  private String extractVoiceQuestion(final WebElement element, final String language) {
-    if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
-      return "";
-    }
-
-    final List<WebElement> audioIconButtons = element.findElement(By.className("examChoiceQuestion"))
-      .findElements(By.className("audioIconButton"));
-
-    if (!audioIconButtons.isEmpty()) {
-      for (WebElement audioIconButton : audioIconButtons) {
-        final String dataAudioUrl = audioIconButton.getAttribute("data-audio-url");
-        if (dataAudioUrl.contains(language)) {
-          return BASE_URL + dataAudioUrl;
-        }
-      }
-    }
-    return "";
-  }
-
   private String extractFinalAnswer(final WebElement element) {
     if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
       return "";
@@ -134,25 +116,6 @@ public class Choice {
   private String extractDescription(final WebElement element) {
     if (!element.findElements(By.className("immediateExplanation")).isEmpty()) {
       return element.findElement(By.className("immediateExplanation")).getText();
-    }
-    return "";
-  }
-
-  private String extractVoiceAnswer(final WebElement element, final String language) {
-    if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
-      return "";
-    }
-
-    final List<WebElement> audioIconButtons = element.findElement(By.className("examChoiceQuestion"))
-      .findElements(By.className("icon-sound"));
-
-    if (!audioIconButtons.isEmpty()) {
-      for (WebElement audioIconButton : audioIconButtons) {
-        final String dataAudioUrl = audioIconButton.getAttribute("data-audio-url");
-        if (dataAudioUrl.contains(language)) {
-          return BASE_URL + dataAudioUrl;
-        }
-      }
     }
     return "";
   }

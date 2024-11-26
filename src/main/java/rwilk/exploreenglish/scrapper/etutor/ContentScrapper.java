@@ -65,6 +65,8 @@ public class ContentScrapper implements CommandLineRunner {
   @Override
   public void run(final String... args) throws Exception {
 //    etutorExerciseRepository.findAllByIsReady(false)
+//            .stream()
+//            .filter(it -> it.getId() > 1585L)
 //            .forEach(this::webScrap);
   }
 

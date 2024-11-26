@@ -80,8 +80,8 @@ public class PictureChoiceScrapper extends BaseScrapper implements CommandLineRu
         .finalAnswer(extractCorrectAnswer(exercise))
         .translation(extractTranslation(exercise))
         .description(null)
-        .answerSecondarySound(extractCorrectAnswerAudio(exercise, "/en-ame/"))
-        .answerPrimarySound(extractCorrectAnswerAudio(exercise, "/en/"))
+        .answerSecondarySound(extractCorrectAnswerAudio(exercise, SECONDARY_LANGUAGES))
+        .answerPrimarySound(extractCorrectAnswerAudio(exercise, PRIMARY_LANGUAGES))
         .html(exercise.getAttribute("innerHTML"))
         .type(ExerciseItemType.PICTURES_CHOICE.toString())
         .exercise(etutorExercise)
@@ -146,9 +146,9 @@ public class PictureChoiceScrapper extends BaseScrapper implements CommandLineRu
       .getText();
   }
 
-  private String extractCorrectAnswerAudio(final WebElement element, final String language) {
+  private String extractCorrectAnswerAudio(final WebElement element, final List<String> languages) {
     final String audio = extractCorrectAnswerAudio(element);
-    if (audio.contains(language)) {
+    if (languages.stream().anyMatch(audio::contains)) {
       return audio;
     }
     return null;

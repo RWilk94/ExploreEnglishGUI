@@ -32,7 +32,8 @@ public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
   @Override
   public void run(final String... args) throws Exception {
     /* call the below method to web scrap etutor courses */
-//    etutorCourseRepository.findAllByIsReady(false)
+//    etutorCourseRepository.findById(1L).ifPresent(this::webScrapAndSaveLessons);
+//    etutorCourseRepository.findById(26L).ifPresent(this::webScrapAndSaveLessons);
 //      .forEach(this::webScrapAndSaveLessons);
   }
 

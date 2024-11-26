@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.scrapper.etutor;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -16,6 +17,26 @@ public abstract class BaseScrapper {
   protected static final String AUTO_LOGIN_TOKEN = "03rW8A7qetBrsxbJzOyy94UZ3cuCokvJs0qTunfM";
   protected static final String BASE_URL = "https://www.etutor.pl";
   protected static final String XPATH_CHILDREN = "./child::*";
+  private static final String BRITISH_ENGLISH = "/en/";
+  private static final String AMERICAN_ENGLISH = "/en-ame/";
+  private static final String ITALIAN = "/it/";
+  private static final String FRENCH = "/fr/";
+  private static final String SPANISH = "/es/";
+  private static final String LATIN = "/es-latin-america/";
+  private static final String GERMAN = "/de/";
+  protected static final List<String> PRIMARY_LANGUAGES = List.of(BRITISH_ENGLISH, ITALIAN, FRENCH, SPANISH, GERMAN);
+  protected static final List<String> SECONDARY_LANGUAGES = List.of(AMERICAN_ENGLISH, LATIN);
+  private static final List<String> primaryLanguageTitles = List.of(
+          "British English",
+          "Italiano standard",
+          "Français standard",
+          "Español ibérico",
+          "Germany");
+  private static final List<String> secondaryLanguageTitles = List.of(
+          "American English",
+          "Español América Latina"
+  );
+
 
   protected BaseScrapper() {
     System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
@@ -23,7 +44,7 @@ public abstract class BaseScrapper {
 
   protected ChromeDriver getDriver() {
     final ChromeOptions options = new ChromeOptions();
-    options.addArguments("headless");
+    // options.addArguments("headless");
     options.addArguments("--mute-audio");
     options.addArguments("use-fake-ui-for-media-stream");
 
@@ -40,11 +61,19 @@ public abstract class BaseScrapper {
   }
 
   protected String extractBritishAudioIcon(final WebElement element) {
-    return extractAudioIcon(element, "British English");
+    return primaryLanguageTitles.stream()
+            .map(it -> extractAudioIcon(element, it))
+            .filter(StringUtils::isNoneBlank)
+            .findFirst()
+            .orElse("");
   }
 
   protected String extractAmericanAudioIcon(final WebElement element) {
-    return extractAudioIcon(element, "American English");
+    return secondaryLanguageTitles.stream()
+            .map(it -> extractAudioIcon(element, it))
+            .filter(StringUtils::isNoneBlank)
+            .findFirst()
+            .orElse("");
   }
 
   protected void closeCookieBox(final WebDriver driver) {
@@ -78,11 +107,19 @@ public abstract class BaseScrapper {
   }
 
   protected String extractBritishAudioButton(final WebElement element) {
-    return extractAudioButton(element, "British English");
+    return primaryLanguageTitles.stream()
+            .map(it -> extractAudioButton(element, it))
+            .filter(StringUtils::isNoneBlank)
+            .findFirst()
+            .orElse("");
   }
 
   protected String extractAmericanAudioButton(final WebElement element) {
-    return extractAudioButton(element, "American English");
+    return secondaryLanguageTitles.stream()
+            .map(it -> extractAudioButton(element, it))
+            .filter(StringUtils::isNoneBlank)
+            .findFirst()
+            .orElse("");
   }
 
   private String extractAudioButton(final WebElement element, final String title) {

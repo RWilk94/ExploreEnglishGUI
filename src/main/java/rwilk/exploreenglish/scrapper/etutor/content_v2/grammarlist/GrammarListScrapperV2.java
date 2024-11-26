@@ -144,10 +144,10 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
             for (final Element audioElement : audioElements) {
                 final String audioUrl = audioElement.attr("data-audio-url");
 
-                if (audioUrl.contains("/en/")) {
-                    etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
-                } else if (audioUrl.contains("/en-ame/")) {
+                if (SECONDARY_LANGUAGES.stream().anyMatch(audioUrl::contains)) {
                     etutorDefinition.setSecondarySound(BASE_URL + audioUrl);
+                } else {
+                    etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
                 }
             }
 
@@ -160,7 +160,10 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
         final String[] parts = html.text().split("=");
         String translation = parts.length > 1 ? parts[1].trim() : "";
 
-        translation = translation.replace("Wpisz treść notatki...", "").trim();
+        translation = translation
+                .replace("Wpisz treść notatki...", "")
+                .replace("àèéìòóù", "")
+                .trim();
 
         return beautify(translation);
     }
@@ -177,10 +180,10 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
             for (final Element audioElement : audioElements) {
                 final String audioUrl = audioElement.attr("data-audio-url");
 
-                if (audioUrl.contains("/en/")) {
-                    etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
-                } else if (audioUrl.contains("/en-ame/")) {
+                if (SECONDARY_LANGUAGES.stream().anyMatch(audioUrl::contains)) {
                     etutorDefinition.setSecondarySound(BASE_URL + audioUrl);
+                } else {
+                    etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
                 }
             }
 
@@ -219,10 +222,10 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
         for (final Element audioElement : audioElements) {
             final String audioUrl = audioElement.attr("data-audio-url");
 
-            if (audioUrl.contains("/en/")) {
-                etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
-            } else if (audioUrl.contains("/en-ame/")) {
+            if (SECONDARY_LANGUAGES.stream().anyMatch(audioUrl::contains)) {
                 etutorDefinition.setSecondarySound(BASE_URL + audioUrl);
+            } else {
+                etutorDefinition.setPrimarySound(BASE_URL + audioUrl);
             }
         }
 

@@ -88,36 +88,4 @@ public class SpeakingScrapperV2 extends BaseScrapper implements CommandLineRunne
         etutorExerciseRepository.save(etutorExercise);
         driver.quit();
     }
-
-    protected String extractBritishAudioIcon(final WebElement element) {
-        return extractAudioIcon(element, "British English");
-    }
-
-    protected String extractAmericanAudioIcon(final WebElement element) {
-        return extractAudioIcon(element, "American English");
-    }
-
-    private String extractAudioIcon(final WebElement element, final String title) {
-        return element.findElements(By.className("hasRecording")).stream()
-                .map(it -> extractDataAudioIconUrlAttribute(it, title))
-                .filter(StringUtils::isNoneEmpty)
-                .findFirst()
-                .orElse(null);
-    }
-
-    private String extractDataAudioIconUrlAttribute(final WebElement element, final String title) {
-        if (StringUtils.defaultString(element.getAttribute("title"), "").equals(title)) {
-            return BASE_URL + element.findElement(By.className("audioIcon"))
-                    .getAttribute("data-audio-url");
-        }
-        return extractDataAudioIconUrlAttributeBackup(element, title);
-    }
-
-    private String extractDataAudioIconUrlAttributeBackup(final WebElement element, final String title) {
-        if (StringUtils.defaultString(element.getAttribute("oldtitle"), "").equals(title)) {
-            return BASE_URL + element.findElement(By.className("audioIcon"))
-                    .getAttribute("data-audio-url");
-        }
-        return "";
-    }
 }

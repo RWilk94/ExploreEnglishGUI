@@ -11,10 +11,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExerciseItem;
+import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseItemType;
 
 @SuppressWarnings({"java:S1192", "java:S2142", "java:S112", "StatementWithEmptyBody", "java:S108"})
-public class MaskedWriting {
+public class MaskedWriting extends BaseScrapper {
 
   private static final String XPATH_CHILDREN = "./child::*";
   private static final String BASE_URL = "https://www.etutor.pl";
@@ -44,8 +45,8 @@ public class MaskedWriting {
       .forthPossibleAnswer(possibleAnswers.size() >= 4 ? possibleAnswers.get(3) : null)
       .question(extractWritingQuestion(element))
       .questionTemplate(extractWritingQuestionTemplate(element))
-      .questionPrimarySound(extractWritingVoiceQuestion(element, "/en/"))
-      .questionSecondarySound(extractWritingVoiceQuestion(element, "/en-ame/"))
+      .questionPrimarySound(extractWritingVoiceQuestion(element, PRIMARY_LANGUAGES))
+      .questionSecondarySound(extractWritingVoiceQuestion(element, SECONDARY_LANGUAGES))
       .translation(extractWritingQuestion(element))
       .html(element.getAttribute("innerHTML"))
       .type(ExerciseItemType.WRITING.toString())
@@ -77,8 +78,8 @@ public class MaskedWriting {
       .replace(" ,", "'")
       .replace(" ?", "?")
       .replace(" !", "!");
-    final String britishSound = extractBritishSound(element);
-    final String americanSound = extractAmericanSound(element);
+    final String britishSound = extractBritishAudioIcon(element);
+    final String americanSound = extractAmericanAudioIcon(element);
     final String description = extractWritingDescription(element);
 
     exerciseItem.setFinalAnswer(finalAnswer);
@@ -199,40 +200,16 @@ public class MaskedWriting {
     return sb.toString();
   }
 
-  private String extractWritingVoiceQuestion(final WebElement element, final String language) {
+  private String extractWritingVoiceQuestion(final WebElement element, final List<String> languages) {
     final List<WebElement> audioIconButtons = element.findElements(By.className("audioIconButton"));
 
     if (!audioIconButtons.isEmpty()) {
       for (WebElement audioIconButton : audioIconButtons) {
         final String dataAudioUrl = audioIconButton.getAttribute("data-audio-url");
-        if (dataAudioUrl.contains(language)) {
+        if (languages.stream().anyMatch(dataAudioUrl::contains)) {
           return BASE_URL + dataAudioUrl;
         }
       }
-    }
-    return "";
-  }
-
-  protected String extractBritishSound(final WebElement element) {
-    return extractSound(element, "British English");
-  }
-
-  protected String extractAmericanSound(final WebElement element) {
-    return extractSound(element, "American English");
-  }
-
-  private String extractSound(final WebElement element, final String title) {
-    return element.findElements(By.className("hasRecording")).stream()
-      .map(it -> extractDataAudioUrlAttribute(it, title))
-      .filter(StringUtils::isNoneEmpty)
-      .findFirst()
-      .orElse(null);
-  }
-
-  private String extractDataAudioUrlAttribute(final WebElement element, final String title) {
-    if (StringUtils.defaultString(element.getAttribute("title"), "").equals(title)) {
-      return BASE_URL + element.findElement(By.className("audioIcon"))
-        .getAttribute("data-audio-url");
     }
     return "";
   }

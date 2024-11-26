@@ -40,7 +40,7 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
 //    webScrapExerciseTypeExercise(etutorExerciseRepository.findById(501L).get());
 
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.EXERCISE.toString(), false)
-//      .subList(0, 10)
+//      .subList(0, 5)
 //      .forEach(this::webScrapExerciseTypeExercise);
   }
 
@@ -79,6 +79,7 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
       clickNextQuestionButton(driver);
     });
 
+    // TODO check because translation and finalAnswer are not on the right place, need to be replaced
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);

@@ -130,7 +130,7 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
                         }
                     }
                 } else {
-                    final List<String> ignoredTags = List.of("head", "br", "img");
+                    final List<String> ignoredTags = List.of("head", "br", "img", "p");
                     final String tagName = ((Element) node).tagName();
 
                     if (!ignoredTags.contains(tagName)) {

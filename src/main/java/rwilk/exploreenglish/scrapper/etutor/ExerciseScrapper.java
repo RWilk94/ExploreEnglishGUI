@@ -48,10 +48,10 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
 
   @Override
   public void run(final String... args) throws Exception {
-/*    etutorLessonRepository.findAllByIsReady(false)
-            .stream()
-            .limit(100)
-            .forEach(this::webScrapContent);*/
+//    etutorLessonRepository.findAllByIsReady(false)
+//            .stream()
+//            .limit(100)
+//            .forEach(this::webScrapContent);
   }
 
   public void webScrapContent(final EtutorLesson etutorLesson) {
