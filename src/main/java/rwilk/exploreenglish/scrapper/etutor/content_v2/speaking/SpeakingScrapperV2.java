@@ -36,20 +36,25 @@ public class SpeakingScrapperV2 extends BaseScrapper implements CommandLineRunne
 //                .forEach(this::webScrap);
     }
 
-    public void webScrap(final EtutorExercise etutorExercise) {
+    public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
         if (ExerciseType.SPEAKING != ExerciseType.valueOf(etutorExercise.getType())) {
             return;
         }
-
-        final WebDriver driver = super.getDriver();
         final WebDriverWait wait = super.openDefaultPage(driver);
 
         // open course
         driver.get(etutorExercise.getHref());
         // and wait for display list of lessons
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("exercise-pronunciation")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("lessonHeader")));
         // close cookie box
         super.closeCookieBox(driver);
+
+        if (driver.findElements(By.className("exercise-pronunciation")).isEmpty()) {
+            // TODO webscrap as note
+        } else {
+
+        }
+
 
         final WebElement content = driver.findElement(By.className("exercise-pronunciation"));
         final String instruction = content
@@ -86,6 +91,5 @@ public class SpeakingScrapperV2 extends BaseScrapper implements CommandLineRunne
         etutorExerciseItemRepository.saveAll(exerciseItems);
         etutorExercise.setIsReady(true);
         etutorExerciseRepository.save(etutorExercise);
-        driver.quit();
     }
 }

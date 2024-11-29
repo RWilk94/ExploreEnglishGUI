@@ -49,7 +49,7 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
    *
    * @param etutorExercise content
    */
-  public void webScrapPicturesWordsListTypeExercise(final EtutorExercise etutorExercise) {
+  public void webScrapPicturesWordsListTypeExercise(final EtutorExercise etutorExercise, final WebDriver driver) {
 //    Platform.runLater(() -> {
 //      final Robot robot = new Robot();
 //      robot.mouseMove(RandomUtils.nextInt(0, 2000), RandomUtils.nextInt(0, 2000));
@@ -62,7 +62,6 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
         && ExerciseType.WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
-    final WebDriver driver = super.getDriver();
     final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
@@ -158,7 +157,6 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
     etutorWordRepository.saveAll(etutorWords);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);
-    driver.quit();
   }
 
   private String extractPolishName(final WebElement element) {
@@ -385,6 +383,7 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
       case "latin" -> "latin ";
       case "AAVE" -> "African American Vernacular English";
       case "InE" -> "Indian English";
+      case "Italiano standard" -> "Italian standard";
       default -> throw new MissingEtutorLanguageVarietyException(languageVariety);
     };
   }

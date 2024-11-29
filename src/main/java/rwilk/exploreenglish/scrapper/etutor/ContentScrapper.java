@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.openqa.selenium.WebDriver;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
@@ -19,7 +20,7 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class ContentScrapper implements CommandLineRunner {
+public class ContentScrapper extends BaseScrapper implements CommandLineRunner {
 
   private final EtutorExerciseRepository etutorExerciseRepository;
   private final WordScrapper wordScrapper;
@@ -64,14 +65,17 @@ public class ContentScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-//    etutorExerciseRepository.findAllByIsReady(false)
-//            .stream()
+    etutorExerciseRepository.findAllByIsReady(false)
+            .stream()
 //            .filter(it -> it.getId() > 1585L)
-//            .forEach(this::webScrap);
+            .forEach(this::webScrap);
   }
 
   private void webScrap(final EtutorExercise it) {
-    log.warn("START scrapping {}", it);
+    log.info("START scrapping {}", it);
+
+    final WebDriver driver = super.getDriver();
+
     try {
       switch (Objects.requireNonNull(ExerciseType.fromString(it.getType()))) {
         case TIP,
@@ -79,36 +83,38 @@ public class ContentScrapper implements CommandLineRunner {
              GRAMMAR_NOTE,
              SCREEN_CULTURAL,
              SCREEN_CULINARY,
-             SCREEN_MUSIC -> noteScrapper.webScrap(it); // DONE in UI
-        case COMIC_BOOK -> comicBookScrapper.webScrap(it); // DONE in UI
-        case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it); // DONE in UI
-        case DIALOGUE -> dialogScrapper.webScrap(it); // DONE in UI
-        case MATCHING_PAIRS, MATCHING_PAIRS_GRAMMAR -> matchingPairsScrapper.webScrap(it); // DONE in UI
-        case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it); // DONE in UI
+             SCREEN_MUSIC -> noteScrapper.webScrap(it, driver); // DONE in UI
+        case COMIC_BOOK -> comicBookScrapper.webScrap(it, driver); // DONE in UI
+        case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it, driver); // DONE in UI
+        case DIALOGUE -> dialogScrapper.webScrap(it, driver); // DONE in UI
+        case MATCHING_PAIRS, MATCHING_PAIRS_GRAMMAR -> matchingPairsScrapper.webScrap(it, driver); // DONE in UI
+        case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it, driver); // DONE in UI
         case PICTURES_LISTENING -> {
           try {
-            pictureListeningScrapper.webScrap(it);
+            pictureListeningScrapper.webScrap(it, driver);
           } catch (JsonProcessingException e) {
             log.error("An error occurred due to: ", e);
           }
         } // DONE in UI
-        case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it); // DONE in UI
-        case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it); // DONE in UI
-        case GRAMMAR_LIST -> grammarListScrapper.webScrap(it); // CHECK IN UI
-        case READING -> readingScrapper.webScrap(it);
+        case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it, driver); // DONE in UI
+        case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it, driver); // DONE in UI
+        case GRAMMAR_LIST -> grammarListScrapper.webScrap(it, driver); // CHECK IN UI
+        case READING -> readingScrapper.webScrap(it, driver);
 
-        case SPEAKING -> speakingScrapper.webScrap(it);
-        case WRITING -> writingScrapper.webScrap(it);
+        // TODO SPEAKING need to be fixed
+        case SPEAKING -> throw new NotImplementedException("SPEAKING hasn't supported yet."); // speakingScrapper.webScrap(it);
+        case WRITING -> writingScrapper.webScrap(it, driver);
         case VIDEO -> throw new NotImplementedException("VIDEO hasn't supported yet.");
         default -> throw new NotImplementedException("default hasn't supported yet.");
       }
-      log.warn("FINISH scrapping {}", it);
+      log.info("FINISH scrapping {}", it);
     } catch (NotImplementedException n) {
       log.error(ExceptionUtils.getMessage(n));
     } catch (Exception e) {
       log.error("An error occurred due to: ", e);
       // throw e;
     }
+    driver.quit();
   }
 
 }

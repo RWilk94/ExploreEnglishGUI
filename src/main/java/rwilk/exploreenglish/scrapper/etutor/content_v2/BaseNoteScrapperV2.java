@@ -31,8 +31,7 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
         this.etutorNoteRepository = etutorNoteRepository;
     }
 
-    protected void webScrap(final EtutorExercise etutorExercise) {
-        final WebDriver driver = super.getDriver();
+    protected void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
         final WebDriverWait wait = super.openDefaultPage(driver);
 
         // open course
@@ -82,7 +81,6 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
         etutorNoteRepository.save(etutorNote);
         etutorExercise.setIsReady(true);
         etutorExerciseRepository.save(etutorExercise);
-        driver.quit();
     }
 
     private void printLeafNodesRecursive(final Element element, final EtutorNote note,
@@ -130,7 +128,7 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
                         }
                     }
                 } else {
-                    final List<String> ignoredTags = List.of("head", "br", "img", "p");
+                    final List<String> ignoredTags = List.of("head", "br", "img", "p", "hr", "meta");
                     final String tagName = ((Element) node).tagName();
 
                     if (!ignoredTags.contains(tagName)) {
@@ -142,7 +140,6 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
                         final String url = src.contains("https") ? src : BASE_URL + src;
                         note.getNoteItems().get(note.getNoteItems().size() - 1).setImage(url);
                     }
-
 
                 }
             } else if (node.nodeName().equals("#comment")) {

@@ -34,12 +34,10 @@ public class WritingScrapperV2 extends BaseScrapper implements CommandLineRunner
 //                .forEach(this::webScrap);
     }
 
-    public void webScrap(final EtutorExercise etutorExercise) {
+    public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
         if (ExerciseType.WRITING != ExerciseType.valueOf(etutorExercise.getType())) {
             return;
         }
-
-        final WebDriver driver = super.getDriver();
         final WebDriverWait wait = super.openDefaultPage(driver);
 
         // open course
@@ -74,6 +72,5 @@ public class WritingScrapperV2 extends BaseScrapper implements CommandLineRunner
         etutorNoteRepository.save(etutorNote);
         etutorExercise.setIsReady(true);
         etutorExerciseRepository.save(etutorExercise);
-        driver.quit();
     }
 }

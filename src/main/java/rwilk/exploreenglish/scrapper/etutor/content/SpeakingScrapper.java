@@ -18,6 +18,7 @@ import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+// TODO to remove
 @Component
 public class SpeakingScrapper extends BaseScrapper implements CommandLineRunner {
 

@@ -9,12 +9,13 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BaseScrapper {
 
-  protected static final String AUTO_LOGIN_TOKEN = "03rW8A7qetBrsxbJzOyy94UZ3cuCokvJs0qTunfM";
+  protected static final String AUTO_LOGIN_TOKEN = "2zMRYoGkd1z7HZpOX9eek6PjiskpoOAZTNWRq2Dh";
   protected static final String BASE_URL = "https://www.etutor.pl";
   protected static final String XPATH_CHILDREN = "./child::*";
   private static final String BRITISH_ENGLISH = "/en/";
@@ -43,12 +44,16 @@ public abstract class BaseScrapper {
   }
 
   protected ChromeDriver getDriver() {
+    final ChromeDriverService service = new ChromeDriverService.Builder()
+            .withSilent(true)
+            .build();
+
     final ChromeOptions options = new ChromeOptions();
-    // options.addArguments("headless");
+    options.addArguments("headless");
     options.addArguments("--mute-audio");
     options.addArguments("use-fake-ui-for-media-stream");
 
-    return new ChromeDriver(options);
+    return new ChromeDriver(service, options);
   }
 
   protected WebDriverWait openDefaultPage(final WebDriver driver) {
@@ -99,7 +104,8 @@ public abstract class BaseScrapper {
   }
 
   private String extractDataAudioIconUrlAttributeBackup(final WebElement element, final String title) {
-    if (StringUtils.defaultString(element.getAttribute("oldtitle"), "").equals(title)) {
+    if (StringUtils.defaultString(element.getAttribute("oldtitle"), "").equals(title)
+            && !element.findElements(By.className("audioIcon")).isEmpty()) {
       return BASE_URL + element.findElement(By.className("audioIcon"))
               .getAttribute("data-audio-url");
     }
@@ -139,7 +145,8 @@ public abstract class BaseScrapper {
   }
 
   private String extractDataAudioButtonUrlAttributeBackup(final WebElement element, final String title) {
-    if (StringUtils.defaultString(element.getAttribute("oldtitle"), "").equals(title)) {
+    if (StringUtils.defaultString(element.getAttribute("oldtitle"), "").equals(title)
+            && !element.findElements(By.className("audioIconButton")).isEmpty()) {
       return BASE_URL + element.findElement(By.className("audioIconButton"))
               .getAttribute("data-audio-url");
     }

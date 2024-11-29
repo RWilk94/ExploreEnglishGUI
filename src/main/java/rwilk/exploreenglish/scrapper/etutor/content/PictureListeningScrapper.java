@@ -52,12 +52,10 @@ public class PictureListeningScrapper extends BaseScrapper implements CommandLin
 //      });
   }
 
-  public void webScrap(final EtutorExercise etutorExercise) throws JsonProcessingException {
+  public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) throws JsonProcessingException {
     if (ExerciseType.PICTURES_LISTENING != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
-
-    final WebDriver driver = super.getDriver();
     final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
@@ -126,7 +124,6 @@ public class PictureListeningScrapper extends BaseScrapper implements CommandLin
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);
-    driver.quit();
   }
 
   private String extractInstruction(final WebElement element) {

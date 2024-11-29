@@ -38,12 +38,10 @@ public class ComicBookScrapper extends BaseScrapper implements CommandLineRunner
 //      .forEach(this::webScrap);
   }
 
-  public void webScrap(final EtutorExercise etutorExercise) {
+  public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
     if (ExerciseType.COMIC_BOOK != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
-
-    final WebDriver driver = super.getDriver();
     final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
@@ -89,7 +87,6 @@ public class ComicBookScrapper extends BaseScrapper implements CommandLineRunner
     etutorDialogRepository.saveAll(etutorDialogItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);
-    driver.quit();
   }
 
   private String extractComicImage(final WebElement element) {

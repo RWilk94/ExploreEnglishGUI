@@ -37,13 +37,12 @@ public class MatchingPairsScrapper extends BaseScrapper implements CommandLineRu
 //      .forEach(this::webScrap);
   }
 
-  public void webScrap(final EtutorExercise etutorExercise) {
+  public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
     if (!List.of(
             ExerciseType.MATCHING_PAIRS_GRAMMAR,
             ExerciseType.MATCHING_PAIRS).contains(ExerciseType.valueOf(etutorExercise.getType()))) {
       return;
     }
-    final WebDriver driver = super.getDriver();
     final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
@@ -83,6 +82,5 @@ public class MatchingPairsScrapper extends BaseScrapper implements CommandLineRu
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);
-    driver.quit();
   }
 }

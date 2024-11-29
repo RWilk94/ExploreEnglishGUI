@@ -47,12 +47,10 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
 //      .forEach(this::webScrap);
   }
 
-  public void webScrap(final EtutorExercise etutorExercise) {
+  public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
     if (ExerciseType.DIALOGUE != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
-
-    final WebDriver driver = super.getDriver();
     final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
@@ -115,7 +113,6 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);
-    driver.quit();
   }
 
   private String extractDialogEnglish(final WebElement element) {

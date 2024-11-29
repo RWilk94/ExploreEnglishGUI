@@ -22,6 +22,7 @@ import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.content.exercise.NoteItem;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+// TODO to remove
 @SuppressWarnings({"java:S1192", "DuplicatedCode"})
 @Component
 public class NoteScrapper extends BaseScrapper implements CommandLineRunner {

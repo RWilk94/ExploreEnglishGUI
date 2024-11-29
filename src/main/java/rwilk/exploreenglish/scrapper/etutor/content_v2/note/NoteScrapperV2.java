@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.scrapper.etutor.content_v2.note;
 
+import org.openqa.selenium.WebDriver;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
@@ -26,7 +27,7 @@ public class NoteScrapperV2 extends BaseNoteScrapperV2 implements CommandLineRun
 //                .forEach(this::webScrap);
     }
 
-    public void webScrap(final EtutorExercise etutorExercise) {
+    public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
         if (!List.of(
                 ExerciseType.TIP,
                 ExerciseType.SCREEN,
@@ -38,6 +39,6 @@ public class NoteScrapperV2 extends BaseNoteScrapperV2 implements CommandLineRun
             return;
         }
 
-        super.webScrap(etutorExercise);
+        super.webScrap(etutorExercise, driver);
     }
 }

@@ -43,12 +43,10 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
 //        etutorExerciseRepository.findById(526L).ifPresent(this::webScrap);
     }
 
-    public void webScrap(final EtutorExercise etutorExercise) {
+    public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
         if (ExerciseType.GRAMMAR_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
             return;
         }
-
-        final WebDriver driver = super.getDriver();
         final WebDriverWait wait = super.openDefaultPage(driver);
 
         // open course
@@ -59,6 +57,8 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
         super.closeCookieBox(driver);
         // open dropdown menu
         driver.findElement(By.className("dropdownMenu")).click();
+        //
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("dropdownMenuOptions")));
         // and select 'Lista elementów'
         driver.findElement(By.className("dropdownMenuOptions")).findElement(By.linkText("Lista elementów")).click();
 
@@ -91,7 +91,6 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
         etutorWordRepository.saveAll(etutorWords);
         etutorExercise.setIsReady(true);
         etutorExerciseRepository.save(etutorExercise);
-        driver.quit();
     }
 
     private EtutorWord webScrapWordAndDefinition(final Element element) {

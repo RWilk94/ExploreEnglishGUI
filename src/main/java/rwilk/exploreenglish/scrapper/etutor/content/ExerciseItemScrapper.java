@@ -44,11 +44,10 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
 //      .forEach(this::webScrapExerciseTypeExercise);
   }
 
-  public void webScrapExerciseTypeExercise(final EtutorExercise etutorExercise) {
+  public void webScrapExerciseTypeExercise(final EtutorExercise etutorExercise, final WebDriver driver) {
     if (ExerciseType.EXERCISE != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
-    final WebDriver driver = super.getDriver();
     final WebDriverWait wait = super.openDefaultPage(driver);
 
     // open course
@@ -83,7 +82,6 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);
-    driver.quit();
   }
 
   private String extractExerciseInstruction(final WebElement element) {
@@ -108,6 +106,9 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
   }
 
   private String extractDescription(final WebElement element) {
+    if (element.findElements(By.className("immediateExplanation")).isEmpty()) {
+      return "";
+    }
     return element.findElement(By.className("immediateExplanation")).getText();
   }
 
