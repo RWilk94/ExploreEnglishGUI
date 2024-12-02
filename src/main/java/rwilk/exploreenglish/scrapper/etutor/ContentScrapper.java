@@ -12,6 +12,7 @@ import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.scrapper.etutor.content.*;
 import rwilk.exploreenglish.scrapper.etutor.content_v2.grammarlist.GrammarListScrapperV2;
 import rwilk.exploreenglish.scrapper.etutor.content_v2.note.NoteScrapperV2;
+import rwilk.exploreenglish.scrapper.etutor.content_v2.reading.ReadingScrapperV2;
 import rwilk.exploreenglish.scrapper.etutor.content_v2.speaking.SpeakingScrapperV2;
 import rwilk.exploreenglish.scrapper.etutor.content_v2.writing.WritingScrapperV2;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
@@ -31,7 +32,7 @@ public class ContentScrapper extends BaseScrapper implements CommandLineRunner {
   private final MatchingPairsScrapper matchingPairsScrapper;
   private final DialogScrapper dialogScrapper;
   private final ComicBookScrapper comicBookScrapper;
-  private final ReadingScrapper readingScrapper;
+  private final ReadingScrapperV2 readingScrapper;
   private final PicturesMaskedWritingScrapper picturesMaskedWritingScrapper;
   private final SpeakingScrapperV2 speakingScrapper;
   private final GrammarListScrapperV2 grammarListScrapper;
@@ -43,7 +44,7 @@ public class ContentScrapper extends BaseScrapper implements CommandLineRunner {
                          final ExerciseItemScrapper exerciseItemScrapper,
                          final MatchingPairsScrapper matchingPairsScrapper, final DialogScrapper dialogScrapper,
                          final ComicBookScrapper comicBookScrapper,
-                         final ReadingScrapper readingScrapper,
+                         final ReadingScrapperV2 readingScrapper,
                          final PicturesMaskedWritingScrapper picturesMaskedWritingScrapper,
                          final SpeakingScrapperV2 speakingScrapper, final GrammarListScrapperV2 grammarListScrapper,
                          final WritingScrapperV2 writingScrapper) {
@@ -98,7 +99,7 @@ public class ContentScrapper extends BaseScrapper implements CommandLineRunner {
         } // DONE in UI
         case PICTURES_CHOICE -> pictureChoiceScrapper.webScrap(it, driver); // DONE in UI
         case PICTURES_WORDS_LIST, WORDS_LIST -> wordScrapper.webScrapPicturesWordsListTypeExercise(it, driver); // DONE in UI
-        case GRAMMAR_LIST -> grammarListScrapper.webScrap(it, driver); // CHECK IN UI
+        case GRAMMAR_LIST -> grammarListScrapper.webScrap(it, driver); // DONE IN UI
         case READING -> readingScrapper.webScrap(it, driver);
 
         // TODO SPEAKING need to be fixed

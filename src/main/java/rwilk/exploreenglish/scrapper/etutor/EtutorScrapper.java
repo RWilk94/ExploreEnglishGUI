@@ -39,40 +39,44 @@ public class EtutorScrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        List<EtutorCourse> courses = etutorCourseRepository.findAll();
-//
-//        if (courses.size() != courseScrapper.countCourses()) {
-//            courseScrapper.webScrapAndSaveCourses();
-//        }
-//        courses = etutorCourseRepository.findAllByIsReady(false);
-//
-//        courses.forEach(course -> {
-//            etutorLessonRepository.deleteAllByCourse_Id(course.getId());
-//
-//            lessonScrapper.webScrapAndSaveLessons(course);
-//
-//            course.setIsReady(true);
-//            etutorCourseRepository.save(course);
-//        });
-//
-//        etutorLessonRepository.findAllByIsReady(false)
-//                .forEach(lesson -> {
-//                    etutorExerciseRepository.deleteAllByLesson_Id(lesson.getId());
-//
-//                    exerciseScrapper.webScrapContent(lesson);
-//
-//                    lesson.setIsReady(true);
-//                    etutorLessonRepository.save(lesson);
-//                });
-//
-//        etutorExerciseRepository.findAllByIsReady(false)
-//                .stream()
-//                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.SPEAKING)
-//                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.VIDEO)
-//                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.MULTIREPRESENTATION)
-//                .forEach(contentScrapper::webScrap);
+        webScrap();
+    }
 
-//        distinctService.fixEmptyPolishNameInWords();
-//        distinctService.generateEtutorLessonWords();
+    public void webScrap() {
+        List<EtutorCourse> courses = etutorCourseRepository.findAll();
+
+        if (courses.size() != courseScrapper.countCourses()) {
+            courseScrapper.webScrapAndSaveCourses();
+        }
+        courses = etutorCourseRepository.findAllByIsReady(false);
+
+        courses.forEach(course -> {
+            etutorLessonRepository.deleteAllByCourse_Id(course.getId());
+
+            lessonScrapper.webScrapAndSaveLessons(course);
+
+            course.setIsReady(true);
+            etutorCourseRepository.save(course);
+        });
+
+        etutorLessonRepository.findAllByIsReady(false)
+                .forEach(lesson -> {
+                    etutorExerciseRepository.deleteAllByLesson_Id(lesson.getId());
+
+                    exerciseScrapper.webScrapContent(lesson);
+
+                    lesson.setIsReady(true);
+                    etutorLessonRepository.save(lesson);
+                });
+
+        etutorExerciseRepository.findAllByIsReady(false)
+                .stream()
+                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.SPEAKING)
+                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.VIDEO)
+                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.MULTIREPRESENTATION)
+                .forEach(contentScrapper::webScrap);
+
+        distinctService.fixEmptyPolishNameInWords();
+        distinctService.generateEtutorLessonWords();
     }
 }

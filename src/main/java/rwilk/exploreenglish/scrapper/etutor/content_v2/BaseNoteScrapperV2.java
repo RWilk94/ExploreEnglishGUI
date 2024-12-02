@@ -83,7 +83,7 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
         etutorExerciseRepository.save(etutorExercise);
     }
 
-    private void printLeafNodesRecursive(final Element element, final EtutorNote note,
+    protected void printLeafNodesRecursive(final Element element, final EtutorNote note,
                                          final String language) {
         if (element.children().isEmpty()) {
             System.out.println(element.text());

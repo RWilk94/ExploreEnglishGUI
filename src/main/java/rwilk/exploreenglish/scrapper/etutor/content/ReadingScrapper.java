@@ -22,6 +22,7 @@ import rwilk.exploreenglish.scrapper.etutor.content.exercise.Choice;
 import rwilk.exploreenglish.scrapper.etutor.content.exercise.Cloze;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+// TODO to remove
 @java.lang.SuppressWarnings({"java:S1192", "java:S3776"})
 @Component
 public class ReadingScrapper extends BaseScrapper implements CommandLineRunner {
