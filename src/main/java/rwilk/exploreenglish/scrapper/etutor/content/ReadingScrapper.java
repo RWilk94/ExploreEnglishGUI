@@ -19,6 +19,7 @@ import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.content.exercise.Choice;
+import rwilk.exploreenglish.scrapper.etutor.content.exercise.Cloze;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 @java.lang.SuppressWarnings({"java:S1192", "java:S3776"})
@@ -80,21 +81,45 @@ public class ReadingScrapper extends BaseScrapper implements CommandLineRunner {
       final String instruction = exercise.findElement(By.className("exerciseinstruction")).getText();
 
       for (final WebElement ex : exercise.findElements(By.className("exercise-numbered-question"))) {
-        final EtutorExerciseItem etutorExerciseItem = Choice.webScrap(etutorExercise, ex, instruction);
-        exerciseItems.add(etutorExerciseItem);
 
-        // find and click correct answer
-        for (final WebElement answer : ex.findElements(By.className("examChoiceOptionBox"))) {
-          if (answer.findElement(By.tagName("input")).getAttribute("value")
-            .equals(etutorExerciseItem.getCorrectAnswer())) {
-            answer.click();
-            // and get to next question
-            final WebElement nextQuestionButton = driver.findElement(By.id("nextQuestionButton"));
-            if (nextQuestionButton != null && nextQuestionButton.isDisplayed() && !nextQuestionButton.getAttribute("class")
-              .contains("hidden")) {
-              nextQuestionButton.click();
+        final WebElement component = ex.findElement(By.className("component"));
+        final String type = component.getAttribute("data-component");
+
+        if (type.equalsIgnoreCase("choice")) {
+          final EtutorExerciseItem etutorExerciseItem = Choice.webScrap(etutorExercise, ex, instruction);
+          exerciseItems.add(etutorExerciseItem);
+
+          // find and click correct answer
+          for (final WebElement answer : ex.findElements(By.className("examChoiceOptionBox"))) {
+            if (answer.findElement(By.tagName("input")).getAttribute("value")
+                    .equals(etutorExerciseItem.getCorrectAnswer())) {
+              answer.click();
+              // and get to next question
+              final WebElement nextQuestionButton = driver.findElement(By.id("nextQuestionButton"));
+              if (nextQuestionButton != null && nextQuestionButton.isDisplayed() && !nextQuestionButton.getAttribute("class")
+                      .contains("hidden")) {
+                nextQuestionButton.click();
+              }
+              break;
             }
-            break;
+          }
+
+        } else if (type.equalsIgnoreCase("cloze")) {
+          final EtutorExerciseItem etutorExerciseItem = Cloze.webScrap(etutorExercise, ex, instruction);
+          exerciseItems.add(etutorExerciseItem);
+
+          final WebElement solveQuestionButton = driver.findElement(By.id("solveQuestionButton"));
+          if (solveQuestionButton != null && solveQuestionButton.isDisplayed() && !solveQuestionButton.getAttribute("class")
+                  .contains("hidden")) {
+            solveQuestionButton.click();
+          }
+
+          super.sleep(300);
+
+          final WebElement nextQuestionButton = driver.findElement(By.id("nextQuestionButton"));
+          if (nextQuestionButton != null && nextQuestionButton.isDisplayed() && !nextQuestionButton.getAttribute("class")
+                  .contains("hidden")) {
+            nextQuestionButton.click();
           }
         }
       }

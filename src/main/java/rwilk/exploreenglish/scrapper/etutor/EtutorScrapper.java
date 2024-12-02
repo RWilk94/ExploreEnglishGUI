@@ -68,6 +68,8 @@ public class EtutorScrapper implements CommandLineRunner {
         etutorExerciseRepository.findAllByIsReady(false)
                 .stream()
                 .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.SPEAKING)
+                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.VIDEO)
+                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.MULTIREPRESENTATION)
                 .forEach(contentScrapper::webScrap);
 
         distinctService.fixEmptyPolishNameInWords();

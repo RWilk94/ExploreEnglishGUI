@@ -93,6 +93,14 @@ public abstract class BaseScrapper {
     }
   }
 
+  protected void sleep(int millis) {
+    try {
+      Thread.sleep(millis);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private String extractAudioIcon(final WebElement element, final String title) {
     return element.findElements(By.className("hasRecording")).stream()
       .map(it -> extractDataAudioIconUrlAttribute(it, title))

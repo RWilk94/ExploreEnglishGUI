@@ -14,8 +14,6 @@ import rwilk.exploreenglish.scrapper.etutor.type.ExerciseItemType;
 @java.lang.SuppressWarnings("java:S1192")
 public class Choice extends BaseScrapper {
 
-  private static final String BASE_URL = "https://www.etutor.pl";
-
   public static EtutorExerciseItem webScrap(final EtutorExercise etutorExercise, final WebElement element,
                                             final String instruction) {
     return new Choice().get(etutorExercise, element, instruction);
