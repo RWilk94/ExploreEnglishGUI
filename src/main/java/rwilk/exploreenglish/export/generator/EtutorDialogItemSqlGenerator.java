@@ -22,7 +22,7 @@ public class EtutorDialogItemSqlGenerator extends SqlGeneratorAbstract<EtutorDia
         final StringBuilder sql = new StringBuilder();
 
         for (final List<EtutorDialogItem> chunk : chunks) {
-            sql.append("INSERT INTO 'dialog_items' ('id', 'type', 'dialog_english', 'dialog_polish', 'face_image', " +
+            sql.append("INSERT INTO 'dialog_items' ('id', 'type', 'dialog_foreign', 'dialog_native', 'face_image', " +
                     "'audio', comic_image, 'sound_seek_second', 'exercise_id') VALUES ");
 
             for (final EtutorDialogItem dialog : chunk) {
@@ -35,11 +35,11 @@ public class EtutorDialogItemSqlGenerator extends SqlGeneratorAbstract<EtutorDia
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostropheWithoutTrim(dialog.getDialogForeign())) // COLUMN DIALOG_ENGLISH
+                        .append(replaceApostropheWithoutTrim(dialog.getDialogForeign())) // COLUMN dialog_foreign
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostropheWithoutTrim(dialog.getDialogNative())) // COLUMN DIALOG_POLISH
+                        .append(replaceApostropheWithoutTrim(dialog.getDialogNative())) // COLUMN dialog_native
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)

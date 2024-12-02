@@ -21,6 +21,7 @@ public class EtutorLessonWordSqlGenerator extends SqlGeneratorAbstract<EtutorLes
         final List<List<EtutorLessonWord>> chunks = ListUtils.partition(source, CHUNK_SIZE);
         final StringBuilder sql = new StringBuilder();
 
+        // TODO Can position column be removed?
         for (final List<EtutorLessonWord> chunk : chunks) {
             sql.append("INSERT INTO 'lesson_words' ('id', 'position', 'exercise_id', 'word_id') VALUES ");
 

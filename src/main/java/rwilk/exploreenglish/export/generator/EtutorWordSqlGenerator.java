@@ -22,7 +22,7 @@ public class EtutorWordSqlGenerator extends SqlGeneratorAbstract<EtutorWord> {
         final StringBuilder sql = new StringBuilder();
 
         for (final List<EtutorWord> chunk : chunks) {
-            sql.append("INSERT INTO 'words' ('id', 'polish_name', 'additional_information', 'part_of_speech', 'article', " +
+            sql.append("INSERT INTO 'words' ('id', 'native_translation', 'additional_information', 'part_of_speech', 'article', " +
                     "'grammar_type', 'image', 'exercise_id') VALUES");
 
             for (final EtutorWord word : chunk) {
@@ -31,7 +31,7 @@ public class EtutorWordSqlGenerator extends SqlGeneratorAbstract<EtutorWord> {
                         .append(word.getId()) // COLUMN_ID
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(word.getNativeTranslation())) // COLUMN POLISH_NAME
+                        .append(replaceApostrophe(word.getNativeTranslation())) // COLUMN native_translation
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)

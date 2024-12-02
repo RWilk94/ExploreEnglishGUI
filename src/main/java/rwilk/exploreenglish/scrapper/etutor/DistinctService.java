@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.transaction.annotation.Transactional;
 import rwilk.exploreenglish.model.WordTypeEnum;
 import rwilk.exploreenglish.model.entity.etutor.EtutorDefinition;
 import rwilk.exploreenglish.model.entity.etutor.EtutorLessonWord;
@@ -56,6 +57,7 @@ public class DistinctService implements CommandLineRunner {
     wordRepository.saveAll(words);
   }
 
+  @Transactional
   public void generateEtutorLessonWords() {
     final Map<String, Map<String, List<EtutorWord>>> wordsGroupedByName =
       wordRepository.findAll()

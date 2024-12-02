@@ -22,8 +22,8 @@ public class EtutorDefinitionSqlGenerator extends SqlGeneratorAbstract<EtutorDef
         final StringBuilder sql = new StringBuilder();
 
         for (final List<EtutorDefinition> chunk : chunks) {
-            sql.append("INSERT INTO 'definitions' ('id', 'type', 'english_name', 'additional_information', " +
-                    "'british_sound', 'american_sound', 'word_id') VALUES ");
+            sql.append("INSERT INTO 'definitions' ('id', 'type', 'foreign_translation', 'additional_information', " +
+                    "'primary_sound', 'secondary_sound', 'word_id') VALUES ");
 
             for (final EtutorDefinition definition : chunk) {
                 sql.append("\n")
@@ -35,7 +35,7 @@ public class EtutorDefinitionSqlGenerator extends SqlGeneratorAbstract<EtutorDef
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(definition.getForeignTranslation())) // COLUMN ENGLISH_NAME
+                        .append(replaceApostrophe(definition.getForeignTranslation())) // COLUMN foreign_translation
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
@@ -43,11 +43,11 @@ public class EtutorDefinitionSqlGenerator extends SqlGeneratorAbstract<EtutorDef
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(definition.getPrimarySound())) // COLUMN BRITISH_SOUND
+                        .append(replaceApostrophe(definition.getPrimarySound())) // COLUMN primary_sound
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(definition.getSecondarySound())) // COLUMN AMERICAN_SOUND
+                        .append(replaceApostrophe(definition.getSecondarySound())) // COLUMN secondary_sound
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(definition.getWord().getId()) // COLUMN WORD_ID

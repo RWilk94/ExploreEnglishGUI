@@ -23,9 +23,9 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
 
         for (final List<EtutorExerciseItem> chunk : chunks) {
             sql.append("INSERT INTO 'exercise_items' ('id', 'instruction', 'question', 'question_template', " +
-                    "'question_british_sound', 'question_american_sound', 'first_possible_answer', " +
+                    "'question_primary_sound', 'question_secondary_sound', 'first_possible_answer', " +
                     "'second_possible_answer', 'third_possible_answer', 'forth_possible_answer', 'correct_answer', " +
-                    "'answer_british_sound', 'answer_american_sound', 'final_answer', 'translation', 'description', " +
+                    "'answer_primary_sound', 'answer_secondary_sound', 'final_answer', 'translation', 'description', " +
                     "'type', 'image', 'exercise_id') VALUES ");
 
             for (final EtutorExerciseItem item : chunk) {
@@ -46,11 +46,11 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(item.getQuestionPrimarySound())) // COLUMN QUESTION_BRITISH_SOUND
+                        .append(replaceApostrophe(item.getQuestionPrimarySound())) // COLUMN question_primary_sound
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(item.getQuestionSecondarySound())) // COLUMN QUESTION_AMERICAN_SOUND
+                        .append(replaceApostrophe(item.getQuestionSecondarySound())) // COLUMN question_secondary_sound
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
@@ -74,11 +74,11 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(item.getAnswerPrimarySound())) // COLUMN ANSWER_BRITISH_SOUND
+                        .append(replaceApostrophe(item.getAnswerPrimarySound())) // COLUMN answer_primary_sound
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)
-                        .append(replaceApostrophe(item.getAnswerSecondarySound())) // COLUMN ANSWER_AMERICAN_SOUND
+                        .append(replaceApostrophe(item.getAnswerSecondarySound())) // COLUMN answer_secondary_sound
                         .append(QUOTE_SIGN)
                         .append(PARAM_SEPARATOR)
                         .append(QUOTE_SIGN)

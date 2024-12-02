@@ -23,7 +23,7 @@ public class EtutorNoteItemSqlGenerator extends SqlGeneratorAbstract<EtutorNoteI
     final StringBuilder sql = new StringBuilder();
 
     for (final List<EtutorNoteItem> chunk : chunks) {
-      sql.append("INSERT INTO 'note_items' ('id', 'american_sound', 'british_sound', 'example', 'plain_text', " +
+      sql.append("INSERT INTO 'note_items' ('id', 'secondary_sound', 'primary_sound', 'example', 'plain_text', " +
                  "'image', 'primary_style', 'secondary_style', 'additional', 'language_type', 'note_id') VALUES ");
 
       for (final EtutorNoteItem noteItem : chunk) {
