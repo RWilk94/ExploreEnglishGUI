@@ -86,7 +86,7 @@ public class ContentScrapper extends BaseScrapper implements CommandLineRunner {
              SCREEN_MUSIC -> noteScrapper.webScrap(it, driver); // DONE in UI
         case COMIC_BOOK -> comicBookScrapper.webScrap(it, driver); // DONE in UI
         case PICTURES_MASKED_WRITING -> picturesMaskedWritingScrapper.webScrap(it, driver); // DONE in UI
-        case DIALOGUE -> dialogScrapper.webScrap(it, driver); // DONE in UI
+        case DIALOG -> dialogScrapper.webScrap(it, driver); // DONE in UI
         case MATCHING_PAIRS, MATCHING_PAIRS_GRAMMAR -> matchingPairsScrapper.webScrap(it, driver); // DONE in UI
         case EXERCISE -> exerciseItemScrapper.webScrapExerciseTypeExercise(it, driver); // DONE in UI
         case PICTURES_LISTENING -> {

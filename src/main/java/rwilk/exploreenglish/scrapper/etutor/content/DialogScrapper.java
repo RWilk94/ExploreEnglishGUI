@@ -48,7 +48,7 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
   }
 
   public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
-    if (ExerciseType.DIALOGUE != ExerciseType.valueOf(etutorExercise.getType())) {
+    if (ExerciseType.DIALOG != ExerciseType.valueOf(etutorExercise.getType())) {
       return;
     }
     final WebDriverWait wait = super.openDefaultPage(driver);
@@ -74,7 +74,7 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
           .audio(extractAudio(driver))
           .soundSeekSecond(extractDataSoundSeekSeconds(element))
           .html(element.getAttribute("innerHTML"))
-          .type(ExerciseType.DIALOGUE.toString())
+          .type(ExerciseType.DIALOG.toString())
           .exercise(etutorExercise)
           .build()
       );
