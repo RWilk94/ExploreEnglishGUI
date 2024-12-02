@@ -72,6 +72,7 @@ public class ReadingScrapper extends BaseScrapper implements CommandLineRunner {
 
     if (!driver.findElements(By.id("switchToExerciseTestButton")).isEmpty()) {
       final WebElement switchToExerciseTestButton = driver.findElement(By.id("switchToExerciseTestButton"));
+      scrollToElement(driver, switchToExerciseTestButton);
       switchToExerciseTestButton.click();
 
       final WebElement exercise = driver.findElement(By.id("readingExerciseTest"))

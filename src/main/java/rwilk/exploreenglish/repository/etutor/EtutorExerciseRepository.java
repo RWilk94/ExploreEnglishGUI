@@ -11,4 +11,6 @@ public interface EtutorExerciseRepository extends JpaRepository<EtutorExercise, 
   List<EtutorExercise> findAllByIsReady(Boolean isReady);
 
   List<EtutorExercise> findAllByTypeAndIsReady(String type, Boolean isReady);
+
+  void deleteAllByLesson_Id(Long lessonId);
 }

@@ -64,6 +64,8 @@ public class GrammarListScrapper extends BaseScrapper implements CommandLineRunn
     super.closeCookieBox(driver);
     // open dropdown menu
     driver.findElement(By.className("dropdownMenu")).click();
+    //
+    wait.until(ExpectedConditions.presenceOfElementLocated(By.className("dropdownMenuOptions")));
     // and select 'Lista elementów'
     driver.findElement(By.className("dropdownMenuOptions")).findElement(By.linkText("Lista elementów")).click();
 

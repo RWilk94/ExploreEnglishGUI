@@ -96,6 +96,7 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
         for (final WebElement answer : ex.findElements(By.className("examChoiceOptionBox"))) {
           if (answer.findElement(By.tagName("input")).getAttribute("value")
             .equals(etutorExerciseItem.getCorrectAnswer())) {
+            scrollToElement(driver, answer);
             answer.click();
             // and get to next question
             final WebElement nextQuestionButton = driver.findElement(By.id("nextQuestionButton"));

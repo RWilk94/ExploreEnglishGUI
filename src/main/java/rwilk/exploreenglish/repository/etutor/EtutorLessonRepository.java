@@ -9,4 +9,6 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorLesson;
 public interface EtutorLessonRepository extends JpaRepository<EtutorLesson, Long> {
 
   List<EtutorLesson> findAllByIsReady(Boolean isReady);
+
+  void deleteAllByCourse_Id(Long courseId);
 }

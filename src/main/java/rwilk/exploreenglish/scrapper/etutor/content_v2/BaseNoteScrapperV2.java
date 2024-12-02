@@ -144,6 +144,8 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
                 }
             } else if (node.nodeName().equals("#comment")) {
                 // do nothing
+            } else if (node.nodeName().equals("#data")) {
+                // do nothing
             } else {
                 throw new UnsupportedOperationException(node.nodeName());
             }

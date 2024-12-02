@@ -65,13 +65,13 @@ public class ContentScrapper extends BaseScrapper implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    etutorExerciseRepository.findAllByIsReady(false)
-            .stream()
+//    etutorExerciseRepository.findAllByIsReady(false)
+//            .stream()
 //            .filter(it -> it.getId() > 1585L)
-            .forEach(this::webScrap);
+//            .forEach(this::webScrap);
   }
 
-  private void webScrap(final EtutorExercise it) {
+  public void webScrap(final EtutorExercise it) {
     log.info("START scrapping {}", it);
 
     final WebDriver driver = super.getDriver();

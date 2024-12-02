@@ -29,11 +29,9 @@ public class PicturesMaskedWriting extends BaseScrapper {
   private EtutorExerciseItem get(final EtutorExercise etutorExercise, final WebElement element,
                                  final String instruction) {
     List<String> possibleAnswers = extractPossibleAnswers(element);
-    if (possibleAnswers.size() > 4) {
+
+    while (possibleAnswers.size() > 4) {
       possibleAnswers = mergePossibleAnswers(possibleAnswers);
-      if (possibleAnswers.size() > 4) {
-        throw new UnsupportedOperationException("possibleAnswers contains more then 4 items");
-      }
     }
 
     final EtutorExerciseItem exerciseItem = EtutorExerciseItem.builder()

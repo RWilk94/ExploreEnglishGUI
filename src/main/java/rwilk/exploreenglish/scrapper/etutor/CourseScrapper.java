@@ -86,6 +86,18 @@ public class CourseScrapper extends BaseScrapper implements CommandLineRunner {
         webScrap(frenchCourses);
     }
 
+    public int countCourses() {
+        return englishCourses.values().stream().mapToInt(List::size).sum() +
+                germanCourses.values().stream().mapToInt(List::size).sum() +
+                spanishCourses.values().stream().mapToInt(List::size).sum() +
+                italianCourses.values().stream().mapToInt(List::size).sum() +
+                frenchCourses.values().stream().mapToInt(List::size).sum();
+    }
+
+    public List<EtutorCourse> findAllCoursesToWebScrap() {
+        return etutorCourseRepository.findAllByIsReady(false);
+    }
+
     private void webScrap(final Map<LanguageEnum, List<String>> courses) {
         final LanguageEnum language = courses.keySet().stream().findFirst().orElse(null);
         final List<String> courseList = courses.values().stream().findFirst().orElseThrow(() -> new IllegalStateException("Course list is empty"));
@@ -112,6 +124,7 @@ public class CourseScrapper extends BaseScrapper implements CommandLineRunner {
                     .image(driver.findElement(By.className("courseImg"))
                             .getAttribute("src"))
                     .language(language.name())
+                    .isReady(false)
                     .build();
 
             etutorCourseRepository.save(etutorCourse);

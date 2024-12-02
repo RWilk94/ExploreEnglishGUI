@@ -4,10 +4,7 @@ import java.time.Duration;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -84,6 +81,15 @@ public abstract class BaseScrapper {
   protected void closeCookieBox(final WebDriver driver) {
     if (!driver.findElements(By.id("CybotCookiebotDialog")).isEmpty()) {
       driver.findElement(By.id("CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll")).click();
+    }
+  }
+
+  protected void scrollToElement(final WebDriver driver, final WebElement element) {
+    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
     }
   }
 

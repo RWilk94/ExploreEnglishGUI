@@ -30,9 +30,10 @@ public class MaskedWriting extends BaseScrapper {
 
   private EtutorExerciseItem get(final EtutorExercise etutorExercise, final WebElement element,
                                  final String instruction, final WebDriverWait wait) {
-    final List<String> possibleAnswers = extractPossibleAnswers(element);
-    if (possibleAnswers.size() > 4) {
-      throw new UnsupportedOperationException("possibleAnswers contains more then 4 items");
+    List<String> possibleAnswers = extractPossibleAnswers(element);
+
+    while (possibleAnswers.size() > 4) {
+      possibleAnswers = mergePossibleAnswers(possibleAnswers);
     }
 
     final EtutorExerciseItem exerciseItem = EtutorExerciseItem.builder()
@@ -55,7 +56,6 @@ public class MaskedWriting extends BaseScrapper {
 
     final WebElement suggestNextLetterButton = element.findElement(By.xpath("../parent::*"))
       .findElement(By.id("suggestNextLetterButton"));
-
 
     for (final WebElement webElement : element.findElements(By.className("writing-mask"))) {
       final int letterSize = Integer.parseInt(webElement.findElement(By.tagName("input")).getAttribute("size"));
@@ -212,6 +212,29 @@ public class MaskedWriting extends BaseScrapper {
       }
     }
     return "";
+  }
+
+  private List<String> mergePossibleAnswers(final List<String> possibleAnswers) {
+    final List<String> newPossibleAnswers = new ArrayList<>();
+    final int mergeCounter = possibleAnswers.size() / 2;
+
+    int index = 0;
+
+    for (int i = 0; i < mergeCounter; i++) {
+      final String answer1 = possibleAnswers.get(index);
+      final String answer2 = possibleAnswers.get(index + 1);
+
+      newPossibleAnswers.add(
+              "[" +
+                      answer1.substring(answer1.indexOf("[") + 1, answer1.indexOf("]")) +
+                      "," +
+                      answer2.substring(answer2.indexOf("[") + 1, answer2.indexOf("]")) +
+                      "]"
+      );
+
+      index += 2;
+    }
+    return newPossibleAnswers;
   }
 
 }

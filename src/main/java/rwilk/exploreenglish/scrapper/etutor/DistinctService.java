@@ -42,7 +42,7 @@ public class DistinctService implements CommandLineRunner {
 //    generateEtutorLessonWords();
   }
 
-  private void fixEmptyPolishNameInWords() {
+  public void fixEmptyPolishNameInWords() {
     final List<EtutorWord> words = wordRepository.findAllByNativeTranslationLike("");
 
     words.forEach(word -> word.setNativeTranslation(
@@ -56,7 +56,7 @@ public class DistinctService implements CommandLineRunner {
     wordRepository.saveAll(words);
   }
 
-  private void generateEtutorLessonWords() {
+  public void generateEtutorLessonWords() {
     final Map<String, Map<String, List<EtutorWord>>> wordsGroupedByName =
       wordRepository.findAll()
         .stream()

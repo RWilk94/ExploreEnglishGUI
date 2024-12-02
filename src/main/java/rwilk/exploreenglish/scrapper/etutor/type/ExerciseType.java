@@ -25,7 +25,8 @@ public enum ExerciseType {
     MATCHING_PAIRS_GRAMMAR("matching_pairs_grammar1"), // DONE
     SCREEN_CULTURAL("screen-cultural"), // DONE
     SCREEN_CULINARY("screen-culinary"), // DONE
-    SCREEN_MUSIC("screen-music"); // DONE
+    SCREEN_MUSIC("screen-music"), // DONE
+    MULTIREPRESENTATION("multirepresentation");
 
     private final String value;
 
