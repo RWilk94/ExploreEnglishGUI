@@ -6,6 +6,11 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorCourse;
 import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorLessonRepository;
+import rwilk.exploreenglish.scrapper.etutor.content_v2.ContentScrapper;
+import rwilk.exploreenglish.scrapper.etutor.course.CourseScrapper;
+import rwilk.exploreenglish.scrapper.etutor.distinct.DistinctService;
+import rwilk.exploreenglish.scrapper.etutor.exercise.ExerciseScrapper;
+import rwilk.exploreenglish.scrapper.etutor.lesson.LessonScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 import java.util.List;
@@ -39,7 +44,7 @@ public class EtutorScrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        webScrap();
+//        webScrap();
     }
 
     public void webScrap() {
@@ -71,12 +76,10 @@ public class EtutorScrapper implements CommandLineRunner {
 
         etutorExerciseRepository.findAllByIsReady(false)
                 .stream()
-                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.SPEAKING)
-                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.VIDEO)
                 .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.MULTIREPRESENTATION)
                 .forEach(contentScrapper::webScrap);
 
-        distinctService.fixEmptyPolishNameInWords();
-        distinctService.generateEtutorLessonWords();
+        // distinctService.fixEmptyPolishNameInWords();
+        // distinctService.generateEtutorLessonWords();
     }
 }

@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.etutor;
+package rwilk.exploreenglish.scrapper.etutor.exercise;
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ import rwilk.exploreenglish.repository.etutor.EtutorExerciseItemRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorLessonRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
+import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})

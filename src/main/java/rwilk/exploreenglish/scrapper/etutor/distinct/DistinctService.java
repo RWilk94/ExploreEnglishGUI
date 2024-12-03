@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.etutor;
+package rwilk.exploreenglish.scrapper.etutor.distinct;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.etutor;
+package rwilk.exploreenglish.scrapper.etutor.lesson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorCourse;
 import rwilk.exploreenglish.model.entity.etutor.EtutorLesson;
 import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorLessonRepository;
+import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Component

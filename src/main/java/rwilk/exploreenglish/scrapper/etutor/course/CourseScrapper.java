@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.etutor;
+package rwilk.exploreenglish.scrapper.etutor.course;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.LanguageEnum;
 import rwilk.exploreenglish.model.entity.etutor.EtutorCourse;
 import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository;
+import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 
 @SuppressWarnings("unused")
 @Component

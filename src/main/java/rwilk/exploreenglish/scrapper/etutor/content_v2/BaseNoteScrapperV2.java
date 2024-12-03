@@ -114,7 +114,9 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
                                     .build()
                     );
                 } else {
-                    note.getNoteItems().get(note.getNoteItems().size() - 1).setAdditional(textNode.getWholeText());
+                    if (!note.getNoteItems().isEmpty()) {
+                        note.getNoteItems().get(note.getNoteItems().size() - 1).setAdditional(textNode.getWholeText());
+                    }
                 }
 
             } else if (node instanceof final Element element) {
