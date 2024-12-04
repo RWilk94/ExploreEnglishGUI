@@ -63,19 +63,40 @@ public abstract class BaseScrapper {
   }
 
   protected String extractBritishAudioIcon(final WebElement element) {
-    return primaryLanguageTitles.stream()
+    final String audio =  primaryLanguageTitles.stream()
             .map(it -> extractAudioIcon(element, it))
             .filter(StringUtils::isNoneBlank)
             .findFirst()
-            .orElse("");
+            .orElse(null);
+
+    if (StringUtils.isNoneBlank(audio)) {
+      return audio;
+    } else {
+      return PRIMARY_LANGUAGES.stream()
+              .map(it -> extractDataAudioIconUrlByAttribute(element, it))
+              .filter(StringUtils::isNoneEmpty)
+              .findFirst()
+              .orElse(null);
+    }
   }
 
   protected String extractAmericanAudioIcon(final WebElement element) {
-    return secondaryLanguageTitles.stream()
+    final String audio = secondaryLanguageTitles.stream()
             .map(it -> extractAudioIcon(element, it))
             .filter(StringUtils::isNoneBlank)
             .findFirst()
-            .orElse("");
+            .orElse(null);
+
+    if (StringUtils.isNoneBlank(audio)) {
+      return audio;
+    } else {
+      return SECONDARY_LANGUAGES.stream()
+              .map(it -> extractDataAudioIconUrlByAttribute(element, it))
+              .filter(StringUtils::isNoneEmpty)
+              .findFirst()
+              .orElse(null);
+    }
+
   }
 
   protected void closeCookieBox(final WebDriver driver) {
@@ -123,23 +144,56 @@ public abstract class BaseScrapper {
       return BASE_URL + element.findElement(By.className("audioIcon"))
               .getAttribute("data-audio-url");
     }
-    return "";
+    return null;
+  }
+
+  private String extractDataAudioIconUrlByAttribute(final WebElement element, final String title) {
+    if (!element.findElements(By.className("audioIcon")).isEmpty()) {
+      final String dataAudioUrl = element
+              .findElement(By.className("audioIcon"))
+              .getAttribute("data-audio-url");
+      if (StringUtils.isNoneBlank(dataAudioUrl) && dataAudioUrl.contains(title)) {
+        return BASE_URL + dataAudioUrl;
+      }
+    }
+    return null;
   }
 
   protected String extractBritishAudioButton(final WebElement element) {
-    return primaryLanguageTitles.stream()
+    final String audio = primaryLanguageTitles.stream()
             .map(it -> extractAudioButton(element, it))
             .filter(StringUtils::isNoneBlank)
             .findFirst()
-            .orElse("");
+            .orElse(null);
+
+    if (StringUtils.isNoneBlank(audio)) {
+      return audio;
+    } else {
+      return PRIMARY_LANGUAGES.stream()
+              .map(it -> extractDataAudioButtonUrlByAttribute(element, it))
+              .filter(StringUtils::isNoneEmpty)
+              .findFirst()
+              .orElse(null);
+    }
+
   }
 
   protected String extractAmericanAudioButton(final WebElement element) {
-    return secondaryLanguageTitles.stream()
+    final String audio = secondaryLanguageTitles.stream()
             .map(it -> extractAudioButton(element, it))
             .filter(StringUtils::isNoneBlank)
             .findFirst()
-            .orElse("");
+            .orElse(null);
+
+    if (StringUtils.isNoneBlank(audio)) {
+      return audio;
+    } else {
+      return SECONDARY_LANGUAGES.stream()
+              .map(it -> extractDataAudioButtonUrlByAttribute(element, it))
+              .filter(StringUtils::isNoneEmpty)
+              .findFirst()
+              .orElse(null);
+    }
   }
 
   private String extractAudioButton(final WebElement element, final String title) {
@@ -164,6 +218,19 @@ public abstract class BaseScrapper {
       return BASE_URL + element.findElement(By.className("audioIconButton"))
               .getAttribute("data-audio-url");
     }
-    return "";
+    return null;
   }
+
+  private String extractDataAudioButtonUrlByAttribute(final WebElement element, final String title) {
+    if (!element.findElements(By.className("audioIconButton")).isEmpty()) {
+      final String dataAudioUrl = element
+              .findElement(By.className("audioIconButton"))
+              .getAttribute("data-audio-url");
+      if (StringUtils.isNoneBlank(dataAudioUrl) && dataAudioUrl.contains(title)) {
+        return BASE_URL + dataAudioUrl;
+      }
+    }
+    return null;
+  }
+
 }

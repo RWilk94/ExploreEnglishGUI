@@ -216,7 +216,10 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
 
   private String extractImage(final WebElement element) {
     if (!element.findElements(By.tagName("img")).isEmpty()) {
-      return element.findElement(By.tagName("img")).getAttribute("src");
+      final String image = element.findElement(By.tagName("img")).getAttribute("src");
+      if (!image.contains("/images/icons/note-save.svg") && !image.contains("/images/icons/trash-darkGrey.svg")) {
+        return image;
+      }
     }
     return null;
   }
@@ -241,8 +244,8 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
     final String languageVariety = extractLanguageVariety(element);
     final String languageRegister = extractLanguageRegister(element);
     final String englishName = element.getText()
-      .replace(languageVariety, "")
-      .replace(languageRegister, "")
+      .replace(StringUtils.defaultString(languageVariety), "")
+      .replace(StringUtils.defaultString(languageRegister), "")
       .trim();
     final String additionalInformation = concatAdditionalInformation(languageVariety, languageRegister);
 
@@ -348,14 +351,14 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
     if (!element.findElements(By.className("languageVariety")).isEmpty()) {
       return element.findElement(By.className("languageVariety")).getText();
     }
-    return "";
+    return null;
   }
 
   private String extractLanguageRegister(final WebElement element) {
     if (!element.findElements(By.className("languageRegister")).isEmpty()) {
       return element.findElement(By.className("languageRegister")).getText();
     }
-    return "";
+    return null;
   }
 
   private String concatAdditionalInformation(final String languageVariety, final String languageRegister) {

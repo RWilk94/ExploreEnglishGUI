@@ -82,7 +82,7 @@ public class PicturesMaskedWritingScrapper extends BaseScrapper implements Comma
     if (!element.findElements(By.className("center")).isEmpty()) {
       return element.findElement(By.className("center")).getText().trim();
     }
-    return "";
+    return null;
   }
 
   private int countLetterSize(final WebElement element) {

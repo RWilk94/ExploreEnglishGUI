@@ -119,7 +119,7 @@ public class PictureChoiceScrapper extends BaseScrapper implements CommandLineRu
     if (!element.findElements(By.className("center")).isEmpty()) {
       return element.findElement(By.className("center")).getText().trim();
     }
-    return "";
+    return null;
   }
 
   private List<String> extractPossibleAnswers(final WebElement element) {

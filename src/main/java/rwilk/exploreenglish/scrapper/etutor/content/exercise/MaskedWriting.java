@@ -211,7 +211,7 @@ public class MaskedWriting extends BaseScrapper {
         }
       }
     }
-    return "";
+    return null;
   }
 
   private List<String> mergePossibleAnswers(final List<String> possibleAnswers) {

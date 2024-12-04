@@ -91,9 +91,15 @@ public class VideoScrapper extends BaseScrapper implements CommandLineRunner {
     }
 
     private String extractVideoUrl(final WebDriver driver) {
-        return BASE_URL + driver.findElement(By.className("videoPlayerContainer"))
+        final String videoUrl = driver.findElement(By.className("videoPlayerContainer"))
                 .findElement(By.tagName("video"))
                 .getAttribute("src");
+
+        if (videoUrl.contains(BASE_URL)) {
+            return videoUrl;
+        } else {
+            return BASE_URL + videoUrl;
+        }
     }
 
     private String extractDialogEnglish(final WebElement element) {

@@ -130,7 +130,7 @@ public class PictureListeningScrapper extends BaseScrapper implements CommandLin
     if (!element.findElements(By.className("center")).isEmpty()) {
       return element.findElement(By.className("center")).getText().trim();
     }
-    return "";
+    return null;
   }
 
   private List<Triple<String, String, String>> extractPossibleAnswers(final WebElement element) {

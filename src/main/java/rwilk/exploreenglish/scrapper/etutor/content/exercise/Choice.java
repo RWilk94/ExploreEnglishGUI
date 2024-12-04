@@ -71,7 +71,7 @@ public class Choice extends BaseScrapper {
 
   private String extractQuestion(final WebElement element) {
     if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
-      return "";
+      return null;
     }
 
     final WebElement questionDiv = element.findElement(By.className("examChoiceQuestion"));
@@ -93,7 +93,7 @@ public class Choice extends BaseScrapper {
 
   private String extractFinalAnswer(final WebElement element) {
     if (element.findElements(By.className("examChoiceQuestion")).isEmpty()) {
-      return "";
+      return null;
     }
 
     final String question = element.findElement(By.className("examChoiceQuestion")).getText();
@@ -108,14 +108,14 @@ public class Choice extends BaseScrapper {
     if (!element.findElements(By.className("immediateTranslation")).isEmpty()) {
       return element.findElement(By.className("immediateTranslation")).getText();
     }
-    return "";
+    return null;
   }
 
   private String extractDescription(final WebElement element) {
     if (!element.findElements(By.className("immediateExplanation")).isEmpty()) {
       return element.findElement(By.className("immediateExplanation")).getText();
     }
-    return "";
+    return null;
   }
 
   private void validateExerciseItem(final EtutorExerciseItem exerciseItem) {

@@ -106,8 +106,8 @@ public class ContentScrapper extends BaseScrapper implements CommandLineRunner {
         case GRAMMAR_LIST -> grammarListScrapper.webScrap(it, driver); // DONE IN UI
         case READING -> readingScrapper.webScrap(it, driver); // DONE IN UI
         case SPEAKING -> speakingScrapper.webScrap(it, driver);
-        case WRITING -> writingScrapper.webScrap(it, driver);
-        case VIDEO -> videoScrapper.webScrap(it, driver);
+        case WRITING -> writingScrapper.webScrap(it, driver); // DONE in UI
+        case VIDEO -> videoScrapper.webScrap(it, driver); // DONE in UI
         default -> throw new NotImplementedException("default hasn't supported yet.");
       }
       log.info("FINISH scrapping {}", it);

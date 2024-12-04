@@ -37,7 +37,7 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
   @Override
   public void run(final String... args) throws Exception {
 
-//    webScrapExerciseTypeExercise(etutorExerciseRepository.findById(501L).get());
+//    webScrapExerciseTypeExercise(etutorExerciseRepository.findById(10L).get(), super.getDriver());
 
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.EXERCISE.toString(), false)
 //      .subList(0, 5)
@@ -88,7 +88,7 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
     if (!element.findElements(By.className("exerciseinstruction")).isEmpty()) {
       return element.findElement(By.className("exerciseinstruction")).getText().trim();
     }
-    return "";
+    return null;
   }
 
   private void clickNextQuestionButton(final WebDriver driver) {
@@ -107,7 +107,7 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
 
   private String extractDescription(final WebElement element) {
     if (element.findElements(By.className("immediateExplanation")).isEmpty()) {
-      return "";
+      return null;
     }
     return element.findElement(By.className("immediateExplanation")).getText();
   }
