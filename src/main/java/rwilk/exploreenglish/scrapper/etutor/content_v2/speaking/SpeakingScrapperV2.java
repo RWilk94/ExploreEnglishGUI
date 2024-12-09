@@ -125,18 +125,30 @@ public class SpeakingScrapperV2 extends BaseNoteScrapperV2 implements CommandLin
     }
 
     private String extractNativeText(final WebElement element) {
+        if (element.findElements(By.className("nativeLessonContent")).isEmpty()) {
+            return null;
+        }
         return element.findElement(By.className("nativeLessonContent")).getText();
     }
 
     private String extractForeignText(final WebElement element) {
+        if (element.findElements(By.className("foreignLessonContent")).isEmpty()) {
+            return null;
+        }
         return element.findElement(By.className("foreignLessonContent")).getText();
     }
 
     private String extractNativeHtml(final WebElement element) {
+        if (element.findElements(By.className("nativeLessonContent")).isEmpty()) {
+            return null;
+        }
         return element.findElement(By.className("nativeLessonContent")).getAttribute("innerHTML");
     }
 
     private String extractForeignHTML(final WebElement element) {
+        if (element.findElements(By.className("foreignLessonContent")).isEmpty()) {
+            return null;
+        }
         return element.findElement(By.className("foreignLessonContent")).getAttribute("innerHTML");
     }
 }

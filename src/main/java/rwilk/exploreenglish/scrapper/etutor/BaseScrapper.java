@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BaseScrapper {
 
-  protected static final String AUTO_LOGIN_TOKEN = "aKhL4TkNEh92p0QNqUQRgfxvXh8SYPGB5tf43eMv";
+  protected static final String AUTO_LOGIN_TOKEN = "Klu62eEqqNNd5dnFDbiKXHqZF3jaRRZ0qVsgznkS";
   protected static final String BASE_URL = "https://www.etutor.pl";
   protected static final String XPATH_CHILDREN = "./child::*";
   private static final String BRITISH_ENGLISH = "/en/";
@@ -54,7 +54,7 @@ public abstract class BaseScrapper {
   }
 
   protected WebDriverWait openDefaultPage(final WebDriver driver) {
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10).getSeconds());
+    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20).getSeconds());
     final Cookie cookie = new Cookie("autoLoginToken", AUTO_LOGIN_TOKEN);
 
     driver.get(BASE_URL);

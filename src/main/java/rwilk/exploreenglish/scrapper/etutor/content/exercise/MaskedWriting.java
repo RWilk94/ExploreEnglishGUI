@@ -55,7 +55,8 @@ public class MaskedWriting extends BaseScrapper {
       .build();
 
     final WebElement suggestNextLetterButton = element.findElement(By.xpath("../parent::*"))
-      .findElement(By.id("suggestNextLetterButton"));
+            .findElement(By.xpath("../parent::*"))
+            .findElement(By.id("suggestNextLetterButton"));
 
     for (final WebElement webElement : element.findElements(By.className("writing-mask"))) {
       final int letterSize = Integer.parseInt(webElement.findElement(By.tagName("input")).getAttribute("size"));

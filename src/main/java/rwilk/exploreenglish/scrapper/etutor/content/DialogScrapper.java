@@ -22,6 +22,8 @@ import rwilk.exploreenglish.repository.etutor.EtutorExerciseItemRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.content.exercise.Choice;
+import rwilk.exploreenglish.scrapper.etutor.content.exercise.Cloze;
+import rwilk.exploreenglish.scrapper.etutor.content.exercise.MaskedWriting;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 @java.lang.SuppressWarnings({"java:S1192", "java:S3776"})
@@ -88,26 +90,48 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
         .findElement(By.className("exercise"));
       final String instruction = exercise.findElement(By.className("exerciseinstruction")).getText();
 
-      for (final WebElement ex : exercise.findElements(By.className("exercise-numbered-question"))) {
-        final EtutorExerciseItem etutorExerciseItem = Choice.webScrap(etutorExercise, ex, instruction);
-        exerciseItems.add(etutorExerciseItem);
+        for (final WebElement ex : exercise.findElements(By.className("exercise-numbered-question"))) {
 
-        // find and click correct answer
-        for (final WebElement answer : ex.findElements(By.className("examChoiceOptionBox"))) {
-          if (answer.findElement(By.tagName("input")).getAttribute("value")
-            .equals(etutorExerciseItem.getCorrectAnswer())) {
-            scrollToElement(driver, answer);
-            answer.click();
-            // and get to next question
-            final WebElement nextQuestionButton = driver.findElement(By.id("nextQuestionButton"));
-            if (nextQuestionButton != null && nextQuestionButton.isDisplayed() && !nextQuestionButton.getAttribute("class")
-              .contains("hidden")) {
-              nextQuestionButton.click();
+            final String exerciseType = exercise.getAttribute("data-exercise");
+
+            if (exerciseType.contains("choice")) {
+                final EtutorExerciseItem etutorExerciseItem = Choice.webScrap(etutorExercise, ex, instruction);
+                exerciseItems.add(etutorExerciseItem);
+
+                // find and click correct answer
+                for (final WebElement answer : ex.findElements(By.className("examChoiceOptionBox"))) {
+                    if (answer.findElement(By.tagName("input")).getAttribute("value")
+                            .equals(etutorExerciseItem.getCorrectAnswer())) {
+                        scrollToElement(driver, answer);
+                        answer.click();
+                        // and get to next question
+                        final WebElement nextQuestionButton = driver.findElement(By.id("nextQuestionButton"));
+                        if (nextQuestionButton != null && nextQuestionButton.isDisplayed() && !nextQuestionButton.getAttribute("class")
+                                .contains("hidden")) {
+                            nextQuestionButton.click();
+                        }
+                        break;
+                    }
+                }
+            } else if (exerciseType.contains("masked-writing")) {
+                final EtutorExerciseItem etutorExerciseItem = MaskedWriting.webScrap(etutorExercise, ex, instruction, wait);
+                exerciseItems.add(etutorExerciseItem);
+
+                final WebElement nextQuestionButton = driver.findElement(By.id("nextQuestionButton"));
+                if (nextQuestionButton != null && nextQuestionButton.isDisplayed() && !nextQuestionButton.getAttribute("class")
+                        .contains("hidden")) {
+                    nextQuestionButton.click();
+                }
+
+            } else if (exerciseType.contains("cloze")) {
+                final EtutorExerciseItem etutorExerciseItem = Cloze.webScrap(etutorExercise, ex, instruction);
+                exerciseItems.add(etutorExerciseItem);
+                // TODO go to next exercise
+                throw new UnsupportedOperationException("Not implemented yet");
+
             }
-            break;
-          }
+
         }
-      }
     }
 
     etutorDialogRepository.saveAll(etutorDialogItems);

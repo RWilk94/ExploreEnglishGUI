@@ -54,7 +54,7 @@ public final class EtutorExerciseItem implements Serializable {
   @Column(name = "answer_secondary_sound")
   private String answerSecondarySound; // American English
 
-  @Column(name = "final_answer")
+  @Column(name = "final_answer", length = 2000)
   private String finalAnswer;
   @Column(name = "translation")
   private String translation;
