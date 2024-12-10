@@ -10,5 +10,7 @@ public interface EtutorLessonRepository extends JpaRepository<EtutorLesson, Long
 
   List<EtutorLesson> findAllByIsReady(Boolean isReady);
 
+  List<EtutorLesson> findAllByCourse_Id(Long courseId);
+
   void deleteAllByCourse_Id(Long courseId);
 }

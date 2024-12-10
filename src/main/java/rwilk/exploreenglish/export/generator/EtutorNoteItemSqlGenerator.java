@@ -16,7 +16,7 @@ public class EtutorNoteItemSqlGenerator extends SqlGeneratorAbstract<EtutorNoteI
   private static final String TAG = "NOTE_ITEMS";
 
   @Override
-  public void generateSql(final List<EtutorNoteItem> source) {
+  public void generateSql(final List<EtutorNoteItem> source, final String directoryAlias) {
     logger.info(LOG_PREFIX, TAG);
 
     final List<List<EtutorNoteItem>> chunks = ListUtils.partition(source, CHUNK_SIZE);
@@ -71,6 +71,6 @@ public class EtutorNoteItemSqlGenerator extends SqlGeneratorAbstract<EtutorNoteI
           .append(getEndLineCharacter(chunk, noteItem));
       }
     }
-    exportFile(sql, TAG.toLowerCase() + ".txt", TAG);
+    exportFile(sql, directoryAlias + "/" + TAG.toLowerCase() + ".txt", TAG);
   }
 }

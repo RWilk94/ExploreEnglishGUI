@@ -15,7 +15,7 @@ public class EtutorDefinitionSqlGenerator extends SqlGeneratorAbstract<EtutorDef
     private static final String TAG = "DEFINITIONS";
 
     @Override
-    public void generateSql(final List<EtutorDefinition> source) {
+    public void generateSql(final List<EtutorDefinition> source, final String directoryAlias) {
         logger.info(LOG_PREFIX, TAG);
 
         final List<List<EtutorDefinition>> chunks = ListUtils.partition(source, CHUNK_SIZE);
@@ -54,6 +54,6 @@ public class EtutorDefinitionSqlGenerator extends SqlGeneratorAbstract<EtutorDef
                         .append(getEndLineCharacter(chunk, definition));
             }
         }
-        exportFile(sql, TAG.toLowerCase() + ".txt", TAG);
+        exportFile(sql, directoryAlias + "/" + TAG.toLowerCase() + ".txt", TAG);
     }
 }

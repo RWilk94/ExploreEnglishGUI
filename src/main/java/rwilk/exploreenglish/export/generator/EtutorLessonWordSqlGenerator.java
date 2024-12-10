@@ -15,7 +15,7 @@ public class EtutorLessonWordSqlGenerator extends SqlGeneratorAbstract<EtutorLes
     private static final String TAG = "LESSON_WORDS";
 
     @Override
-    public void generateSql(final List<EtutorLessonWord> source) {
+    public void generateSql(final List<EtutorLessonWord> source, final String directoryAlias) {
         logger.info(LOG_PREFIX, TAG);
 
         final List<List<EtutorLessonWord>> chunks = ListUtils.partition(source, CHUNK_SIZE);
@@ -38,6 +38,6 @@ public class EtutorLessonWordSqlGenerator extends SqlGeneratorAbstract<EtutorLes
                         .append(getEndLineCharacter(chunk, lessonWord));
             }
         }
-        exportFile(sql, TAG.toLowerCase() + ".txt", TAG);
+        exportFile(sql, directoryAlias + "/" + TAG.toLowerCase() + ".txt", TAG);
     }
 }

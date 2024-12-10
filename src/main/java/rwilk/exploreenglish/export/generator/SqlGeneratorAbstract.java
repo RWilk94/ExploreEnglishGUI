@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.export.generator;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public abstract class SqlGeneratorAbstract<T> {
   protected static final String PARAM_SEPARATOR = ", ";
   protected static final String QUOTE_SIGN = "'";
 
-  public abstract void generateSql(final List<T> source);
+  public abstract void generateSql(final List<T> source, final String directoryAlias);
 
   protected String replaceApostrophe(final String text) {
     return StringUtils.trimToEmpty(StringUtils.defaultString(text)).replace("'", "''");
@@ -34,6 +35,11 @@ public abstract class SqlGeneratorAbstract<T> {
   }
 
   protected void exportFile(final StringBuilder sql, final String fileName, final String tag) {
+    if (fileName.contains("/")) {
+      final File file = new File("scripts/" + fileName.substring(0, fileName.lastIndexOf("/")));
+      file.mkdirs();
+    }
+
     try (PrintWriter out = new PrintWriter("scripts/" + fileName)) {
       out.println(sql.toString());
       logger.info("FINISH GENERATING {}", tag);

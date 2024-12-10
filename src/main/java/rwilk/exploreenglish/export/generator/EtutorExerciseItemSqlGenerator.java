@@ -15,7 +15,7 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
     private static final String TAG = "EXERCISE_ITEMS";
 
     @Override
-    public void generateSql(List<EtutorExerciseItem> source) {
+    public void generateSql(List<EtutorExerciseItem> source, String directoryAlias) {
         logger.info(LOG_PREFIX, TAG);
 
         final List<List<EtutorExerciseItem>> chunks = ListUtils.partition(source, CHUNK_SIZE);
@@ -105,6 +105,6 @@ public class EtutorExerciseItemSqlGenerator extends SqlGeneratorAbstract<EtutorE
                         .append(getEndLineCharacter(chunk, item));
             }
         }
-        exportFile(sql, TAG.toLowerCase() + ".txt", TAG);
+        exportFile(sql, directoryAlias + "/" + TAG.toLowerCase() + ".txt", TAG);
     }
 }

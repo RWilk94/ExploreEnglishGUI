@@ -15,7 +15,7 @@ public class EtutorWordSqlGenerator extends SqlGeneratorAbstract<EtutorWord> {
     private static final String TAG = "WORDS";
 
     @Override
-    public void generateSql(final List<EtutorWord> source) {
+    public void generateSql(final List<EtutorWord> source, final String directoryAlias) {
         logger.info(LOG_PREFIX, TAG);
 
         final List<List<EtutorWord>> chunks = ListUtils.partition(source, CHUNK_SIZE);
@@ -23,7 +23,7 @@ public class EtutorWordSqlGenerator extends SqlGeneratorAbstract<EtutorWord> {
 
         for (final List<EtutorWord> chunk : chunks) {
             sql.append("INSERT INTO 'words' ('id', 'native_translation', 'additional_information', 'part_of_speech', 'article', " +
-                    "'grammar_type', 'image', 'exercise_id') VALUES");
+                    "'grammar_type', 'image') VALUES ");
 
             for (final EtutorWord word : chunk) {
                 sql.append("\n")
@@ -53,11 +53,9 @@ public class EtutorWordSqlGenerator extends SqlGeneratorAbstract<EtutorWord> {
                         .append(QUOTE_SIGN)
                         .append(replaceApostrophe(word.getImage())) // COLUMN IMAGE
                         .append(QUOTE_SIGN)
-                        .append(PARAM_SEPARATOR)
-                        .append(word.getExercise().getId()) // COLUMN EXERCISE_ID
                         .append(getEndLineCharacter(chunk, word));
             }
         }
-        exportFile(sql, TAG.toLowerCase() + ".txt", TAG);
+        exportFile(sql, directoryAlias + "/" + TAG.toLowerCase() + ".txt", TAG);
     }
 }

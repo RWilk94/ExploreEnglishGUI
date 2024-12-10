@@ -15,7 +15,7 @@ public class EtutorDialogItemSqlGenerator extends SqlGeneratorAbstract<EtutorDia
     private static final String TAG = "DIALOG_ITEMS";
 
     @Override
-    public void generateSql(final List<EtutorDialogItem> source) {
+    public void generateSql(final List<EtutorDialogItem> source, final String directoryAlias) {
         logger.info(LOG_PREFIX, TAG);
 
         final List<List<EtutorDialogItem>> chunks = ListUtils.partition(source, CHUNK_SIZE);
@@ -60,6 +60,6 @@ public class EtutorDialogItemSqlGenerator extends SqlGeneratorAbstract<EtutorDia
                         .append(getEndLineCharacter(chunk, dialog));
             }
         }
-        exportFile(sql, TAG.toLowerCase() + ".txt", TAG);
+        exportFile(sql, directoryAlias + "/" + TAG.toLowerCase() + ".txt", TAG);
     }
 }

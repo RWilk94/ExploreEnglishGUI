@@ -16,7 +16,7 @@ public class EtutorCourseSqlGenerator extends SqlGeneratorAbstract<EtutorCourse>
   private static final String TAG = "COURSES";
 
   @Override
-  public void generateSql(final List<EtutorCourse> source) {
+  public void generateSql(final List<EtutorCourse> source, final String directoryAlias) {
     logger.info(LOG_PREFIX, TAG);
 
     final List<List<EtutorCourse>> chunks = ListUtils.partition(source, CHUNK_SIZE);
