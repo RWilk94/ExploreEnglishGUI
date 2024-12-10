@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
@@ -50,7 +51,9 @@ public class ContentScrapper extends BaseScrapper implements CommandLineRunner {
                          final ReadingScrapperV2 readingScrapper,
                          final PicturesMaskedWritingScrapper picturesMaskedWritingScrapper,
                          final SpeakingScrapperV2 speakingScrapper, final GrammarListScrapperV2 grammarListScrapper,
-                         final WritingScrapperV2 writingScrapper, final VideoScrapper videoScrapper) {
+                         final WritingScrapperV2 writingScrapper, final VideoScrapper videoScrapper,
+                         @Value("${explore-english.autologin-token}") final String autologinToken) {
+    super(autologinToken);
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.wordScrapper = wordScrapper;
     this.noteScrapper = noteScrapper;

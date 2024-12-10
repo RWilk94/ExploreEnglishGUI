@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.etutor.EtutorDialogItem;
@@ -26,7 +27,9 @@ public class VideoScrapper extends BaseScrapper implements CommandLineRunner {
     private final EtutorDialogRepository etutorDialogRepository;
 
     public VideoScrapper(EtutorExerciseRepository etutorExerciseRepository,
-                         EtutorDialogRepository etutorDialogRepository) {
+                         EtutorDialogRepository etutorDialogRepository,
+                         @Value("${explore-english.autologin-token}") final String autologinToken) {
+        super(autologinToken);
         this.etutorExerciseRepository = etutorExerciseRepository;
         this.etutorDialogRepository = etutorDialogRepository;
     }

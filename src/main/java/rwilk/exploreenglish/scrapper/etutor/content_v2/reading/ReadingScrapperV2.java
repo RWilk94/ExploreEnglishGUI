@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +35,9 @@ public class ReadingScrapperV2 extends BaseNoteScrapperV2 implements CommandLine
 
     public ReadingScrapperV2(EtutorExerciseRepository etutorExerciseRepository,
                              EtutorNoteRepository etutorNoteRepository,
-                             EtutorExerciseItemRepository etutorExerciseItemRepository) {
-        super(etutorExerciseRepository, etutorNoteRepository);
+                             EtutorExerciseItemRepository etutorExerciseItemRepository,
+                             @Value("${explore-english.autologin-token}") final String autologinToken) {
+        super(etutorExerciseRepository, etutorNoteRepository, autologinToken);
         this.etutorExerciseItemRepository = etutorExerciseItemRepository;
     }
 
@@ -139,7 +141,7 @@ public class ReadingScrapperV2 extends BaseNoteScrapperV2 implements CommandLine
                 final String type = component.getAttribute("data-component");
 
                 if (type.equalsIgnoreCase("choice")) {
-                    final EtutorExerciseItem etutorExerciseItem = Choice.webScrap(etutorExercise, ex, instruction);
+                    final EtutorExerciseItem etutorExerciseItem = Choice.webScrap(etutorExercise, ex, instruction, autologinToken);
                     exerciseItems.add(etutorExerciseItem);
 
                     // find and click correct answer

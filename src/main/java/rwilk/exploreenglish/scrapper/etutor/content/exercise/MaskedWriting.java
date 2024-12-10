@@ -21,11 +21,12 @@ public class MaskedWriting extends BaseScrapper {
   private static final String BASE_URL = "https://www.etutor.pl";
 
   public static EtutorExerciseItem webScrap(final EtutorExercise etutorExercise, final WebElement element,
-                                            final String instruction, final WebDriverWait wait) {
-    return new MaskedWriting().get(etutorExercise, element, instruction, wait);
+                                            final String instruction, final WebDriverWait wait, final String autologinToken) {
+    return new MaskedWriting(autologinToken).get(etutorExercise, element, instruction, wait);
   }
 
-  private MaskedWriting() {
+  private MaskedWriting(final String autologinToken) {
+    super(autologinToken);
   }
 
   private EtutorExerciseItem get(final EtutorExercise etutorExercise, final WebElement element,

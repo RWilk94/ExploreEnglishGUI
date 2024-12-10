@@ -1,7 +1,9 @@
 package rwilk.exploreenglish.scrapper.etutor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import rwilk.exploreenglish.model.LanguageEnum;
 import rwilk.exploreenglish.model.entity.etutor.EtutorCourse;
 import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
@@ -26,12 +28,14 @@ public class EtutorScrapper implements CommandLineRunner {
     private final EtutorCourseRepository etutorCourseRepository;
     private final EtutorLessonRepository etutorLessonRepository;
     private final EtutorExerciseRepository etutorExerciseRepository;
+    private final Long courseId;
 
     public EtutorScrapper(CourseScrapper courseScrapper, LessonScrapper lessonScrapper,
                           ExerciseScrapper exerciseScrapper, ContentScrapper contentScrapper,
                           DistinctService distinctService, EtutorCourseRepository etutorCourseRepository,
                           EtutorLessonRepository etutorLessonRepository,
-                          EtutorExerciseRepository etutorExerciseRepository) {
+                          EtutorExerciseRepository etutorExerciseRepository,
+                          @Value("${explore-english.course-id}") Long courseId) {
         this.courseScrapper = courseScrapper;
         this.lessonScrapper = lessonScrapper;
         this.exerciseScrapper = exerciseScrapper;
@@ -40,31 +44,34 @@ public class EtutorScrapper implements CommandLineRunner {
         this.etutorCourseRepository = etutorCourseRepository;
         this.etutorLessonRepository = etutorLessonRepository;
         this.etutorExerciseRepository = etutorExerciseRepository;
+        this.courseId = courseId;
     }
 
     @Override
     public void run(String... args) throws Exception {
-         // webScrap();
+         webScrap();
     }
 
     public void webScrap() {
-        List<EtutorCourse> courses = etutorCourseRepository.findAll();
-
-        if (courses.size() != courseScrapper.countCourses()) {
-            courseScrapper.webScrapAndSaveCourses();
-        }
-        courses = etutorCourseRepository.findAllByIsReady(false);
-
-        courses.forEach(course -> {
-            etutorLessonRepository.deleteAllByCourse_Id(course.getId());
-
-            lessonScrapper.webScrapAndSaveLessons(course);
-
-            course.setIsReady(true);
-            etutorCourseRepository.save(course);
-        });
-
+//        List<EtutorCourse> courses = etutorCourseRepository.findAll();
+//
+//        if (courses.size() != courseScrapper.countCourses()) {
+//            courseScrapper.webScrapAndSaveCourses();
+//        }
+//        courses = etutorCourseRepository.findAllByIsReady(false);
+//
+//        courses.forEach(course -> {
+//            etutorLessonRepository.deleteAllByCourse_Id(course.getId());
+//
+//            lessonScrapper.webScrapAndSaveLessons(course);
+//
+//            course.setIsReady(true);
+//            etutorCourseRepository.save(course);
+//        });
+//
         etutorLessonRepository.findAllByIsReady(false)
+                .stream()
+                .filter(it -> it.getCourse().getId().equals(courseId))
                 .forEach(lesson -> {
                     etutorExerciseRepository.deleteAllByLesson_Id(lesson.getId());
 
@@ -76,6 +83,7 @@ public class EtutorScrapper implements CommandLineRunner {
 
         etutorExerciseRepository.findAllByIsReady(false)
                 .stream()
+                .filter(it -> it.getLesson().getCourse().getId().equals(courseId))
                 .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.MULTIREPRESENTATION)
                 .forEach(contentScrapper::webScrap);
 

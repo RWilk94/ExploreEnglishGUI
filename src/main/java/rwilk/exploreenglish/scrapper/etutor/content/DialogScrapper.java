@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -36,8 +37,10 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
 
   public DialogScrapper(final EtutorExerciseRepository etutorExerciseRepository,
                         final EtutorExerciseItemRepository etutorExerciseItemRepository,
-                        final EtutorDialogRepository etutorDialogRepository) {
-    this.etutorExerciseRepository = etutorExerciseRepository;
+                        final EtutorDialogRepository etutorDialogRepository,
+                        @Value("${explore-english.autologin-token}") final String autologinToken) {
+      super(autologinToken);
+      this.etutorExerciseRepository = etutorExerciseRepository;
     this.etutorExerciseItemRepository = etutorExerciseItemRepository;
     this.etutorDialogRepository = etutorDialogRepository;
   }
@@ -95,7 +98,7 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
             final String exerciseType = exercise.getAttribute("data-exercise");
 
             if (exerciseType.contains("choice")) {
-                final EtutorExerciseItem etutorExerciseItem = Choice.webScrap(etutorExercise, ex, instruction);
+                final EtutorExerciseItem etutorExerciseItem = Choice.webScrap(etutorExercise, ex, instruction, autologinToken);
                 exerciseItems.add(etutorExerciseItem);
 
                 // find and click correct answer
@@ -114,7 +117,7 @@ public class DialogScrapper extends BaseScrapper implements CommandLineRunner {
                     }
                 }
             } else if (exerciseType.contains("masked-writing")) {
-                final EtutorExerciseItem etutorExerciseItem = MaskedWriting.webScrap(etutorExercise, ex, instruction, wait);
+                final EtutorExerciseItem etutorExerciseItem = MaskedWriting.webScrap(etutorExercise, ex, instruction, wait, autologinToken);
                 exerciseItems.add(etutorExerciseItem);
 
                 final WebElement nextQuestionButton = driver.findElement(By.id("nextQuestionButton"));

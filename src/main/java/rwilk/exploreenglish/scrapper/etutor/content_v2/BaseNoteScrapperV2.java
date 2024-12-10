@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorNote;
 import rwilk.exploreenglish.model.entity.etutor.EtutorNoteItem;
@@ -26,7 +27,9 @@ public abstract class BaseNoteScrapperV2 extends BaseScrapper {
     protected final EtutorExerciseRepository etutorExerciseRepository;
     protected final EtutorNoteRepository etutorNoteRepository;
 
-    public BaseNoteScrapperV2(EtutorExerciseRepository etutorExerciseRepository, EtutorNoteRepository etutorNoteRepository) {
+    public BaseNoteScrapperV2(EtutorExerciseRepository etutorExerciseRepository, EtutorNoteRepository etutorNoteRepository,
+                              @Value("${explore-english.autologin-token}") final String autologinToken) {
+        super(autologinToken);
         this.etutorExerciseRepository = etutorExerciseRepository;
         this.etutorNoteRepository = etutorNoteRepository;
     }

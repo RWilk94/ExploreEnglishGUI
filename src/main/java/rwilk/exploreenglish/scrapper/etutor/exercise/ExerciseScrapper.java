@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +39,9 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
                           final EtutorExerciseItemRepository etutorExerciseItemRepository,
                           final EtutorExerciseRepository etutorExerciseRepository,
                           final EtutorLessonRepository etutorLessonRepository,
-                          final EtutorNoteRepository etutorNoteRepository) {
+                          final EtutorNoteRepository etutorNoteRepository,
+                          @Value("${explore-english.autologin-token}") final String autologinToken) {
+    super(autologinToken);
     this.etutorCourseRepository = etutorCourseRepository;
     this.etutorDefinitionRepository = etutorDefinitionRepository;
     this.etutorExerciseItemRepository = etutorExerciseItemRepository;

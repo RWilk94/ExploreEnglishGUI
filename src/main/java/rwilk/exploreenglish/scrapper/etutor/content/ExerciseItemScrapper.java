@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,9 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
   private final EtutorExerciseItemRepository etutorExerciseItemRepository;
 
   public ExerciseItemScrapper(final EtutorExerciseRepository etutorExerciseRepository,
-                              final EtutorExerciseItemRepository etutorExerciseItemRepository) {
+                              final EtutorExerciseItemRepository etutorExerciseItemRepository,
+                              @Value("${explore-english.autologin-token}") final String autologinToken) {
+    super(autologinToken);
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.etutorExerciseItemRepository = etutorExerciseItemRepository;
   }
@@ -37,7 +40,8 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
   @Override
   public void run(final String... args) throws Exception {
 
-//    webScrapExerciseTypeExercise(etutorExerciseRepository.findById(10L).get(), super.getDriver());
+//    webScrapExerciseTypeExercise(etutorExerciseRepository.findById(125L).get(), super.getDriver());
+//    webScrapExerciseTypeExercise(etutorExerciseRepository.findById(211L).get(), super.getDriver());
 
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.EXERCISE.toString(), false)
 //      .subList(0, 5)
@@ -64,8 +68,8 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
     final List<EtutorExerciseItem> exerciseItems = new ArrayList<>();
     exerciseQuestions.forEach(element -> {
       switch (driver.findElement(By.className("exercise")).getAttribute("data-exercise")) {
-        case "choice" -> exerciseItems.add(Choice.webScrap(etutorExercise, element, instruction));
-        case "masked-writing" -> exerciseItems.add(MaskedWriting.webScrap(etutorExercise, element, instruction, wait));
+        case "choice" -> exerciseItems.add(Choice.webScrap(etutorExercise, element, instruction, autologinToken));
+        case "masked-writing" -> exerciseItems.add(MaskedWriting.webScrap(etutorExercise, element, instruction, wait, autologinToken));
         case "cloze" -> {
           final EtutorExerciseItem etutorExerciseItem = Cloze.webScrap(etutorExercise, element, instruction);
           clickSolveQuestionButton(driver);
@@ -78,7 +82,6 @@ public class ExerciseItemScrapper extends BaseScrapper implements CommandLineRun
       clickNextQuestionButton(driver);
     });
 
-    // TODO check because translation and finalAnswer are not on the right place, need to be replaced
     etutorExerciseItemRepository.saveAll(exerciseItems);
     etutorExercise.setIsReady(true);
     etutorExerciseRepository.save(etutorExercise);

@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
@@ -30,8 +31,9 @@ public class SpeakingScrapperV2 extends BaseNoteScrapperV2 implements CommandLin
 
     public SpeakingScrapperV2(EtutorExerciseRepository etutorExerciseRepository,
                               EtutorExerciseItemRepository etutorExerciseItemRepository,
-                              EtutorNoteRepository etutorNoteRepository) {
-        super(etutorExerciseRepository, etutorNoteRepository);
+                              EtutorNoteRepository etutorNoteRepository,
+                              @Value("${explore-english.autologin-token}") final String autologinToken) {
+        super(etutorExerciseRepository, etutorNoteRepository, autologinToken);
         this.etutorExerciseItemRepository = etutorExerciseItemRepository;
     }
 

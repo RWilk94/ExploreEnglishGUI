@@ -15,11 +15,12 @@ import rwilk.exploreenglish.scrapper.etutor.type.ExerciseItemType;
 public class Choice extends BaseScrapper {
 
   public static EtutorExerciseItem webScrap(final EtutorExercise etutorExercise, final WebElement element,
-                                            final String instruction) {
-    return new Choice().get(etutorExercise, element, instruction);
+                                            final String instruction, final String autologinToken) {
+    return new Choice(autologinToken).get(etutorExercise, element, instruction);
   }
 
-  private Choice() {
+  private Choice(final String autologinToken) {
+    super(autologinToken);
   }
 
   private EtutorExerciseItem get(final EtutorExercise etutorExercise, final WebElement element,
@@ -27,7 +28,7 @@ public class Choice extends BaseScrapper {
     final String correctAnswer = extractCorrectAnswer(element);
     final List<String> possibleAnswers = extractPossibleAnswers(element, correctAnswer);
 
-    final EtutorExerciseItem exerciseItem = EtutorExerciseItem.builder()
+      return EtutorExerciseItem.builder()
       .id(null)
       .instruction(instruction)
       .correctAnswer(correctAnswer)
@@ -47,9 +48,6 @@ public class Choice extends BaseScrapper {
       .type(ExerciseItemType.CHOICE.toString())
       .exercise(etutorExercise)
       .build();
-
-    validateExerciseItem(exerciseItem);
-    return exerciseItem;
   }
 
   private String extractCorrectAnswer(final WebElement element) {
@@ -96,12 +94,7 @@ public class Choice extends BaseScrapper {
       return null;
     }
 
-    final String question = element.findElement(By.className("examChoiceQuestion")).getText();
-
-    if (question.equals(extractQuestion(element))) {
-      return extractCorrectAnswer(element);
-    }
-    return question;
+    return element.findElement(By.className("examChoiceQuestion")).getText();
   }
 
   private String extractTranslation(final WebElement element) {
@@ -116,25 +109,6 @@ public class Choice extends BaseScrapper {
       return element.findElement(By.className("immediateExplanation")).getText();
     }
     return null;
-  }
-
-  private void validateExerciseItem(final EtutorExerciseItem exerciseItem) {
-    if (StringUtils.isNoneEmpty(exerciseItem.getFinalAnswer())
-        && exerciseItem.getFinalAnswer().contains("(")
-        && exerciseItem.getFinalAnswer().contains(")")
-        && StringUtils.isEmpty(exerciseItem.getTranslation())) {
-
-      final String finalAnswer = exerciseItem.getFinalAnswer();
-      exerciseItem.setTranslation(finalAnswer.substring(finalAnswer.indexOf("(") + 1, finalAnswer.indexOf(")")).trim());
-      exerciseItem.setFinalAnswer(finalAnswer.substring(0, finalAnswer.indexOf("(")).trim());
-
-    } else if (StringUtils.isNoneEmpty(exerciseItem.getFinalAnswer())
-               && exerciseItem.getFinalAnswer().contains("=")
-               && StringUtils.isEmpty(exerciseItem.getTranslation())) {
-      final String finalAnswer = exerciseItem.getFinalAnswer();
-      exerciseItem.setTranslation(finalAnswer.substring(finalAnswer.indexOf("=") + 1).trim());
-      exerciseItem.setFinalAnswer(finalAnswer.substring(0, finalAnswer.indexOf("=")).trim());
-    }
   }
 
 }

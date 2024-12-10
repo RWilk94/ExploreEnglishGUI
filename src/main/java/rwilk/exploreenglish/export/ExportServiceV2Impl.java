@@ -38,7 +38,7 @@ public class ExportServiceV2Impl implements ExportServiceV2, CommandLineRunner {
 
     @Override
     public void run(final String... args) throws Exception {
-        export();
+        // export();
     }
 
     @Override

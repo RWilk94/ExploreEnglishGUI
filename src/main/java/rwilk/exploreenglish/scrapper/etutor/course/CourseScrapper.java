@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -69,7 +70,9 @@ public class CourseScrapper extends BaseScrapper implements CommandLineRunner {
 
     private final EtutorCourseRepository etutorCourseRepository;
 
-    public CourseScrapper(final EtutorCourseRepository etutorCourseRepository) {
+    public CourseScrapper(final EtutorCourseRepository etutorCourseRepository,
+                          @Value("${explore-english.autologin-token}") final String autologinToken) {
+        super(autologinToken);
         this.etutorCourseRepository = etutorCourseRepository;
     }
 

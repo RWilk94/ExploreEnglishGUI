@@ -19,11 +19,12 @@ public class PicturesMaskedWriting extends BaseScrapper {
   private static final String BASE_URL = "https://www.etutor.pl";
 
   public static EtutorExerciseItem webScrap(final EtutorExercise etutorExercise, final WebElement element,
-                                            final String instruction) {
-    return new PicturesMaskedWriting().get(etutorExercise, element, instruction);
+                                            final String instruction, final String autologinToken) {
+    return new PicturesMaskedWriting(autologinToken).get(etutorExercise, element, instruction);
   }
 
-  private PicturesMaskedWriting() {
+  private PicturesMaskedWriting(final String autologinToken) {
+    super(autologinToken);
   }
 
   private EtutorExerciseItem get(final EtutorExercise etutorExercise, final WebElement element,

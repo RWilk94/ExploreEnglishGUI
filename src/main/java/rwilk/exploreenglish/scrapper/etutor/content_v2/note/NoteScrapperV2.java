@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.scrapper.etutor.content_v2.note;
 
 import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
@@ -15,8 +16,9 @@ import java.util.List;
 public class NoteScrapperV2 extends BaseNoteScrapperV2 implements CommandLineRunner {
 
     public NoteScrapperV2(EtutorExerciseRepository etutorExerciseRepository,
-                          EtutorNoteRepository etutorNoteRepository) {
-        super(etutorExerciseRepository, etutorNoteRepository);
+                          EtutorNoteRepository etutorNoteRepository,
+                          @Value("${explore-english.autologin-token}") final String autologinToken) {
+        super(etutorExerciseRepository, etutorNoteRepository, autologinToken);
     }
 
     @Override

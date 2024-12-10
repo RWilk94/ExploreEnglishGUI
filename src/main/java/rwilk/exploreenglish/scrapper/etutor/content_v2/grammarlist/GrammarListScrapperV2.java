@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import rwilk.exploreenglish.model.WordTypeEnum;
@@ -32,7 +33,9 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
     private final EtutorWordRepository etutorWordRepository;
 
     public GrammarListScrapperV2(EtutorExerciseRepository etutorExerciseRepository,
-                                 EtutorWordRepository etutorWordRepository) {
+                                 EtutorWordRepository etutorWordRepository,
+                                 @Value("${explore-english.autologin-token}") final String autologinToken) {
+        super(autologinToken);
         this.etutorExerciseRepository = etutorExerciseRepository;
         this.etutorWordRepository = etutorWordRepository;
     }

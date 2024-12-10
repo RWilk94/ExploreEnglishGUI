@@ -12,7 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BaseScrapper {
 
-  protected static final String AUTO_LOGIN_TOKEN = "Klu62eEqqNNd5dnFDbiKXHqZF3jaRRZ0qVsgznkS";
   protected static final String BASE_URL = "https://www.etutor.pl";
   protected static final String XPATH_CHILDREN = "./child::*";
   private static final String BRITISH_ENGLISH = "/en/";
@@ -35,9 +34,11 @@ public abstract class BaseScrapper {
           "Español América Latina"
   );
 
+  protected final String autologinToken;
 
-  protected BaseScrapper() {
-    System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
+  protected BaseScrapper(String autologinToken) {
+      this.autologinToken = autologinToken;
+      System.setProperty("webdriver.chrome.driver", "C:\\Corelogic\\TAX\\ExploreEnglishGUI\\chrome_driver\\chromedriver.exe");
   }
 
   protected ChromeDriver getDriver() {
@@ -55,7 +56,7 @@ public abstract class BaseScrapper {
 
   protected WebDriverWait openDefaultPage(final WebDriver driver) {
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20).getSeconds());
-    final Cookie cookie = new Cookie("autoLoginToken", AUTO_LOGIN_TOKEN);
+    final Cookie cookie = new Cookie("autoLoginToken", autologinToken);
 
     driver.get(BASE_URL);
     driver.manage().addCookie(cookie);
