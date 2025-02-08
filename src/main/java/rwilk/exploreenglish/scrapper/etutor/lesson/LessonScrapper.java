@@ -3,6 +3,7 @@ package rwilk.exploreenglish.scrapper.etutor.lesson;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,6 +19,7 @@ import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorLessonRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 
+@Slf4j
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Component
 public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
@@ -69,6 +71,7 @@ public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
 
     // iterate through the hrefs and open the dedicated lesson page
     lessonHrefs.forEach(lessonHref -> {
+      log.info("Scraping lesson: {}", lessonHref);
       driver.get(lessonHref);
       // and wait until the page loads
       wait.until(ExpectedConditions.presenceOfElementLocated(By.className("lessonDetailPage")));
@@ -89,6 +92,7 @@ public class LessonScrapper extends BaseScrapper implements CommandLineRunner {
                    .isReady(false)
                    .build()
           ).toList());
+      log.info("Lesson {} has been scraped", lessonHref);
     });
 
     etutorLessonRepository.saveAll(etutorLessons);
