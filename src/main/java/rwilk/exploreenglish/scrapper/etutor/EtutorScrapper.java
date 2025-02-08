@@ -49,7 +49,7 @@ public class EtutorScrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-         webScrap();
+            webScrap();
     }
 
     public void webScrap() {
@@ -69,25 +69,26 @@ public class EtutorScrapper implements CommandLineRunner {
 //            etutorCourseRepository.save(course);
 //        });
 //
-        etutorLessonRepository.findAllByIsReady(false)
-                .stream()
-                .filter(it -> it.getCourse().getId().equals(courseId))
-                .forEach(lesson -> {
-                    etutorExerciseRepository.deleteAllByLesson_Id(lesson.getId());
+//        etutorLessonRepository.findAllByIsReady(false)
+//                .stream()
+//                .filter(it -> it.getCourse().getId().equals(courseId))
+//                .forEach(lesson -> {
+//                    etutorExerciseRepository.deleteAllByLesson_Id(lesson.getId());
+//
+//                    exerciseScrapper.webScrapContent(lesson);
+//
+//                    lesson.setIsReady(true);
+//                    etutorLessonRepository.save(lesson);
+//                });
 
-                    exerciseScrapper.webScrapContent(lesson);
+//        etutorExerciseRepository.findAllByIsReady(false)
+//                .stream()
+//                .filter(it -> it.getLesson().getCourse().getId() < 15L)
+//                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.MULTIREPRESENTATION)
+//                .forEach(contentScrapper::webScrap);
 
-                    lesson.setIsReady(true);
-                    etutorLessonRepository.save(lesson);
-                });
-
-        etutorExerciseRepository.findAllByIsReady(false)
-                .stream()
-                .filter(it -> it.getLesson().getCourse().getId().equals(courseId))
-                .filter(it -> ExerciseType.fromString(it.getType()) != ExerciseType.MULTIREPRESENTATION)
-                .forEach(contentScrapper::webScrap);
-
-        // distinctService.fixEmptyPolishNameInWords();
-        // distinctService.generateEtutorLessonWords();
+         // distinctService.fixEmptyPolishNameInWords();
+//          distinctService.fixEmptyPolishNameInWordsByHtml();
+//          distinctService.generateEtutorLessonWords();
     }
 }

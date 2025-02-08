@@ -2,6 +2,7 @@ package rwilk.exploreenglish.scrapper.etutor.exercise;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,6 +24,7 @@ import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
+@Slf4j
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Component
 public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner {
@@ -59,6 +61,7 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
   }
 
   public void webScrapContent(final EtutorLesson etutorLesson) {
+    log.info("Scraping exercises for lesson: {}", etutorLesson.getName());
     final WebDriver driver = super.getDriver();
     final WebDriverWait wait = super.openDefaultPage(driver);
 
@@ -87,6 +90,7 @@ public class ExerciseScrapper extends BaseScrapper implements CommandLineRunner 
     etutorExerciseRepository.saveAll(etutorExercises);
     etutorLesson.setIsReady(true);
     etutorLessonRepository.save(etutorLesson);
+    log.info("Exercises for lesson: {} have been scraped", etutorLesson.getName());
     driver.quit();
   }
 

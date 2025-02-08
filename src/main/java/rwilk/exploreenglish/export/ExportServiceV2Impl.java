@@ -38,12 +38,12 @@ public class ExportServiceV2Impl implements ExportServiceV2, CommandLineRunner {
 
     @Override
     public void run(final String... args) throws Exception {
-        // export();
+         // export();
     }
 
     @Override
     public void export() {
-        final List<EtutorCourse> etutorCourses = etutorCourseRepository.findAll();
+        final List<EtutorCourse> etutorCourses = etutorCourseRepository.findAllByIsReady(true);
         etutorCourseSqlGenerator.generateSql(etutorCourses, "");
 
         for (final EtutorCourse etutorCourse : etutorCourses) {

@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,11 +72,11 @@ public class EtutorWord implements Serializable {
   private EtutorExercise exercise;
 
   @ToString.Exclude
-  @OneToMany(mappedBy = "word", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-  private List<EtutorLessonWord> etutorLessonWords;
+  @OneToMany(mappedBy = "word", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
+  private List<EtutorLessonWord> etutorLessonWords = new ArrayList<>();
 
   @ToString.Exclude
   @OneToMany(mappedBy = "word", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
-  private List<EtutorDefinition> definitions;
+  private List<EtutorDefinition> definitions = new ArrayList<>();
 
 }

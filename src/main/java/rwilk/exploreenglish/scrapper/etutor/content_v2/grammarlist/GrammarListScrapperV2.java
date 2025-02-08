@@ -19,6 +19,7 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorWord;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorWordRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
+import rwilk.exploreenglish.scrapper.etutor.content_v2.IrregularVerbsScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 import java.util.ArrayList;
@@ -31,23 +32,30 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
 
     private final EtutorExerciseRepository etutorExerciseRepository;
     private final EtutorWordRepository etutorWordRepository;
+    private final IrregularVerbsScrapper irregularVerbsScrapper;
 
     public GrammarListScrapperV2(EtutorExerciseRepository etutorExerciseRepository,
                                  EtutorWordRepository etutorWordRepository,
-                                 @Value("${explore-english.autologin-token}") final String autologinToken) {
+                                 @Value("${explore-english.autologin-token}") final String autologinToken,
+                                 IrregularVerbsScrapper irregularVerbsScrapper) {
         super(autologinToken);
         this.etutorExerciseRepository = etutorExerciseRepository;
         this.etutorWordRepository = etutorWordRepository;
+        this.irregularVerbsScrapper = irregularVerbsScrapper;
     }
 
     @Override
     public void run(final String... args) throws Exception {
-//        etutorExerciseRepository.findById(1169L).ifPresent(this::webScrap);
+//        etutorExerciseRepository.findById(9329L).ifPresent((ex) -> {
+//            final WebDriver driver = super.getDriver();
+//            webScrap(ex, driver);
+//        });
 //        etutorExerciseRepository.findById(526L).ifPresent(this::webScrap);
     }
 
     public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {
-        if (ExerciseType.GRAMMAR_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
+        if (ExerciseType.GRAMMAR_LIST != ExerciseType.valueOf(etutorExercise.getType())
+                && ExerciseType.WORDS_LIST != ExerciseType.valueOf(etutorExercise.getType())) {
             return;
         }
         final WebDriverWait wait = super.openDefaultPage(driver);
@@ -64,6 +72,13 @@ public class GrammarListScrapperV2 extends BaseScrapper implements CommandLineRu
         wait.until(ExpectedConditions.presenceOfElementLocated(By.className("dropdownMenuOptions")));
         // and select 'Lista elementów'
         driver.findElement(By.className("dropdownMenuOptions")).findElement(By.linkText("Lista elementów")).click();
+
+        if (!driver.findElement(By.className("learningcontents"))
+                .findElement(By.className("wordsgroupfirst"))
+                .findElements(By.className("irregularverbs")).isEmpty()) {
+            irregularVerbsScrapper.webScrap(etutorExercise, driver);
+            return;
+        }
 
         final String contentHtml = driver.findElement(By.className("learningcontents"))
                 .findElement(By.className("wordsgroupfirst"))

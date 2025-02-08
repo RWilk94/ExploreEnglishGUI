@@ -24,6 +24,7 @@ import rwilk.exploreenglish.model.entity.etutor.EtutorWord;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorWordRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
+import rwilk.exploreenglish.scrapper.etutor.content_v2.IrregularVerbsScrapper;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
 
 @Component
@@ -31,17 +32,24 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
 
   private final EtutorExerciseRepository etutorExerciseRepository;
   private final EtutorWordRepository etutorWordRepository;
+  private final IrregularVerbsScrapper irregularVerbsScrapper;
 
   public WordScrapper(final EtutorExerciseRepository etutorExerciseRepository,
                       final EtutorWordRepository etutorWordRepository,
-                      @Value("${explore-english.autologin-token}") final String autologinToken) {
+                      @Value("${explore-english.autologin-token}") final String autologinToken,
+                      final IrregularVerbsScrapper irregularVerbsScrapper) {
     super(autologinToken);
     this.etutorExerciseRepository = etutorExerciseRepository;
     this.etutorWordRepository = etutorWordRepository;
+    this.irregularVerbsScrapper = irregularVerbsScrapper;
   }
 
   @Override
   public void run(final String... args) throws Exception {
+//    etutorExerciseRepository.findById(911L).ifPresent(it -> {
+//      final WebDriver driver = getDriver();
+//      webScrapPicturesWordsListTypeExercise(it, driver);
+//    });
 //    etutorExerciseRepository.findAllByTypeAndIsReady(ExerciseType.WORDS_LIST.toString(), false)
 //      .subList(0, 10)
 //      .forEach(this::webScrapPicturesWordsListTypeExercise);
@@ -79,6 +87,13 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
     wait.until(ExpectedConditions.presenceOfElementLocated(By.className("dropdownMenuOptions")));
     // and select 'Lista elementów'
     driver.findElement(By.className("dropdownMenuOptions")).findElement(By.linkText("Lista elementów")).click();
+
+    if (!driver.findElement(By.className("learningcontents"))
+            .findElement(By.className("wordsgroupfirst"))
+            .findElements(By.className("irregularverbs")).isEmpty()) {
+      irregularVerbsScrapper.webScrap(etutorExercise, driver);
+      return;
+    }
 
     // elements are grouped in div without any css class
     final List<WebElement> elements = driver.findElement(By.className("learningcontents"))
@@ -166,16 +181,7 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
 
   private String extractPolishName(final WebElement element) {
     final String text = element.findElement(By.className("hws")).getText();
-    String polishName = text.substring(text.lastIndexOf("=") + 1).trim();
-
-    final List<WebElement> children = element.findElement(By.className("hws")).findElements(By.xpath(XPATH_CHILDREN));
-    for (final WebElement child : children) {
-      final String childText = child.getText();
-      if (StringUtils.isNoneEmpty(childText) && polishName.contains(childText)) {
-        polishName = beautify(polishName.replace(childText, "").trim());
-      }
-    }
-    return polishName;
+    return text.substring(text.lastIndexOf("=") + 1).trim();
   }
 
   private void webScrapTranslations(final WebElement element, final EtutorWord etutorWord) {
@@ -378,7 +384,7 @@ public class WordScrapper extends BaseScrapper implements CommandLineRunner {
     }
   }
 
-  private String formatLanguageVariety(final String languageVariety) {
+  public static String formatLanguageVariety(final String languageVariety) {
     return switch (languageVariety) {
       case "BrE" -> "British English";
       case "AmE" -> "American English";
