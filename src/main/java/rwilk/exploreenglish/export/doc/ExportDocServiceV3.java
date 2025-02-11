@@ -3,7 +3,6 @@ package rwilk.exploreenglish.export.doc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -151,14 +150,13 @@ public class ExportDocServiceV3 implements CommandLineRunner {
         setWordTextBase(paragraph, " = " + text.trim(), COLOR_GREY, false, FONT_SIZE_MEDIUM);
     }
 
-    private XWPFRun setWordTextBase(XWPFParagraph paragraph, String text, String color, boolean isBold, int fontSize) {
+    private void setWordTextBase(XWPFParagraph paragraph, String text, String color, boolean isBold, int fontSize) {
         final XWPFRun run = paragraph.createRun();
         run.setText(text);
         run.setBold(isBold);
         run.setFontSize(fontSize);
         run.setFontFamily(FONT_CALIBRI);
         run.setColor(color);
-        return run;
     }
 
     private void saveToFile(XWPFDocument document) throws IOException {

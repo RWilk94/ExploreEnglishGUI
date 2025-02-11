@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -14,7 +16,9 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "langeek_lessons")
-public class LangeekLesson {
+public class LangeekLesson implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 8870137178077958046L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

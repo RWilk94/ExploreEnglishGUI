@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -15,7 +17,9 @@ import java.util.Date;
 @Entity
 @EqualsAndHashCode
 @Table(name = "langeek_exercises")
-public class LangeekExercise {
+public class LangeekExercise implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 3033250878364052487L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +33,8 @@ public class LangeekExercise {
     private String href;
     @Column(name = "image")
     private String image;
+    @Column(name = "description", length = 2000)
+    private String description;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)

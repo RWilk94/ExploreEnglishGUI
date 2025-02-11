@@ -23,11 +23,11 @@ public class Translation implements Serializable {
     private String translation;
     private String alternativeTranslation;
     private String otherTranslations;
+    private List<Translation> subTranslations;
     private List<Synonym> synonyms;
     private List<Antonym> antonyms;
     private String level;
     private boolean isDialectSpecific;
-    private List<String> dialects;
     private boolean hideNLPExamples;
     private String visibility;
     private String wiki;

@@ -34,7 +34,6 @@ public class IrregularVerbsScrapper extends BaseScrapper implements CommandLineR
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("IrregularVerbsScrapper");
     }
 
     public void webScrap(final EtutorExercise etutorExercise, final WebDriver driver) {

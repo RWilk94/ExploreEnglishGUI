@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -14,7 +16,9 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "langeek_definitions")
-public class LangeekDefinition {
+public class LangeekDefinition implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -4644235291112900779L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +37,7 @@ public class LangeekDefinition {
     @Column(name = "language")
     private String language;
 
+    @ToString.Exclude
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")

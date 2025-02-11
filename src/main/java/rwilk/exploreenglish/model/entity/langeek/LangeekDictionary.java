@@ -15,8 +15,9 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "langeek_courses")
-public class LangeekCourse implements Serializable {
+@EqualsAndHashCode
+@Table(name = "langeek_dictionaries", uniqueConstraints = @UniqueConstraint(columnNames = {"langeek_id", "language"}))
+public class LangeekDictionary implements Serializable {
     @Serial
     private static final long serialVersionUID = -5205822470795971849L;
 
@@ -24,21 +25,19 @@ public class LangeekCourse implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
-    @Column(name = "name", length = 2000)
-    private String name;
-    @Column(name = "description", length = 2000)
-    private String description;
-    @Column(name = "href", length = 2000)
-    private String href;
-    @Column(name = "image", length = 256)
-    private String image;
+
+    @Column(name = "langeek_id")
+    private Long langeekId;
+
     @Column(name = "language")
     private String language;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String jsonData;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     private Date modifyDate;
-    @Column(name = "is_ready")
-    Boolean isReady;
 }

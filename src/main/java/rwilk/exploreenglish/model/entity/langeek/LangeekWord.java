@@ -5,6 +5,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +20,9 @@ import java.util.List;
 @EqualsAndHashCode
 @Entity
 @Table(name = "langeek_words")
-public class LangeekWord {
+public class LangeekWord implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 8664156100003682598L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,16 +43,20 @@ public class LangeekWord {
     @Type(type = "text")
     @Column(name = "html")
     private String html;
+    @Column(name = "href", length = 256)
+    private String href;
+    @Column(name = "level")
+    private String level;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     private Date modifyDate;
 
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
-    private LangeekExercise exercise;
+//    @ToString.Exclude
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+//    @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "id")
+//    private LangeekExercise exercise;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "word", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})

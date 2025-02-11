@@ -21,4 +21,9 @@ public class NLPAnalyzedData implements Serializable {
     private Boolean isComparable;
     private String partOfSpeech;
     private String word;
+    private String pastForm;
+    private String presentParticipleForm;
+    private String presentForm;
+    private String conjugationType;
+    private String pluralForm;
 }

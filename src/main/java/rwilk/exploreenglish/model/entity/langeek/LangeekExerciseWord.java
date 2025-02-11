@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -14,7 +16,9 @@ import java.util.Date;
 @Entity
 @EqualsAndHashCode
 @Table(name = "langeek_exercise_words", uniqueConstraints = @UniqueConstraint(columnNames = {"exercise_id", "word_id"}))
-public class LangeekExerciseWord {
+public class LangeekExerciseWord implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5257284171275474019L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
