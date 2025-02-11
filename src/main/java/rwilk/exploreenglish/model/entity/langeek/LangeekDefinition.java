@@ -36,6 +36,8 @@ public class LangeekDefinition implements Serializable {
     private String secondarySound;   // American Sound
     @Column(name = "language")
     private String language;
+    @Column(name = "main_word_indexes")
+    private String mainWordIndexes;
 
     @ToString.Exclude
     @UpdateTimestamp

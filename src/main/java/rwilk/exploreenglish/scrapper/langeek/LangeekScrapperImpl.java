@@ -9,10 +9,7 @@ import rwilk.exploreenglish.model.entity.langeek.LangeekCourse;
 import rwilk.exploreenglish.model.entity.langeek.LangeekExercise;
 import rwilk.exploreenglish.model.entity.langeek.LangeekLesson;
 import rwilk.exploreenglish.repository.langeek.LangeekExerciseRepository;
-import rwilk.exploreenglish.scrapper.langeek.scrapper.LangeekCourseScrapper;
-import rwilk.exploreenglish.scrapper.langeek.scrapper.LangeekExerciseScrapper;
-import rwilk.exploreenglish.scrapper.langeek.scrapper.LangeekLessonScrapper;
-import rwilk.exploreenglish.scrapper.langeek.scrapper.LangeekWordScrapper;
+import rwilk.exploreenglish.scrapper.langeek.scrapper.*;
 
 import java.util.List;
 
@@ -26,6 +23,7 @@ public class LangeekScrapperImpl implements LangeekScrapper, CommandLineRunner {
     private final LangeekLessonScrapper langeekLessonScrapper;
     private final LangeekExerciseScrapper langeekExerciseScrapper;
     private final LangeekWordScrapper langeekWordScrapper;
+    private final LangeekWordV2Scrapper langeekWordV2Scrapper;
     private final LangeekExerciseRepository langeekExerciseRepository;
 
     @SuppressWarnings("unused")
@@ -66,14 +64,14 @@ public class LangeekScrapperImpl implements LangeekScrapper, CommandLineRunner {
                 // .stream()
                 // .filter(exercise -> exercise.getLesson().getId() >= 7 && exercise.getLesson().getId() <= 12)
                 .forEach(langeekExercise -> {
-                    try {
-                        Thread.sleep(1000);
+//                    try {
+//                        Thread.sleep(1000);
                         webScrapWords(langeekExercise);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    } catch (Exception e) {
-                        log.error("Error: {}", e.getMessage());
-                    }
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    } catch (Exception e) {
+//                        log.error("Error: {}", e.getMessage());
+//                    }
                 });
     }
 
@@ -94,7 +92,7 @@ public class LangeekScrapperImpl implements LangeekScrapper, CommandLineRunner {
 
     @Override
     public void webScrapWords(final LangeekExercise langeekExercise) {
-        langeekWordScrapper.webScrap(langeekExercise);
+        langeekWordV2Scrapper.webScrap(langeekExercise);
     }
 
 }

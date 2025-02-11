@@ -6,7 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.langeek.LangeekDictionary;
 import rwilk.exploreenglish.repository.langeek.LangeekDictionaryRepository;
-import rwilk.exploreenglish.scrapper.langeek.schema.word.LangeekWordResponse;
+import rwilk.exploreenglish.scrapper.langeek.schema.exercise.LangeekDictionaryExerciseResponse;
+import rwilk.exploreenglish.scrapper.langeek.schema.word.LangeekDictionaryWordResponse;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,13 +20,34 @@ import java.net.http.HttpResponse;
 public class LangeekDictionaryScrapper {
     private final LangeekDictionaryRepository langeekDictionaryRepository;
 
-    public LangeekWordResponse webScrap(final Long wordId, final String language) {
+    public LangeekDictionaryExerciseResponse webScrapExercise(final String href) {
+        final HttpClient client = HttpClient.newHttpClient();
+
+        final int id = Integer.parseInt(href.substring(href.lastIndexOf("subcategory/") + 12, href.lastIndexOf("/word-list")));
+        final String url = "https://langeek.co/_next/data/tUmY4WxKKuxaSo8_0o3D1/en-PL/vocab/subcategory/" + id + "/word-list.json?locale=en-PL&id=" + id;
+
+        final HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        try {
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            final ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(response.body(), LangeekDictionaryExerciseResponse.class);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return null;
+    }
+
+    public LangeekDictionaryWordResponse webScrap(final Long wordId, final String language) {
         final LangeekDictionary cachedEntry = langeekDictionaryRepository.findByLangeekIdAndLanguage(wordId, language);
         if (cachedEntry != null) {
             final ObjectMapper objectMapper = new ObjectMapper();
             try {
                 log.info("[fetchLangeekDictionaryEntry] Fetched from cache: {}", wordId);
-                return objectMapper.readValue(cachedEntry.getJsonData(), LangeekWordResponse.class);
+                return objectMapper.readValue(cachedEntry.getJsonData(), LangeekDictionaryWordResponse.class);
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -50,7 +72,7 @@ public class LangeekDictionaryScrapper {
                     .build());
 
             final ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(response.body(), LangeekWordResponse.class);
+            return objectMapper.readValue(response.body(), LangeekDictionaryWordResponse.class);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

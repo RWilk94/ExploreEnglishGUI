@@ -36,6 +36,7 @@ public class Translation implements Serializable {
     private LocalizedProperties localizedProperties;
     private String automatedTranslatorDefinition;
     private String title;
+    private String type;
     private String titleVoice;
     private String titleTranscription;
 }
