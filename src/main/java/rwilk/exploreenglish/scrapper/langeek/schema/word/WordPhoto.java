@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.langeek.schema;
+package rwilk.exploreenglish.scrapper.langeek.schema.word;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -13,8 +13,9 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LangeekResponse implements Serializable {
+public class WordPhoto implements Serializable {
     @Serial
-    private static final long serialVersionUID = -1144217525649068886L;
-    private PageProps pageProps;
+    private static final long serialVersionUID = 7370373854390522206L;
+    private String photo;
+    private String photoThumbnail;
 }

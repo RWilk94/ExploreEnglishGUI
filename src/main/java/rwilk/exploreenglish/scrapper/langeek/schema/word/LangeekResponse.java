@@ -1,11 +1,10 @@
-package rwilk.exploreenglish.scrapper.langeek.schema;
+package rwilk.exploreenglish.scrapper.langeek.schema.word;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
 
 @Getter
 @Setter
@@ -14,9 +13,8 @@ import java.util.List;
 @EqualsAndHashCode
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WordEntry implements Serializable {
+public class LangeekResponse implements Serializable {
     @Serial
-    private static final long serialVersionUID = -6921778088927130076L;
-    private int id;
-    private List<Word> words;
+    private static final long serialVersionUID = -1144217525649068886L;
+    private PageProps pageProps;
 }

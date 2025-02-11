@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.langeek.schema;
+package rwilk.exploreenglish.scrapper.langeek.schema.word;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

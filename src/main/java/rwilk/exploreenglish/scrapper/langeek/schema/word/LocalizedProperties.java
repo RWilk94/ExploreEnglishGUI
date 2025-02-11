@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.langeek.schema;
+package rwilk.exploreenglish.scrapper.langeek.schema.word;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -13,8 +13,9 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Synonym implements Serializable {
+public class LocalizedProperties implements Serializable {
     @Serial
-    private static final long serialVersionUID = 5702610799335633444L;
-    private String word;
+    private static final long serialVersionUID = -1445096267715833489L;
+    private String translation;
+    private String otherTranslations;
 }

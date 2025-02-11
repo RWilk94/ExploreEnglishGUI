@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.langeek.LangeekDictionary;
 import rwilk.exploreenglish.repository.langeek.LangeekDictionaryRepository;
-import rwilk.exploreenglish.scrapper.langeek.schema.LangeekResponse;
+import rwilk.exploreenglish.scrapper.langeek.schema.word.LangeekResponse;
 
 import java.net.URI;
 import java.net.http.HttpClient;

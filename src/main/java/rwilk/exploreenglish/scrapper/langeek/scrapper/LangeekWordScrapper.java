@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.exception.ConstraintViolationException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,7 +19,7 @@ import rwilk.exploreenglish.model.entity.langeek.LangeekWord;
 import rwilk.exploreenglish.repository.langeek.LangeekExerciseRepository;
 import rwilk.exploreenglish.repository.langeek.LangeekExerciseWordRepository;
 import rwilk.exploreenglish.repository.langeek.LangeekWordRepository;
-import rwilk.exploreenglish.scrapper.langeek.schema.*;
+import rwilk.exploreenglish.scrapper.langeek.schema.word.*;
 
 import java.io.IOException;
 import java.net.URL;
