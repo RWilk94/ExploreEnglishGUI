@@ -107,7 +107,7 @@ public class LangeekWordScrapper {
         return wordElement.child(4).select("a").get(1).attr("href");
     }
 
-    private Word extractDictionaryWord(final LangeekResponse dictionaryEntry, final String foreignTranslation, final String description) {
+    private Word extractDictionaryWord(final LangeekWordResponse dictionaryEntry, final String foreignTranslation, final String description) {
         final List<Word> words = dictionaryEntry
                 .getPageProps()
                 .getInitialState()
@@ -260,7 +260,7 @@ public class LangeekWordScrapper {
         return "";
     }
 
-    private List<Example> extractDictionaryWordTranslationExamples(final LangeekResponse dictionaryEntry, final int translationId) {
+    private List<Example> extractDictionaryWordTranslationExamples(final LangeekWordResponse dictionaryEntry, final int translationId) {
         return dictionaryEntry.getPageProps()
                 .getInitialState()
                 .getStaticData()
@@ -336,7 +336,7 @@ public class LangeekWordScrapper {
     }
 
     private List<LangeekDefinition> createDefinitions(final LangeekWord langeekWord, final Element wordElement) {
-        final LangeekResponse dictionaryEntry = langeekDictionaryScrapper.webScrap(extractLangeekWordId(wordElement), "en-PL");
+        final LangeekWordResponse dictionaryEntry = langeekDictionaryScrapper.webScrap(extractLangeekWordId(wordElement), "en-PL");
         final Word selectedDictionaryWord = extractDictionaryWord(dictionaryEntry, extractForeignTranslation(wordElement), extractDescription(wordElement));
         final Translation selectedTranslation = extractDictionaryWordTranslation(selectedDictionaryWord, extractDescription(wordElement), extractNativeTranslation(wordElement));
         langeekWord.setLevel(extractLevel(selectedTranslation));

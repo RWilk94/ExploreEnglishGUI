@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.langeek.LangeekDictionary;
 import rwilk.exploreenglish.repository.langeek.LangeekDictionaryRepository;
-import rwilk.exploreenglish.scrapper.langeek.schema.word.LangeekResponse;
+import rwilk.exploreenglish.scrapper.langeek.schema.word.LangeekWordResponse;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,13 +19,13 @@ import java.net.http.HttpResponse;
 public class LangeekDictionaryScrapper {
     private final LangeekDictionaryRepository langeekDictionaryRepository;
 
-    public LangeekResponse webScrap(final Long wordId, final String language) {
+    public LangeekWordResponse webScrap(final Long wordId, final String language) {
         final LangeekDictionary cachedEntry = langeekDictionaryRepository.findByLangeekIdAndLanguage(wordId, language);
         if (cachedEntry != null) {
             final ObjectMapper objectMapper = new ObjectMapper();
             try {
                 log.info("[fetchLangeekDictionaryEntry] Fetched from cache: {}", wordId);
-                return objectMapper.readValue(cachedEntry.getJsonData(), LangeekResponse.class);
+                return objectMapper.readValue(cachedEntry.getJsonData(), LangeekWordResponse.class);
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -50,7 +50,7 @@ public class LangeekDictionaryScrapper {
                     .build());
 
             final ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(response.body(), LangeekResponse.class);
+            return objectMapper.readValue(response.body(), LangeekWordResponse.class);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
