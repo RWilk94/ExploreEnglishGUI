@@ -47,6 +47,12 @@ public class LangeekWord implements Serializable {
     private String href;
     @Column(name = "level")
     private String level;
+    @Column(name = "word_id")
+    private Long langeekWordId;
+    @Column(name = "dictionary_id")
+    private Long langeekDictionaryId;
+    @Column(name = "translation_id")
+    private Long langeekWordTranslationId;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -60,7 +66,7 @@ public class LangeekWord implements Serializable {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "word", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
-    private List<LangeekExerciseWord> etutorLessonWords = new ArrayList<>();
+    private List<LangeekExerciseWord> exerciseWords = new ArrayList<>();
 
     @ToString.Exclude
     @OneToMany(mappedBy = "word", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})

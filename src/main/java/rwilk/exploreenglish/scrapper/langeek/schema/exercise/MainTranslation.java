@@ -2,6 +2,7 @@ package rwilk.exploreenglish.scrapper.langeek.schema.exercise;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import rwilk.exploreenglish.scrapper.langeek.schema.word.LocalizedProperties;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,4 +23,5 @@ public class MainTranslation implements Serializable {
     private String translation;
     private int id;
     private Word word;
+    private LocalizedProperties localizedProperties;
 }

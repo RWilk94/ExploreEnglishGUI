@@ -16,6 +16,7 @@ import rwilk.exploreenglish.model.entity.langeek.LangeekWord;
 import rwilk.exploreenglish.repository.langeek.LangeekExerciseRepository;
 import rwilk.exploreenglish.repository.langeek.LangeekExerciseWordRepository;
 import rwilk.exploreenglish.repository.langeek.LangeekWordRepository;
+import rwilk.exploreenglish.scrapper.langeek.exception.WordNotFoundException;
 import rwilk.exploreenglish.scrapper.langeek.schema.exercise.Card;
 import rwilk.exploreenglish.scrapper.langeek.schema.exercise.LangeekDictionaryExerciseResponse;
 import rwilk.exploreenglish.scrapper.langeek.schema.exercise.MainTranslation;
@@ -36,7 +37,7 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        // fixSynonyms();
     }
 
     @Transactional
@@ -50,24 +51,61 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
         for (final MainTranslation mainTranslation : mainTranslations) {
             log.info("Scraping word: {}", mainTranslation.getTitle());
 
-            if (mainTranslation.getWord() == null) {
-                log.warn("Word is null: {}", mainTranslation.getTitle());
+            final int dictionaryId;
+            final int wordId;
+            final int translationId;
+
+            try {
+                if (mainTranslation.getWord() == null || mainTranslation.getWord().getWordEntry() == null) {
+                    log.warn("Word is null: {}", mainTranslation.getTitle());
+                    throw new WordNotFoundException(String.format("404 - Word %s not found", mainTranslation.getTitle()));
+                }
+
+                dictionaryId = mainTranslation.getWord().getWordEntry().getId();
+                wordId = mainTranslation.getWord().getId();
+                translationId = mainTranslation.getId();
+
+                final LangeekDictionaryWordResponse langeekDictionaryWordResponse = langeekDictionaryScrapper
+                        .webScrap((long) dictionaryId, "en-PL");
+
+
+                final Word selectedWord = getSelectedWord(langeekDictionaryWordResponse, wordId);
+                final Translation selectedTranslation = getSelectedTranslation(selectedWord, translationId);
+
+                final LangeekWord langeekWord = createLangeekWord(dictionaryId, selectedTranslation);
+                langeekWord.setLangeekWordId((long) wordId);
+                langeekWord.setLangeekDictionaryId((long) dictionaryId);
+                langeekWord.setLangeekWordTranslationId((long) translationId);
+                final List<LangeekDefinition> langeekDefinitions = createDefinitions(langeekDictionaryWordResponse, langeekWord, selectedWord, selectedTranslation);
+                langeekWord.setDefinitions(langeekDefinitions);
+
+                save(langeekExercise, langeekWord, findDuplicates(langeekWord));
+            } catch (WordNotFoundException e) {
+                log.warn("Word dictionary not found: {}, trying to save via backup", e.getMessage());
+                final LangeekWord langeekWord = LangeekWord.builder()
+                        .nativeTranslation(getNativeTranslation(mainTranslation.getLocalizedProperties()))
+                        .additionalInformation(null)
+                        .partOfSpeech(mainTranslation.getPartOfSpeech().getPartOfSpeechType())
+                        .article(null)
+                        .grammarType(null)
+                        .image(mainTranslation.getWordPhoto() != null ? mainTranslation.getWordPhoto().getPhoto() : null)
+                        .level(null)
+                        .definitions(new ArrayList<>())
+                        .build();
+
+                final LangeekDefinition definition = LangeekDefinition.builder()
+                        .type(WordTypeEnum.WORD.toString())
+                        .foreignTranslation(mainTranslation.getTitle())
+                        .additionalInformation(mainTranslation.getTranslation())
+                        .primarySound(null)
+                        .secondarySound(null)
+                        .language("en-PL")
+                        .word(langeekWord)
+                        .build();
+
+                langeekWord.getDefinitions().add(definition);
+                save(langeekExercise, langeekWord, findDuplicates(langeekWord));
             }
-
-            final int dictionaryId = mainTranslation.getWord().getWordEntry().getId();
-            final int wordId = mainTranslation.getWord().getId();
-            final int translationId = mainTranslation.getId();
-
-            final LangeekDictionaryWordResponse langeekDictionaryWordResponse = langeekDictionaryScrapper
-                    .webScrap((long) dictionaryId, "en-PL");
-            final Word selectedWord = getSelectedWord(langeekDictionaryWordResponse, wordId);
-            final Translation selectedTranslation = getSelectedTranslation(selectedWord, translationId);
-
-            final LangeekWord langeekWord = createLangeekWord(dictionaryId, selectedTranslation);
-            final List<LangeekDefinition> langeekDefinitions = createDefinitions(langeekDictionaryWordResponse, langeekWord, selectedWord, selectedTranslation);
-            langeekWord.setDefinitions(langeekDefinitions);
-
-            save(langeekExercise, langeekWord, findDuplicates(langeekWord));
 
             log.info("Finish scraping word: {}", mainTranslation.getTitle());
         }
@@ -88,6 +126,13 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
     }
 
     private Word getSelectedWord(final LangeekDictionaryWordResponse langeekDictionaryWordResponse, final int wordId) {
+        if (langeekDictionaryWordResponse.getPageProps()
+                .getInitialState()
+                .getStaticData()
+                .getWordEntry() == null) {
+            throw new WordNotFoundException(String.format("404 - Word %s not found", wordId));
+        }
+
         return langeekDictionaryWordResponse.getPageProps()
                 .getInitialState()
                 .getStaticData()
@@ -149,6 +194,22 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
         return nativeTranslation.trim();
     }
 
+    private String getNativeTranslation(final LocalizedProperties localizedProperties) {
+        if (localizedProperties == null) {
+            return null;
+        }
+
+        String nativeTranslation = localizedProperties.getTranslation();
+        if (StringUtils.isNotEmpty(localizedProperties.getOtherTranslations())) {
+            nativeTranslation += ", " + localizedProperties.getOtherTranslations();
+        }
+        if (StringUtils.isBlank(nativeTranslation)) {
+            throw new IllegalArgumentException("Native translation is empty");
+        }
+
+        return nativeTranslation.trim();
+    }
+
     private String getPartOfSpeech(final Translation translation) {
         final String partOfSpeech = translation.getPartOfSpeech().getPartOfSpeechType();
         if (StringUtils.isEmpty(partOfSpeech)) {
@@ -181,7 +242,7 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
             createLangeekSuperlativeDefinition(translation.getMetadata().getNlpAnalyzedData(), langeekWord, langeekDefinitions);
             createLangeekPluralDefinition(translation.getMetadata().getNlpAnalyzedData(), langeekWord, langeekDefinitions);
         }
-        createLangeekSynonymsDefinition(translation.getSynonyms(), langeekWord, langeekDefinitions);
+        createLangeekSynonymsDefinition(translation, langeekWord, langeekDefinitions);
         createLangeekAntonymsDefinition(translation.getAntonyms(), langeekWord, langeekDefinitions);
         createLangeekSentenceDefinition(
                 extractDictionaryWordTranslationExamples(langeekDictionaryWordResponse, translation.getId()),
@@ -285,16 +346,24 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
         );
     }
 
-    private void createLangeekSynonymsDefinition(final List<Synonym> synonyms,
+
+    private void createLangeekSynonymsDefinition(final Translation translation,
                                                  final LangeekWord langeekWord,
                                                  final List<LangeekDefinition> langeekDefinitions) {
-        Optional.ofNullable(synonyms)
-                .filter(CollectionUtils::isNotEmpty)
-                .ifPresent(synonymsList -> synonymsList.forEach(synonym ->
-                        langeekDefinitions.add(
-                                createLangeekDefinitionObject(WordTypeEnum.SYNONYM, synonym.getWord(), langeekWord)
-                        )
-                ));
+        if (translation.getSynonymCluster() != null && CollectionUtils.isNotEmpty(translation.getSynonymCluster().getTranslations())) {
+            final SynonymCluster synonymCluster = translation.getSynonymCluster();
+
+            final List<SynonymTranslation> synonymTranslations = synonymCluster.getTranslations()
+                    .stream()
+                    .filter(clusterTranslation -> clusterTranslation.getTranslationId() != translation.getId())
+                    .toList();
+
+            synonymTranslations.forEach(
+                    synonymTranslation -> langeekDefinitions.add(
+                            createLangeekDefinitionObject(WordTypeEnum.SYNONYM, synonymTranslation.getWord(), langeekWord)
+                    )
+            );
+        }
     }
 
     private void createLangeekAntonymsDefinition(final List<Antonym> antonyms,
@@ -441,7 +510,7 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
                 .word(langeekWord)
                 .build();
 
-        langeekWord.setEtutorLessonWords(List.of(langeekExerciseWord));
+        langeekWord.setExerciseWords(List.of(langeekExerciseWord));
         langeekWordRepository.save(langeekWord);
     }
 }

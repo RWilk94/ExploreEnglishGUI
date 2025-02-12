@@ -428,7 +428,7 @@ public class LangeekWordScrapper {
                 .word(langeekWord)
                 .build();
 
-        langeekWord.setEtutorLessonWords(List.of(langeekExerciseWord));
+        langeekWord.setExerciseWords(List.of(langeekExerciseWord));
         langeekWordRepository.save(langeekWord);
     }
 

@@ -39,4 +39,5 @@ public class Translation implements Serializable {
     private String type;
     private String titleVoice;
     private String titleTranscription;
+    private SynonymCluster synonymCluster;
 }

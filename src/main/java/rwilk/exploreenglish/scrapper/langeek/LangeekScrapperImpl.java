@@ -66,7 +66,7 @@ public class LangeekScrapperImpl implements LangeekScrapper, CommandLineRunner {
                 .forEach(langeekExercise -> {
 //                    try {
 //                        Thread.sleep(1000);
-                        webScrapWords(langeekExercise);
+                    webScrapWords(langeekExercise);
 //                    } catch (InterruptedException e) {
 //                        throw new RuntimeException(e);
 //                    } catch (Exception e) {
@@ -93,6 +93,10 @@ public class LangeekScrapperImpl implements LangeekScrapper, CommandLineRunner {
     @Override
     public void webScrapWords(final LangeekExercise langeekExercise) {
         langeekWordV2Scrapper.webScrap(langeekExercise);
+    }
+
+    public void fixSynonyms(final LangeekExercise langeekExercise) {
+        langeekWordV2Scrapper.fixSynonyms(langeekExercise);
     }
 
 }

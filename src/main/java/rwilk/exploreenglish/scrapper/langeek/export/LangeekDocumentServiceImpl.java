@@ -12,11 +12,16 @@ import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.langeek.*;
 import rwilk.exploreenglish.repository.langeek.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Order(100)
 @Slf4j
@@ -27,7 +32,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
     private static final String FONT_CALIBRI = "Calibri";
     private static final int FONT_SIZE_VERY_BIG = 14;
     private static final int FONT_SIZE_BIG = 12;
-    private static final int FONT_SIZE_MEDIUM = 10;
+    private static final int FONT_SIZE_MEDIUM = 11;
     //    private static final int FONT_SIZE_SMALL = 11;
     private static final double SPACING_BETWEEN = 1.5;
 
@@ -44,14 +49,14 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
 
     @Override
     public void run(String... args) throws Exception {
-        // generateDocument();
+        generateDocument();
     }
 
     @Override
     public void generateDocument() throws IOException {
         final List<LangeekCourse> courses = langeekCourseRepository.findAll()
                 .stream()
-                .filter(course -> course.getId() <= 7)
+                .filter(course -> course.getId() <= 1)
                 .toList();
 
         for (final LangeekCourse course : courses) {
@@ -60,7 +65,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                     .toList();
 
             for (final LangeekLesson lesson : lessons) {
-                final FileInputStream fis = new FileInputStream("template.docx");
+                final FileInputStream fis = new FileInputStream("template2.docx");
                 final XWPFDocument document = new XWPFDocument(fis);
                 createFooter(document);
 
@@ -94,6 +99,9 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                                 createForeignWordTextStyle(primaryParagraph, " / ");
                             }
                             createForeignWordTextStyle(primaryParagraph, primaryDefinition.getForeignTranslation());
+                            if ("british".equals(primaryDefinition.getAdditionalInformation())) {
+                                createAdditionalLanguageVariantTextStyle(primaryParagraph, primaryDefinition.getAdditionalInformation().trim());
+                            }
                         }
                         createNativeWordTextStyle(primaryParagraph, " = ");
 
@@ -102,14 +110,50 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                             createAdditionalTextStyle(primaryParagraph, word.getAdditionalInformation());
                         }
 
+                        if (StringUtils.isNotEmpty(word.getPartOfSpeech())) {
+                            createForeignWordTextStyle(primaryParagraph, " ");
+                            createPartOfSpeechTextStyle(primaryParagraph, word.getPartOfSpeech());
+                        }
+
+//                        for (final LangeekDefinition secondaryDefinition : secondaryDefinitions) {
+//                            createNativeWordTextStyle(primaryParagraph, "(" + secondaryDefinition.getType().toLowerCase() + ": ");
+//                            createForeignWordTextStyle(primaryParagraph, secondaryDefinition.getForeignTranslation());
+//                            createNativeWordTextStyle(primaryParagraph, ")");
+//                        }
+
                         final XWPFParagraph sentenceParagraph = document.createParagraph();
                         sentenceParagraph.setSpacingBetween(SPACING_BETWEEN);
                         sentenceParagraph.setSpacingBefore(0);
                         sentenceParagraph.setSpacingAfter(0);
 
+                        final Map<String, List<LangeekDefinition>> secondaryDefinitionsMap = definitions.stream()
+                                .filter(it -> List.of("PAST_TENSE", "PAST_PARTICIPLE", "PRESENT_PARTICIPLE"/*, "SYNONYM", "OPPOSITE"*/).contains(it.getType()))
+                                .collect(groupingBy(LangeekDefinition::getType));
+
+                        AtomicInteger index = new AtomicInteger(0);
+                        secondaryDefinitionsMap.forEach((s, langeekDefinitions) -> {
+                            String appendSpace = "";
+                            if (index.get() > 0) {
+                                appendSpace = " ";
+                            }
+                            createSentenceTextStyle(sentenceParagraph, appendSpace + s + ": ");
+                            langeekDefinitions.forEach(secondaryDefinition -> {
+                                createForeignWordTextStyle(sentenceParagraph, secondaryDefinition.getForeignTranslation());
+                                if (langeekDefinitions.indexOf(secondaryDefinition) < langeekDefinitions.size() - 1) {
+                                    createSentenceTextStyle(sentenceParagraph, ", ");
+                                }
+                            });
+                            index.getAndIncrement();
+                        });
+
                         final List<LangeekDefinition> primaryDefinitionsWithAdditionalInfo = primaryDefinitions.stream()
                                 .filter(it -> StringUtils.isNotEmpty(it.getAdditionalInformation()))
+                                .filter(it -> !it.getAdditionalInformation().equals("british"))
                                 .toList();
+
+                        if (!secondaryDefinitionsMap.isEmpty() && !primaryDefinitionsWithAdditionalInfo.isEmpty()) {
+                            sentenceParagraph.createRun().addBreak();
+                        }
 
                         for (final LangeekDefinition primaryDefinition : primaryDefinitionsWithAdditionalInfo) {
                             if (StringUtils.isNoneBlank(primaryDefinition.getAdditionalInformation())) {
@@ -135,23 +179,18 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
         final XWPFRun headerRun = headerParagraph.createRun();
         headerRun.setText(headerText.toUpperCase(Locale.ROOT));
         headerRun.setBold(true);
-        headerRun.setColor(COLOR_CYTAT);
+        headerRun.setColor(COLOR_BLUE);
         headerRun.setFontSize(36);
     }
 
     private void createFooter(final XWPFDocument document) {
         final XWPFFooter footer = document.createFooter(HeaderFooterType.DEFAULT);
-
         final XWPFParagraph footerParagraph = footer.createParagraph();
         footerParagraph.setAlignment(ParagraphAlignment.CENTER);
 
-        final String color = COLOR_CYTAT;
+        final String color = COLOR_BLUE;
 
         XWPFRun footerRun = footerParagraph.createRun();
-        footerRun.setText("Strona ");
-        footerRun.setColor(color);
-
-        footerRun = footerParagraph.createRun();
         footerRun.getCTR().addNewFldChar().setFldCharType(STFldCharType.BEGIN);
         footerRun = footerParagraph.createRun();
         footerRun.getCTR().addNewInstrText().setStringValue(" PAGE ");
@@ -160,7 +199,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
         footerRun.getCTR().addNewFldChar().setFldCharType(STFldCharType.END);
 
         footerRun = footerParagraph.createRun();
-        footerRun.setText(" z ");
+        footerRun.setText(" / ");
         footerRun.setColor(color);
 
         footerRun = footerParagraph.createRun();
@@ -173,7 +212,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
     }
 
     private void createLessonDescriptionTextStyle(XWPFParagraph paragraph, String text) {
-        setWordTextBase(paragraph, text + "\n", COLOR_CYTAT, true, FONT_SIZE_VERY_BIG);
+        setWordTextBase(paragraph, text + "\n", COLOR_BLUE, true, FONT_SIZE_VERY_BIG);
     }
 
     private void createForeignWordTextStyle(XWPFParagraph paragraph, String text) {
@@ -184,18 +223,26 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
         setWordTextBase(paragraph, " (" + text.trim() + ") ", COLOR_GREY, false, FONT_SIZE_MEDIUM);
     }
 
+    private void createPartOfSpeechTextStyle(XWPFParagraph paragraph, String text) {
+        setWordTextBase(paragraph, "[" + text.trim() + "]", COLOR_GREY, false, FONT_SIZE_BIG);
+    }
+
     private void createNativeWordTextStyle(XWPFParagraph paragraph, String text) {
         setWordTextBase(paragraph, text, COLOR_BLACK, false, FONT_SIZE_BIG);
     }
 
     private void createSentenceTextStyle(XWPFParagraph paragraph, String text) {
-        setWordTextBase(paragraph, text, COLOR_BLACK, true, FONT_SIZE_MEDIUM);
+        setWordTextBase(paragraph, text, COLOR_GREY, true, FONT_SIZE_MEDIUM);
         paragraph.setIndentationLeft(360);
     }
 
     private void createAdditionalSentenceTextStyle(XWPFParagraph paragraph, String text) {
         setWordTextBase(paragraph, text.trim(), COLOR_GREY, false, FONT_SIZE_MEDIUM);
         paragraph.setIndentationLeft(360);
+    }
+
+    private void createAdditionalLanguageVariantTextStyle(XWPFParagraph paragraph, String text) {
+        setWordTextBase(paragraph, " (" + text.trim() + ")", COLOR_GREY, false, FONT_SIZE_MEDIUM);
     }
 
     private void setWordTextBase(XWPFParagraph paragraph, String text, String color, boolean isBold, int fontSize) {
@@ -207,9 +254,20 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
         run.setColor(color);
     }
 
-    private void saveToFile(XWPFDocument document, LangeekLesson langeekLesson) throws IOException {
-        try (FileOutputStream out = new FileOutputStream("generated/" + langeekLesson.getName() + ".docx")) {
+    private void saveToFile(XWPFDocument document, LangeekLesson langeekLesson) {
+        String directoryPath = "generated/" + langeekLesson.getCourse().getName().replaceAll("[\"/:*?<>|]", "");
+        File directory = new File(directoryPath);
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        File file = new File(directory, langeekLesson.getName().replaceAll("[\"/:*?<>|]", "") + ".docx");
+
+        try (FileOutputStream out = new FileOutputStream(file)) {
             document.write(out);
+        } catch (Exception e) {
+            log.error("Failed to save to file", e);
         }
     }
 }
