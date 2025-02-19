@@ -14,6 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "langeek_definitions")
 public class LangeekDefinition implements Serializable {
@@ -46,7 +47,7 @@ public class LangeekDefinition implements Serializable {
     private Date modifyDate;
 
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "word_id", nullable = false, referencedColumnName = "id", insertable = true, updatable = true)
     private LangeekWord word;
 

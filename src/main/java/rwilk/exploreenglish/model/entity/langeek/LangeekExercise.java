@@ -35,6 +35,9 @@ public class LangeekExercise implements Serializable {
     private String image;
     @Column(name = "description", length = 2000)
     private String description;
+    @Lob
+    @Column(name = "json_data", columnDefinition = "LONGTEXT")
+    private String jsonData;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)

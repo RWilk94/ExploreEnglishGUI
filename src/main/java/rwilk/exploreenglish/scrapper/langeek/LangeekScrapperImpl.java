@@ -64,14 +64,14 @@ public class LangeekScrapperImpl implements LangeekScrapper, CommandLineRunner {
                 // .stream()
                 // .filter(exercise -> exercise.getLesson().getId() >= 7 && exercise.getLesson().getId() <= 12)
                 .forEach(langeekExercise -> {
-//                    try {
+                    try {
 //                        Thread.sleep(1000);
                     webScrapWords(langeekExercise);
 //                    } catch (InterruptedException e) {
 //                        throw new RuntimeException(e);
-//                    } catch (Exception e) {
-//                        log.error("Error: {}", e.getMessage());
-//                    }
+                    } catch (Exception e) {
+                        log.error("Error: {}", e.getMessage());
+                    }
                 });
     }
 
@@ -94,9 +94,4 @@ public class LangeekScrapperImpl implements LangeekScrapper, CommandLineRunner {
     public void webScrapWords(final LangeekExercise langeekExercise) {
         langeekWordV2Scrapper.webScrap(langeekExercise);
     }
-
-    public void fixSynonyms(final LangeekExercise langeekExercise) {
-        langeekWordV2Scrapper.fixSynonyms(langeekExercise);
-    }
-
 }

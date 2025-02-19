@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.wp.usermodel.HeaderFooterType;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.boot.CommandLineRunner;
@@ -16,12 +17,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Order(100)
 @Slf4j
@@ -30,6 +31,7 @@ import static java.util.stream.Collectors.groupingBy;
 public class LangeekDocumentServiceImpl implements LangeekDocumentService, CommandLineRunner {
 
     private static final String FONT_CALIBRI = "Calibri";
+    private static final String FONT_KRISTEN_ITC = "Kristen ITC";
     private static final int FONT_SIZE_VERY_BIG = 14;
     private static final int FONT_SIZE_BIG = 12;
     private static final int FONT_SIZE_MEDIUM = 11;
@@ -56,7 +58,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
     public void generateDocument() throws IOException {
         final List<LangeekCourse> courses = langeekCourseRepository.findAll()
                 .stream()
-                .filter(course -> course.getId() <= 1)
+                // .filter(course -> course.getId() <= 1)
                 .toList();
 
         for (final LangeekCourse course : courses) {
@@ -65,11 +67,13 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                     .toList();
 
             for (final LangeekLesson lesson : lessons) {
+                log.info("Generating document for lesson: {}", lesson.getName());
                 final FileInputStream fis = new FileInputStream("template2.docx");
                 final XWPFDocument document = new XWPFDocument(fis);
+                createFirstPageFooter(document, lesson);
                 createFooter(document);
 
-                createHeader(document, lesson.getName());
+                // createHeader(document, lesson.getName());
 
                 final List<LangeekExercise> exercises = langeekExerciseRepository.findAllByLesson_Id(lesson.getId());
 
@@ -126,17 +130,39 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                         sentenceParagraph.setSpacingBefore(0);
                         sentenceParagraph.setSpacingAfter(0);
 
+                        final List<String> order = List.of("PAST_TENSE", "PAST_PARTICIPLE", "PRESENT_PARTICIPLE");
                         final Map<String, List<LangeekDefinition>> secondaryDefinitionsMap = definitions.stream()
                                 .filter(it -> List.of("PAST_TENSE", "PAST_PARTICIPLE", "PRESENT_PARTICIPLE"/*, "SYNONYM", "OPPOSITE"*/).contains(it.getType()))
-                                .collect(groupingBy(LangeekDefinition::getType));
+                                .collect(groupingBy(LangeekDefinition::getType, LinkedHashMap::new, toList()));
+                        final Map<String, List<LangeekDefinition>> sortedMap = secondaryDefinitionsMap.entrySet().stream()
+                                .sorted(Comparator.comparingInt(e -> order.indexOf(e.getKey())))
+                                .collect(Collectors.toMap(
+                                        Map.Entry::getKey,
+                                        Map.Entry::getValue,
+                                        (e1, e2) -> e1,
+                                        LinkedHashMap::new
+                                ));
 
                         AtomicInteger index = new AtomicInteger(0);
-                        secondaryDefinitionsMap.forEach((s, langeekDefinitions) -> {
+                        sortedMap.forEach((s, langeekDefinitions) -> {
                             String appendSpace = "";
                             if (index.get() > 0) {
                                 appendSpace = " ";
                             }
-                            createSentenceTextStyle(sentenceParagraph, appendSpace + s + ": ");
+                            switch (s) {
+                                case "PAST_TENSE":
+                                    createSentenceTextStyle(sentenceParagraph, appendSpace + "past tense: ");
+                                    break;
+                                case "PAST_PARTICIPLE":
+                                    createSentenceTextStyle(sentenceParagraph, appendSpace + "past participle: ");
+                                    break;
+                                case "PRESENT_PARTICIPLE":
+                                    createSentenceTextStyle(sentenceParagraph, appendSpace + "present participle: ");
+                                    break;
+                                default:
+                                    createSentenceTextStyle(sentenceParagraph, appendSpace + s + ": ");
+                            }
+
                             langeekDefinitions.forEach(secondaryDefinition -> {
                                 createForeignWordTextStyle(sentenceParagraph, secondaryDefinition.getForeignTranslation());
                                 if (langeekDefinitions.indexOf(secondaryDefinition) < langeekDefinitions.size() - 1) {
@@ -181,6 +207,27 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
         headerRun.setBold(true);
         headerRun.setColor(COLOR_BLUE);
         headerRun.setFontSize(36);
+    }
+
+    private void createFirstPageFooter(final XWPFDocument document, final LangeekLesson lesson) {
+        XWPFHeaderFooterPolicy policy = document.createHeaderFooterPolicy();
+        XWPFFooter footer = policy.createFooter(STHdrFtr.FIRST);
+
+        XWPFParagraph paragraph = footer.createParagraph();
+        paragraph.setAlignment(ParagraphAlignment.RIGHT);
+
+        XWPFRun run = paragraph.createRun();
+        run.setText(lesson.getName());
+        run.setFontFamily(FONT_KRISTEN_ITC);
+        run.setColor(COLOR_BLUE);
+        run.setFontSize(28);
+
+        XWPFRun run2 = paragraph.createRun();
+        run2.addBreak();
+        run2.setText("By R.Wilk");
+        run2.setFontFamily(FONT_KRISTEN_ITC);
+        run2.setColor(COLOR_BLUE);
+        run2.setFontSize(28);
     }
 
     private void createFooter(final XWPFDocument document) {

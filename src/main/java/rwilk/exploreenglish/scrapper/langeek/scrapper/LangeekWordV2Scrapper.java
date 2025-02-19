@@ -44,7 +44,7 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
     public void webScrap(final LangeekExercise langeekExercise) {
         log.info("Scraping exercise: {} {} {}", langeekExercise.getId(), langeekExercise.getName(), langeekExercise.getHref());
         final LangeekDictionaryExerciseResponse langeekDictionaryExerciseResponse = langeekDictionaryScrapper
-                .webScrapExercise(langeekExercise.getHref());
+                .webScrapExercise(langeekExercise);
 
         final List<MainTranslation> mainTranslations = getMainTranslations(langeekDictionaryExerciseResponse);
 
@@ -184,7 +184,8 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
         }
 
         String nativeTranslation = translation.getLocalizedProperties().getTranslation();
-        if (StringUtils.isNotEmpty(translation.getLocalizedProperties().getOtherTranslations())) {
+        if (StringUtils.isNotEmpty(translation.getLocalizedProperties().getOtherTranslations())
+                && !translation.getLocalizedProperties().getOtherTranslations().equals(nativeTranslation)) {
             nativeTranslation += ", " + translation.getLocalizedProperties().getOtherTranslations();
         }
         if (StringUtils.isBlank(nativeTranslation)) {
@@ -467,13 +468,15 @@ public class LangeekWordV2Scrapper implements CommandLineRunner {
                         .allMatch(wordDefinition -> duplicateWord.getDefinitions()
                                 .stream()
                                 .anyMatch(duplicateDefinition -> duplicateDefinition.getForeignTranslation().equals(wordDefinition.getForeignTranslation())
-                                        && StringUtils.defaultString(duplicateDefinition.getAdditionalInformation()).equals(wordDefinition.getAdditionalInformation())
+                                        && StringUtils.defaultString(duplicateDefinition.getAdditionalInformation()).equals(StringUtils.defaultString(wordDefinition.getAdditionalInformation()))
                                 )
                         )
                 ).toList();
 
         if (finalDuplicates.size() > 1) {
             throw new RuntimeException("More than one duplicate");
+        } else if (finalDuplicates.size() == 1) {
+            System.out.println("Duplicate word: " + langeekWord.getDefinitions().get(0).getForeignTranslation());
         }
 
         return finalDuplicates;

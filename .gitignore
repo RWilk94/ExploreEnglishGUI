@@ -5,3 +5,8 @@
 /scripts/
 /old_scripts/
 /files/
+/generated/
+/databasebackup/
+all_locales.txt
+*.docx
+*.pdf
