@@ -31,6 +31,7 @@ import static java.util.stream.Collectors.toList;
 public class LangeekDocumentServiceImpl implements LangeekDocumentService, CommandLineRunner {
 
     private static final String FONT_CALIBRI = "Calibri";
+    private static final String FONT_APTOS = "Aptos";
     private static final String FONT_KRISTEN_ITC = "Kristen ITC";
     private static final int FONT_SIZE_VERY_BIG = 14;
     private static final int FONT_SIZE_BIG = 12;
@@ -51,7 +52,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
 
     @Override
     public void run(String... args) throws Exception {
-        generateDocument();
+        // generateDocument();
     }
 
     @Override
@@ -297,7 +298,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
         run.setText(text);
         run.setBold(isBold);
         run.setFontSize(fontSize);
-        run.setFontFamily(FONT_CALIBRI);
+        run.setFontFamily(FONT_APTOS);
         run.setColor(color);
     }
 
