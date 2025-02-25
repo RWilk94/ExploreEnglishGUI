@@ -6,17 +6,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import rwilk.exploreenglish.model.entity.langeek.*;
-import rwilk.exploreenglish.repository.langeek.*;
+import rwilk.exploreenglish.repository.langeek.LangeekCourseRepository;
+import rwilk.exploreenglish.repository.langeek.LangeekExerciseRepository;
+import rwilk.exploreenglish.repository.langeek.LangeekExerciseWordRepository;
+import rwilk.exploreenglish.repository.langeek.LangeekLessonRepository;
 
+import javax.xml.namespace.QName;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -71,9 +78,14 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                 log.info("Generating document for lesson: {}", lesson.getName());
                 final FileInputStream fis = new FileInputStream("template2.docx");
                 final XWPFDocument document = new XWPFDocument(fis);
-                createFirstPageFooter(document, lesson);
-                createFooter(document);
+                // createFirstPageFooter(document, lesson);
 
+                document.getParagraphs().forEach(paragraph -> {
+                    printContentsOfTextBox(paragraph, lesson.getName());
+                });
+
+                createFooter(document);
+                createSecurityHeader(document);
                 // createHeader(document, lesson.getName());
 
                 final List<LangeekExercise> exercises = langeekExerciseRepository.findAllByLesson_Id(lesson.getId());
@@ -197,6 +209,103 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
         }
     }
 
+    private void printContentsOfTextBox(final XWPFParagraph paragraph, final String title) {
+        XmlObject[] textBoxObjects =  paragraph.getCTP().selectPath("""
+                declare namespace w='http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+                declare namespace wps='http://schemas.microsoft.com/office/word/2010/wordprocessingShape'
+                declare namespace v='urn:schemas-microsoft-com:vml'
+                        .//*/wps:txbx/w:txbxContent | .//*/v:textbox/w:txbxContent""");
+
+        for (int i =0; i < textBoxObjects.length; i++) {
+            XWPFParagraph embeddedPara = null;
+            try {
+                XmlObject[] paraObjects = textBoxObjects[i].
+                        selectChildren(
+                                new QName("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "p"));
+
+                for (int j=0; j<paraObjects.length; j++) {
+                    embeddedPara = new XWPFParagraph(
+                            CTP.Factory.parse(paraObjects[j].xmlText()), paragraph.getBody());
+
+                    if (embeddedPara.getText().equals("This is a title of this book.")) {
+                        // Get the underlying CTP (Content Type Paragraph)
+                        CTP ctp = embeddedPara.getCTP();
+
+                        // Clear existing runs
+                        while (ctp.sizeOfRArray() > 0) {
+                            ctp.removeR(0);
+                        }
+
+                        // Create a new run with the new text
+                        CTR run = ctp.addNewR();
+                        CTRPr runProperties = run.addNewRPr();
+                        CTHpsMeasure fontSize = runProperties.addNewSz();
+                        fontSize.setVal(new BigInteger("56"));
+                        CTColor color = runProperties.addNewColor();
+                        color.setVal("FFFFFF");
+                        runProperties.addNewB();
+                        CTFonts fonts = runProperties.addNewRFonts();
+                        fonts.setAscii(FONT_KRISTEN_ITC);
+                        fonts.setHAnsi(FONT_KRISTEN_ITC);
+
+                        CTText text = run.addNewT();
+                        text.setStringValue(title);
+
+                        // Update the original XML in the document
+                        paraObjects[j].set(ctp);
+                    }
+
+                    // System.out.println(embeddedPara.getText());
+                }
+
+            } catch (XmlException e) {
+                //handle
+            }
+        }
+    }
+
+
+
+//    private void replaceTextInTextBoxes(XWPFDocument document, String oldText, String newText) {
+//        // Iterate through all paragraphs in the document
+//        for (XWPFParagraph paragraph : document.getParagraphs()) {
+//            // Get all runs in the paragraph
+//            List<XWPFRun> runs = paragraph.getRuns();
+//
+//            for (XWPFRun run : runs) {
+//                // Check for drawings in this run
+//                CTDrawing drawing = run.getCTR().getDrawingArray(0);
+//                if (drawing != null) {
+//                    // Process the drawing to find and replace text
+//                    processDrawing(drawing, oldText, newText);
+//                }
+//            }
+//        }
+//    }
+//
+//    private static void processDrawing(CTDrawing drawing, String oldText, String newText) {
+//        // This is a simplified example. In a real implementation, you would:
+//        // 1. Navigate through the drawing to find the text body
+//        // 2. Check if the text matches what you're looking for
+//        // 3. Replace the text if it matches
+//
+//        // The exact code depends on the structure of your document
+//        // This would typically involve working with the drawing's inline or anchor,
+//        // then accessing the shape and its text body
+//
+//        // Example of accessing text in a shape (actual implementation will be more complex):
+//         CTTextBody textBody = drawing.getInlineList().get(0).getGraphic().getGraphicData()
+//             .getShape().getTxBody();
+//
+//         for (CTTextParagraph textParagraph : textBody.getPList()) {
+//             String text = textParagraph.getTextString();
+//             if (text.contains(oldText)) {
+//                 // Replace the text
+//                 // This is simplified; actual text replacement would be more complex
+//             }
+//         }
+//    }
+
     private void createHeader(final XWPFDocument document, final String headerText) {
         final XWPFHeader header = document.createHeader(HeaderFooterType.FIRST);
 
@@ -208,6 +317,19 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
         headerRun.setBold(true);
         headerRun.setColor(COLOR_BLUE);
         headerRun.setFontSize(36);
+    }
+
+    private void createSecurityHeader(final XWPFDocument document) {
+        final XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
+
+        final XWPFParagraph headerParagraph = header.createParagraph();
+        headerParagraph.setAlignment(ParagraphAlignment.CENTER);
+
+        final XWPFRun headerRun = headerParagraph.createRun();
+        headerRun.setText("Created by R.Wilk, All rights reserved");
+        headerRun.setBold(true);
+        headerRun.setColor("FFFFFF");
+        headerRun.setFontSize(18);
     }
 
     private void createFirstPageFooter(final XWPFDocument document, final LangeekLesson lesson) {

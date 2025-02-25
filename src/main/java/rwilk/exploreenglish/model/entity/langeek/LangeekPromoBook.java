@@ -32,4 +32,8 @@ public class LangeekPromoBook implements Serializable {
     private Long courseId;
     @Column(name = "course_name")
     private String courseName;
+    @Column(name = "price")
+    private Integer price;
+    @Column(name = "course_price")
+    private Integer coursePrice;
 }

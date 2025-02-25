@@ -10,7 +10,9 @@ public interface LangeekPromoBookRepository extends JpaRepository<LangeekPromoBo
     @Query(nativeQuery = true, value = """
                 select 
                     ll.id, 
-                    ll.name, 
+                    ll.name,
+                    ll.price,
+                    (select lc.price from langeek_courses lc where lc.id = ll.course_id) as course_price,            
                     count(le.id) as words_count, 
                     (
                             select count(le2.id) as exercises_count
