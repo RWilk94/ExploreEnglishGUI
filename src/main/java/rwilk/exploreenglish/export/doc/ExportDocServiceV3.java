@@ -61,7 +61,7 @@ public class ExportDocServiceV3 implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        generateDocument();
+        // generateDocument();
     }
 
     public void generateDocument() throws IOException {
