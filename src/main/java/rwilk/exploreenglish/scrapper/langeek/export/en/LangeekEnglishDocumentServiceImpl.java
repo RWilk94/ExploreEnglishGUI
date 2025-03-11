@@ -1,4 +1,4 @@
-package rwilk.exploreenglish.scrapper.langeek.export;
+package rwilk.exploreenglish.scrapper.langeek.export.en;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,7 @@ import rwilk.exploreenglish.repository.langeek.LangeekCourseRepository;
 import rwilk.exploreenglish.repository.langeek.LangeekExerciseRepository;
 import rwilk.exploreenglish.repository.langeek.LangeekExerciseWordRepository;
 import rwilk.exploreenglish.repository.langeek.LangeekLessonRepository;
+import rwilk.exploreenglish.scrapper.langeek.export.LangeekDocumentService;
 
 import javax.xml.namespace.QName;
 import java.io.File;
@@ -35,7 +36,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LangeekDocumentServiceImpl implements LangeekDocumentService, CommandLineRunner {
+public class LangeekEnglishDocumentServiceImpl implements LangeekDocumentService, CommandLineRunner {
 
     private static final String FONT_CALIBRI = "Calibri";
     private static final String FONT_APTOS = "Aptos";
@@ -66,7 +67,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
     public void generateDocument() throws IOException {
         final List<LangeekCourse> courses = langeekCourseRepository.findAll()
                 .stream()
-                // .filter(course -> course.getId() <= 1)
+//                 .filter(course -> course.getId() <= 6)
                 .toList();
 
         for (final LangeekCourse course : courses) {
@@ -76,7 +77,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
 
             for (final LangeekLesson lesson : lessons) {
                 log.info("Generating document for lesson: {}", lesson.getName());
-                final FileInputStream fis = new FileInputStream("template2.docx");
+                final FileInputStream fis = new FileInputStream("template3.docx");
                 final XWPFDocument document = new XWPFDocument(fis);
                 // createFirstPageFooter(document, lesson);
 
@@ -85,7 +86,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                 });
 
                 createFooter(document);
-                // createSecurityHeader(document);
+                createSecurityHeader(document);
                 // createHeader(document, lesson.getName());
 
                 final List<LangeekExercise> exercises = langeekExerciseRepository.findAllByLesson_Id(lesson.getId());
@@ -120,12 +121,12 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                                 createAdditionalLanguageVariantTextStyle(primaryParagraph, primaryDefinition.getAdditionalInformation().trim());
                             }
                         }
-                        createNativeWordTextStyle(primaryParagraph, " = ");
-
-                        createNativeWordTextStyle(primaryParagraph, word.getNativeTranslation());
-                        if (StringUtils.isNoneBlank(word.getAdditionalInformation())) {
-                            createAdditionalTextStyle(primaryParagraph, word.getAdditionalInformation());
-                        }
+//                        createNativeWordTextStyle(primaryParagraph, " = ");
+//
+//                        createNativeWordTextStyle(primaryParagraph, word.getNativeTranslation());
+//                        if (StringUtils.isNoneBlank(word.getAdditionalInformation())) {
+//                            createAdditionalTextStyle(primaryParagraph, word.getAdditionalInformation());
+//                        }
 
                         if (StringUtils.isNotEmpty(word.getPartOfSpeech())) {
                             createForeignWordTextStyle(primaryParagraph, " ");
@@ -201,16 +202,6 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                             if (primaryDefinitions.indexOf(primaryDefinition) < primaryDefinitionsWithAdditionalInfo.size() - 1) {
                                 sentenceParagraph.createRun().addBreak();
                             }
-                        }
-
-                        List<LangeekDefinition> sentences = definitions.stream()
-                                .filter(it -> it.getType().equals("SENTENCE"))
-                                .limit(1)
-                                .toList();
-
-                        for (final LangeekDefinition sentence : sentences) {
-                            sentenceParagraph.createRun().addBreak();
-                            createSentenceTextStyle(sentenceParagraph, sentence.getForeignTranslation());
                         }
                     }
                 }
@@ -435,7 +426,7 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
     }
 
     private void saveToFile(XWPFDocument document, LangeekLesson langeekLesson) {
-        String directoryPath = "generated/langeek-pl/" + langeekLesson.getCourse().getName().replaceAll("[\"/:*?<>|]", "");
+        String directoryPath = "generated/" + langeekLesson.getCourse().getName().replaceAll("[\"/:*?<>|]", "");
         File directory = new File(directoryPath);
 
         if (!directory.exists()) {

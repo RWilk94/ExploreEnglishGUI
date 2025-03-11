@@ -58,6 +58,10 @@ public class LangeekPromoBookExportService implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        // generateDocument();
+    }
+
+    public void generateDocument() throws Exception {
         final Map<Long, List<LangeekPromoBook>> promoBooksMap = langeekPromoBookRepository
                 .findAllPromoBooks()
                 .stream()

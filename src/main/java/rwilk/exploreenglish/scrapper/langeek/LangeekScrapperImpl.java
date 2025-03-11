@@ -60,19 +60,19 @@ public class LangeekScrapperImpl implements LangeekScrapper, CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        langeekExerciseRepository.findAllByIsReady(false)
-                // .stream()
-                // .filter(exercise -> exercise.getLesson().getId() >= 7 && exercise.getLesson().getId() <= 12)
-                .forEach(langeekExercise -> {
-                    try {
-//                        Thread.sleep(1000);
-                    webScrapWords(langeekExercise);
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-                    } catch (Exception e) {
-                        log.error("Error: {}", e.getMessage());
-                    }
-                });
+//        langeekExerciseRepository.findAllByIsReady(false)
+//                // .stream()
+//                // .filter(exercise -> exercise.getLesson().getId() >= 7 && exercise.getLesson().getId() <= 12)
+//                .forEach(langeekExercise -> {
+//                    try {
+////                        Thread.sleep(1000);
+//                    webScrapWords(langeekExercise);
+////                    } catch (InterruptedException e) {
+////                        throw new RuntimeException(e);
+//                    } catch (Exception e) {
+//                        log.error("Error: {}", e.getMessage());
+//                    }
+//                });
     }
 
     @Override
