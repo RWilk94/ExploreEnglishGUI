@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
-import rwilk.exploreenglish.scrapper.ewa.schema.course.Child;
-import rwilk.exploreenglish.scrapper.ewa.schema.course.EwaCourseResponse;
-import rwilk.exploreenglish.scrapper.ewa.schema.course.Lesson;
-import rwilk.exploreenglish.scrapper.ewa.schema.course.Result;
+import rwilk.exploreenglish.repository.ewa.EwaCourseRepository;
+import rwilk.exploreenglish.repository.ewa.EwaExerciseRepository;
+import rwilk.exploreenglish.repository.ewa.EwaLessonRepository;
 import rwilk.exploreenglish.scrapper.ewa.scrapper.EwaCourseScrapper;
+import rwilk.exploreenglish.scrapper.ewa.scrapper.EwaExerciseItemScrapper;
+import rwilk.exploreenglish.scrapper.ewa.scrapper.EwaExerciseScrapper;
 import rwilk.exploreenglish.scrapper.ewa.scrapper.EwaLessonScrapper;
 
 @Slf4j
@@ -17,27 +18,27 @@ import rwilk.exploreenglish.scrapper.ewa.scrapper.EwaLessonScrapper;
 public class EwaScrapper implements CommandLineRunner {
     private final EwaCourseScrapper ewaCourseScrapper;
     private final EwaLessonScrapper ewaLessonScrapper;
+    private final EwaExerciseScrapper ewaExerciseScrapper;
+    private final EwaExerciseItemScrapper ewaExerciseItemScrapper;
+    private final EwaCourseRepository ewaCourseRepository;
+    private final EwaLessonRepository ewaLessonRepository;
+    private final EwaExerciseRepository ewaExerciseRepository;
 
     @Override
     public void run(String... args) throws Exception {
-        // webScrapEwaApp();
+        webScrapEwaApp();
     }
 
     public void webScrapEwaApp() {
-        final EwaCourseResponse ewaCourseResponse = ewaCourseScrapper.webScrapCourses();
+        ewaCourseScrapper.webScrap();
 
-        for (final Result result : ewaCourseResponse.getResult()) {
-            System.out.println(result.getTitle());
-            // System.out.println(result.getId());
+        ewaCourseRepository.findAllByIsReady(false)
+                .forEach(ewaLessonScrapper::webScrap);
 
-            for (final Child child : result.getChilds()) {
+        ewaLessonRepository.findAllByIsReady(false)
+                .forEach(ewaExerciseScrapper::webScrap);
 
-                for (final Lesson lesson : child.getLessons()) {
-                    System.out.println(lesson.getTitle());
-                    // System.out.println(lesson.getId());
-                }
-            }
-            System.out.println("-------------------------------------------------");
-        }
+        ewaExerciseRepository.findAllByIsReady(false)
+                .forEach(ewaExerciseItemScrapper::webScrap);
     }
 }

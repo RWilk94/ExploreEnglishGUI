@@ -1,10 +1,12 @@
 package rwilk.exploreenglish.scrapper.ewa.scrapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
-import rwilk.exploreenglish.scrapper.ewa.schema.course.EwaCourseResponse;
+import org.springframework.transaction.annotation.Transactional;
+import rwilk.exploreenglish.model.entity.ewa.EwaCourse;
+import rwilk.exploreenglish.repository.ewa.EwaCourseRepository;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,15 +15,22 @@ import java.net.http.HttpResponse;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class EwaCourseScrapper implements CommandLineRunner {
+
+    private final EwaCourseRepository ewaCourseRepository;
 
     @Override
     public void run(String... args) throws Exception {
-        // webScrapCourses();
+         // webScrap();
     }
 
-    public EwaCourseResponse webScrapCourses() {
-        final ObjectMapper objectMapper = new ObjectMapper();
+    @Transactional
+    public void webScrap() {
+        if (!ewaCourseRepository.findAll().isEmpty()) {
+            return;
+        }
+
         final HttpClient client = HttpClient.newHttpClient();
 
         final String url = "https://api.appewa.com/api/v12/courses/roadmap";
@@ -35,7 +44,14 @@ public class EwaCourseScrapper implements CommandLineRunner {
 
         try {
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return objectMapper.readValue(response.body(), EwaCourseResponse.class);
+            final EwaCourse ewaCourse = EwaCourse.builder()
+                    .id(null)
+                    .name("Ewa Video Course")
+                    .jsonData(response.body())
+                    .build();
+
+            ewaCourseRepository.save(ewaCourse);
+
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);

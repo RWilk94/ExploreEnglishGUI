@@ -41,8 +41,8 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
     private static final String FONT_APTOS = "Aptos";
     private static final String FONT_KRISTEN_ITC = "Kristen ITC";
     private static final int FONT_SIZE_VERY_BIG = 14;
-    private static final int FONT_SIZE_BIG = 12;
-    private static final int FONT_SIZE_MEDIUM = 11;
+    private static final int FONT_SIZE_BIG = 11;
+    private static final int FONT_SIZE_MEDIUM = 10;
     //    private static final int FONT_SIZE_SMALL = 11;
     private static final double SPACING_BETWEEN = 1.5;
 
@@ -138,10 +138,10 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
 //                            createNativeWordTextStyle(primaryParagraph, ")");
 //                        }
 
-                        final XWPFParagraph sentenceParagraph = document.createParagraph();
-                        sentenceParagraph.setSpacingBetween(SPACING_BETWEEN);
-                        sentenceParagraph.setSpacingBefore(0);
-                        sentenceParagraph.setSpacingAfter(0);
+//                        XWPFParagraph sentenceParagraph = null; // = document.createParagraph();
+//                        sentenceParagraph.setSpacingBetween(SPACING_BETWEEN);
+//                        sentenceParagraph.setSpacingBefore(0);
+//                        sentenceParagraph.setSpacingAfter(0);
 
                         final List<String> order = List.of("PAST_TENSE", "PAST_PARTICIPLE", "PRESENT_PARTICIPLE");
                         final Map<String, List<LangeekDefinition>> secondaryDefinitionsMap = definitions.stream()
@@ -155,6 +155,19 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                                         (e1, e2) -> e1,
                                         LinkedHashMap::new
                                 ));
+
+                        List<LangeekDefinition> sentences = definitions.stream()
+                                .filter(it -> it.getType().equals("SENTENCE"))
+                                .limit(2)
+                                .toList();
+                        if (sentences.isEmpty() && sortedMap.isEmpty()) {
+
+                        } else {
+                            final XWPFParagraph sentenceParagraph = document.createParagraph();
+                            sentenceParagraph.setSpacingBetween(SPACING_BETWEEN);
+                            sentenceParagraph.setSpacingBefore(0);
+                            sentenceParagraph.setSpacingAfter(0);
+
 
                         AtomicInteger index = new AtomicInteger(0);
                         sortedMap.forEach((s, langeekDefinitions) -> {
@@ -185,32 +198,34 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
                             index.getAndIncrement();
                         });
 
-                        final List<LangeekDefinition> primaryDefinitionsWithAdditionalInfo = primaryDefinitions.stream()
-                                .filter(it -> StringUtils.isNotEmpty(it.getAdditionalInformation()))
-                                .filter(it -> !it.getAdditionalInformation().equals("british"))
-                                .toList();
+//                        final List<LangeekDefinition> primaryDefinitionsWithAdditionalInfo = primaryDefinitions.stream()
+//                                .filter(it -> StringUtils.isNotEmpty(it.getAdditionalInformation()))
+//                                .filter(it -> !it.getAdditionalInformation().equals("british"))
+//                                .toList();
 
-                        if (!secondaryDefinitionsMap.isEmpty() && !primaryDefinitionsWithAdditionalInfo.isEmpty()) {
-                            sentenceParagraph.createRun().addBreak();
-                        }
+//                        if (!secondaryDefinitionsMap.isEmpty() && !primaryDefinitionsWithAdditionalInfo.isEmpty()) {
+//                            sentenceParagraph.createRun().addBreak();
+//                        }
 
-                        for (final LangeekDefinition primaryDefinition : primaryDefinitionsWithAdditionalInfo) {
-                            if (StringUtils.isNoneBlank(primaryDefinition.getAdditionalInformation())) {
-                                createAdditionalSentenceTextStyle(sentenceParagraph, primaryDefinition.getAdditionalInformation().trim());
+//                        for (final LangeekDefinition primaryDefinition : primaryDefinitionsWithAdditionalInfo) {
+//                            if (StringUtils.isNoneBlank(primaryDefinition.getAdditionalInformation())) {
+//                                createAdditionalSentenceTextStyle(sentenceParagraph, primaryDefinition.getAdditionalInformation().trim());
+//                            }
+//                            if (primaryDefinitions.indexOf(primaryDefinition) < primaryDefinitionsWithAdditionalInfo.size() - 1) {
+//                                sentenceParagraph.createRun().addBreak();
+//                            }
+//                        }
+
+
+                            for (final LangeekDefinition sentence : sentences) {
+                                if (sentences.indexOf(sentence) == 0 && !sortedMap.isEmpty()) {
+                                    sentenceParagraph.createRun().addBreak();
+                                }
+                                createSentenceTextStyle(sentenceParagraph, sentence.getForeignTranslation(), sentences.indexOf(sentence) + 1);
+                                if (sentences.indexOf(sentence) == 0 && sentences.size() > 1) {
+                                    sentenceParagraph.createRun().addBreak();
+                                }
                             }
-                            if (primaryDefinitions.indexOf(primaryDefinition) < primaryDefinitionsWithAdditionalInfo.size() - 1) {
-                                sentenceParagraph.createRun().addBreak();
-                            }
-                        }
-
-                        List<LangeekDefinition> sentences = definitions.stream()
-                                .filter(it -> it.getType().equals("SENTENCE"))
-                                .limit(1)
-                                .toList();
-
-                        for (final LangeekDefinition sentence : sentences) {
-                            sentenceParagraph.createRun().addBreak();
-                            createSentenceTextStyle(sentenceParagraph, sentence.getForeignTranslation());
                         }
                     }
                 }
@@ -408,11 +423,18 @@ public class LangeekDocumentServiceImpl implements LangeekDocumentService, Comma
     }
 
     private void createNativeWordTextStyle(XWPFParagraph paragraph, String text) {
-        setWordTextBase(paragraph, text, COLOR_BLACK, false, FONT_SIZE_BIG);
+        setWordTextBase(paragraph, text, COLOR_BLACK, true, FONT_SIZE_BIG);
     }
 
     private void createSentenceTextStyle(XWPFParagraph paragraph, String text) {
-        setWordTextBase(paragraph, text, COLOR_GREY, true, FONT_SIZE_MEDIUM);
+        setWordTextBase(paragraph, text, COLOR_GREY, false, FONT_SIZE_MEDIUM);
+        // setWordTextBase(paragraph, text, COLOR_GREY, true, FONT_SIZE_MEDIUM);
+        paragraph.setIndentationLeft(360);
+    }
+
+    private void createSentenceTextStyle(XWPFParagraph paragraph, String text, int index) {
+        setWordTextBase(paragraph, index + ") " + text, COLOR_BLACK, false, FONT_SIZE_MEDIUM);
+        // setWordTextBase(paragraph, text, COLOR_GREY, true, FONT_SIZE_MEDIUM);
         paragraph.setIndentationLeft(360);
     }
 
