@@ -26,7 +26,7 @@ public class EwaScrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        webScrapEwaApp();
+        // webScrapEwaApp();
     }
 
     public void webScrapEwaApp() {

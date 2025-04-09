@@ -56,6 +56,8 @@ public class EwaExerciseItem implements Serializable {
     private String jsonData;
     @Column(name = "is_video_downloaded")
     Boolean isVideoDownloaded;
+    @Column(name = "is_voice_downloaded")
+    Boolean isVoiceDownloaded;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
