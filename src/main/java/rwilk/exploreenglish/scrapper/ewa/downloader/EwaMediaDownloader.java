@@ -33,8 +33,17 @@ public class EwaMediaDownloader implements CommandLineRunner {
 
     @Transactional
     public void downloadMedia(final EwaExerciseItem ewaExerciseItem) {
-        downloadVideo(ewaExerciseItem);
-        downloadVoice(ewaExerciseItem);
+        if (ewaExerciseItem.getVideoHevc() != null && !ewaExerciseItem.getIsVideoDownloaded()) {
+            downloadVideo(ewaExerciseItem);
+        } else {
+            ewaExerciseItem.setIsVideoDownloaded(true);
+        }
+
+        if (ewaExerciseItem.getVoiceUrl() != null && !ewaExerciseItem.getIsVoiceDownloaded()) {
+            downloadVoice(ewaExerciseItem);
+        } else {
+            ewaExerciseItem.setIsVoiceDownloaded(true);
+        }
 
         ewaExerciseItemRepository.save(ewaExerciseItem);
     }
@@ -135,7 +144,19 @@ public class EwaMediaDownloader implements CommandLineRunner {
         } else if (ewaExerciseItem.getContentTranslation() != null) {
             return ewaExerciseItem.getContentTranslation().replaceAll("[^a-zA-Z0-9 ]", "");
         } else {
-            throw new RuntimeException("No voice key found for exercise item: " + ewaExerciseItem.getId());
+            return "";
+        }
+    }
+
+    private String getVideoKey(final EwaExerciseItem ewaExerciseItem) {
+        if (ewaExerciseItem.getType().equals("explain") && ewaExerciseItem.getContentText() != null) {
+            return ewaExerciseItem.getContentText().replaceAll("[^a-zA-Z0-9 ]", "");
+        } else if (ewaExerciseItem.getVoiceKey() != null) {
+            return ewaExerciseItem.getVoiceKey().replaceAll("[^a-zA-Z0-9 ]", "");
+        } else if (ewaExerciseItem.getContentTranslation() != null) {
+            return ewaExerciseItem.getContentTranslation().replaceAll("[^a-zA-Z0-9 ]", "");
+        } else {
+            return "";
         }
     }
 
@@ -145,7 +166,7 @@ public class EwaMediaDownloader implements CommandLineRunner {
                 + "/"
                 + ewaExerciseItem.getId().toString()
                 + "_"
-                + getVoiceKey(ewaExerciseItem)
+                + getVideoKey(ewaExerciseItem)
                 + ".mp4";
     }
 

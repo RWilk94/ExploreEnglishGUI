@@ -2,7 +2,6 @@ package rwilk.exploreenglish.scrapper.ewa.schema.lesson;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import rwilk.exploreenglish.scrapper.ewa.schema.course.Image;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,20 +14,16 @@ import java.util.List;
 @EqualsAndHashCode
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Lesson implements Serializable {
+public class Word implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private String _id;
-    private String kind;
+    private Example example;
+    private String audio;
+    private List<String> meanings;
+    private List<String> examples;
+    private String transcription;
+    private List<String> localizedMeanings;
+    private boolean isRepeatable;
     private String origin;
-    private String courseId;
-    private String title;
-    private Image image;
-    private String avatar;
-    private List<String> media;
-    private String id;
-    private int totalPhrases;
-    private List<Exercise> exercises;
-    private List<LessonWord> lessonWords;
-    private List<LessonPhrase> lessonPhrases;
 }

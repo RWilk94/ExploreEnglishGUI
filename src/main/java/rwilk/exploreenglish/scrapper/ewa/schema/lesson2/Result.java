@@ -1,7 +1,8 @@
-package rwilk.exploreenglish.scrapper.ewa.schema.lesson;
+package rwilk.exploreenglish.scrapper.ewa.schema.lesson2;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import rwilk.exploreenglish.scrapper.ewa.schema.lesson.Lesson;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,14 +14,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Exercise implements Serializable {
+public class Result implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private String _id;
-    private String type;
-    private String lessonId;
-    private String courseId;
-    private Media media;
-    private Content content;
-    private Word word;
+    private Course course;
 }

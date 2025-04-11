@@ -39,6 +39,8 @@ public class EwaExerciseItemScrapper implements CommandLineRunner {
 
     @Transactional
     public void webScrap(final EwaExercise ewaExercise) {
+        log.info("[EwaExerciseItemScrapper] webScrap exercise: {}", ewaExercise.getId());
+
         final HttpClient client = HttpClient.newHttpClient();
 
         final String url = "https://api.appewa.com/api/v12/lessons/" + ewaExercise.getEwaId();
@@ -46,13 +48,15 @@ public class EwaExerciseItemScrapper implements CommandLineRunner {
                 .uri(URI.create(url))
                 .header("Origin", "https://appewa.com")
                 .header("Referer", "https://appewa.com/")
-                .header("X-Session-id", "eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5YmRlZTg0Mi00ZTNiLTRkYWEtODBmNC1iZmUyNDFiYzRkOTIiLCJyb2xlIjoidXNlciIsImxhbmciOiJwbCIsImlhdCI6MTczMzIxNDc4Mn0.fJ3INcoqMSlPuOByT12TC97GY1GeJDRKBhu0sMYMpIKODt8zJu1lQa0Xb7o8-8Xp")
+                .header("X-Session-id", "eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTc0MWZhOC1kY2UwLTRmODktOWU3NC1jNmYzMGI2ODA1YzMiLCJuYW1lIjoiUmFmYcWCIFdpbGsiLCJyb2xlIjoidXNlciIsImxhbmciOiJwbCIsImlhdCI6MTc0NDI4NTM3NH0._ZSr3AI801wcJBFCAZqS78XTcWJ6K5zoxAQt4rG5N92rPZp6CDVrZ9l4UCGFcwUY")
                 .GET()
                 .build();
 
         try {
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            final EwaLessonResponse ewaLessonResponse = objectMapper.readValue(response.body(), EwaLessonResponse.class);
+            final EwaLessonResponse ewaLessonResponse = ewaExercise.getJsonData() != null
+                    ? objectMapper.readValue(ewaExercise.getJsonData(), EwaLessonResponse.class)
+                    : objectMapper.readValue(response.body(), EwaLessonResponse.class);
 
             if (response.statusCode() != 200) {
                 throw new RuntimeException(response.body());
@@ -86,6 +90,7 @@ public class EwaExerciseItemScrapper implements CommandLineRunner {
                         .contentTranslation(exercise.getContent().getTranslation())
                         .jsonData(getExerciseJson(exercise))
                         .isVideoDownloaded(false)
+                        .isVoiceDownloaded(false)
                         .ewaExercise(ewaExercise)
                         .build();
                 ewaExerciseItems.add(ewaExerciseItem);

@@ -26,11 +26,13 @@ public class EwaScrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // webScrapEwaApp();
+        webScrapEwaApp();
     }
 
     public void webScrapEwaApp() {
-        ewaCourseScrapper.webScrap();
+        if (ewaCourseRepository.count() == 0) {
+            ewaCourseScrapper.webScrap();
+        }
 
         ewaCourseRepository.findAllByIsReady(false)
                 .forEach(ewaLessonScrapper::webScrap);
@@ -39,6 +41,13 @@ public class EwaScrapper implements CommandLineRunner {
                 .forEach(ewaExerciseScrapper::webScrap);
 
         ewaExerciseRepository.findAllByIsReady(false)
-                .forEach(ewaExerciseItemScrapper::webScrap);
+                .forEach(exercise -> {
+                    try {
+                        Thread.sleep(1000);
+                        ewaExerciseItemScrapper.webScrap(exercise);
+                    } catch (InterruptedException e) {
+                        log.error(e.getMessage());
+                    }
+                });
     }
 }

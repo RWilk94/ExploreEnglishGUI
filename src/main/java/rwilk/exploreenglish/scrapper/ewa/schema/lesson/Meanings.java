@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -13,14 +14,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Exercise implements Serializable {
+public class Meanings implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private String _id;
-    private String type;
-    private String lessonId;
-    private String courseId;
-    private Media media;
-    private Content content;
-    private Word word;
+    private Map<String, Meaning> pl;
 }

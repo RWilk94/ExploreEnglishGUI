@@ -30,6 +30,8 @@ public class EwaExercise implements Serializable {
     private String kind;
     @Column(name = "title")
     private String title;
+    @Column(name = "origin")
+    private String origin;
     @Column(name = "image_id")
     private String imageId;
     @Column(name = "image_s")
@@ -42,6 +44,8 @@ public class EwaExercise implements Serializable {
     private String imageXl;
     @Column(name = "is_adult")
     private Boolean isAdult;
+    @Column(name = "number")
+    private Integer number;
 
     @Lob
     @Column(name = "json_data", columnDefinition = "LONGTEXT")

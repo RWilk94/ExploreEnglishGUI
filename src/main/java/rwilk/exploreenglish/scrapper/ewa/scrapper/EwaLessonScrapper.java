@@ -11,9 +11,13 @@ import rwilk.exploreenglish.model.entity.ewa.EwaCourse;
 import rwilk.exploreenglish.model.entity.ewa.EwaLesson;
 import rwilk.exploreenglish.repository.ewa.EwaCourseRepository;
 import rwilk.exploreenglish.repository.ewa.EwaLessonRepository;
-import rwilk.exploreenglish.scrapper.ewa.schema.course.EwaCourseResponse;
-import rwilk.exploreenglish.scrapper.ewa.schema.course.Result;
+import rwilk.exploreenglish.scrapper.ewa.schema.course.Lesson;
+import rwilk.exploreenglish.scrapper.ewa.schema.lesson2.EwaLesson2Response;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,51 +37,59 @@ public class EwaLessonScrapper implements CommandLineRunner {
 
     @Transactional
     public void webScrap(final EwaCourse ewaCourse) {
-        final EwaCourseResponse ewaCourseResponse = getEwaCourseResponse(ewaCourse);
-        System.out.println(ewaCourseResponse);
+        log.info("[EwaLessonScrapper] webScrap course: {}", ewaCourse.getId());
+        final HttpClient client = HttpClient.newHttpClient();
 
-        final List<EwaLesson> ewaLessons = new ArrayList<>();
-        for (final Result result : ewaCourseResponse.getResult()) {
-            final EwaLesson ewaLesson = EwaLesson.builder()
-                    .id(null)
-                    .ewaId(result.getId())
-                    .channel(result.getChannel())
-                    .isAdult(result.isAdult())
-                    .number(result.getNumber())
-                    .title(result.getTitle())
-                    .imageId(result.getImageId())
-                    .imageS(result.getImage() != null ? result.getImage().getS() : null)
-                    .imageM(result.getImage() != null ? result.getImage().getM() : null)
-                    .imageL(result.getImage() != null ? result.getImage().getL() : null)
-                    .imageXl(result.getImage() != null ? result.getImage().getXl() : null)
-                    .courseRole(result.getCourseRole())
-                    .backgroundImage(result.getBackgroundImage())
-                    .description(result.getDescription())
-                    .goalDescription(result.getGoalDescription())
-                    .jsonData(getEwaLessonJson(result))
-                    .isReady(false)
-                    .course(ewaCourse)
-                    .build();
+        final String url = "https://api.appewa.com/api/v12/courses/" + ewaCourse.getEwaId();
+        final HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Origin", "https://appewa.com")
+                .header("Referer", "https://appewa.com/")
+                .header("X-Session-id", "eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTc0MWZhOC1kY2UwLTRmODktOWU3NC1jNmYzMGI2ODA1YzMiLCJuYW1lIjoiUmFmYcWCIFdpbGsiLCJyb2xlIjoidXNlciIsImxhbmciOiJwbCIsImlhdCI6MTc0NDI4NTM3NH0._ZSr3AI801wcJBFCAZqS78XTcWJ6K5zoxAQt4rG5N92rPZp6CDVrZ9l4UCGFcwUY")
+                .GET()
+                .build();
 
-            ewaLessons.add(ewaLesson);
-        }
-
-        ewaLessonRepository.saveAll(ewaLessons);
-        ewaCourse.setIsReady(true);
-        ewaCourseRepository.save(ewaCourse);
-    }
-
-    private EwaCourseResponse getEwaCourseResponse(final EwaCourse ewaCourse) {
         try {
-            return objectMapper.readValue(ewaCourse.getJsonData(), EwaCourseResponse.class);
-        } catch (JsonProcessingException e) {
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            final EwaLesson2Response ewaLesson2Response = objectMapper.readValue(response.body(), EwaLesson2Response.class);
+
+            final List<EwaLesson> ewaLessons = new ArrayList<>();
+            for (final Lesson lesson : ewaLesson2Response.getResult().getCourse().getLessons()) {
+                final EwaLesson ewaLesson = EwaLesson.builder()
+                        .id(null)
+                        .ewaId(lesson.getId())
+                        .isAdult(lesson.isAdult())
+                        .kind(lesson.getKind())
+                        .title(lesson.getTitle())
+                        .origin(lesson.getOrigin())
+                        .number(lesson.getNumber())
+                        .imageId(lesson.getImageId())
+                        .imageS(lesson.getImage() != null ? lesson.getImage().getS() : null)
+                        .imageM(lesson.getImage() != null ? lesson.getImage().getM() : null)
+                        .imageL(lesson.getImage() != null ? lesson.getImage().getL() : null)
+                        .imageXl(lesson.getImage() != null ? lesson.getImage().getXl() : null)
+                        .jsonData(getEwaLessonJson(lesson))
+                        .isReady(false)
+                        .course(ewaCourse)
+                        .build();
+
+                ewaLessons.add(ewaLesson);
+            }
+
+            ewaLessonRepository.saveAll(ewaLessons);
+            ewaCourse.setIsReady(true);
+            ewaCourse.setJsonData(response.body());
+            ewaCourseRepository.save(ewaCourse);
+        } catch (Exception e) {
+            log.error(e.getMessage());
             throw new RuntimeException(e);
         }
+
     }
 
-    private String getEwaLessonJson(final Result result) {
+    private String getEwaLessonJson(final Lesson lesson) {
         try {
-            return objectMapper.writeValueAsString(result);
+            return objectMapper.writeValueAsString(lesson);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

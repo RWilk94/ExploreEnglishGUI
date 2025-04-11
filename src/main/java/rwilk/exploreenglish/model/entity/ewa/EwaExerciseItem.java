@@ -26,6 +26,10 @@ public class EwaExerciseItem implements Serializable {
     private String ewaId;
     @Column(name = "type")
     private String type;
+
+//    @Column(name = "origin")
+//    private String origin;
+
     @Column(name = "thumbnail_s")
     private String thumbnailS;
     @Column(name = "thumbnail_m")
@@ -50,6 +54,11 @@ public class EwaExerciseItem implements Serializable {
     private String contentText;
     @Column(name = "content_translation")
     private String contentTranslation;
+
+//    @Column(name = "example_origin")
+//    private String exampleOrigin;
+//    @Column(name = "example_translation")
+//    private String exampleTranslation;
 
     @Lob
     @Column(name = "json_data", columnDefinition = "LONGTEXT")

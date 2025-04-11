@@ -26,14 +26,12 @@ public class EwaLesson implements Serializable {
     private Long id;
     @Column(name = "ewa_id")
     private String ewaId;
-    @Column(name = "channel")
-    private Integer channel;
-    @Column(name = "is_adult")
-    private Boolean isAdult;
-    @Column(name = "number")
-    private Integer number;
+    @Column(name = "kind")
+    private String kind;
     @Column(name = "title")
     private String title;
+    @Column(name = "origin")
+    private String origin;
     @Column(name = "image_id")
     private String imageId;
     @Column(name = "image_s")
@@ -44,14 +42,10 @@ public class EwaLesson implements Serializable {
     private String imageL;
     @Column(name = "image_xl")
     private String imageXl;
-    @Column(name = "course_role")
-    private String courseRole;
-    @Column(name = "background_image_")
-    private String backgroundImage;
-    @Column(name = "description")
-    private String description;
-    @Column(name = "goal_description")
-    private String goalDescription;
+    @Column(name = "is_adult")
+    private Boolean isAdult;
+    @Column(name = "number")
+    private Integer number;
 
     @Lob
     @Column(name = "json_data", columnDefinition = "LONGTEXT")

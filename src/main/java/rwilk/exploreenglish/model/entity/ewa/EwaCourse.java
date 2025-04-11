@@ -24,8 +24,22 @@ public class EwaCourse implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
+    @Column(name = "ewa_id")
+    private String ewaId;
     @Column(name = "name", length = 2000)
     private String name;
+    @Column(name = "description", length = 2000)
+    private String description;
+    @Column(name = "image_id")
+    private String imageId;
+    @Column(name = "image_s")
+    private String imageS;
+    @Column(name = "image_m")
+    private String imageM;
+    @Column(name = "image_l")
+    private String imageL;
+    @Column(name = "image_xl")
+    private String imageXl;
 
     @Lob
     @Column(name = "json_data", columnDefinition = "LONGTEXT")
