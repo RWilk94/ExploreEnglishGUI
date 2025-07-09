@@ -33,6 +33,7 @@ import rwilk.exploreenglish.service.WordSentenceService;
 import rwilk.exploreenglish.service.WordService;
 import rwilk.exploreenglish.utils.WordUtils;
 
+@Deprecated
 @Slf4j
 @Service
 @RequiredArgsConstructor

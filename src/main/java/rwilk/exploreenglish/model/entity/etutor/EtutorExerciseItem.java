@@ -29,9 +29,9 @@ public final class EtutorExerciseItem implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
-  @Column(name = "instruction")
+  @Column(name = "instruction", length = 2000)
   private String instruction;
-  @Column(name = "question")
+  @Column(name = "question", length = 2000)
   private String question;
   @Column(name = "question_template")
   private String questionTemplate;
@@ -56,9 +56,9 @@ public final class EtutorExerciseItem implements Serializable {
 
   @Column(name = "final_answer", length = 2000)
   private String finalAnswer;
-  @Column(name = "translation")
+  @Column(name = "translation", length = 2000)
   private String translation;
-  @Column(name = "description")
+  @Column(name = "description", length = 2000)
   private String description;
   @Column(name = "image")
   private String image;

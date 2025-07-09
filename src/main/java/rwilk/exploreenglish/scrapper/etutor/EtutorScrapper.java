@@ -49,7 +49,7 @@ public class EtutorScrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-            webScrap();
+            // webScrap();
     }
 
     public void webScrap() {

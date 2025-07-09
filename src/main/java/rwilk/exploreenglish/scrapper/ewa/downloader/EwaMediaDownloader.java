@@ -27,8 +27,8 @@ public class EwaMediaDownloader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        ewaExerciseItemRepository.findAllByIsVideoDownloadedOrIsVoiceDownloaded(false, false)
-                .forEach(this::downloadMedia);
+//        ewaExerciseItemRepository.findAllByIsVideoDownloadedOrIsVoiceDownloaded(false, false)
+//                .forEach(this::downloadMedia);
     }
 
     @Transactional
@@ -161,7 +161,7 @@ public class EwaMediaDownloader implements CommandLineRunner {
     }
 
     private String getVideoDestinationPath(final EwaExerciseItem ewaExerciseItem) {
-        return "ewa-video/"
+        return "ewa-video2/"
                 + ewaExerciseItem.getEwaExercise().getId().toString()
                 + "/"
                 + ewaExerciseItem.getId().toString()
@@ -171,7 +171,7 @@ public class EwaMediaDownloader implements CommandLineRunner {
     }
 
     private String getVoiceDestinationPath(final EwaExerciseItem ewaExerciseItem) {
-        return "ewa-video/"
+        return "ewa-video2/"
                 + ewaExerciseItem.getEwaExercise().getId().toString()
                 + "/"
                 + ewaExerciseItem.getId().toString()
