@@ -2,6 +2,7 @@ package rwilk.exploreenglish.migration.service.course
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import rwilk.exploreenglish.migration.entity.FinalCourse
 import rwilk.exploreenglish.migration.mapper.FinalCourseMapper
 import rwilk.exploreenglish.migration.repository.FinalCourseRepository
 import rwilk.exploreenglish.repository.ewa.EwaCourseRepository
@@ -14,10 +15,11 @@ open class EwaCourseMigrationService(
 ) : CourseMigrationService {
 
     @Transactional
-    override fun migrate() {
-        ewaCourseRepository.findAll().forEach { ewaCourse ->
-            val finalCourse = finalCourseMapper.map(ewaCourse)
-            finalCourseRepository.save(finalCourse)
+    override fun migrate(): List<FinalCourse> {
+        return ewaCourseRepository.findAll().map { ewaCourse ->
+            finalCourseMapper.map(ewaCourse)
+        }.also {
+            finalCourseRepository.saveAll(it)
         }
     }
 }

@@ -5,10 +5,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Service
 import rwilk.exploreenglish.migration.service.course.LangeekCourseMigrationService
+import rwilk.exploreenglish.migration.service.lesson.LangeekLessonMigrationService
 
 @Service
 class LangeekMigrationService(
-    private val langeekCourseMigrationService: LangeekCourseMigrationService
+    private val langeekCourseMigrationService: LangeekCourseMigrationService,
+    private val langeekLessonMigrationService: LangeekLessonMigrationService
+
 ) : MigrationService, CommandLineRunner {
     private val logger: Logger = LoggerFactory.getLogger(LangeekMigrationService::class.java)
 
@@ -16,8 +19,13 @@ class LangeekMigrationService(
          migrate()
     }
 
-    override fun migrate() {
-        langeekCourseMigrationService.migrate()
-    }
+    fun migrate() {
+        val finalCourses = langeekCourseMigrationService.migrate()
+        logger.info("Migrated ${finalCourses.size} Langeek courses")
 
+        finalCourses.forEach {
+            val finalLessons = langeekLessonMigrationService.migrate(it)
+            logger.info("Migrated ${finalLessons.size} Langeek lessons for course ${it.name}")
+        }
+    }
 }

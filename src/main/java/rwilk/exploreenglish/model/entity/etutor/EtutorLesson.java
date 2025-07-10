@@ -1,32 +1,16 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.UpdateTimestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
 
-@Getter
-@Setter
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -60,4 +44,79 @@ public class EtutorLesson implements Serializable {
   @JoinColumn(name = "course_id", nullable = false, referencedColumnName = "id")
   private EtutorCourse course;
 
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getHref() {
+    return href;
+  }
+
+  public void setHref(String href) {
+    this.href = href;
+  }
+
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+
+  public Date getModifyDate() {
+    return modifyDate;
+  }
+
+  public void setModifyDate(Date modifyDate) {
+    this.modifyDate = modifyDate;
+  }
+
+  public Boolean getReady() {
+    return isReady;
+  }
+
+  public void setIsReady(Boolean ready) {
+    isReady = ready;
+  }
+
+  public EtutorCourse getCourse() {
+    return course;
+  }
+
+  public void setCourse(EtutorCourse course) {
+    this.course = course;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    EtutorLesson that = (EtutorLesson) o;
+    return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(href, that.href) && Objects.equals(image, that.image) && Objects.equals(modifyDate, that.modifyDate) && Objects.equals(isReady, that.isReady) && Objects.equals(course, that.course);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, description, href, image, modifyDate, isReady, course);
+  }
 }

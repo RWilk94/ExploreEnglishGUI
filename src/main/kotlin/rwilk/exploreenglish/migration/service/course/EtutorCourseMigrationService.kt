@@ -1,21 +1,25 @@
 package rwilk.exploreenglish.migration.service.course
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import rwilk.exploreenglish.migration.entity.FinalCourse
 import rwilk.exploreenglish.migration.mapper.FinalCourseMapper
 import rwilk.exploreenglish.migration.repository.FinalCourseRepository
 import rwilk.exploreenglish.repository.etutor.EtutorCourseRepository
 
 @Service
-class EtutorCourseMigrationService(
+open class EtutorCourseMigrationService(
     private val finalCourseMapper: FinalCourseMapper,
     private val finalCourseRepository: FinalCourseRepository,
     private val etutorCourseRepository: EtutorCourseRepository
 ) : CourseMigrationService {
 
-    override fun migrate() {
-        etutorCourseRepository.findAll().forEach { etutorCourse ->
-            val finalCourse = finalCourseMapper.map(etutorCourse)
-            finalCourseRepository.save(finalCourse)
+    @Transactional
+    override fun migrate(): List<FinalCourse> {
+        return etutorCourseRepository.findAll().map {
+            finalCourseMapper.map(it)
+        }.also {
+            finalCourseRepository.saveAll(it)
         }
     }
 }

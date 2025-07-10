@@ -1,5 +1,3 @@
 package rwilk.exploreenglish.migration.service
 
-interface MigrationService {
-    fun migrate()
-}
+interface MigrationService
