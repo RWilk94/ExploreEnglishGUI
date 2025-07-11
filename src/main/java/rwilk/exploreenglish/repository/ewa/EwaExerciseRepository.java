@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface EwaExerciseRepository extends JpaRepository<EwaExercise, Long> {
     List<EwaExercise> findAllByIsReady(Boolean isReady);
+
+    List<EwaExercise> findAllByEwaLesson_Id(Long ewaLessonId);
 }
