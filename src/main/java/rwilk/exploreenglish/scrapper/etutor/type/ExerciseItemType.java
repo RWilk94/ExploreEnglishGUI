@@ -7,7 +7,9 @@ public enum ExerciseItemType {
   WRITING("masked-writing"),
   CLOZE("cloze"),
   PICTURES_LISTENING("pictures-listening"),
-  PICTURES_CHOICE("pictures-choice");
+  PICTURES_CHOICE("pictures-choice"),
+  MATCHING_PAIRS("matching_pairs"),
+  PICTURES_MASKED_WRITING("pictures_masked_writing");
 
   @Getter
   private final String value;
@@ -16,8 +18,8 @@ public enum ExerciseItemType {
     this.value = value;
   }
 
-  public static ExerciseType fromString(final String text) {
-    for (final ExerciseType type : ExerciseType.values()) {
+  public static ExerciseItemType fromString(final String text) {
+    for (final ExerciseItemType type : ExerciseItemType.values()) {
       if (type.getValue().equalsIgnoreCase(text)) {
         return type;
       }

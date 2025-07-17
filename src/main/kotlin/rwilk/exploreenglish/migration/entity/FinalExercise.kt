@@ -19,7 +19,7 @@ data class FinalExercise(
     val id: Long? = null,
 
     @Column(name = "name", nullable = false, length = 2000)
-    val name: String,
+    val name: String? = null,
 
     @Column(name = "description", length = 2000)
     val description: String? = null,
@@ -28,15 +28,15 @@ data class FinalExercise(
     val image: String? = null,
 
     @Column(name = "type", nullable = false)
-    val type: String,
+    val type: String? = null,
 
     // e.g. etutor, langeek, ewa
-    @Column("source", nullable = false)
-    val source: String,
+    @Column(name = "source", nullable = false)
+    val source: String? = null,
 
     // e.g. etutor_exercise_id, langeek_exercise_id, ewa_exercise_id
-    @Column("source_id", nullable = false)
-    val sourceId: Long,
+    @Column(name = "source_id", nullable = false)
+    val sourceId: Long? = null,
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -49,7 +49,8 @@ data class FinalExercise(
             CascadeType.MERGE,
             CascadeType.REFRESH,
         ]
-    ) @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
+    )
+    @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
     val lesson: FinalLesson? = null
 
 ) : Serializable

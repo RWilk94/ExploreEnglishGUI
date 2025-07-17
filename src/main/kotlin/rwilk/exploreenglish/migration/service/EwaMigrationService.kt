@@ -17,7 +17,7 @@ class EwaMigrationService(
     private val logger: Logger = LoggerFactory.getLogger(EwaMigrationService::class.java)
 
     override fun run(vararg args: String?) {
-         migrate()
+         // migrate()
     }
 
     fun migrate() {

@@ -1,8 +1,5 @@
 package rwilk.exploreenglish.scrapper.etutor.content;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,13 +8,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExerciseItem;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseItemRepository;
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseRepository;
 import rwilk.exploreenglish.scrapper.etutor.BaseScrapper;
+import rwilk.exploreenglish.scrapper.etutor.type.ExerciseItemType;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class MatchingPairsScrapper extends BaseScrapper implements CommandLineRunner {
@@ -75,7 +75,7 @@ public class MatchingPairsScrapper extends BaseScrapper implements CommandLineRu
             .correctAnswer(element1.getText())
             .question(element2.getText())
             .html(content.getAttribute("innerHTML"))
-            .type(ExerciseType.MATCHING_PAIRS.toString())
+            .type(ExerciseItemType.MATCHING_PAIRS.toString())
             .exercise(etutorExercise)
             .build()
         );

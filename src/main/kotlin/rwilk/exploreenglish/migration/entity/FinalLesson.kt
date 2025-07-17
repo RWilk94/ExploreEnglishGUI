@@ -19,7 +19,7 @@ data class FinalLesson(
     val id: Long? = null,
 
     @Column(name = "name", nullable = false, length = 2000)
-    val name: String,
+    val name: String? = null,
 
     @Column(name = "description", length = 2000)
     val description: String? = null,
@@ -29,11 +29,11 @@ data class FinalLesson(
 
     // e.g. etutor, langeek, ewa
     @Column("source", nullable = false)
-    val source: String,
+    val source: String? = null,
 
     // e.g. etutor_lesson_id, langeek_lesson_id, ewa_lesson_id
     @Column("source_id", nullable = false)
-    val sourceId: Long,
+    val sourceId: Long? = null,
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)

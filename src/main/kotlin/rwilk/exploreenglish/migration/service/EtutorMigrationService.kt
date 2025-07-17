@@ -17,7 +17,7 @@ class EtutorMigrationService(
     private val logger: Logger = LoggerFactory.getLogger(EtutorMigrationService::class.java)
 
     override fun run(vararg args: String?) {
-        migrate()
+        // migrate()
     }
 
     fun migrate() {

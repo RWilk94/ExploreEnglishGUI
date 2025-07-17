@@ -18,7 +18,7 @@ class LangeekMigrationService(
     private val logger: Logger = LoggerFactory.getLogger(LangeekMigrationService::class.java)
 
     override fun run(vararg args: String?) {
-        migrate()
+        // migrate()
     }
 
     fun migrate() {

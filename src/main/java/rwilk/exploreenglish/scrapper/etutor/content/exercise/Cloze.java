@@ -1,7 +1,6 @@
 package rwilk.exploreenglish.scrapper.etutor.content.exercise;
 
-import java.util.List;
-
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,10 +8,11 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
 import rwilk.exploreenglish.model.entity.etutor.EtutorExerciseItem;
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseItemType;
+
+import java.util.List;
 
 @SuppressWarnings({"java:S1192", "java:S2142", "java:S112"})
 public class Cloze {
@@ -75,7 +75,23 @@ public class Cloze {
       printLeafNodesRecursive(child, questionTemplate);
     }
 
-    return questionTemplate.toString().trim();
+    final String hint = extractWritingQuestionHint(element);
+
+    return questionTemplate.toString().trim()
+            .concat(StringUtils.isNoneEmpty(hint) ? hint : "");
+  }
+
+  // TODO webscrap all cloze exercises again after this method is implemented
+  private String extractWritingQuestionHint(final WebElement element) {
+    final WebElement webElement = element.findElement(By.className("examClozeHint"));
+    final Document document = Jsoup.parse(webElement.getAttribute("innerHTML"));
+
+    final StringBuilder questionHint = new StringBuilder();
+
+    for (Node child : document.childNodes()) {
+      printLeafNodesRecursive(child, questionHint);
+    }
+    return questionHint.toString().trim();
   }
 
   private void printLeafNodesRecursive(final Node node, final StringBuilder stringBuilder) {
