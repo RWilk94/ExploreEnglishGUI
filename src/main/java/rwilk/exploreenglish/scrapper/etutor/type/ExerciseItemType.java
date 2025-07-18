@@ -9,7 +9,8 @@ public enum ExerciseItemType {
   PICTURES_LISTENING("pictures-listening"),
   PICTURES_CHOICE("pictures-choice"),
   MATCHING_PAIRS("matching_pairs"),
-  PICTURES_MASKED_WRITING("pictures_masked_writing");
+  PICTURES_MASKED_WRITING("pictures_masked_writing"),
+  SPEAKING("speaking");
 
   @Getter
   private final String value;

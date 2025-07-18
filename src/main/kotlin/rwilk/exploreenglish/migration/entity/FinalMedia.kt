@@ -17,7 +17,7 @@ data class FinalMedia(
     val text: String? = null,
 
     @Column(name = "type", nullable = false)
-    val type: String,
+    val type: String? = null,
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)

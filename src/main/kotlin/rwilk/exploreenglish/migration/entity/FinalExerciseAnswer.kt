@@ -18,7 +18,7 @@ data class FinalExerciseAnswer(
     @Column(name = "type", nullable = false)
     val type: String? = null,
 
-    @Column(name = "answer", nullable = false, length = 2000)
+    @Column(name = "answer", length = 2000)
     val answer: String? = null,
 
     @Column(name = "translation", length = 2000)
@@ -47,8 +47,8 @@ data class FinalExerciseAnswer(
             CascadeType.REFRESH,
         ]
     )
-    @JoinColumn(name = "media_sound_id", referencedColumnName = "id")
-    val sound: FinalMedia? = null,
+    @JoinColumn(name = "media_audio_id", referencedColumnName = "id")
+    val audio: FinalMedia? = null,
 
     @ManyToOne(
         fetch = FetchType.LAZY,
@@ -94,7 +94,7 @@ data class FinalExerciseAnswer(
         if (translation != other.translation) return false
         if (source != other.source) return false
         if (modifyDate != other.modifyDate) return false
-        if (sound != other.sound) return false
+        if (audio != other.audio) return false
         if (image != other.image) return false
         if (video != other.video) return false
         if (question != other.question) return false
@@ -111,7 +111,7 @@ data class FinalExerciseAnswer(
         result = 31 * result + (translation?.hashCode() ?: 0)
         result = 31 * result + (source?.hashCode() ?: 0)
         result = 31 * result + (modifyDate?.hashCode() ?: 0)
-        result = 31 * result + (sound?.hashCode() ?: 0)
+        result = 31 * result + (audio?.hashCode() ?: 0)
         result = 31 * result + (image?.hashCode() ?: 0)
         result = 31 * result + (video?.hashCode() ?: 0)
         result = 31 * result + (question?.hashCode() ?: 0)

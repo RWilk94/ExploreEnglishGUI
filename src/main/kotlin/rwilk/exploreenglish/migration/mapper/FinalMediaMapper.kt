@@ -5,39 +5,56 @@ import rwilk.exploreenglish.migration.entity.FinalMedia
 import rwilk.exploreenglish.migration.entity.FinalMediaContent
 import rwilk.exploreenglish.migration.model.LanguageVariantEnum
 import rwilk.exploreenglish.migration.model.MediaTypeEnum
+import rwilk.exploreenglish.migration.repository.FinalMediaContentRepository
+import rwilk.exploreenglish.migration.repository.FinalMediaRepository
 import rwilk.exploreenglish.model.LanguageEnum
-import rwilk.exploreenglish.model.entity.etutor.EtutorExerciseItem
 
 @Component
-class FinalMediaMapper {
-    fun map(etutorExerciseItem: EtutorExerciseItem): List<FinalMedia> {
-        val mediaList = mutableListOf<FinalMedia>()
+class FinalMediaMapper(
+    private val finalMediaRepository: FinalMediaRepository,
+    private val finalMediaContentRepository: FinalMediaContentRepository,
+) {
+    fun map(primarySound: String?, secondarySound: String?): FinalMedia? {
+        val finalMedia = create(
+            primarySound = primarySound,
+            secondarySound = secondarySound
+        )
 
-        listOfNotNull(etutorExerciseItem.questionPrimarySound, etutorExerciseItem.answerPrimarySound)
-            .forEach { sound ->
-                mediaList.add(
-                    FinalMedia(
-                        id = null,
-                        text = null,
-                        type = LanguageVariantEnum.BRITISH_ENGLISH.name,
-                    )
-                )
-            }
-        listOfNotNull(etutorExerciseItem.questionSecondarySound, etutorExerciseItem.answerSecondarySound)
-            .forEach { sound ->
-                mediaList.add(
-                    FinalMedia(
-                        id = null,
-                        text = null,
-                        type = LanguageVariantEnum.AMERICAN_ENGLISH.name,
-                    )
-                )
-            }
+        val existingMedia = when {
+            !primarySound.isNullOrBlank() -> finalMediaContentRepository.findByUrl(
+                primarySound
+            )?.media
 
-        return mediaList
+            !secondarySound.isNullOrBlank() -> finalMediaContentRepository.findByUrl(
+                secondarySound
+            )?.media
+
+            else -> null
+        }
+
+        // add new media contents if they are not already present
+        // ex some exercise items have only primary sound, some only secondary sound
+        if (finalMedia != null && existingMedia != null && finalMedia.mediaContents.size != existingMedia.mediaContents.size) {
+            val existingUrls = existingMedia.mediaContents.mapNotNull { it.url }
+            finalMedia.mediaContents
+                .filter { it.url != null && it.url !in existingUrls }
+                .forEach { mediaContent ->
+                    existingMedia.mediaContents.add(mediaContent)
+                }
+        }
+
+        // set relationships for media contents and save the media
+        var mediaToSave = existingMedia ?: finalMedia
+        mediaToSave?.let { media ->
+            media.mediaContents.forEach { mediaContent ->
+                mediaContent.media = media
+            }
+            mediaToSave = finalMediaRepository.save(media)
+        }
+        return mediaToSave
     }
 
-    fun map(primarySound: String?, secondarySound: String?): FinalMedia? {
+    private fun create(primarySound: String?, secondarySound: String?): FinalMedia? {
         if (primarySound.isNullOrBlank() && secondarySound.isNullOrBlank()) {
             return null
         }

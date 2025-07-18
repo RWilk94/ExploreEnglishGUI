@@ -1,5 +1,7 @@
 package rwilk.exploreenglish.migration.service.exerciseitem
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -10,6 +12,7 @@ import rwilk.exploreenglish.migration.mapper.FinalMediaContentMapper
 import rwilk.exploreenglish.migration.mapper.FinalMediaMapper
 import rwilk.exploreenglish.migration.repository.*
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseItemRepository
+import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType
 
 @Service
 open class EtutotExerciseItemMigrationService(
@@ -24,6 +27,8 @@ open class EtutotExerciseItemMigrationService(
     private val finalMediaMapper: FinalMediaMapper,
     private val finalMediaContentMapper: FinalMediaContentMapper,
 ) : ExerciseItemMigrationService, CommandLineRunner {
+
+    private val logger: Logger = LoggerFactory.getLogger(EtutotExerciseItemMigrationService::class.java)
 
     @Transactional
     override fun migrate(exercise: FinalExercise) {
@@ -42,9 +47,23 @@ open class EtutotExerciseItemMigrationService(
     }
 
     override fun run(vararg args: String?) {
-        finalExerciseRepository.findById(10L).ifPresent {
-            migrate(it)
-        }
+        finalExerciseRepository.findAll()
+            .filter {
+                it.type == ExerciseType.PICTURES_LISTENING.name
+                        || it.type == ExerciseType.PICTURES_CHOICE.name
+                        || it.type == ExerciseType.EXERCISE.name
+                        || it.type == ExerciseType.MATCHING_PAIRS.name
+                        || it.type == ExerciseType.PICTURES_MASKED_WRITING.name
+                        || it.type == ExerciseType.SPEAKING.name
+                        || it.type == ExerciseType.WRITING.name
+                        || it.type == ExerciseType.MATCHING_PAIRS_GRAMMAR.name
+                        || it.type == ExerciseType.DIALOG.name
+                        || it.type == ExerciseType.READING.name
+            }
+            .forEachIndexed { index, exercise ->
+                logger.info("Migrating exercise item ${index + 1} for exercise: ${exercise.id} - ${exercise.name}")
+                migrate(exercise)
+            }
     }
 
 }

@@ -21,10 +21,10 @@ data class FinalExerciseQuestion(
     @Column(name = "type", nullable = false)
     val type: String? = null,
 
-    @Column(name = "instruction", nullable = false)
+    @Column(name = "instruction", nullable = false, length = 2000)
     val instruction: String? = null,
 
-    @Column(name = "question", nullable = false, length = 2000)
+    @Column(name = "question", length = 2000)
     val question: String? = null,
 
     @Column(name = "template", length = 2000)
