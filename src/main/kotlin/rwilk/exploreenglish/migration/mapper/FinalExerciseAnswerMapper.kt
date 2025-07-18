@@ -79,10 +79,10 @@ class FinalExerciseAnswerMapper(
                     isCorrect = etutorExerciseItem.correctAnswer == answer,
                     source = SourceEnum.ETUTOR.name,
                     sourceId = etutorExerciseItem.id,
-                    audio = getFinalMedia(
+                    audio = getFinalAudioMedia(
                         isCorrect = etutorExerciseItem.correctAnswer == answer,
                         etutorExerciseItem = etutorExerciseItem
-                    ) ?: getFinalMediaBackup(
+                    ) ?: getFinalAudioMediaBackup(
                         isCorrect = etutorExerciseItem.correctAnswer == answer,
                         etutorExerciseItem = etutorExerciseItem
                     ),
@@ -118,7 +118,7 @@ class FinalExerciseAnswerMapper(
                     isCorrect = true,
                     source = SourceEnum.ETUTOR.name,
                     sourceId = etutorExerciseItem.id,
-                    audio = getFinalMedia(
+                    audio = getFinalAudioMedia(
                         isCorrect = true,
                         etutorExerciseItem = etutorExerciseItem
                     ),
@@ -149,11 +149,13 @@ class FinalExerciseAnswerMapper(
                     isCorrect = textToTriple(etutorExerciseItem.correctAnswer) == triple,
                     source = SourceEnum.ETUTOR.name,
                     sourceId = etutorExerciseItem.id,
-                    audio = getFinalMedia(
+                    audio = getFinalAudioMedia(
                         isCorrect = textToTriple(etutorExerciseItem.correctAnswer) == triple,
                         etutorExerciseItem = etutorExerciseItem
                     ),
-                    image = null,
+                    image = getFinalImageMedia(
+                        url = triple.middle.ifBlank { null }
+                    ),
                     video = null,
                     question = finalExerciseQuestion
                 )
@@ -185,7 +187,7 @@ class FinalExerciseAnswerMapper(
                     isCorrect = true,
                     source = SourceEnum.ETUTOR.name,
                     sourceId = etutorExerciseItem.id,
-                    audio = getFinalMedia(
+                    audio = getFinalAudioMedia(
                         isCorrect = true,
                         etutorExerciseItem = etutorExerciseItem
                     ),
@@ -222,10 +224,10 @@ class FinalExerciseAnswerMapper(
                     isCorrect = true,
                     source = SourceEnum.ETUTOR.name,
                     sourceId = etutorExerciseItem.id,
-                    audio = getFinalMedia(
+                    audio = getFinalAudioMedia(
                         isCorrect = true,
                         etutorExerciseItem = etutorExerciseItem
-                    ) ?: getFinalMediaBackup(
+                    ) ?: getFinalAudioMediaBackup(
                         isCorrect = true,
                         etutorExerciseItem = etutorExerciseItem
                     ),
@@ -237,17 +239,25 @@ class FinalExerciseAnswerMapper(
 
     }
 
-    private fun getFinalMedia(isCorrect: Boolean, etutorExerciseItem: EtutorExerciseItem): FinalMedia? {
+    private fun getFinalAudioMedia(isCorrect: Boolean, etutorExerciseItem: EtutorExerciseItem): FinalMedia? {
         return when (isCorrect) {
-            true -> finalMediaMapper.map(etutorExerciseItem.answerPrimarySound, etutorExerciseItem.answerSecondarySound)
+            true -> finalMediaMapper.mapAudio(etutorExerciseItem.answerPrimarySound, etutorExerciseItem.answerSecondarySound)
             else -> null
         }
     }
 
-    private fun getFinalMediaBackup(isCorrect: Boolean, etutorExerciseItem: EtutorExerciseItem): FinalMedia? {
+    private fun getFinalAudioMediaBackup(isCorrect: Boolean, etutorExerciseItem: EtutorExerciseItem): FinalMedia? {
         return when (isCorrect) {
-            true -> finalMediaMapper.map(etutorExerciseItem.questionPrimarySound, etutorExerciseItem.questionSecondarySound)
+            true -> finalMediaMapper.mapAudio(etutorExerciseItem.questionPrimarySound, etutorExerciseItem.questionSecondarySound)
             else -> null
+        }
+    }
+
+    private fun getFinalImageMedia(url: String?): FinalMedia? {
+        return if (url.isNullOrBlank()) {
+            null
+        } else {
+            finalMediaMapper.mapImage(url.trim())
         }
     }
 

@@ -12,10 +12,18 @@ class FinalExerciseQuestionMapper(
     private val finalMediaMapper: FinalMediaMapper,
 ) {
     fun map(etutorExerciseItem: EtutorExerciseItem, finalExercise: FinalExercise): FinalExerciseQuestion {
-        val mediaToSave = finalMediaMapper.map(
+        val audioMedia = finalMediaMapper.mapAudio(
             primarySound = etutorExerciseItem.questionPrimarySound,
             secondarySound = etutorExerciseItem.questionSecondarySound
         )
+
+        val imageMedia = if (etutorExerciseItem.question.orEmpty().trim().startsWith("https://")) {
+            finalMediaMapper.mapImage(etutorExerciseItem.question.orEmpty().trim())
+        } else if (!etutorExerciseItem.image.isNullOrBlank()) {
+            finalMediaMapper.mapImage(etutorExerciseItem.image.orEmpty().trim())
+        } else {
+            null
+        }
 
         return FinalExerciseQuestion(
             type = etutorExerciseItem.type ?: ExerciseItemType.SPEAKING.name,
@@ -27,8 +35,8 @@ class FinalExerciseQuestionMapper(
             finalAnswerTranslation = nullIfEmpty(etutorExerciseItem.translation),
             source = SourceEnum.ETUTOR.name,
             sourceId = etutorExerciseItem.id,
-            audio = mediaToSave,
-            image = null,
+            audio = audioMedia,
+            image = imageMedia,
             video = null,
             exercise = finalExercise,
         )

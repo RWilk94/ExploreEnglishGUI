@@ -14,8 +14,8 @@ class FinalMediaMapper(
     private val finalMediaRepository: FinalMediaRepository,
     private val finalMediaContentRepository: FinalMediaContentRepository,
 ) {
-    fun map(primarySound: String?, secondarySound: String?): FinalMedia? {
-        val finalMedia = create(
+    fun mapAudio(primarySound: String?, secondarySound: String?): FinalMedia? {
+        val finalMedia = createAudio(
             primarySound = primarySound,
             secondarySound = secondarySound
         )
@@ -54,7 +54,24 @@ class FinalMediaMapper(
         return mediaToSave
     }
 
-    private fun create(primarySound: String?, secondarySound: String?): FinalMedia? {
+    fun mapImage(url: String?): FinalMedia? {
+        val finalMedia = when (!url.isNullOrBlank()) {
+            true -> finalMediaContentRepository.findByUrl(
+                url
+            )?.media
+
+            else -> null
+        }
+
+        return finalMedia ?: createImage(url)?.let {
+            it.mediaContents.forEach { mediaContent ->
+                mediaContent.media = it
+            }
+            finalMediaRepository.save(it)
+        }
+    }
+
+    private fun createAudio(primarySound: String?, secondarySound: String?): FinalMedia? {
         if (primarySound.isNullOrBlank() && secondarySound.isNullOrBlank()) {
             return null
         }
@@ -88,6 +105,26 @@ class FinalMediaMapper(
             text = null,
             type = MediaTypeEnum.AUDIO.name,
             mediaContents = finalMediaContentList
+        )
+    }
+
+    private fun createImage(url: String?): FinalMedia? {
+        if (url.isNullOrBlank()) {
+            return null
+        }
+
+        val mediaContent = FinalMediaContent(
+            id = null,
+            url = url,
+            type = null,
+            language = null
+        )
+
+        return FinalMedia(
+            id = null,
+            text = null,
+            type = MediaTypeEnum.AUDIO.name,
+            mediaContents = mutableListOf(mediaContent)
         )
     }
 }
