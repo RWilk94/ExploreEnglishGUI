@@ -10,7 +10,6 @@ import rwilk.exploreenglish.migration.repository.FinalExerciseRepository
 import rwilk.exploreenglish.migration.repository.FinalNoteRepository
 import rwilk.exploreenglish.migration.service.noteitem.EtutorNoteItemMigrationService
 import rwilk.exploreenglish.repository.etutor.EtutorNoteRepository
-import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType
 
 @Service
 open class EtutorNoteMigrationService(
@@ -37,15 +36,15 @@ open class EtutorNoteMigrationService(
     }
 
     override fun run(vararg args: String?) {
-        finalExerciseRepository.findAllByTypeIn(
-            listOf(
-                ExerciseType.SCREEN.name,
-                ExerciseType.SCREEN_MUSIC.name,
-                ExerciseType.SCREEN_CULINARY.name,
-                ExerciseType.SCREEN_CULTURAL.name,
-            )
-        ).forEach { exercise ->
-            migrate(exercise)
-        }
+//        finalExerciseRepository.findAllByTypeIn(
+//            listOf(
+//                ExerciseType.SCREEN.name,
+//                ExerciseType.SCREEN_MUSIC.name,
+//                ExerciseType.SCREEN_CULINARY.name,
+//                ExerciseType.SCREEN_CULTURAL.name,
+//            )
+//        ).forEach { exercise ->
+//            migrate(exercise)
+//        }
     }
 }

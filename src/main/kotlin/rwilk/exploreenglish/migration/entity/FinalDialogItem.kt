@@ -31,11 +31,25 @@ data class FinalDialogItem(
     @Column(name = "dialog_native")
     var dialogNative: String? = null,
 
-    @Column(name = "face_image")
-    var faceImage: String? = null,
+    @ManyToOne(
+        fetch = FetchType.LAZY,
+        cascade = [
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+        ]
+    )
+    @JoinColumn(name = "media_face_image_id", referencedColumnName = "id")
+    val faceImage: FinalMedia? = null,
 
-    @Column(name = "comic_image")
-    var comicImage: String? = null,
+    @ManyToOne(
+        fetch = FetchType.LAZY,
+        cascade = [
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+        ]
+    )
+    @JoinColumn(name = "media_comic_image_id", referencedColumnName = "id")
+    val comicImage: FinalMedia? = null,
 
     @Column(name = "sound_seek_second")
     var soundSeekSecond: BigDecimal? = null,
@@ -49,6 +63,16 @@ data class FinalDialogItem(
     )
     @JoinColumn(name = "media_audio_id", referencedColumnName = "id")
     val audio: FinalMedia? = null,
+
+    @ManyToOne(
+        fetch = FetchType.LAZY,
+        cascade = [
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+        ]
+    )
+    @JoinColumn(name = "media_video_id", referencedColumnName = "id")
+    val video: FinalMedia? = null,
 
     @Column(name = "source", nullable = false)
     val source: String? = null,

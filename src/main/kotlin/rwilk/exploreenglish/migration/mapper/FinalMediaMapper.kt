@@ -71,6 +71,23 @@ class FinalMediaMapper(
         }
     }
 
+    fun mapVideo(url: String?): FinalMedia? {
+        val finalMedia = when (!url.isNullOrBlank()) {
+            true -> finalMediaContentRepository.findByUrl(
+                url
+            )?.media
+
+            else -> null
+        }
+
+        return finalMedia ?: createVideo(url)?.let {
+            it.mediaContents.forEach { mediaContent ->
+                mediaContent.media = it
+            }
+            finalMediaRepository.save(it)
+        }
+    }
+
     private fun createAudio(primarySound: String?, secondarySound: String?): FinalMedia? {
         if (primarySound.isNullOrBlank() && secondarySound.isNullOrBlank()) {
             return null
@@ -123,7 +140,27 @@ class FinalMediaMapper(
         return FinalMedia(
             id = null,
             text = null,
-            type = MediaTypeEnum.AUDIO.name,
+            type = MediaTypeEnum.IMAGE.name,
+            mediaContents = mutableListOf(mediaContent)
+        )
+    }
+
+    private fun createVideo(url: String?): FinalMedia? {
+        if (url.isNullOrBlank()) {
+            return null
+        }
+
+        val mediaContent = FinalMediaContent(
+            id = null,
+            url = url,
+            type = null,
+            language = null
+        )
+
+        return FinalMedia(
+            id = null,
+            text = null,
+            type = MediaTypeEnum.VIDEO.name,
             mediaContents = mutableListOf(mediaContent)
         )
     }

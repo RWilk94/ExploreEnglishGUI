@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Service
 import rwilk.exploreenglish.migration.entity.FinalExercise
 import rwilk.exploreenglish.migration.service.course.EtutorCourseMigrationService
+import rwilk.exploreenglish.migration.service.dialog.EtutorDialogMigrationService
 import rwilk.exploreenglish.migration.service.exercise.EtutorExerciseMigrationService
 import rwilk.exploreenglish.migration.service.exerciseitem.EtutotExerciseItemMigrationService
 import rwilk.exploreenglish.migration.service.lesson.EtutorLessonMigrationService
@@ -19,6 +20,7 @@ class EtutorMigrationService(
     private val etutorExerciseMigrationService: EtutorExerciseMigrationService,
     private val etutorExerciseItemMigrationService: EtutotExerciseItemMigrationService,
     private val etutorNoteMigrationService: EtutorNoteMigrationService,
+    private val etutorDialogMigrationService: EtutorDialogMigrationService,
 ) : MigrationService, CommandLineRunner {
     private val logger: Logger = LoggerFactory.getLogger(EtutorMigrationService::class.java)
 
@@ -42,7 +44,6 @@ class EtutorMigrationService(
                     migrateExerciseItems(exercise)
                     migrateNotes(exercise)
                     migrateDialogues(exercise)
-                    // TODO migrate dialogues
                     // TODO migrate word lists
                 }
             }
@@ -90,7 +91,7 @@ class EtutorMigrationService(
                 ExerciseType.VIDEO,
             ).contains(ExerciseType.valueOf(finalExercise.type!!))
         ) {
-            // etutorDialogMigrationService.migrate(finalExercise)
+             etutorDialogMigrationService.migrate(finalExercise)
         }
     }
 }
