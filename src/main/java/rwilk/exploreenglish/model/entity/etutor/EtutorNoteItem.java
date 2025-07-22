@@ -1,23 +1,13 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
+import lombok.*;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.*;
-
-import org.hibernate.annotations.Type;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.UpdateTimestamp;
-
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -62,4 +52,99 @@ public final class EtutorNoteItem implements Serializable {
   @JoinColumn(name = "note_id", nullable = false, referencedColumnName = "id", insertable = true, updatable = true)
   private EtutorNote note;
 
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getExample() {
+    return example;
+  }
+
+  public void setExample(String example) {
+    this.example = example;
+  }
+
+  public String getPrimarySound() {
+    return primarySound;
+  }
+
+  public void setPrimarySound(String primarySound) {
+    this.primarySound = primarySound;
+  }
+
+  public String getSecondarySound() {
+    return secondarySound;
+  }
+
+  public void setSecondarySound(String secondarySound) {
+    this.secondarySound = secondarySound;
+  }
+
+  public String getPlainText() {
+    return plainText;
+  }
+
+  public void setPlainText(String plainText) {
+    this.plainText = plainText;
+  }
+
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+
+  public String getPrimaryStyle() {
+    return primaryStyle;
+  }
+
+  public void setPrimaryStyle(String primaryStyle) {
+    this.primaryStyle = primaryStyle;
+  }
+
+  public String getSecondaryStyle() {
+    return secondaryStyle;
+  }
+
+  public void setSecondaryStyle(String secondaryStyle) {
+    this.secondaryStyle = secondaryStyle;
+  }
+
+  public String getAdditional() {
+    return additional;
+  }
+
+  public void setAdditional(String additional) {
+    this.additional = additional;
+  }
+
+  public String getLanguageType() {
+    return languageType;
+  }
+
+  public void setLanguageType(String languageType) {
+    this.languageType = languageType;
+  }
+
+  public Date getModifyDate() {
+    return modifyDate;
+  }
+
+  public void setModifyDate(Date modifyDate) {
+    this.modifyDate = modifyDate;
+  }
+
+  public EtutorNote getNote() {
+    return note;
+  }
+
+  public void setNote(EtutorNote note) {
+    this.note = note;
+  }
 }

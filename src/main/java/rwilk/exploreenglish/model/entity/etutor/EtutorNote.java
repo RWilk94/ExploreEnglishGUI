@@ -1,23 +1,17 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
-
-import org.hibernate.annotations.Type;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.UpdateTimestamp;
-
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -62,4 +56,92 @@ public final class EtutorNote implements Serializable {
   @ToString.Exclude
   @OneToMany(mappedBy = "note", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   private List<EtutorNoteItem> noteItems;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getNativeTitle() {
+    return nativeTitle;
+  }
+
+  public void setNativeTitle(String nativeTitle) {
+    this.nativeTitle = nativeTitle;
+  }
+
+  public String getNativeContent() {
+    return nativeContent;
+  }
+
+  public void setNativeContent(String nativeContent) {
+    this.nativeContent = nativeContent;
+  }
+
+  public String getNativeHtml() {
+    return nativeHtml;
+  }
+
+  public void setNativeHtml(String nativeHtml) {
+    this.nativeHtml = nativeHtml;
+  }
+
+  public String getForeignTitle() {
+    return foreignTitle;
+  }
+
+  public void setForeignTitle(String foreignTitle) {
+    this.foreignTitle = foreignTitle;
+  }
+
+  public String getForeignContent() {
+    return foreignContent;
+  }
+
+  public void setForeignContent(String foreignContent) {
+    this.foreignContent = foreignContent;
+  }
+
+  public String getForeignHtml() {
+    return foreignHtml;
+  }
+
+  public void setForeignHtml(String foreignHtml) {
+    this.foreignHtml = foreignHtml;
+  }
+
+  public String getAudio() {
+    return audio;
+  }
+
+  public void setAudio(String audio) {
+    this.audio = audio;
+  }
+
+  public Date getModifyDate() {
+    return modifyDate;
+  }
+
+  public void setModifyDate(Date modifyDate) {
+    this.modifyDate = modifyDate;
+  }
+
+  public EtutorExercise getExercise() {
+    return exercise;
+  }
+
+  public void setExercise(EtutorExercise exercise) {
+    this.exercise = exercise;
+  }
+
+  public List<EtutorNoteItem> getNoteItems() {
+    return noteItems;
+  }
+
+  public void setNoteItems(List<EtutorNoteItem> noteItems) {
+    this.noteItems = noteItems;
+  }
 }

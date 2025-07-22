@@ -1,10 +1,9 @@
 package rwilk.exploreenglish.repository.etutor;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import rwilk.exploreenglish.model.entity.etutor.EtutorExercise;
+
+import java.util.List;
 
 public interface EtutorExerciseRepository extends JpaRepository<EtutorExercise, Long> {
 
