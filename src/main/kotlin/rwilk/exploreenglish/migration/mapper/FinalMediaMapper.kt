@@ -20,17 +20,8 @@ class FinalMediaMapper(
             secondarySound = secondarySound
         )
 
-        val existingMedia = when {
-            !primarySound.isNullOrBlank() -> finalMediaContentRepository.findByUrl(
-                primarySound
-            )?.media
-
-            !secondarySound.isNullOrBlank() -> finalMediaContentRepository.findByUrl(
-                secondarySound
-            )?.media
-
-            else -> null
-        }
+        val existingMedia = queryMediaContentByUrl(primarySound)
+            ?: queryMediaContentByUrl(secondarySound)
 
         // add new media contents if they are not already present
         // ex some exercise items have only primary sound, some only secondary sound
@@ -163,5 +154,13 @@ class FinalMediaMapper(
             type = MediaTypeEnum.VIDEO.name,
             mediaContents = mutableListOf(mediaContent)
         )
+    }
+
+    private fun queryMediaContentByUrl(url: String?): FinalMedia? {
+        return if (!url.isNullOrBlank()) {
+            finalMediaContentRepository.findByUrl(url)?.media
+        } else {
+            null
+        }
     }
 }

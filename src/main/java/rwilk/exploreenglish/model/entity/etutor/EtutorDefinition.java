@@ -1,32 +1,15 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.UpdateTimestamp;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -60,4 +43,67 @@ public final class EtutorDefinition implements Serializable {
   @JoinColumn(name = "word_id", nullable = false, referencedColumnName = "id", insertable = true, updatable = true)
   private EtutorWord word;
 
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getForeignTranslation() {
+    return foreignTranslation;
+  }
+
+  public void setForeignTranslation(String foreignTranslation) {
+    this.foreignTranslation = foreignTranslation;
+  }
+
+  public String getAdditionalInformation() {
+    return additionalInformation;
+  }
+
+  public void setAdditionalInformation(String additionalInformation) {
+    this.additionalInformation = additionalInformation;
+  }
+
+  public String getPrimarySound() {
+    return primarySound;
+  }
+
+  public void setPrimarySound(String primarySound) {
+    this.primarySound = primarySound;
+  }
+
+  public String getSecondarySound() {
+    return secondarySound;
+  }
+
+  public void setSecondarySound(String secondarySound) {
+    this.secondarySound = secondarySound;
+  }
+
+  public Date getModifyDate() {
+    return modifyDate;
+  }
+
+  public void setModifyDate(Date modifyDate) {
+    this.modifyDate = modifyDate;
+  }
+
+  public EtutorWord getWord() {
+    return word;
+  }
+
+  public void setWord(EtutorWord word) {
+    this.word = word;
+  }
 }

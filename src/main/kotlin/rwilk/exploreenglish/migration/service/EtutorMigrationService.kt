@@ -11,6 +11,7 @@ import rwilk.exploreenglish.migration.service.exercise.EtutorExerciseMigrationSe
 import rwilk.exploreenglish.migration.service.exerciseitem.EtutotExerciseItemMigrationService
 import rwilk.exploreenglish.migration.service.lesson.EtutorLessonMigrationService
 import rwilk.exploreenglish.migration.service.note.EtutorNoteMigrationService
+import rwilk.exploreenglish.migration.service.word.EtutorWordMigrationService
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType
 
 @Service
@@ -21,6 +22,7 @@ class EtutorMigrationService(
     private val etutorExerciseItemMigrationService: EtutotExerciseItemMigrationService,
     private val etutorNoteMigrationService: EtutorNoteMigrationService,
     private val etutorDialogMigrationService: EtutorDialogMigrationService,
+    private val etutorWordMigrationService: EtutorWordMigrationService,
 ) : MigrationService, CommandLineRunner {
     private val logger: Logger = LoggerFactory.getLogger(EtutorMigrationService::class.java)
 
@@ -44,7 +46,7 @@ class EtutorMigrationService(
                     migrateExerciseItems(exercise)
                     migrateNotes(exercise)
                     migrateDialogues(exercise)
-                    // TODO migrate word lists
+                    migrateWordLists(exercise)
                 }
             }
         }
@@ -92,6 +94,17 @@ class EtutorMigrationService(
             ).contains(ExerciseType.valueOf(finalExercise.type!!))
         ) {
              etutorDialogMigrationService.migrate(finalExercise)
+        }
+    }
+
+    private fun migrateWordLists(finalExercise: FinalExercise) {
+        if (listOf(
+                ExerciseType.WORDS_LIST,
+                ExerciseType.GRAMMAR_LIST,
+                ExerciseType.PICTURES_WORDS_LIST,
+            ).contains(ExerciseType.valueOf(finalExercise.type!!))
+        ) {
+            etutorWordMigrationService.migrate(finalExercise)
         }
     }
 }

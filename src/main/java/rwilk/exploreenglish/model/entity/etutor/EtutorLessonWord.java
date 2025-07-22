@@ -1,33 +1,15 @@
 package rwilk.exploreenglish.model.entity.etutor;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.UpdateTimestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
-@Getter
-@Setter
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -56,4 +38,44 @@ public final class EtutorLessonWord implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "word_id", nullable = false, referencedColumnName = "id")
   private EtutorWord word;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Integer getPosition() {
+    return position;
+  }
+
+  public void setPosition(Integer position) {
+    this.position = position;
+  }
+
+  public Date getModifyDate() {
+    return modifyDate;
+  }
+
+  public void setModifyDate(Date modifyDate) {
+    this.modifyDate = modifyDate;
+  }
+
+  public EtutorExercise getExercise() {
+    return exercise;
+  }
+
+  public void setExercise(EtutorExercise exercise) {
+    this.exercise = exercise;
+  }
+
+  public EtutorWord getWord() {
+    return word;
+  }
+
+  public void setWord(EtutorWord word) {
+    this.word = word;
+  }
 }
