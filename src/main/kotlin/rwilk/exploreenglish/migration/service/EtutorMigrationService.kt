@@ -2,7 +2,6 @@ package rwilk.exploreenglish.migration.service
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Service
 import rwilk.exploreenglish.migration.entity.FinalExercise
 import rwilk.exploreenglish.migration.service.course.EtutorCourseMigrationService
@@ -15,7 +14,7 @@ import rwilk.exploreenglish.migration.service.word.EtutorWordMigrationService
 import rwilk.exploreenglish.scrapper.etutor.type.ExerciseType
 
 @Service
-class EtutorMigrationService(
+open class EtutorMigrationService(
     private val etutorCourseMigrationService: EtutorCourseMigrationService,
     private val etutorLessonMigrationService: EtutorLessonMigrationService,
     private val etutorExerciseMigrationService: EtutorExerciseMigrationService,
@@ -23,14 +22,10 @@ class EtutorMigrationService(
     private val etutorNoteMigrationService: EtutorNoteMigrationService,
     private val etutorDialogMigrationService: EtutorDialogMigrationService,
     private val etutorWordMigrationService: EtutorWordMigrationService,
-) : MigrationService, CommandLineRunner {
+) : MigrationService {
     private val logger: Logger = LoggerFactory.getLogger(EtutorMigrationService::class.java)
 
-    override fun run(vararg args: String?) {
-         migrate()
-    }
-
-    fun migrate() {
+    open fun migrate() {
         val finalCourses = etutorCourseMigrationService.migrate()
         logger.info("Migrated [${finalCourses.size}] Etutor courses")
 
@@ -96,7 +91,7 @@ class EtutorMigrationService(
             ).contains(ExerciseType.valueOf(finalExercise.type!!))
         ) {
 //            logger.info("Migrating dialogues for exercise [${finalExercise.id} ${finalExercise.name}] of type ${finalExercise.type}")
-             etutorDialogMigrationService.migrate(finalExercise)
+            etutorDialogMigrationService.migrate(finalExercise)
         }
     }
 
