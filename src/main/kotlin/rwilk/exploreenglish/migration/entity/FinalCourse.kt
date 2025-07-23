@@ -24,17 +24,22 @@ data class FinalCourse(
     @Column(name = "description", length = 2000)
     val description: String? = null,
 
-    @Column(name = "image", length = 2000)
-    val image: String? = null,
+    @ManyToOne(
+        fetch = FetchType.LAZY,
+        cascade = [
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+        ]
+    )
+    @JoinColumn(name = "media_image_id", referencedColumnName = "id")
+    val image: FinalMedia? = null,
 
     @Column(name = "language", nullable = false)
     val language: String? = null,
 
-    // e.g. etutor, langeek, ewa
     @Column(name = "source", nullable = false)
     val source: String? = null,
 
-    // e.g. etutor_course_id, langeek_course_id, ewa_course_id
     @Column(name = "source_id", nullable = false)
     val sourceId: Long? = null,
 

@@ -9,13 +9,15 @@ import rwilk.exploreenglish.model.entity.ewa.EwaCourse
 import rwilk.exploreenglish.model.entity.langeek.LangeekCourse
 
 @Component
-class FinalCourseMapper {
+class FinalCourseMapper(
+    private val finalMediaMapper: FinalMediaMapper
+) {
 
     fun map(ewaCourse: EwaCourse): FinalCourse {
         return FinalCourse(
             name = ewaCourse.name,
             description = ewaCourse.description,
-            image = ewaCourse.imageS,
+            image = finalMediaMapper.mapImage(ewaCourse.imageS),
             language = LanguageEnum.ENGLISH.name,
             source = SourceEnum.EWA.name,
             sourceId = ewaCourse.id,
@@ -26,7 +28,7 @@ class FinalCourseMapper {
         return FinalCourse(
             name = langeekCourse.name,
             description = langeekCourse.description,
-            image = langeekCourse.image,
+            image = finalMediaMapper.mapImage(langeekCourse.image),
             language = LanguageEnum.ENGLISH.name,
             source = SourceEnum.LANGEEK.name,
             sourceId = langeekCourse.id,
@@ -37,7 +39,7 @@ class FinalCourseMapper {
         return FinalCourse(
             name = etutorCourse.name,
             description = etutorCourse.description,
-            image = etutorCourse.image,
+            image = finalMediaMapper.mapImage(etutorCourse.image),
             language = etutorCourse.language,
             source = SourceEnum.ETUTOR.name,
             sourceId = etutorCourse.id,
