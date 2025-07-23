@@ -35,4 +35,34 @@ data class FinalMedia(
         ]
     )
     val mediaContents: MutableList<FinalMediaContent> = mutableListOf(),
-) : Serializable
+) : Serializable {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as FinalMedia
+
+        if (id != other.id) return false
+        if (text != other.text) return false
+        if (type != other.type) return false
+        if (modifyDate != other.modifyDate) return false
+        if (mediaContents != other.mediaContents) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (text?.hashCode() ?: 0)
+        result = 31 * result + (type?.hashCode() ?: 0)
+        result = 31 * result + (modifyDate?.hashCode() ?: 0)
+        result = 31 * result + mediaContents.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "FinalMedia(id=$id, text=$text, type=$type, modifyDate=$modifyDate)"
+    }
+
+
+}

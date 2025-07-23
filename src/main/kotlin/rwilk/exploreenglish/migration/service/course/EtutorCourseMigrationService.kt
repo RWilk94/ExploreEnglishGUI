@@ -16,10 +16,11 @@ open class EtutorCourseMigrationService(
 
     @Transactional
     override fun migrate(): List<FinalCourse> {
-        return etutorCourseRepository.findAll().map {
-            finalCourseMapper.map(it)
-        }.also {
-            finalCourseRepository.saveAll(it)
-        }
+        return etutorCourseRepository.findAll()
+            .filter { it.language == "ENGLISH" }
+            .map { finalCourseMapper.map(it) }
+            .also {
+                finalCourseRepository.saveAll(it)
+            }
     }
 }

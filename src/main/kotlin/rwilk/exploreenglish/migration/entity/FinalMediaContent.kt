@@ -6,7 +6,12 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "final_media_content")
+@Table(
+    name = "final_media_content",
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = ["url"])
+    ]
+)
 data class FinalMediaContent(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

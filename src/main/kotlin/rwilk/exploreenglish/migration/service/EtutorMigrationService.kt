@@ -27,20 +27,20 @@ class EtutorMigrationService(
     private val logger: Logger = LoggerFactory.getLogger(EtutorMigrationService::class.java)
 
     override fun run(vararg args: String?) {
-        // migrate()
+         migrate()
     }
 
     fun migrate() {
         val finalCourses = etutorCourseMigrationService.migrate()
-        logger.info("Migrated ${finalCourses.size} Etutor courses")
+        logger.info("Migrated [${finalCourses.size}] Etutor courses")
 
         finalCourses.forEach { course ->
             val finalLessons = etutorLessonMigrationService.migrate(course)
-            logger.info("Migrated ${finalLessons.size} Etutor lessons for course ${course.name}")
+            logger.info("Migrated [${finalLessons.size}] Etutor lessons for course [${course.id} ${course.name}]")
 
             finalLessons.forEach { lesson ->
                 val finalExercises = etutorExerciseMigrationService.migrate(lesson)
-                logger.info("Migrated ${finalExercises.size} Etutor exercises for lesson ${lesson.name}")
+                logger.info("Migrated [${finalExercises.size}] Etutor exercises for lesson [${lesson.id} ${lesson.name}]")
 
                 finalExercises.forEach { exercise ->
                     migrateExerciseItems(exercise)
@@ -65,6 +65,7 @@ class EtutorMigrationService(
                 ExerciseType.READING
             ).contains(ExerciseType.valueOf(finalExercise.type!!))
         ) {
+//            logger.info("Migrating exercise items for exercise [${finalExercise.id} ${finalExercise.name}] of type ${finalExercise.type}")
             etutorExerciseItemMigrationService.migrate(finalExercise)
         }
     }
@@ -82,6 +83,7 @@ class EtutorMigrationService(
                 ExerciseType.WRITING,
             ).contains(ExerciseType.valueOf(finalExercise.type!!))
         ) {
+//            logger.info("Migrating notes for exercise [${finalExercise.id} ${finalExercise.name}] of type ${finalExercise.type}")
             etutorNoteMigrationService.migrate(finalExercise)
         }
     }
@@ -93,6 +95,7 @@ class EtutorMigrationService(
                 ExerciseType.VIDEO,
             ).contains(ExerciseType.valueOf(finalExercise.type!!))
         ) {
+//            logger.info("Migrating dialogues for exercise [${finalExercise.id} ${finalExercise.name}] of type ${finalExercise.type}")
              etutorDialogMigrationService.migrate(finalExercise)
         }
     }
@@ -104,6 +107,7 @@ class EtutorMigrationService(
                 ExerciseType.PICTURES_WORDS_LIST,
             ).contains(ExerciseType.valueOf(finalExercise.type!!))
         ) {
+//            logger.info("Migrating word lists for exercise [${finalExercise.id} ${finalExercise.name}] of type ${finalExercise.type}")
             etutorWordMigrationService.migrate(finalExercise)
         }
     }

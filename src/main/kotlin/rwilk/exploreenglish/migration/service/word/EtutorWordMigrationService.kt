@@ -2,7 +2,6 @@ package rwilk.exploreenglish.migration.service.word
 
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import rwilk.exploreenglish.migration.entity.FinalExercise
 import rwilk.exploreenglish.migration.mapper.FinalExerciseWordMapper
 import rwilk.exploreenglish.migration.mapper.FinalWordMapper
@@ -10,6 +9,7 @@ import rwilk.exploreenglish.migration.repository.FinalExerciseRepository
 import rwilk.exploreenglish.migration.repository.FinalExerciseWordRepository
 import rwilk.exploreenglish.migration.repository.FinalWordRepository
 import rwilk.exploreenglish.repository.etutor.EtutorLessonWordRepository
+import javax.transaction.Transactional
 
 @Service
 open class EtutorWordMigrationService(
@@ -37,6 +37,10 @@ open class EtutorWordMigrationService(
     }
 
     override fun run(vararg args: String?) {
+//        finalExerciseRepository.getById(1292L).also { finalWord ->
+//            migrate(finalWord)
+//        }
+
 //        finalExerciseRepository.findAllByTypeIn(
 //            listOf(
 //                ExerciseType.WORDS_LIST.name,

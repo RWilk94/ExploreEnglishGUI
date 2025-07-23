@@ -1,5 +1,6 @@
 package rwilk.exploreenglish.migration.mapper
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import rwilk.exploreenglish.migration.entity.FinalMedia
 import rwilk.exploreenglish.migration.entity.FinalMediaContent
@@ -14,7 +15,13 @@ class FinalMediaMapper(
     private val finalMediaRepository: FinalMediaRepository,
     private val finalMediaContentRepository: FinalMediaContentRepository,
 ) {
+    private val logger = LoggerFactory.getLogger(FinalMediaMapper::class.java)
+
     fun mapAudio(primarySound: String?, secondarySound: String?): FinalMedia? {
+        if (primarySound.isNullOrBlank() && secondarySound.isNullOrBlank()) {
+            return null
+        }
+
         val finalMedia = createAudio(
             primarySound = primarySound,
             secondarySound = secondarySound
@@ -35,14 +42,21 @@ class FinalMediaMapper(
         }
 
         // set relationships for media contents and save the media
-        var mediaToSave = existingMedia ?: finalMedia
-        mediaToSave?.let { media ->
-            media.mediaContents.forEach { mediaContent ->
-                mediaContent.media = media
+        val mediaToSave = existingMedia ?: finalMedia
+        try {
+            if (mediaToSave == null) {
+                logger.warn("No media created for [$primarySound and $secondarySound]")
+                return null
+            } else {
+                mediaToSave.mediaContents.forEach { mediaContent ->
+                    mediaContent.media = mediaToSave
+                }
+                return finalMediaRepository.save(mediaToSave)
             }
-            mediaToSave = finalMediaRepository.save(media)
+        } catch (e: Exception) {
+            logger.error("Failed to map audio for [$primarySound and $secondarySound]", e)
+            return null
         }
-        return mediaToSave
     }
 
     fun mapImage(url: String?): FinalMedia? {
@@ -80,28 +94,24 @@ class FinalMediaMapper(
     }
 
     private fun createAudio(primarySound: String?, secondarySound: String?): FinalMedia? {
-        if (primarySound.isNullOrBlank() && secondarySound.isNullOrBlank()) {
-            return null
-        }
-
         val finalMediaContentList = mutableListOf<FinalMediaContent>()
 
-        primarySound?.let {
+        if (!primarySound.isNullOrBlank()) {
             finalMediaContentList.add(
                 FinalMediaContent(
                     id = null,
-                    url = it,
+                    url = primarySound,
                     type = LanguageVariantEnum.BRITISH_ENGLISH.name,
                     language = LanguageEnum.ENGLISH.name
                 )
             )
         }
 
-        secondarySound?.let {
+        if (!secondarySound.isNullOrBlank()) {
             finalMediaContentList.add(
                 FinalMediaContent(
                     id = null,
-                    url = it,
+                    url = secondarySound,
                     type = LanguageVariantEnum.AMERICAN_ENGLISH.name,
                     language = LanguageEnum.ENGLISH.name
                 )
@@ -158,7 +168,16 @@ class FinalMediaMapper(
 
     private fun queryMediaContentByUrl(url: String?): FinalMedia? {
         return if (!url.isNullOrBlank()) {
-            finalMediaContentRepository.findByUrl(url)?.media
+            val media = finalMediaContentRepository.findByUrl(url)
+            if (media != null) {
+                return media.media
+            }
+
+            val likeMedia = finalMediaContentRepository.findByUrlLike('%' + url.substring(url.lastIndexOf('/') + 1))
+            if (likeMedia.isNotEmpty()) {
+                 return likeMedia.first().media
+            }
+            return null
         } else {
             null
         }
