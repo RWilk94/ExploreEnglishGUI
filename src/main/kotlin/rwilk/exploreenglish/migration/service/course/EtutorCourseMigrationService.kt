@@ -23,7 +23,7 @@ open class EtutorCourseMigrationService(
             .filter { it.language == "ENGLISH" }
             .filter { it -> it.id !in finalCourseIds }
             .takeIf { it.isNotEmpty() }!!
-            .subList(0, 1)
+            .take( 1)
             .map { finalCourseMapper.map(it) }
             .also {
                 finalCourseRepository.saveAll(it)

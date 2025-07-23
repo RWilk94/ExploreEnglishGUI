@@ -11,7 +11,7 @@ import rwilk.exploreenglish.migration.repository.FinalExerciseQuestionRepository
 import rwilk.exploreenglish.repository.etutor.EtutorExerciseItemRepository
 
 @Service
-open class EtutotExerciseItemMigrationService(
+open class EtutorExerciseItemMigrationService(
     private val finalExerciseQuestionRepository: FinalExerciseQuestionRepository,
     private val finalExerciseAnswerRepository: FinalExerciseAnswerRepository,
     private val etutorExerciseItemRepository: EtutorExerciseItemRepository,

@@ -37,6 +37,16 @@ data class FinalDefinition(
     @JoinColumn(name = "media_audio_id", referencedColumnName = "id")
     val audio: FinalMedia? = null,
 
+    @ManyToOne(
+        fetch = FetchType.LAZY,
+        cascade = [
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+        ]
+    )
+    @JoinColumn(name = "media_video_id", referencedColumnName = "id")
+    val video: FinalMedia? = null,
+
     @Column(name = "source", nullable = false)
     val source: String? = null,
 

@@ -7,7 +7,7 @@ import rwilk.exploreenglish.migration.entity.FinalExercise
 import rwilk.exploreenglish.migration.service.course.EtutorCourseMigrationService
 import rwilk.exploreenglish.migration.service.dialog.EtutorDialogMigrationService
 import rwilk.exploreenglish.migration.service.exercise.EtutorExerciseMigrationService
-import rwilk.exploreenglish.migration.service.exerciseitem.EtutotExerciseItemMigrationService
+import rwilk.exploreenglish.migration.service.exerciseitem.EtutorExerciseItemMigrationService
 import rwilk.exploreenglish.migration.service.lesson.EtutorLessonMigrationService
 import rwilk.exploreenglish.migration.service.note.EtutorNoteMigrationService
 import rwilk.exploreenglish.migration.service.word.EtutorWordMigrationService
@@ -18,7 +18,7 @@ open class EtutorMigrationService(
     private val etutorCourseMigrationService: EtutorCourseMigrationService,
     private val etutorLessonMigrationService: EtutorLessonMigrationService,
     private val etutorExerciseMigrationService: EtutorExerciseMigrationService,
-    private val etutorExerciseItemMigrationService: EtutotExerciseItemMigrationService,
+    private val etutorExerciseItemMigrationService: EtutorExerciseItemMigrationService,
     private val etutorNoteMigrationService: EtutorNoteMigrationService,
     private val etutorDialogMigrationService: EtutorDialogMigrationService,
     private val etutorWordMigrationService: EtutorWordMigrationService,

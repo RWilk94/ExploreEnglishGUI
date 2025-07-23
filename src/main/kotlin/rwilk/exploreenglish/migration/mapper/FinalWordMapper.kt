@@ -5,6 +5,7 @@ import rwilk.exploreenglish.migration.entity.FinalWord
 import rwilk.exploreenglish.migration.model.SourceEnum
 import rwilk.exploreenglish.migration.repository.FinalWordRepository
 import rwilk.exploreenglish.model.entity.etutor.EtutorWord
+import rwilk.exploreenglish.model.entity.ewa.EwaExerciseItem
 
 @Component
 class FinalWordMapper(
@@ -25,6 +26,22 @@ class FinalWordMapper(
             sourceId = etutorWord.id,
         ).also { finalWord ->
             finalWord.definitions = etutorWord.definitions.map { finalDefinitionMapper.map(it, finalWord) }
+        }
+    }
+
+    fun map(ewaExerciseItem: EwaExerciseItem): FinalWord {
+        return FinalWord(
+            id = null,
+            nativeTranslation = ewaExerciseItem.contentTranslation,
+            additionalInformation = ewaExerciseItem.contentDescription,
+            partOfSpeech = null,
+            article = null,
+            grammarType = null,
+            image = finalMediaMapper.mapImage(ewaExerciseItem.thumbnailS),
+            source = SourceEnum.EWA.name,
+            sourceId = ewaExerciseItem.id,
+        ).also { finalWord ->
+            finalWord.definitions = listOf(finalDefinitionMapper.map(ewaExerciseItem, finalWord))
         }
     }
 }

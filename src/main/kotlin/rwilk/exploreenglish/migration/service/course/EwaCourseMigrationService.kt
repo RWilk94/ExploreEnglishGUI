@@ -16,7 +16,14 @@ open class EwaCourseMigrationService(
 
     @Transactional
     override fun migrate(): List<FinalCourse> {
-        return ewaCourseRepository.findAll().map { ewaCourse ->
+        val finalCourseIds = finalCourseRepository.findAll()
+            .map { it.sourceId }
+
+        return ewaCourseRepository.findAll()
+            .filter { it -> it.id !in finalCourseIds }
+            .takeIf { it.isNotEmpty() }!!
+//            .take( 1)
+            .map { ewaCourse ->
             finalCourseMapper.map(ewaCourse)
         }.also {
             finalCourseRepository.saveAll(it)
