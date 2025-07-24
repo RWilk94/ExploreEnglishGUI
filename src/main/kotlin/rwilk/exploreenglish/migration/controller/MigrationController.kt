@@ -12,7 +12,7 @@ class MigrationController(
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
-        // etutorMigrationService.migrate()
-        // ewaMigrationService.migrate()
+         etutorMigrationService.migrate()
+         ewaMigrationService.migrate()
     }
 }

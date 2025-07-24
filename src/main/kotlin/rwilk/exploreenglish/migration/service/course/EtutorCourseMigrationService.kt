@@ -17,16 +17,17 @@ open class EtutorCourseMigrationService(
     @Transactional
     override fun migrate(): List<FinalCourse> {
         val finalCourseIds = finalCourseRepository.findAll()
+            .filter { it.source == "ETUTOR" }
             .map { it.sourceId }
 
         return etutorCourseRepository.findAll()
             .filter { it.language == "ENGLISH" }
             .filter { it -> it.id !in finalCourseIds }
-            .takeIf { it.isNotEmpty() }!!
-            .take( 1)
-            .map { finalCourseMapper.map(it) }
-            .also {
+            .takeIf { it.isNotEmpty() }
+            ?.take(1)
+            ?.map { finalCourseMapper.map(it) }
+            ?.also {
                 finalCourseRepository.saveAll(it)
-            }
+            } ?: emptyList()
     }
 }
