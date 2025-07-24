@@ -6,4 +6,5 @@ import rwilk.exploreenglish.migration.entity.FinalExercise
 interface FinalExerciseRepository : JpaRepository<FinalExercise, Long> {
     fun findAllByTypeIn(types: List<String>): List<FinalExercise>
     fun findBySourceId(sourceId: Long): FinalExercise?
+    fun findAllByLesson_Id(lessonId: Long): List<FinalExercise>
 }
