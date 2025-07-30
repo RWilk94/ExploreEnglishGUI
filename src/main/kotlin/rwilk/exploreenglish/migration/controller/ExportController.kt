@@ -34,17 +34,27 @@ class ExportController(
 ) : ExportServiceV2, CommandLineRunner {
 
     override fun run(vararg args: String?) {
-        export()
+         export()
     }
 
     override fun export() {
         val courses = finalCourseRepository.findAll()
         finalCourseSqlGenerator.generateSql(courses, "final_courses")
 
+        val finalMediaCourse = mutableSetOf<FinalMedia>()
+        courses.map { it.image }.forEach { finalMediaCourse.add(it!!) }
+        val finalMediaContentCourse = mutableSetOf<FinalMediaContent>()
+        for (media in finalMediaCourse) {
+            finalMediaContentCourse.addAll(media.mediaContents)
+        }
+
+        finalMediaSqlGenerator.generateSql(finalMediaCourse.toList(), "final_courses")
+        finalMediaContentSqlGenerator.generateSql(finalMediaContentCourse.toList(), "final_courses")
+
         for (course in courses) {
             val directoryAlias = "final_courses/${course.id}"
 
-            val lessons = finalLessonRepository.findByCourseId(course.id!!)
+            val lessons = finalLessonRepository.findAllByCourse_Id(course.id!!)
             finalLessonSqlGenerator.generateSql(lessons, directoryAlias)
 
             val finalExercises = lessons
@@ -93,7 +103,6 @@ class ExportController(
 
             val finalMedia = mutableSetOf<FinalMedia>()
 
-            course.image?.let { finalMedia.add(it) }
             lessons.forEach { lesson ->
                 lesson.image?.let { finalMedia.add(it) }
             }

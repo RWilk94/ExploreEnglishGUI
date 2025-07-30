@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import rwilk.exploreenglish.migration.entity.FinalLesson
 
 interface FinalLessonRepository : JpaRepository<FinalLesson, Long> {
-    fun findByCourseId(courseId: Long): List<FinalLesson>
+    fun findAllByCourse_Id(courseId: Long): List<FinalLesson>
 }

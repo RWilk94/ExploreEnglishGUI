@@ -39,6 +39,6 @@ class FinalLessonSqlGenerator : SqlGeneratorAbstract<FinalLesson>() {
                     .append(getEndLineCharacter(chunk, lesson))
             }
         }
-        exportFile(sql, "${TAG.lowercase()}.txt", TAG)
+        exportFile(sql, "$directoryAlias/${TAG.lowercase()}.txt", TAG)
     }
 }
