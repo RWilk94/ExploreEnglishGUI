@@ -1,6 +1,8 @@
 package rwilk.exploreenglish.migration.mapper
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.stereotype.Component
+import rwilk.exploreenglish.migration.entity.FinalExercise
 import rwilk.exploreenglish.migration.entity.FinalWord
 import rwilk.exploreenglish.migration.model.SourceEnum
 import rwilk.exploreenglish.migration.repository.FinalWordRepository
@@ -42,6 +44,38 @@ class FinalWordMapper(
             sourceId = ewaExerciseItem.id,
         ).also { finalWord ->
             finalWord.definitions = listOf(finalDefinitionMapper.map(ewaExerciseItem, finalWord))
+        }
+    }
+
+    fun mapExplainType(node: JsonNode, finalExercise: FinalExercise): FinalWord {
+        return FinalWord(
+            id = null,
+            nativeTranslation = node.path("content").path("translation").asText(),
+            additionalInformation = node.path("content").path("description").asText(),
+            partOfSpeech = null,
+            article = null,
+            grammarType = null,
+            image = finalMediaMapper.mapImage(node.path("media").path("video").path("thumbnail").path("s").asText(null)),
+            source = SourceEnum.EWA.name,
+            sourceId = finalExercise.sourceId,
+        ).also { finalWord ->
+            finalWord.definitions = listOf(finalDefinitionMapper.map(node, finalWord))
+        }
+    }
+
+    fun mapExplainWordType(node: JsonNode, finalExercise: FinalExercise): FinalWord {
+        return FinalWord(
+            id = null,
+            nativeTranslation = node.path("word").path("meanings").map { it.asText() }.distinct().joinToString(", "),
+            additionalInformation = null,
+            partOfSpeech = null,
+            article = null,
+            grammarType = null,
+            image = null,
+            source = SourceEnum.EWA.name,
+            sourceId = finalExercise.sourceId,
+        ).also { finalWord ->
+            finalWord.definitions = finalDefinitionMapper.mapExplainType(node, finalWord)
         }
     }
 }

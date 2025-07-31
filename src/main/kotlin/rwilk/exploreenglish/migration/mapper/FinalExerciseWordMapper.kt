@@ -25,8 +25,19 @@ class FinalExerciseWordMapper {
         return FinalExerciseWord(
             id = null,
             position = null,
-            source = SourceEnum.ETUTOR.name,
+            source = SourceEnum.EWA.name,
             sourceId = ewaExerciseItem.id,
+            word = finalWord,
+            exercise = finalExercise
+        )
+    }
+
+    fun map(finalExercise: FinalExercise, finalWord: FinalWord): FinalExerciseWord {
+        return FinalExerciseWord(
+            id = null,
+            position = null,
+            source = SourceEnum.EWA.name,
+            sourceId = finalWord.sourceId,
             word = finalWord,
             exercise = finalExercise
         )

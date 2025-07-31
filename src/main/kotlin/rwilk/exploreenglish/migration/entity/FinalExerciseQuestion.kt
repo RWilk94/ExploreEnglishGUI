@@ -8,9 +8,9 @@ import javax.persistence.*
 @Entity
 @Table(
     name = "final_exercise_questions",
-    uniqueConstraints = [
-        UniqueConstraint(columnNames = ["source", "source_id"])
-    ]
+//    uniqueConstraints = [
+//        UniqueConstraint(columnNames = ["source", "source_id", "type"])
+//    ]
 )
 data class FinalExerciseQuestion(
     @Id
@@ -21,7 +21,7 @@ data class FinalExerciseQuestion(
     @Column(name = "type", nullable = false)
     val type: String? = null,
 
-    @Column(name = "instruction", nullable = false, length = 2000)
+    @Column(name = "instruction", length = 2000)
     val instruction: String? = null,
 
     @Column(name = "question", length = 2000)

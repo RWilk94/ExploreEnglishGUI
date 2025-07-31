@@ -8,9 +8,6 @@ import javax.persistence.*
 @Entity
 @Table(
     name = "final_exercises",
-    uniqueConstraints = [
-        UniqueConstraint(columnNames = ["source", "source_id"])
-    ]
 )
 data class FinalExercise(
     @Id

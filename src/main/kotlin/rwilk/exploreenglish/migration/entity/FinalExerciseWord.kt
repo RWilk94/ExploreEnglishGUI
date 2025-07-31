@@ -8,9 +8,9 @@ import javax.persistence.*
 @Entity
 @Table(
     name = "final_exercise_words",
-    uniqueConstraints = [
-        UniqueConstraint(columnNames = ["source", "source_id"])
-    ]
+//    uniqueConstraints = [
+//        UniqueConstraint(columnNames = ["source", "source_id"])
+//    ]
 )
 data class FinalExerciseWord(
     @Id

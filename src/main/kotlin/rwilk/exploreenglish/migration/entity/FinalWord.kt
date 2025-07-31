@@ -8,9 +8,9 @@ import javax.persistence.*
 @Entity
 @Table(
     name = "final_words",
-    uniqueConstraints = [
+/*    uniqueConstraints = [
         UniqueConstraint(columnNames = ["source", "source_id"])
-    ]
+    ]*/
 )
 data class FinalWord(
     @Id
@@ -79,4 +79,8 @@ data class FinalWord(
     val exerciseWords: List<FinalExerciseWord> = emptyList(),
 
 ): Serializable {
+
+    override fun toString(): String {
+        return "FinalWord(modifyDate=$modifyDate, sourceId=$sourceId, source=$source, image=$image, grammarType=$grammarType, article=$article, partOfSpeech=$partOfSpeech, additionalInformation=$additionalInformation, nativeTranslation=$nativeTranslation, id=$id)"
+    }
 }

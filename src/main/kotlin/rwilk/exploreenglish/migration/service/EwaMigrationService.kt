@@ -7,14 +7,12 @@ import org.springframework.stereotype.Service
 import rwilk.exploreenglish.migration.service.course.EwaCourseMigrationService
 import rwilk.exploreenglish.migration.service.exercise.EwaExerciseMigrationService
 import rwilk.exploreenglish.migration.service.lesson.EwaLessonMigrationService
-import rwilk.exploreenglish.migration.service.word.EwaWordMigrationService
 
 @Service
 class EwaMigrationService(
     private val ewaCourseMigrationService: EwaCourseMigrationService,
     private val ewaLessonMigrationService: EwaLessonMigrationService,
     private val ewaExerciseMigrationService: EwaExerciseMigrationService,
-    private val ewaWordMigrationService: EwaWordMigrationService,
 ) : MigrationService, CommandLineRunner {
     private val logger: Logger = LoggerFactory.getLogger(EwaMigrationService::class.java)
 
@@ -33,11 +31,6 @@ class EwaMigrationService(
             finalLessons.forEach { lesson ->
                 val finalExercises = ewaExerciseMigrationService.migrate(lesson)
                 logger.info("Migrated ${finalExercises.size} Ewa exercises for lesson ${lesson.name}")
-
-                finalExercises.forEach { exercise ->
-                    ewaWordMigrationService.migrate(exercise)
-                    logger.info("Migrated words for exercise ${exercise.name}")
-                }
             }
         }
     }

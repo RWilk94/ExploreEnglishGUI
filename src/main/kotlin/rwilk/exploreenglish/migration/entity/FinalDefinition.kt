@@ -8,9 +8,9 @@ import javax.persistence.*
 @Entity
 @Table(
     name = "final_definitions",
-    uniqueConstraints = [
-        UniqueConstraint(columnNames = ["source", "source_id"])
-    ]
+//    uniqueConstraints = [
+//        UniqueConstraint(columnNames = ["source", "source_id"])
+//    ]
 )
 data class FinalDefinition(
     @Id

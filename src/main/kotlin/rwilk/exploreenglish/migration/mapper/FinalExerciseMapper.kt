@@ -12,12 +12,12 @@ import rwilk.exploreenglish.model.entity.langeek.LangeekExercise
 class FinalExerciseMapper(
     private val finalMediaMapper: FinalMediaMapper
 ) {
-    fun map(ewaExercise: EwaExercise, ewaLesson: FinalLesson): FinalExercise {
+    fun map(ewaExercise: EwaExercise, type: String, ewaLesson: FinalLesson): FinalExercise {
         return FinalExercise(
             name = ewaExercise.origin,
             description = ewaExercise.title,
             image = finalMediaMapper.mapImage(ewaExercise.imageS),
-            type = ewaExercise.kind,
+            type = type,
             source = SourceEnum.EWA.name,
             sourceId = ewaExercise.id,
             lesson = ewaLesson

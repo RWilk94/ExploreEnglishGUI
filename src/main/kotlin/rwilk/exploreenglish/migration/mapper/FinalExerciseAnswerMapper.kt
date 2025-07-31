@@ -1,6 +1,7 @@
 package rwilk.exploreenglish.migration.mapper
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.tuple.Triple
@@ -38,6 +39,18 @@ class FinalExerciseAnswerMapper(
             ExerciseItemType.SPEAKING,
             null -> mapSpeaking(etutorExerciseItem, finalExerciseQuestion)
         }
+    }
+
+    fun mapEwaChooseType(node: JsonNode, finalExerciseQuestion: FinalExerciseQuestion): List<FinalExerciseAnswer> {
+        return mapChooseByVideo(node = node, finalExerciseQuestion = finalExerciseQuestion)
+    }
+
+    fun mapEwaComposeType(node: JsonNode, finalExerciseQuestion: FinalExerciseQuestion): List<FinalExerciseAnswer> {
+        return mapComposePhraseByVideo(node = node,finalExerciseQuestion = finalExerciseQuestion)
+    }
+
+    fun mapEwaDialogType(dialogNode: JsonNode, finalExerciseQuestion: FinalExerciseQuestion): List<FinalExerciseAnswer> {
+        return mapComposePhraseByDialog(node = dialogNode, finalExerciseQuestion = finalExerciseQuestion)
     }
 
     private fun mapMatchingPairs(
@@ -241,14 +254,22 @@ class FinalExerciseAnswerMapper(
 
     private fun getFinalAudioMedia(isCorrect: Boolean, etutorExerciseItem: EtutorExerciseItem): FinalMedia? {
         return when (isCorrect) {
-            true -> finalMediaMapper.mapAudio(etutorExerciseItem.answerPrimarySound, etutorExerciseItem.answerSecondarySound)
+            true -> finalMediaMapper.mapAudio(
+                etutorExerciseItem.answerPrimarySound,
+                etutorExerciseItem.answerSecondarySound
+            )
+
             else -> null
         }
     }
 
     private fun getFinalAudioMediaBackup(isCorrect: Boolean, etutorExerciseItem: EtutorExerciseItem): FinalMedia? {
         return when (isCorrect) {
-            true -> finalMediaMapper.mapAudio(etutorExerciseItem.questionPrimarySound, etutorExerciseItem.questionSecondarySound)
+            true -> finalMediaMapper.mapAudio(
+                etutorExerciseItem.questionPrimarySound,
+                etutorExerciseItem.questionSecondarySound
+            )
+
             else -> null
         }
     }
@@ -263,5 +284,111 @@ class FinalExerciseAnswerMapper(
 
     private fun nullIfEmpty(value: String?): String? {
         return if (value.isNullOrBlank()) null else value
+    }
+
+    private fun mapChooseByVideo(
+        node: JsonNode,
+        finalExerciseQuestion: FinalExerciseQuestion
+    ): List<FinalExerciseAnswer> {
+        val type = node.path("type").asText(null)
+
+        val correctAnswer = node.path("content")
+            .path("answers")
+            .path("correct")
+            .asText()
+
+        return listOf(
+            correctAnswer,
+            node.path("content").path("answers").path("incorrect").get(0).asText(),
+            node.path("content").path("answers").path("incorrect").get(1).asText(),
+            node.path("content").path("answers").path("incorrect").get(2).asText(),
+        ).filter { StringUtils.isNotBlank(it) }
+            .map { answer ->
+                FinalExerciseAnswer(
+                    type = type,
+                    answer = nullIfEmpty(answer),
+                    translation = null,
+                    isCorrect = correctAnswer == answer,
+                    source = SourceEnum.EWA.name,
+                    sourceId = finalExerciseQuestion.sourceId,
+                    audio = null,
+                    image = null,
+                    video = null,
+                    question = finalExerciseQuestion
+                )
+            }
+    }
+
+    private fun mapComposePhraseByVideo(
+        node: JsonNode,
+        finalExerciseQuestion: FinalExerciseQuestion
+    ): List<FinalExerciseAnswer> {
+        val type = node.path("type").asText(null)
+
+        val correctAnswer = node.path("content")
+            .path("answers")
+            .path("correct")
+            .asText()
+
+        val inputList = ArrayList<String>()
+        inputList.addAll(extractBracedWords(correctAnswer))
+        inputList.addAll(extractBracedWords(node.path("content").path("extraBlocks").asText()))
+
+        return inputList
+            .filter { text -> StringUtils.isNotBlank(text) }
+            .map { answer ->
+                FinalExerciseAnswer(
+                    type = type,
+                    answer = nullIfEmpty(answer),
+                    translation = null,
+                    isCorrect = correctAnswer.contains(answer),
+                    source = SourceEnum.EWA.name,
+                    sourceId = finalExerciseQuestion.sourceId,
+                    audio = null,
+                    image = null,
+                    video = null,
+                    question = finalExerciseQuestion
+                )
+            }
+    }
+
+    private fun mapComposePhraseByDialog(
+        node: JsonNode,
+        finalExerciseQuestion: FinalExerciseQuestion
+    ): List<FinalExerciseAnswer> {
+        val correctAnswer = node.path("answers")
+            .path("correct")
+            .asText()
+
+        val inputList = ArrayList<String>()
+        inputList.add(correctAnswer)
+        node.path("answers").path("incorrect").forEach {
+            if (StringUtils.isNotBlank(it.toString())) {
+                inputList.add(it.toString().replace("\"", ""))
+            }
+        }
+
+        return inputList
+            .filter { text -> StringUtils.isNotBlank(text) }
+            .map { answer ->
+                FinalExerciseAnswer(
+                    type = "dialog",
+                    answer = nullIfEmpty(answer),
+                    translation = null,
+                    isCorrect = correctAnswer.contains(answer),
+                    source = SourceEnum.EWA.name,
+                    sourceId = finalExerciseQuestion.sourceId,
+                    audio = null,
+                    image = null,
+                    video = null,
+                    question = finalExerciseQuestion
+                )
+            }
+    }
+
+    private fun extractBracedWords(text: String): List<String> {
+        val pattern = Regex("\\{([^}]*)\\}")
+        val matches = pattern.findAll(text)
+        return matches.map { "{${it.groupValues[1]}}" }.toList()
     }
 }
