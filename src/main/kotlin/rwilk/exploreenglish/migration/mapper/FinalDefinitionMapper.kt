@@ -100,7 +100,7 @@ class FinalDefinitionMapper(
 
     private fun unwrapAudioPath(node: JsonNode): String? {
         return try {
-            node.path("media").path("voice").first().asText()
+            node.path("media").path("voice").first().asText(null)
         } catch (e: Exception) {
             null
         }
@@ -108,7 +108,12 @@ class FinalDefinitionMapper(
 
     private fun unwrapVideoPath(node: JsonNode): String? {
         return try {
-            node.path("media").path("encodedVideos").path("medium").path("hevc").asText()
+            val videoId = node.path("media").path("encodedVideos").path("medium").path("hevc").asText()
+            if (videoId.isNullOrBlank()) {
+                null
+            } else {
+                "$BASE_URL${videoId}"
+            }
         } catch (e: Exception) {
             null
         }
