@@ -64,6 +64,52 @@ class FinalDefinitionMapper(
         )
     }
 
+    fun mapLessonWordsType(node: JsonNode, finalWord: FinalWord): List<FinalDefinition> {
+        val definition = FinalDefinition(
+            id = null,
+            type = WordTypeEnum.WORD.toString(),
+            foreignTranslation = node.path("origin").asText(),
+            additionalInformation = null,
+            video = null,
+            audio = finalMediaMapper.mapAudio(
+                primarySound = unwrapLessonWordsTypeAudioPath(node),
+                secondarySound = null
+            ),
+            source = SourceEnum.EWA.name,
+            sourceId = finalWord.sourceId,
+            word = finalWord
+        )
+
+        val sentences = node.path("examples").mapNotNull { exampleNode ->
+            val sentenceText = exampleNode.asText(null)
+            if (sentenceText.isNullOrBlank()) {
+                null
+            } else {
+                FinalDefinition(
+                    id = null,
+                    type = WordTypeEnum.SENTENCE.toString(),
+                    foreignTranslation = sentenceText,
+                    additionalInformation = null,
+                    video = null,
+                    audio = null,
+                    source = SourceEnum.EWA.name,
+                    sourceId = finalWord.sourceId,
+                    word = finalWord
+                )
+            }
+        }
+
+        return listOf(definition) + sentences
+    }
+
+    private fun unwrapLessonWordsTypeAudioPath(node: JsonNode): String? {
+        return try {
+            node.path("audio").asText(null)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     fun mapExplainType(node: JsonNode, finalWord: FinalWord): List<FinalDefinition> {
         val definitions = mutableListOf<FinalDefinition>()
 

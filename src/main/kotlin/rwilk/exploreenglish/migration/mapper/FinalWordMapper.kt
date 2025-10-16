@@ -78,4 +78,36 @@ class FinalWordMapper(
             finalWord.definitions = finalDefinitionMapper.mapExplainType(node, finalWord)
         }
     }
+
+    fun mapLessonWordsType(node: JsonNode, finalExercise: FinalExercise): FinalWord {
+        return FinalWord(
+            id = null,
+            nativeTranslation = node.path("localizedMeanings").map { it.asText() }.distinct().joinToString(", "),
+            additionalInformation = null,
+            partOfSpeech = null,
+            article = null,
+            grammarType = null,
+            image = null,
+            source = SourceEnum.EWA.name,
+            sourceId = finalExercise.sourceId,
+        ).also { finalWord ->
+            finalWord.definitions = finalDefinitionMapper.mapLessonWordsType(node, finalWord)
+        }
+    }
+
+    fun mapLessonPhrasesType(node: JsonNode, finalExercise: FinalExercise): FinalWord {
+        return FinalWord(
+            id = null,
+            nativeTranslation = node.path("localizedTranslation").asText(),
+            additionalInformation = null,
+            partOfSpeech = null,
+            article = null,
+            grammarType = null,
+            image = null,
+            source = SourceEnum.EWA.name,
+            sourceId = finalExercise.sourceId,
+        ).also { finalWord ->
+            finalWord.definitions = finalDefinitionMapper.mapLessonWordsType(node, finalWord)
+        }
+    }
 }

@@ -46,18 +46,26 @@ class FinalExerciseQuestionMapper(
     fun map(node: JsonNode, finalExercise: FinalExercise): FinalExerciseQuestion {
         val finalAnswer = node.path("content").path("answers").path("correct").asText(null)
 
-        val videoMedia = finalMediaMapper.mapVideo(
-            url = "https://storage.appewa.com/api/v1/files/${node.path("media")
-                .path("encodedVideos")
-                .path("medium")
-                .path("hevc")
-                .asText(null)}"
-        )
+        val videoId = node.path("media")
+            .path("encodedVideos")
+            .path("medium")
+            .path("hevc")
+            .asText(null)
+
+        val videoMedia = when (videoId) {
+            null -> null
+            else -> finalMediaMapper.mapVideo(url = "https://storage.appewa.com/api/v1/files/${videoId}")
+        }
 
         val imageMedia = finalMediaMapper.mapImage(
             url = node.path("media")
                 .path("video")
                 .path("thumbnail")
+                .path("s")
+                .asText(null)
+        ) ?: finalMediaMapper.mapImage(
+            url = node.path("media")
+                .path("image")
                 .path("s")
                 .asText(null)
         )
@@ -72,9 +80,9 @@ class FinalExerciseQuestionMapper(
 
         return FinalExerciseQuestion(
             type = node.path("type").asText(null),
-            instruction = null,
-            question = node.path("content").path("text").asText(null)
-                ?: node.path("content").path("hint").asText(null),
+            instruction = node.path("content").path("hint").asText(null),
+            question = node.path("content").path("text").asText(null),
+                // ?: node.path("content").path("hint").asText(null),
             template = null,
             finalAnswer = finalAnswer,
             finalAnswerDescription = null,

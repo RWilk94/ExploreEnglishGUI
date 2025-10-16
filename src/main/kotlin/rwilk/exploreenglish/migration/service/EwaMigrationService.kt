@@ -26,11 +26,11 @@ class EwaMigrationService(
 
         finalCourses.forEach { course ->
             val finalLessons = ewaLessonMigrationService.migrate(course)
-            logger.info("Migrated ${finalLessons.size} Ewa lessons for course ${course.name}")
+            logger.info("Migrated ${finalLessons.size} Ewa lessons for course ${course.id} ${course.name}")
 
             finalLessons.forEach { lesson ->
                 val finalExercises = ewaExerciseMigrationService.migrate(lesson)
-                logger.info("Migrated ${finalExercises.size} Ewa exercises for lesson ${lesson.name}")
+                logger.info("Migrated ${finalExercises.size} Ewa exercises for lesson ${lesson.id} ${lesson.name}")
             }
         }
     }
