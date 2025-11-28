@@ -33,7 +33,7 @@ open class EwaExerciseMigrationService(
             .map { ewaExercise ->
                 val jsonNode = objectMapper.readTree(ewaExercise.jsonData)
                 val lessonWordsNode = jsonNode.path("result").path("lesson").path("lessonWords")
-                if (lessonWordsNode.isArray) {
+                if (lessonWordsNode.isArray && lessonWordsNode.size() > 0) {
                     // need to create ONE finalExercise
                     // need to create MULTIPLE finalWords and finalExerciseWords
                     val finalExerciseLessonWords = finalExerciseRepository.save(
@@ -49,7 +49,7 @@ open class EwaExerciseMigrationService(
                 }
 
                 val lessonPhrasesNode = jsonNode.path("result").path("lesson").path("lessonPhrases")
-                if (lessonPhrasesNode.isArray) {
+                if (lessonPhrasesNode.isArray && lessonPhrasesNode.size() > 0) {
                     // need to create ONE finalExercise
                     // need to create MULTIPLE finalWords and finalExerciseWords
                     val finalExerciseLessonPhrases = finalExerciseRepository.save(

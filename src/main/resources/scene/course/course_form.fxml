@@ -8,7 +8,7 @@
       AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
   <HBox>
-    <Label minWidth="100" text="Id:">
+    <Label minWidth="100" text="Id">
       <HBox.margin>
         <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
       </HBox.margin>
@@ -21,12 +21,12 @@
   </HBox>
 
   <HBox>
-    <Label minWidth="100" text="EN Name:">
+    <Label minWidth="100" text="Name">
       <HBox.margin>
         <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
       </HBox.margin>
     </Label>
-    <TextField fx:id="textFieldEnName" HBox.hgrow="ALWAYS">
+    <TextField fx:id="textFieldName" HBox.hgrow="ALWAYS">
       <HBox.margin>
         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
       </HBox.margin>
@@ -34,30 +34,35 @@
   </HBox>
 
   <HBox>
-    <Label minWidth="100" text="PL Name:">
+    <Label minWidth="100" text="Description">
       <HBox.margin>
         <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
       </HBox.margin>
     </Label>
-    <TextField fx:id="textFieldPlName" HBox.hgrow="ALWAYS">
+    <TextArea fx:id="textAreaDescription" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" prefRowCount="3" wrapText="true">
       <HBox.margin>
         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
       </HBox.margin>
-    </TextField>
+    </TextArea>
+<!--    <TextField fx:id="textFieldDescription" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">-->
+<!--      <HBox.margin>-->
+<!--        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>-->
+<!--      </HBox.margin>-->
+<!--    </TextField>-->
   </HBox>
 
   <HBox>
-    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Export Database" onAction="#buttonExportDatabaseOnAction">
+    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Export Database" onAction="#buttonExportDatabaseOnAction" disable="true">
       <HBox.margin>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
       </HBox.margin>
     </Button>
-    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Generate Document" onAction="#buttonGenerateDocumentOnAction">
+    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Generate Document" onAction="#buttonGenerateDocumentOnAction" disable="true">
       <HBox.margin>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
       </HBox.margin>
     </Button>
-    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Delete" onAction="#buttonDeleteOnAction">
+    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Delete" onAction="#buttonDeleteOnAction" disable="true">
       <HBox.margin>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
       </HBox.margin>
@@ -70,12 +75,12 @@
         </HBox.margin>
       </Button>
 
-      <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" text="Edit" onAction="#buttonEditOnAction">
+      <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" text="Edit" onAction="#buttonEditOnAction" disable="true">
         <HBox.margin>
           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
         </HBox.margin>
       </Button>
-      <Button layoutX="331.0" layoutY="10.0" mnemonicParsing="false" text="Add" onAction="#buttonAddOnAction">
+      <Button layoutX="331.0" layoutY="10.0" mnemonicParsing="false" text="Add" onAction="#buttonAddOnAction" disable="true">
         <HBox.margin>
           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
         </HBox.margin>

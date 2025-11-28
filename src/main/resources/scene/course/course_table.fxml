@@ -2,15 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-  fx:controller="rwilk.exploreenglish.controller.course.CourseTableController"
-  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      fx:controller="rwilk.exploreenglish.controller.course.CourseTableController"
+      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
   <HBox>
     <TextField fx:id="textFieldSearch" promptText="Search course here..." HBox.hgrow="ALWAYS">
@@ -28,15 +24,15 @@
         </cellValueFactory>
       </TableColumn>
 
-      <TableColumn fx:id="columnEnglishName" minWidth="20.0" prefWidth="-1.0" text="En Name">
+      <TableColumn fx:id="columnName" minWidth="20.0" prefWidth="-1.0" text="Name">
         <cellValueFactory>
-          <PropertyValueFactory property="englishName"/>
+          <PropertyValueFactory property="name"/>
         </cellValueFactory>
       </TableColumn>
 
-      <TableColumn fx:id="columnPolishName" minWidth="20.0" prefWidth="-1.0" text="Pl Name">
+      <TableColumn fx:id="columnDescription" minWidth="20.0" prefWidth="-1.0" text="Description">
         <cellValueFactory>
-          <PropertyValueFactory property="polishName"/>
+          <PropertyValueFactory property="description"/>
         </cellValueFactory>
       </TableColumn>
     </columns>

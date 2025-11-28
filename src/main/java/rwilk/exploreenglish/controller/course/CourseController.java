@@ -1,27 +1,28 @@
 package rwilk.exploreenglish.controller.course;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import org.springframework.stereotype.Controller;
-
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import rwilk.exploreenglish.model.entity.Course;
+import org.springframework.stereotype.Controller;
+import rwilk.exploreenglish.migration.entity.FinalCourse;
 import rwilk.exploreenglish.service.CourseService;
+import rwilk.exploreenglish.service.FinalCourseService;
 import rwilk.exploreenglish.service.InjectService;
 import rwilk.exploreenglish.service.export.DocService;
 import rwilk.exploreenglish.service.export.ExportDocumentService;
 import rwilk.exploreenglish.service.export.ExportService;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 @Controller
 public class CourseController implements Initializable {
 
   private final InjectService injectService;
   private final CourseService courseService;
+  private final FinalCourseService finalCourseService;
   private final ExportService exportService;
   private final DocService docService;
   private final ExportDocumentService exportDocumentService;
@@ -32,11 +33,13 @@ public class CourseController implements Initializable {
   public AnchorPane anchorPaneTable;
 
   public CourseController(final InjectService injectService, final CourseService courseService,
+                          final FinalCourseService finalCourseService,
                           final ExportService exportService, final DocService docService,
                           final ExportDocumentService exportDocumentService) {
     this.injectService = injectService;
     this.courseService = courseService;
-    this.exportService = exportService;
+      this.finalCourseService = finalCourseService;
+      this.exportService = exportService;
     this.docService = docService;
     this.exportDocumentService = exportDocumentService;
     injectService.setCourseController(this);
@@ -100,7 +103,7 @@ public class CourseController implements Initializable {
     injectService.getViewController().refreshListViewCourses();
   }
 
-  public void setCourseForm(Course course) {
+  public void setCourseForm(FinalCourse course) {
     courseFormController.setCourseForm(course);
   }
 
@@ -119,4 +122,8 @@ public class CourseController implements Initializable {
   public ExportDocumentService getExportDocumentService() {
     return exportDocumentService;
   }
+
+    public FinalCourseService getFinalCourseService() {
+        return finalCourseService;
+    }
 }

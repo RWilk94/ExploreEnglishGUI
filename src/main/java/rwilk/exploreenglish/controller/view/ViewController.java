@@ -14,21 +14,10 @@ import rwilk.exploreenglish.model.LearnItem;
 import rwilk.exploreenglish.model.LearnItemChild;
 import rwilk.exploreenglish.model.PartOfSpeechEnum;
 import rwilk.exploreenglish.model.entity.*;
-import rwilk.exploreenglish.service.CourseService;
-import rwilk.exploreenglish.service.ExerciseItemService;
-import rwilk.exploreenglish.service.ExerciseService;
-import rwilk.exploreenglish.service.InjectService;
-import rwilk.exploreenglish.service.LessonService;
-import rwilk.exploreenglish.service.LessonWordService;
-import rwilk.exploreenglish.service.NoteService;
-import rwilk.exploreenglish.service.WordSentenceService;
+import rwilk.exploreenglish.service.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -138,16 +127,16 @@ public class ViewController implements Initializable {
   }
 
   public void listViewCoursesOnMouseClicked(MouseEvent mouseEvent) {
-    selectedCourse = listViewCourses.getSelectionModel().getSelectedItem();
-    if (selectedCourse != null) {
-      fillInLessonsListView(selectedCourse);
-      listViewLearnItems.setItems(null);
-      listViewLearnItemChildren.setItems(null);
-      injectService.getCourseController().setCourseForm(selectedCourse);
-      injectService.getMainController().tabPane.getSelectionModel().select(0);
-
-      injectService.getLessonController().setCourseComboBox(selectedCourse);
-    }
+//    selectedCourse = listViewCourses.getSelectionModel().getSelectedItem();
+//    if (selectedCourse != null) {
+//      fillInLessonsListView(selectedCourse);
+//      listViewLearnItems.setItems(null);
+//      listViewLearnItemChildren.setItems(null);
+//      injectService.getCourseController().setCourseForm(selectedCourse);
+//      injectService.getMainController().tabPane.getSelectionModel().select(0);
+//
+//      injectService.getLessonController().setCourseComboBox(selectedCourse);
+//    }
   }
 
   public void listViewLessonsOnMouseClicked(MouseEvent mouseEvent) {
@@ -287,17 +276,17 @@ public class ViewController implements Initializable {
   }
 
   public void buttonCoursePositionUpOnAction(ActionEvent actionEvent) {
-    if (selectedCourse != null) {
-      courseService.getPreviousCourse(selectedCourse.getPosition())
-          .ifPresent(previousCourse -> replaceCourses(selectedCourse, previousCourse));
-    }
+//    if (selectedCourse != null) {
+//      courseService.getPreviousCourse(selectedCourse.getPosition())
+//          .ifPresent(previousCourse -> replaceCourses(selectedCourse, previousCourse));
+//    }
   }
 
   public void buttonCoursePositionDownOnAction(ActionEvent actionEvent) {
-    if (selectedCourse != null) {
-      courseService.getNextCourse(selectedCourse.getPosition())
-          .ifPresent(previousCourse -> replaceCourses(selectedCourse, previousCourse));
-    }
+//    if (selectedCourse != null) {
+//      courseService.getNextCourse(selectedCourse.getPosition())
+//          .ifPresent(previousCourse -> replaceCourses(selectedCourse, previousCourse));
+//    }
   }
 
   public void buttonLessonPositionUpOnAction(ActionEvent actionEvent) {
