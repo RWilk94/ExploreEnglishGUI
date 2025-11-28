@@ -12,7 +12,7 @@ class FinalDialogItemSqlGenerator : SqlGeneratorAbstract<FinalDialogItem>() {
     private val TAG = "DIALOG_ITEMS"
 
     override fun generateSql(source: List<FinalDialogItem>, directoryAlias: String) {
-        logger.info(LOG_PREFIX, TAG)
+        logger.info(LOG_PREFIX, directoryAlias, TAG)
 
         val chunks = source.chunked(CHUNK_SIZE)
         val sql = StringBuilder()

@@ -12,7 +12,7 @@ class FinalNoteSqlGenerator : SqlGeneratorAbstract<FinalNote>() {
     private val TAG = "NOTES"
 
     override fun generateSql(source: List<FinalNote>, directoryAlias: String) {
-        logger.info(LOG_PREFIX, TAG)
+        logger.info(LOG_PREFIX, directoryAlias, TAG)
 
         val chunks = source.chunked(CHUNK_SIZE)
         val sql = StringBuilder()

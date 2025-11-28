@@ -119,12 +119,12 @@ class FinalDefinitionMapper(
                 definitions.add(
                     FinalDefinition(
                         id = null,
-                        type = when (key == node.path("word").path("origin").asText("")) {
+                        type = when (key.lowercase() == node.path("word").path("origin").asText("").lowercase()) {
                             true -> WordTypeEnum.WORD.name
                             else -> WordTypeEnum.SENTENCE.name
                         },
                         foreignTranslation = key,
-                        additionalInformation = when (key != node.path("word").path("origin").asText("")) {
+                        additionalInformation = when (key.lowercase() != node.path("word").path("origin").asText("").lowercase()) {
                             true -> node.path("word").path("example").path("translation").asText()
                             else -> null
                         },

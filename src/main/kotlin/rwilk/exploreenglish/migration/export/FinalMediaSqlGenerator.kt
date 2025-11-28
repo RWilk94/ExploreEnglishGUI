@@ -12,7 +12,7 @@ class FinalMediaSqlGenerator : SqlGeneratorAbstract<FinalMedia>() {
     private val TAG = "MEDIA"
 
     override fun generateSql(source: List<FinalMedia>, directoryAlias: String) {
-        logger.info(LOG_PREFIX, TAG)
+        logger.info(LOG_PREFIX, directoryAlias, TAG)
 
         val chunks = source.chunked(CHUNK_SIZE)
         val sql = StringBuilder()

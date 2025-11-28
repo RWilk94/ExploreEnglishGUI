@@ -12,7 +12,7 @@ class FinalExerciseAnswerSqlGenerator : SqlGeneratorAbstract<FinalExerciseAnswer
     private val TAG = "EXERCISE_ANSWERS"
 
     override fun generateSql(source: List<FinalExerciseAnswer>, directoryAlias: String) {
-        logger.info(LOG_PREFIX, TAG)
+        logger.info(LOG_PREFIX, directoryAlias, TAG)
 
         val chunks = source.chunked(CHUNK_SIZE)
         val sql = StringBuilder()

@@ -3,6 +3,7 @@ package rwilk.exploreenglish.migration.service.word
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.stereotype.Service
 import rwilk.exploreenglish.migration.entity.FinalExercise
+import rwilk.exploreenglish.migration.entity.FinalWord
 import rwilk.exploreenglish.migration.mapper.FinalExerciseWordMapper
 import rwilk.exploreenglish.migration.mapper.FinalWordMapper
 import rwilk.exploreenglish.migration.repository.FinalExerciseWordRepository
@@ -34,6 +35,19 @@ class EwaLessonWordsMigrationService(
                 finalWord = finalWord
             )
         )
+    }
+
+    fun migrateWordV2(finalExercise: FinalExercise, finalWord: FinalWord): FinalExercise {
+        val savedWord = finalWordRepository.save(finalWord)
+
+        finalExerciseWordRepository.save(
+            finalExerciseWordMapper.map(
+                finalExercise = finalExercise,
+                finalWord = savedWord
+            )
+        )
+
+        return finalExercise
     }
 
 }

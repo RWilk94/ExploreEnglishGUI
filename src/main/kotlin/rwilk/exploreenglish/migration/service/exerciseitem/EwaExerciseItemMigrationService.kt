@@ -36,10 +36,10 @@ class EwaExerciseItemMigrationService(
                 nodes = nodes
             )
 
-            "explainWord" -> migrateExplainWord(
-                finalExercise = finalExercise,
-                nodes = nodes
-            )
+//            "explainWord" -> migrateExplainWord(
+//                finalExercise = finalExercise,
+//                nodes = nodes
+//            )
 
             "chooseByVideo", "chooseByImage", "chooseAnswerByText" -> migrateChooseTypes(
                 finalExercise = finalExercise,

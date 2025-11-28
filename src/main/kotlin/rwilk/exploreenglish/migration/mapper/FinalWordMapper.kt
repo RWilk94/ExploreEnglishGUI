@@ -80,6 +80,10 @@ class FinalWordMapper(
     }
 
     fun mapLessonWordsType(node: JsonNode, finalExercise: FinalExercise): FinalWord {
+        if (node.path("type").asText() == "explainWord") {
+            return mapExplainWordType(node, finalExercise)
+        }
+
         return FinalWord(
             id = null,
             nativeTranslation = node.path("localizedMeanings").map { it.asText() }.distinct().joinToString(", "),

@@ -12,7 +12,7 @@ class FinalWordSqlGenerator : SqlGeneratorAbstract<FinalWord>() {
     private val TAG = "WORDS"
 
     override fun generateSql(source: List<FinalWord>, directoryAlias: String) {
-        logger.info(LOG_PREFIX, TAG)
+        logger.info(LOG_PREFIX, directoryAlias, TAG)
 
         val chunks = source.chunked(CHUNK_SIZE)
         val sql = StringBuilder()

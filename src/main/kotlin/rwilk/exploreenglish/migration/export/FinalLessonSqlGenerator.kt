@@ -12,7 +12,7 @@ class FinalLessonSqlGenerator : SqlGeneratorAbstract<FinalLesson>() {
     private val TAG = "LESSONS"
 
     override fun generateSql(source: List<FinalLesson>, directoryAlias: String) {
-        logger.info(LOG_PREFIX, TAG)
+        logger.info(LOG_PREFIX, directoryAlias, TAG)
 
         val chunks = source.chunked(CHUNK_SIZE)
         val sql = StringBuilder()

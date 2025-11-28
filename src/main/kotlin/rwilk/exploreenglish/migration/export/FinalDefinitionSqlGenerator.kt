@@ -12,7 +12,7 @@ class FinalDefinitionSqlGenerator : SqlGeneratorAbstract<FinalDefinition>() {
     private val TAG = "DEFINITIONS"
 
     override fun generateSql(source: List<FinalDefinition>, directoryAlias: String) {
-        logger.info(LOG_PREFIX, TAG)
+        logger.info(LOG_PREFIX, directoryAlias, TAG)
 
         val chunks = source.chunked(CHUNK_SIZE)
         val sql = StringBuilder()

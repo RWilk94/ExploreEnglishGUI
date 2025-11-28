@@ -12,7 +12,7 @@ class FinalExerciseWordSqlGenerator : SqlGeneratorAbstract<FinalExerciseWord>() 
     private val TAG = "EXERCISE_WORDS"
 
     override fun generateSql(source: List<FinalExerciseWord>, directoryAlias: String) {
-        logger.info(LOG_PREFIX, TAG)
+        logger.info(LOG_PREFIX, directoryAlias, TAG)
 
         val chunks = source.chunked(CHUNK_SIZE)
         val sql = StringBuilder()
